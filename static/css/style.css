@@ -62,11 +62,12 @@ header h1 {
     pointer-events: auto;
 }
 
+/* Event count info on map overlay - KISS design */
 #event-count {
     position: absolute;
     top: 0;
     left: 0;
-    max-width: 320px;
+    max-width: 380px;
     font-size: 0.95rem;
     font-weight: 500;
     color: #4CAF50;
@@ -116,6 +117,7 @@ header h1 {
     display: none;
 }
 
+/* Event list sidebar with filters */
 #event-list {
     position: fixed;
     right: 0;
@@ -136,93 +138,46 @@ header h1 {
     color: #fff;
 }
 
+/* Filter section in sidebar */
 #filters-section {
     margin-bottom: 1.5rem;
     padding-bottom: 1rem;
-    border-bottom: 1px solid rgba(76, 175, 80, 0.3);
+    border-bottom: 2px solid rgba(76, 175, 80, 0.3);
 }
 
-#filters-section h3 {
-    font-size: 1rem;
-    margin-bottom: 1rem;
-    color: #4CAF50;
+.filter-row {
+    margin-bottom: 0.8rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
 }
 
-.filter-group {
-    margin-bottom: 1rem;
-}
-
-.filter-group label {
-    display: block;
-    font-size: 0.85rem;
-    color: #ccc;
-    margin-bottom: 0.3rem;
+.filter-row label {
+    font-size: 0.8rem;
+    color: #888;
     font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
-.filter-group input[type="range"] {
-    width: 65%;
-    margin-right: 0.5rem;
-    vertical-align: middle;
-}
-
-.filter-group select {
-    width: 100%;
-    padding: 0.5rem;
+.filter-row select {
+    padding: 0.5rem 0.7rem;
     background: rgba(45, 45, 45, 0.9);
     color: #fff;
     border: 1px solid #4CAF50;
     border-radius: 5px;
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     cursor: pointer;
-}
-
-.filter-group select:hover {
-    background: rgba(55, 55, 55, 0.9);
-}
-
-.filter-group input[type="number"] {
-    width: calc(50% - 0.25rem);
-    padding: 0.5rem;
-    background: rgba(45, 45, 45, 0.9);
-    color: #fff;
-    border: 1px solid #4CAF50;
-    border-radius: 5px;
-    font-size: 0.85rem;
-    margin-bottom: 0.5rem;
-}
-
-.filter-group input[type="number"]:first-of-type {
-    margin-right: 0.5rem;
-}
-
-#custom-location-inputs {
-    margin-top: 0.5rem;
-}
-
-#custom-location-inputs.hidden {
-    display: none;
-}
-
-#apply-custom-location {
-    width: 100%;
-    padding: 0.5rem;
-    background: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 0.85rem;
     transition: background 0.2s;
 }
 
-#apply-custom-location:hover {
-    background: #45a049;
+.filter-row select:hover {
+    background: rgba(55, 55, 55, 0.9);
 }
 
-#reset-filters {
+.reset-btn {
     width: 100%;
-    padding: 0.5rem;
+    padding: 0.6rem;
     background: rgba(255, 87, 34, 0.2);
     color: #FF5722;
     border: 1px solid #FF5722;
@@ -233,20 +188,8 @@ header h1 {
     transition: background 0.2s;
 }
 
-#reset-filters:hover {
+.reset-btn:hover {
     background: rgba(255, 87, 34, 0.3);
-}
-
-#distance-value {
-    color: #4CAF50;
-    font-weight: bold;
-    font-size: 0.9rem;
-}
-
-.location-override label {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
 }
 
 .location-override input[type="checkbox"] {

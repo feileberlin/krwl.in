@@ -8,7 +8,7 @@ class EventsApp {
         this.config = null;
         this.debug = false;
         this.filters = {
-            maxDistance: 5,
+            maxDistance: 1.25,  // Default: 15 minutes by foot
             timeFilter: 'sunrise',
             category: 'all',
             useCustomLocation: false,
@@ -192,9 +192,24 @@ class EventsApp {
             
             // Extract unique categories from events
             this.populateCategories();
+            
+            // Populate location selector with predefined locations
+            this.populateLocationSelector();
         } catch (error) {
             console.error('Error loading events:', error);
             this.events = [];
+        }
+    }
+    
+    populateLocationSelector() {
+        const locationSelector = document.getElementById('location-selector');
+        if (this.config.map?.predefined_locations) {
+            this.config.map.predefined_locations.forEach(loc => {
+                const option = document.createElement('option');
+                option.value = JSON.stringify({ lat: loc.lat, lon: loc.lon });
+                option.textContent = loc.name;
+                locationSelector.appendChild(option);
+            });
         }
     }
     
@@ -240,6 +255,22 @@ class EventsApp {
                     sunrise.setDate(sunrise.getDate() + 1);
                 }
                 return sunrise;
+                
+            case 'sunday':
+                // Next Sunday at 23:59
+                const sunday = new Date(now);
+                const daysUntilSunday = (7 - now.getDay()) % 7 || 7;
+                sunday.setDate(sunday.getDate() + daysUntilSunday);
+                sunday.setHours(23, 59, 59, 999);
+                return sunday;
+                
+            case 'full-moon':
+                // Approximate: ~29.5 days lunar cycle
+                // This is simplified - for production use a proper lunar calendar library
+                const nextFullMoon = new Date(now);
+                nextFullMoon.setDate(nextFullMoon.getDate() + 29);
+                nextFullMoon.setHours(23, 59, 59, 999);
+                return nextFullMoon;
                 
             case '6h':
                 return new Date(now.getTime() + 6 * 60 * 60 * 1000);
@@ -405,6 +436,12 @@ class EventsApp {
             case 'sunrise':
                 timeText = 'till sunrise';
                 break;
+            case 'sunday':
+                timeText = 'till sunday night';
+                break;
+            case 'full-moon':
+                timeText = 'till next full moon';
+                break;
             case '6h':
                 timeText = 'in the next 6 hours';
                 break;
@@ -418,29 +455,35 @@ class EventsApp {
                 timeText = 'in the next 48 hours';
                 break;
             case 'all':
-                timeText = 'upcoming';
+                timeText = 'all upcoming';
                 break;
         }
         
-        // Distance description (approximate travel time)
+        // Distance description - match selector options
         const distance = this.filters.maxDistance;
         let distanceText = '';
-        if (distance <= 1) {
-            distanceText = 'within walking distance';
-        } else if (distance <= 5) {
-            const minutes = Math.round(distance * 3); // ~3 min per km walking
-            distanceText = `within ${minutes} minutes walk`;
-        } else if (distance <= 15) {
-            const minutes = Math.round(distance * 4); // ~4 min per km by bike
-            distanceText = `within ${minutes} minutes by bike`;
+        if (distance === 1.25) {
+            distanceText = 'within 15 minutes by foot';
+        } else if (distance === 2.5) {
+            distanceText = 'within 10 minutes by bike';
+        } else if (distance === 20) {
+            distanceText = 'within 1 hour by public transport';
         } else {
+            // Fallback for other values
             distanceText = `within ${distance} km`;
         }
         
         // Location description
-        let locationText = 'from your location';
+        let locationText = 'from your current location';
         if (this.filters.useCustomLocation && this.filters.customLat && this.filters.customLon) {
-            locationText = 'from custom location';
+            // Check if it's a predefined location
+            const locationSelector = document.getElementById('location-selector');
+            const selectedOption = locationSelector.options[locationSelector.selectedIndex];
+            if (selectedOption && selectedOption.value !== 'geolocation') {
+                locationText = `from ${selectedOption.textContent}`;
+            } else {
+                locationText = 'from custom location';
+            }
         } else if (!this.userLocation) {
             locationText = 'from default location';
         }
@@ -448,7 +491,13 @@ class EventsApp {
         // Category description
         let categoryText = '';
         if (this.filters.category !== 'all') {
-            categoryText = ` in ${this.filters.category}`;
+            const categoryNames = {
+                'on-stage': 'on stage',
+                'pub-games': 'pub games',
+                'festivals': 'festivals'
+            };
+            const categoryName = categoryNames[this.filters.category] || this.filters.category;
+            categoryText = ` ${categoryName}`;
         }
         
         // Construct the full sentence
@@ -532,13 +581,11 @@ class EventsApp {
     }
     
     setupEventListeners() {
-        // Distance filter
+        // Distance filter (now a select)
         const distanceFilter = document.getElementById('distance-filter');
-        const distanceValue = document.getElementById('distance-value');
-        distanceFilter.addEventListener('input', (e) => {
+        distanceFilter.addEventListener('change', (e) => {
             const value = parseFloat(e.target.value);
             this.filters.maxDistance = value;
-            distanceValue.textContent = `${value} km`;
             this.displayEvents();
         });
         
@@ -556,51 +603,33 @@ class EventsApp {
             this.displayEvents();
         });
         
-        // Custom location checkbox
-        const useCustomLocation = document.getElementById('use-custom-location');
-        const customLocationInputs = document.getElementById('custom-location-inputs');
-        useCustomLocation.addEventListener('change', (e) => {
-            if (e.target.checked) {
-                customLocationInputs.classList.remove('hidden');
-                // Pre-fill with current location if available
-                if (this.userLocation) {
-                    document.getElementById('custom-lat').value = this.userLocation.lat.toFixed(4);
-                    document.getElementById('custom-lon').value = this.userLocation.lon.toFixed(4);
-                }
-            } else {
-                customLocationInputs.classList.add('hidden');
+        // Location selector
+        const locationSelector = document.getElementById('location-selector');
+        locationSelector.addEventListener('change', (e) => {
+            if (e.target.value === 'geolocation') {
+                // Use geolocation
                 this.filters.useCustomLocation = false;
                 this.filters.customLat = null;
                 this.filters.customLon = null;
-                this.displayEvents();
-            }
-        });
-        
-        // Apply custom location button
-        const applyCustomLocation = document.getElementById('apply-custom-location');
-        applyCustomLocation.addEventListener('click', () => {
-            const lat = parseFloat(document.getElementById('custom-lat').value);
-            const lon = parseFloat(document.getElementById('custom-lon').value);
-            
-            if (!isNaN(lat) && !isNaN(lon) && lat >= -90 && lat <= 90 && lon >= -180 && lon <= 180) {
-                this.filters.useCustomLocation = true;
-                this.filters.customLat = lat;
-                this.filters.customLon = lon;
-                
-                // Update map view to custom location
-                this.map.setView([lat, lon], 13);
-                
-                this.displayEvents();
+                if (this.userLocation) {
+                    this.map.setView([this.userLocation.lat, this.userLocation.lon], 13);
+                }
             } else {
-                alert('Please enter valid latitude (-90 to 90) and longitude (-180 to 180) values.');
+                // Use predefined location
+                const location = JSON.parse(e.target.value);
+                this.filters.useCustomLocation = true;
+                this.filters.customLat = location.lat;
+                this.filters.customLon = location.lon;
+                this.map.setView([location.lat, location.lon], 13);
             }
+            this.displayEvents();
         });
         
         // Reset filters button
         const resetFilters = document.getElementById('reset-filters');
         resetFilters.addEventListener('click', () => {
             // Reset all filters to defaults
-            this.filters.maxDistance = 5;
+            this.filters.maxDistance = 1.25;
             this.filters.timeFilter = 'sunrise';
             this.filters.category = 'all';
             this.filters.useCustomLocation = false;
@@ -608,8 +637,7 @@ class EventsApp {
             this.filters.customLon = null;
             
             // Reset UI elements
-            document.getElementById('distance-filter').value = 5;
-            document.getElementById('distance-value').textContent = '5 km';
+            document.getElementById('distance-filter').value = 1.25;
             document.getElementById('time-filter').value = 'sunrise';
             document.getElementById('category-filter').value = 'all';
             document.getElementById('use-custom-location').checked = false;
