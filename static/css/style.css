@@ -48,6 +48,74 @@ header h1 {
     z-index: 1;
 }
 
+#map-overlay {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    pointer-events: none;
+    z-index: 1000;
+}
+
+#map-overlay > * {
+    pointer-events: auto;
+}
+
+#event-count {
+    position: absolute;
+    top: 0;
+    left: 0;
+    max-width: 320px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #4CAF50;
+    padding: 0.8rem;
+    background: rgba(30, 30, 30, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 8px;
+    border: 2px solid #4CAF50;
+    line-height: 1.4;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+#imprint-link {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding: 0.6rem 1rem;
+    background: rgba(30, 30, 30, 0.95);
+    backdrop-filter: blur(10px);
+    color: #4CAF50;
+    text-decoration: none;
+    border-radius: 8px;
+    border: 2px solid #4CAF50;
+    font-size: 0.85rem;
+    font-weight: 500;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    transition: background 0.2s, color 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#imprint-link:hover {
+    background: rgba(76, 175, 80, 0.2);
+    color: #fff;
+}
+
+#site-logo {
+    max-height: 40px;
+    max-width: 120px;
+    height: auto;
+    width: auto;
+    display: block;
+}
+
+#imprint-text {
+    display: none;
+}
+
 #event-list {
     position: fixed;
     right: 0;
@@ -66,6 +134,124 @@ header h1 {
     font-size: 1.2rem;
     margin-bottom: 1rem;
     color: #fff;
+}
+
+#filters-section {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(76, 175, 80, 0.3);
+}
+
+#filters-section h3 {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    color: #4CAF50;
+}
+
+.filter-group {
+    margin-bottom: 1rem;
+}
+
+.filter-group label {
+    display: block;
+    font-size: 0.85rem;
+    color: #ccc;
+    margin-bottom: 0.3rem;
+    font-weight: 500;
+}
+
+.filter-group input[type="range"] {
+    width: 65%;
+    margin-right: 0.5rem;
+    vertical-align: middle;
+}
+
+.filter-group select {
+    width: 100%;
+    padding: 0.5rem;
+    background: rgba(45, 45, 45, 0.9);
+    color: #fff;
+    border: 1px solid #4CAF50;
+    border-radius: 5px;
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+
+.filter-group select:hover {
+    background: rgba(55, 55, 55, 0.9);
+}
+
+.filter-group input[type="number"] {
+    width: calc(50% - 0.25rem);
+    padding: 0.5rem;
+    background: rgba(45, 45, 45, 0.9);
+    color: #fff;
+    border: 1px solid #4CAF50;
+    border-radius: 5px;
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+}
+
+.filter-group input[type="number"]:first-of-type {
+    margin-right: 0.5rem;
+}
+
+#custom-location-inputs {
+    margin-top: 0.5rem;
+}
+
+#custom-location-inputs.hidden {
+    display: none;
+}
+
+#apply-custom-location {
+    width: 100%;
+    padding: 0.5rem;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: background 0.2s;
+}
+
+#apply-custom-location:hover {
+    background: #45a049;
+}
+
+#reset-filters {
+    width: 100%;
+    padding: 0.5rem;
+    background: rgba(255, 87, 34, 0.2);
+    color: #FF5722;
+    border: 1px solid #FF5722;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+    transition: background 0.2s;
+}
+
+#reset-filters:hover {
+    background: rgba(255, 87, 34, 0.3);
+}
+
+#distance-value {
+    color: #4CAF50;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.location-override label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.location-override input[type="checkbox"] {
+    margin-right: 0.5rem;
+    cursor: pointer;
 }
 
 .event-card {
@@ -213,6 +399,11 @@ header h1 {
 }
 
 @media (max-width: 768px) {
+    #filters-overlay {
+        width: calc(100% - 20px);
+        max-width: 280px;
+    }
+    
     #event-list {
         width: 100%;
         top: auto;
@@ -222,5 +413,15 @@ header h1 {
     
     #map {
         height: 60vh;
+    }
+}
+
+@media (max-width: 480px) {
+    #filters-overlay {
+        top: 5px;
+        left: 5px;
+        width: calc(100% - 10px);
+        max-width: none;
+        padding: 0.8rem;
     }
 }

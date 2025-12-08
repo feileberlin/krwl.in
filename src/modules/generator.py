@@ -51,14 +51,64 @@ class StaticSiteGenerator:
             <h1>KRWL HOF Community Events</h1>
             <div id="status">
                 <span id="location-status">Getting location...</span>
-                <span id="event-count">0 events nearby</span>
             </div>
         </header>
         
-        <div id="map"></div>
+        <div id="map">
+            <div id="map-overlay">
+                <div id="event-count">0 events</div>
+                <a href="imprint.html" id="imprint-link">
+                    <img id="site-logo" src="logo.png" alt="Site Logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
+                    <span id="imprint-text" style="display: none;">Imprint</span>
+                </a>
+            </div>
+        </div>
         
         <div id="event-list">
-            <h2>Upcoming Events (Until Sunrise)</h2>
+            <div id="filters-section">
+                <h3>Filters</h3>
+                
+                <div class="filter-group">
+                    <label for="category-filter">Event Type:</label>
+                    <select id="category-filter">
+                        <option value="all">All Categories</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="time-filter">Event Max Start Time:</label>
+                    <select id="time-filter">
+                        <option value="sunrise">Next Sunrise (6 AM)</option>
+                        <option value="6h">Next 6 hours</option>
+                        <option value="12h">Next 12 hours</option>
+                        <option value="24h">Next 24 hours</option>
+                        <option value="48h">Next 48 hours</option>
+                        <option value="all">All upcoming events</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="distance-filter">Event Distance (km):</label>
+                    <input type="range" id="distance-filter" min="1" max="50" value="5" step="0.5">
+                    <span id="distance-value">5 km</span>
+                </div>
+                
+                <div class="filter-group location-override">
+                    <label for="use-custom-location">
+                        <input type="checkbox" id="use-custom-location">
+                        Use custom location
+                    </label>
+                    <div id="custom-location-inputs" class="hidden">
+                        <input type="number" id="custom-lat" placeholder="Latitude" step="0.0001">
+                        <input type="number" id="custom-lon" placeholder="Longitude" step="0.0001">
+                        <button id="apply-custom-location">Apply</button>
+                    </div>
+                </div>
+                
+                <button id="reset-filters">Reset All Filters</button>
+            </div>
+            
+            <h2>Events</h2>
             <div id="events-container">
                 <p>Loading events...</p>
             </div>
@@ -141,6 +191,74 @@ header h1 {
     z-index: 1;
 }
 
+#map-overlay {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    pointer-events: none;
+    z-index: 1000;
+}
+
+#map-overlay > * {
+    pointer-events: auto;
+}
+
+#event-count {
+    position: absolute;
+    top: 0;
+    left: 0;
+    max-width: 320px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #4CAF50;
+    padding: 0.8rem;
+    background: rgba(30, 30, 30, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 8px;
+    border: 2px solid #4CAF50;
+    line-height: 1.4;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+#imprint-link {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding: 0.6rem 1rem;
+    background: rgba(30, 30, 30, 0.95);
+    backdrop-filter: blur(10px);
+    color: #4CAF50;
+    text-decoration: none;
+    border-radius: 8px;
+    border: 2px solid #4CAF50;
+    font-size: 0.85rem;
+    font-weight: 500;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    transition: background 0.2s, color 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#imprint-link:hover {
+    background: rgba(76, 175, 80, 0.2);
+    color: #fff;
+}
+
+#site-logo {
+    max-height: 40px;
+    max-width: 120px;
+    height: auto;
+    width: auto;
+    display: block;
+}
+
+#imprint-text {
+    display: none;
+}
+
 #event-list {
     position: fixed;
     right: 0;
@@ -159,6 +277,124 @@ header h1 {
     font-size: 1.2rem;
     margin-bottom: 1rem;
     color: #fff;
+}
+
+#filters-section {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(76, 175, 80, 0.3);
+}
+
+#filters-section h3 {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    color: #4CAF50;
+}
+
+.filter-group {
+    margin-bottom: 1rem;
+}
+
+.filter-group label {
+    display: block;
+    font-size: 0.85rem;
+    color: #ccc;
+    margin-bottom: 0.3rem;
+    font-weight: 500;
+}
+
+.filter-group input[type="range"] {
+    width: 65%;
+    margin-right: 0.5rem;
+    vertical-align: middle;
+}
+
+.filter-group select {
+    width: 100%;
+    padding: 0.5rem;
+    background: rgba(45, 45, 45, 0.9);
+    color: #fff;
+    border: 1px solid #4CAF50;
+    border-radius: 5px;
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+
+.filter-group select:hover {
+    background: rgba(55, 55, 55, 0.9);
+}
+
+.filter-group input[type="number"] {
+    width: calc(50% - 0.25rem);
+    padding: 0.5rem;
+    background: rgba(45, 45, 45, 0.9);
+    color: #fff;
+    border: 1px solid #4CAF50;
+    border-radius: 5px;
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+}
+
+.filter-group input[type="number"]:first-of-type {
+    margin-right: 0.5rem;
+}
+
+#custom-location-inputs {
+    margin-top: 0.5rem;
+}
+
+#custom-location-inputs.hidden {
+    display: none;
+}
+
+#apply-custom-location {
+    width: 100%;
+    padding: 0.5rem;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: background 0.2s;
+}
+
+#apply-custom-location:hover {
+    background: #45a049;
+}
+
+#reset-filters {
+    width: 100%;
+    padding: 0.5rem;
+    background: rgba(255, 87, 34, 0.2);
+    color: #FF5722;
+    border: 1px solid #FF5722;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+    transition: background 0.2s;
+}
+
+#reset-filters:hover {
+    background: rgba(255, 87, 34, 0.3);
+}
+
+#distance-value {
+    color: #4CAF50;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.location-override label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.location-override input[type="checkbox"] {
+    margin-right: 0.5rem;
+    cursor: pointer;
 }
 
 .event-card {
@@ -306,6 +542,11 @@ header h1 {
 }
 
 @media (max-width: 768px) {
+    #filters-overlay {
+        width: calc(100% - 20px);
+        max-width: 280px;
+    }
+    
     #event-list {
         width: 100%;
         top: auto;
@@ -315,6 +556,16 @@ header h1 {
     
     #map {
         height: 60vh;
+    }
+}
+
+@media (max-width: 480px) {
+    #filters-overlay {
+        top: 5px;
+        left: 5px;
+        width: calc(100% - 10px);
+        max-width: none;
+        padding: 0.8rem;
     }
 }
 '''
@@ -333,6 +584,14 @@ class EventsApp {
         this.events = [];
         this.markers = [];
         this.config = null;
+        this.filters = {
+            maxDistance: 5,
+            timeFilter: 'sunrise',
+            category: 'all',
+            useCustomLocation: false,
+            customLat: null,
+            customLon: null
+        };
         
         this.init();
     }
@@ -449,10 +708,31 @@ class EventsApp {
             const response = await fetch('events.json');
             const data = await response.json();
             this.events = data.events || [];
+            
+            // Extract unique categories from events
+            this.populateCategories();
         } catch (error) {
             console.error('Error loading events:', error);
             this.events = [];
         }
+    }
+    
+    populateCategories() {
+        const categories = new Set();
+        this.events.forEach(event => {
+            if (event.category) {
+                categories.add(event.category);
+            }
+        });
+        
+        // Populate category filter dropdown
+        const categoryFilter = document.getElementById('category-filter');
+        categories.forEach(category => {
+            const option = document.createElement('option');
+            option.value = category;
+            option.textContent = category;
+            categoryFilter.appendChild(option);
+        });
     }
     
     calculateDistance(lat1, lon1, lat2, lon2) {
@@ -464,6 +744,41 @@ class EventsApp {
                   Math.sin(dLon/2) * Math.sin(dLon/2);
         const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
         return R * c;
+    }
+    
+    getMaxEventTime() {
+        const now = new Date();
+        const timeFilter = this.filters.timeFilter;
+        
+        switch (timeFilter) {
+            case 'sunrise':
+                // Simplified: next sunrise at 6 AM
+                const sunrise = new Date(now);
+                sunrise.setHours(6, 0, 0, 0);
+                if (now.getHours() >= 6) {
+                    sunrise.setDate(sunrise.getDate() + 1);
+                }
+                return sunrise;
+                
+            case '6h':
+                return new Date(now.getTime() + 6 * 60 * 60 * 1000);
+                
+            case '12h':
+                return new Date(now.getTime() + 12 * 60 * 60 * 1000);
+                
+            case '24h':
+                return new Date(now.getTime() + 24 * 60 * 60 * 1000);
+                
+            case '48h':
+                return new Date(now.getTime() + 48 * 60 * 60 * 1000);
+                
+            case 'all':
+                // Return a date far in the future
+                return new Date(now.getFullYear() + 10, 11, 31);
+                
+            default:
+                return this.getNextSunrise();
+        }
     }
     
     getNextSunrise() {
@@ -480,21 +795,36 @@ class EventsApp {
     }
     
     filterEvents() {
-        const nextSunrise = this.getNextSunrise();
-        const maxDistance = this.config.filtering.max_distance_km;
+        const maxEventTime = this.getMaxEventTime();
+        const maxDistance = this.filters.maxDistance;
+        const category = this.filters.category;
         
-        return this.events.filter(event => {
-            // Filter by time (until next sunrise)
+        // Determine which location to use for distance calculation
+        let referenceLocation = this.userLocation;
+        if (this.filters.useCustomLocation && this.filters.customLat && this.filters.customLon) {
+            referenceLocation = {
+                lat: this.filters.customLat,
+                lon: this.filters.customLon
+            };
+        }
+        
+        const filtered = this.events.filter(event => {
+            // Filter by time
             const eventTime = new Date(event.start_time);
-            if (eventTime > nextSunrise) {
+            if (eventTime > maxEventTime) {
                 return false;
             }
             
-            // Filter by distance if user location is available
-            if (this.userLocation && event.location) {
+            // Filter by category
+            if (category !== 'all' && event.category !== category) {
+                return false;
+            }
+            
+            // Filter by distance if location is available
+            if (referenceLocation && event.location) {
                 const distance = this.calculateDistance(
-                    this.userLocation.lat,
-                    this.userLocation.lon,
+                    referenceLocation.lat,
+                    referenceLocation.lon,
                     event.location.lat,
                     event.location.lon
                 );
@@ -507,6 +837,8 @@ class EventsApp {
             
             return true;
         });
+        
+        return filtered;
     }
     
     fitMapToMarkers() {
@@ -538,8 +870,8 @@ class EventsApp {
         const container = document.getElementById('events-container');
         const countEl = document.getElementById('event-count');
         
-        // Update count
-        countEl.textContent = `${filteredEvents.length} events nearby`;
+        // Update count with descriptive sentence
+        this.updateFilterDescription(filteredEvents.length);
         
         // Clear existing content
         container.innerHTML = '';
@@ -549,7 +881,7 @@ class EventsApp {
         this.markers = [];
         
         if (filteredEvents.length === 0) {
-            container.innerHTML = '<p>No upcoming events found nearby.</p>';
+            container.innerHTML = '<p>No events match the current filters.</p>';
             return;
         }
         
@@ -564,6 +896,70 @@ class EventsApp {
         
         // Fit map to show all markers
         this.fitMapToMarkers();
+    }
+    
+    updateFilterDescription(count) {
+        const countEl = document.getElementById('event-count');
+        
+        // Build descriptive sentence
+        const eventText = `${count} event${count !== 1 ? 's' : ''}`;
+        
+        // Time description
+        let timeText = '';
+        switch (this.filters.timeFilter) {
+            case 'sunrise':
+                timeText = 'till sunrise';
+                break;
+            case '6h':
+                timeText = 'in the next 6 hours';
+                break;
+            case '12h':
+                timeText = 'in the next 12 hours';
+                break;
+            case '24h':
+                timeText = 'in the next 24 hours';
+                break;
+            case '48h':
+                timeText = 'in the next 48 hours';
+                break;
+            case 'all':
+                timeText = 'upcoming';
+                break;
+        }
+        
+        // Distance description (approximate travel time)
+        const distance = this.filters.maxDistance;
+        let distanceText = '';
+        if (distance <= 1) {
+            distanceText = 'within walking distance';
+        } else if (distance <= 5) {
+            const minutes = Math.round(distance * 3); // ~3 min per km walking
+            distanceText = `within ${minutes} minutes walk`;
+        } else if (distance <= 15) {
+            const minutes = Math.round(distance * 4); // ~4 min per km by bike
+            distanceText = `within ${minutes} minutes by bike`;
+        } else {
+            distanceText = `within ${distance} km`;
+        }
+        
+        // Location description
+        let locationText = 'from your location';
+        if (this.filters.useCustomLocation && this.filters.customLat && this.filters.customLon) {
+            locationText = 'from custom location';
+        } else if (!this.userLocation) {
+            locationText = 'from default location';
+        }
+        
+        // Category description
+        let categoryText = '';
+        if (this.filters.category !== 'all') {
+            categoryText = ` in ${this.filters.category}`;
+        }
+        
+        // Construct the full sentence
+        const description = `${eventText}${categoryText} ${timeText} ${distanceText} ${locationText}`;
+        
+        countEl.textContent = description;
     }
     
     displayEventCard(event, container) {
@@ -640,6 +1036,98 @@ class EventsApp {
     }
     
     setupEventListeners() {
+        // Distance filter
+        const distanceFilter = document.getElementById('distance-filter');
+        const distanceValue = document.getElementById('distance-value');
+        distanceFilter.addEventListener('input', (e) => {
+            const value = parseFloat(e.target.value);
+            this.filters.maxDistance = value;
+            distanceValue.textContent = `${value} km`;
+            this.displayEvents();
+        });
+        
+        // Time filter
+        const timeFilter = document.getElementById('time-filter');
+        timeFilter.addEventListener('change', (e) => {
+            this.filters.timeFilter = e.target.value;
+            this.displayEvents();
+        });
+        
+        // Category filter
+        const categoryFilter = document.getElementById('category-filter');
+        categoryFilter.addEventListener('change', (e) => {
+            this.filters.category = e.target.value;
+            this.displayEvents();
+        });
+        
+        // Custom location checkbox
+        const useCustomLocation = document.getElementById('use-custom-location');
+        const customLocationInputs = document.getElementById('custom-location-inputs');
+        useCustomLocation.addEventListener('change', (e) => {
+            if (e.target.checked) {
+                customLocationInputs.classList.remove('hidden');
+                // Pre-fill with current location if available
+                if (this.userLocation) {
+                    document.getElementById('custom-lat').value = this.userLocation.lat.toFixed(4);
+                    document.getElementById('custom-lon').value = this.userLocation.lon.toFixed(4);
+                }
+            } else {
+                customLocationInputs.classList.add('hidden');
+                this.filters.useCustomLocation = false;
+                this.filters.customLat = null;
+                this.filters.customLon = null;
+                this.displayEvents();
+            }
+        });
+        
+        // Apply custom location button
+        const applyCustomLocation = document.getElementById('apply-custom-location');
+        applyCustomLocation.addEventListener('click', () => {
+            const lat = parseFloat(document.getElementById('custom-lat').value);
+            const lon = parseFloat(document.getElementById('custom-lon').value);
+            
+            if (!isNaN(lat) && !isNaN(lon) && lat >= -90 && lat <= 90 && lon >= -180 && lon <= 180) {
+                this.filters.useCustomLocation = true;
+                this.filters.customLat = lat;
+                this.filters.customLon = lon;
+                
+                // Update map view to custom location
+                this.map.setView([lat, lon], 13);
+                
+                this.displayEvents();
+            } else {
+                alert('Please enter valid latitude (-90 to 90) and longitude (-180 to 180) values.');
+            }
+        });
+        
+        // Reset filters button
+        const resetFilters = document.getElementById('reset-filters');
+        resetFilters.addEventListener('click', () => {
+            // Reset all filters to defaults
+            this.filters.maxDistance = 5;
+            this.filters.timeFilter = 'sunrise';
+            this.filters.category = 'all';
+            this.filters.useCustomLocation = false;
+            this.filters.customLat = null;
+            this.filters.customLon = null;
+            
+            // Reset UI elements
+            document.getElementById('distance-filter').value = 5;
+            document.getElementById('distance-value').textContent = '5 km';
+            document.getElementById('time-filter').value = 'sunrise';
+            document.getElementById('category-filter').value = 'all';
+            document.getElementById('use-custom-location').checked = false;
+            document.getElementById('custom-location-inputs').classList.add('hidden');
+            
+            // Reset map view
+            if (this.userLocation) {
+                this.map.setView([this.userLocation.lat, this.userLocation.lon], 13);
+            }
+            
+            this.displayEvents();
+        });
+        
+        // Event detail close listeners
         document.getElementById('close-detail').addEventListener('click', () => {
             document.getElementById('event-detail').classList.add('hidden');
         });
