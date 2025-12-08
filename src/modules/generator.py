@@ -15,6 +15,13 @@ class StaticSiteGenerator:
         
     def generate_all(self):
         """Generate all static files"""
+        from .utils import archive_old_events
+        
+        print("Archiving old events...")
+        archived_count = archive_old_events(self.base_path)
+        if archived_count > 0:
+            print(f"  Archived {archived_count} past event(s)")
+        
         print("Generating HTML...")
         self._generate_html()
         

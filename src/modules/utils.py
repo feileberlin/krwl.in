@@ -73,7 +73,6 @@ def get_next_sunrise(lat, lon):
     Returns datetime object
     """
     from datetime import datetime, timedelta
-    import math
     
     # Simplified sunrise calculation
     # For production, use a library like astral or suntime
@@ -86,3 +85,106 @@ def get_next_sunrise(lat, lon):
         tomorrow += timedelta(days=1)
     
     return tomorrow
+
+
+def archive_old_events(base_path):
+    """
+    Archive events that have already passed
+    Moves them from published to archived status
+    Returns number of events archived
+    """
+    from datetime import datetime
+    
+    events_data = load_events(base_path)
+    events = events_data.get('events', [])
+    
+    now = datetime.now()
+    archived_count = 0
+    active_events = []
+    archived_events = []
+    
+    for event in events:
+        # Parse event end time (or start time if no end time)
+        event_time_str = event.get('end_time') or event.get('start_time')
+        if not event_time_str:
+            active_events.append(event)
+            continue
+        
+        try:
+            event_time = datetime.fromisoformat(event_time_str.replace('Z', '+00:00'))
+            # Remove timezone info for comparison if present
+            if event_time.tzinfo:
+                event_time = event_time.replace(tzinfo=None)
+            
+            if event_time < now:
+                # Event has passed - archive it
+                event['status'] = 'archived'
+                event['archived_at'] = now.isoformat()
+                archived_events.append(event)
+                archived_count += 1
+            else:
+                active_events.append(event)
+        except (ValueError, AttributeError):
+            # Keep event if we can't parse the time
+            active_events.append(event)
+    
+    # Save active events
+    events_data['events'] = active_events
+    save_events(base_path, events_data)
+    
+    # Save archived events if there are any
+    if archived_events:
+        archive_path = base_path / 'data' / 'archived_events.json'
+        try:
+            with open(archive_path, 'r') as f:
+                archive_data = json.load(f)
+        except FileNotFoundError:
+            archive_data = {'archived_events': []}
+        
+        archive_data['archived_events'].extend(archived_events)
+        archive_data['last_updated'] = now.isoformat()
+        
+        with open(archive_path, 'w') as f:
+            json.dump(archive_data, f, indent=2)
+    
+    return archived_count
+
+
+def filter_events_by_time(events, config):
+    """
+    Filter events based on time rules:
+    - Remove events that have already passed
+    - Only show events until next sunrise
+    Returns filtered list of events
+    """
+    from datetime import datetime
+    
+    now = datetime.now()
+    next_sunrise = get_next_sunrise(config['map']['default_center']['lat'], 
+                                     config['map']['default_center']['lon'])
+    
+    filtered_events = []
+    
+    for event in events:
+        event_start_str = event.get('start_time')
+        if not event_start_str:
+            continue
+        
+        try:
+            event_start = datetime.fromisoformat(event_start_str.replace('Z', '+00:00'))
+            # Remove timezone info for comparison if present
+            if event_start.tzinfo:
+                event_start = event_start.replace(tzinfo=None)
+            
+            # Event must be in the future
+            if event_start <= now:
+                continue
+            
+            # Event must be before next sunrise
+            if event_start <= next_sunrise:
+                filtered_events.append(event)
+        except (ValueError, AttributeError):
+            # Skip events with invalid time format
+            continue
+    
+    return filtered_events

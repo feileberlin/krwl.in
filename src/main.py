@@ -453,6 +453,7 @@ COMMANDS:
     list                      List all published events
     list-pending              List all pending events
     generate                  Generate static site files
+    archive                   Archive past events (automatic on generate)
     load-examples             Load example data for development
     clear-data                Clear all event data
     
@@ -673,6 +674,22 @@ def cli_clear_data(base_path):
     return 0
 
 
+def cli_archive_old_events(base_path):
+    """CLI: Archive past events"""
+    from modules.utils import archive_old_events
+    
+    print("Archiving past events...")
+    archived_count = archive_old_events(base_path)
+    
+    if archived_count > 0:
+        print(f"✓ Archived {archived_count} past event(s)")
+        print(f"  Archived events saved to: {base_path / 'data' / 'archived_events.json'}")
+    else:
+        print("✓ No past events to archive")
+    
+    return 0
+
+
 def main():
     """Main entry point"""
     parser = argparse.ArgumentParser(
@@ -734,6 +751,9 @@ def main():
         
         elif args.command == 'generate':
             return cli_generate(base_path, config)
+        
+        elif args.command == 'archive':
+            return cli_archive_old_events(base_path)
         
         elif args.command == 'load-examples':
             return cli_load_examples(base_path)

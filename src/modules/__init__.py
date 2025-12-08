@@ -7,7 +7,9 @@ from .utils import (
     load_pending_events,
     save_pending_events,
     calculate_distance,
-    get_next_sunrise
+    get_next_sunrise,
+    archive_old_events,
+    filter_events_by_time
 )
 from .scraper import EventScraper
 from .editor import EventEditor
@@ -21,6 +23,8 @@ __all__ = [
     'save_pending_events',
     'calculate_distance',
     'get_next_sunrise',
+    'archive_old_events',
+    'filter_events_by_time',
     'EventScraper',
     'EventEditor',
     'StaticSiteGenerator'
