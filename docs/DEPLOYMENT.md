@@ -13,8 +13,10 @@ The workflow in `.github/workflows/deploy-static-to-gh-pages.yml` automatically 
 When triggered, the workflow:
 1. Checks out the repository code
 2. Uses the `peaceiris/actions-gh-pages` action to publish the contents of the `static/` directory
-3. Pushes the published files to the `gh-pages` branch
+3. Pushes the published files to the `gh-pages` branch as an orphan branch (no git history)
 4. Ensures `.nojekyll` is created (via `enable_jekyll: false`) so files starting with underscore are not ignored
+
+**Note:** The workflow uses `force_orphan: true` to keep the `gh-pages` branch clean without commit history. This is a best practice for deployment branches and prevents the branch from growing unnecessarily large over time.
 
 ### Configuration
 
