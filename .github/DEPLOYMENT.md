@@ -27,14 +27,26 @@ This repository uses a safe two-step deployment process:
 - **Debug mode**: OFF
 - **Performance**: Maximum speed
 - **Caching**: Enabled
+- **Data source**: Real events only
 - **Used by**: `main` branch
 - **Domain**: Custom domain via CNAME
 
 ### Development (`config.dev.json`)
 - **Debug mode**: ON (console logging)
 - **Performance**: Caching disabled for testing
+- **Data source**: Both real and demo events
 - **Used by**: `preview` branch
 - **Domain**: GitHub Pages `/preview/` path (no CNAME)
+
+### Data Source Options (Dev Mode Only)
+
+Development mode supports three data source configurations:
+
+1. **`"source": "real"`** - Load only real scraped events
+2. **`"source": "demo"`** - Load only demo events with current timestamps
+3. **`"source": "both"`** - Load both real and demo events (default for dev)
+
+Demo events are automatically generated from real event templates with fresh timestamps, making them perfect for testing time-based features.
 
 ## Workflows
 
@@ -54,12 +66,13 @@ This repository uses a safe two-step deployment process:
 
 **What it does**:
 - Copies `static/` → `publish/preview/`
-- Uses `config.dev.json` (debug enabled)
+- **Generates fresh demo events** from real event templates
+- Uses `config.dev.json` (debug enabled, real+demo data)
 - NO CNAME (avoids domain conflict)
 - Injects `<base href="/preview/">` tag
 - Deploys to GitHub Pages `/preview/` path
 
-**Result**: Debug-enabled preview at `yourdomain.com/preview/`
+**Result**: Debug-enabled preview at `yourdomain.com/preview/` with fresh demo events
 
 ### 3. Promote Preview (`promote-preview.yml`)
 **Triggers**: Manual dispatch only
@@ -87,8 +100,12 @@ When using `config.dev.json` (preview branch):
 
 - **Debug logs** appear in browser console with `[KRWL Debug]` prefix
 - **Title shows** `[DEBUG MODE]` indicator
+- **Data source** shows which events are loaded (real/demo/both)
+- **Demo events** are marked with `[DEMO]` prefix in titles
+- **Fresh timestamps** on demo events (regenerated on each deploy)
 - **Console logs**:
   - Config loaded
+  - Data source mode
   - Events loading/filtering
   - Distance calculations
   - Filter reasons
@@ -102,8 +119,11 @@ When using `config.prod.json` (main branch):
 
 ## Local Testing
 
-### Test with Debug Mode
+### Test with Debug Mode and Demo Data
 ```bash
+# Generate fresh demo events
+python3 generate_demo_events.py > static/events.demo.json
+
 # Serve static/ directory locally
 python3 -m http.server 8000
 
@@ -118,6 +138,7 @@ cp config.dev.json static/config.json
 
 **Access**: `http://localhost:8000`
 **Check console**: Debug logs should appear
+**Demo events**: Look for [DEMO] prefix in event titles
 
 ### Test with Production Config
 ```bash

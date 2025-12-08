@@ -114,11 +114,53 @@ class EventsApp {
     
     async loadEvents() {
         try {
-            this.log('Loading events from events.json');
-            const response = await fetch('events.json');
-            const data = await response.json();
-            this.events = data.events || [];
-            this.log(`Loaded ${this.events.length} events`);
+            this.log('Loading events from config data source');
+            const dataConfig = this.config.data || { source: 'real' };
+            const source = dataConfig.source || 'real';
+            
+            this.log(`Data source mode: ${source}`);
+            
+            let allEvents = [];
+            
+            if (source === 'real') {
+                // Load only real events
+                const response = await fetch('events.json');
+                const data = await response.json();
+                allEvents = data.events || [];
+                this.log(`Loaded ${allEvents.length} real events`);
+            } else if (source === 'demo') {
+                // Load only demo events
+                const response = await fetch('events.demo.json');
+                const data = await response.json();
+                allEvents = data.events || [];
+                this.log(`Loaded ${allEvents.length} demo events`);
+            } else if (source === 'both') {
+                // Load and combine both real and demo events
+                try {
+                    const realResponse = await fetch('events.json');
+                    const realData = await realResponse.json();
+                    const realEvents = realData.events || [];
+                    this.log(`Loaded ${realEvents.length} real events`);
+                    allEvents = allEvents.concat(realEvents);
+                } catch (e) {
+                    this.log('Could not load real events:', e);
+                }
+                
+                try {
+                    const demoResponse = await fetch('events.demo.json');
+                    const demoData = await demoResponse.json();
+                    const demoEvents = demoData.events || [];
+                    this.log(`Loaded ${demoEvents.length} demo events`);
+                    allEvents = allEvents.concat(demoEvents);
+                } catch (e) {
+                    this.log('Could not load demo events:', e);
+                }
+                
+                this.log(`Combined total: ${allEvents.length} events`);
+            }
+            
+            this.events = allEvents;
+            this.log(`Total events loaded: ${this.events.length}`);
         } catch (error) {
             console.error('Error loading events:', error);
             this.events = [];

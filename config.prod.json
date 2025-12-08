@@ -8,6 +8,9 @@
     "cache_enabled": true,
     "prefetch_events": true
   },
+  "data": {
+    "source": "real"
+  },
   "scraping": {
     "sources": [
       {
