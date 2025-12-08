@@ -6,8 +6,15 @@ class EventsApp {
         this.events = [];
         this.markers = [];
         this.config = null;
+        this.debug = false;
         
         this.init();
+    }
+    
+    log(...args) {
+        if (this.debug) {
+            console.log('[KRWL Debug]', ...args);
+        }
     }
     
     async init() {
@@ -31,10 +38,16 @@ class EventsApp {
         try {
             const response = await fetch('config.json');
             this.config = await response.json();
+            this.debug = this.config.debug || false;
+            this.log('Config loaded:', this.config);
+            if (this.debug) {
+                document.title += ' [DEBUG MODE]';
+            }
         } catch (error) {
             console.error('Error loading config:', error);
             // Use defaults
             this.config = {
+                debug: false,
                 map: {
                     default_center: { lat: 52.52, lon: 13.405 },
                     default_zoom: 13
@@ -101,9 +114,11 @@ class EventsApp {
     
     async loadEvents() {
         try {
+            this.log('Loading events from events.json');
             const response = await fetch('events.json');
             const data = await response.json();
             this.events = data.events || [];
+            this.log(`Loaded ${this.events.length} events`);
         } catch (error) {
             console.error('Error loading events:', error);
             this.events = [];
@@ -138,10 +153,18 @@ class EventsApp {
         const nextSunrise = this.getNextSunrise();
         const maxDistance = this.config.filtering.max_distance_km;
         
-        return this.events.filter(event => {
+        this.log('Filtering events:', {
+            totalEvents: this.events.length,
+            nextSunrise: nextSunrise,
+            maxDistance: maxDistance,
+            userLocation: this.userLocation
+        });
+        
+        const filtered = this.events.filter(event => {
             // Filter by time (until next sunrise)
             const eventTime = new Date(event.start_time);
             if (eventTime > nextSunrise) {
+                this.log(`Event "${event.title}" filtered out: after sunrise`);
                 return false;
             }
             
@@ -156,12 +179,16 @@ class EventsApp {
                 event.distance = distance;
                 
                 if (distance > maxDistance) {
+                    this.log(`Event "${event.title}" filtered out: ${distance.toFixed(1)}km > ${maxDistance}km`);
                     return false;
                 }
             }
             
             return true;
         });
+        
+        this.log(`Filtered to ${filtered.length} events`);
+        return filtered;
     }
     
     displayEvents() {
