@@ -7,6 +7,14 @@ class EventsApp {
         this.markers = [];
         this.config = null;
         this.debug = false;
+        this.filters = {
+            maxDistance: 5,
+            timeFilter: 'sunrise',
+            category: 'all',
+            useCustomLocation: false,
+            customLat: null,
+            customLon: null
+        };
         
         this.init();
     }
@@ -100,14 +108,34 @@ class EventsApp {
                 },
                 (error) => {
                     console.error('Location error:', error);
-                    statusEl.textContent = '⚠️ Location unavailable';
+                    statusEl.textContent = '⚠️ Location unavailable - using default location';
                     
-                    // Still display events, but without distance filtering
+                    // Use config default location as fallback
+                    const defaultCenter = this.config.map.default_center;
+                    this.userLocation = {
+                        lat: defaultCenter.lat,
+                        lon: defaultCenter.lon
+                    };
+                    this.log('Using fallback location:', this.userLocation);
+                    
+                    // Center map on default location
+                    this.map.setView([this.userLocation.lat, this.userLocation.lon], 13);
+                    
+                    // Still display events with fallback location
                     this.displayEvents();
                 }
             );
         } else {
-            statusEl.textContent = '⚠️ Geolocation not supported';
+            statusEl.textContent = '⚠️ Geolocation not supported - using default location';
+            
+            // Use config default location as fallback
+            const defaultCenter = this.config.map.default_center;
+            this.userLocation = {
+                lat: defaultCenter.lat,
+                lon: defaultCenter.lon
+            };
+            this.log('Geolocation not supported, using fallback location:', this.userLocation);
+            
             this.displayEvents();
         }
     }
@@ -161,10 +189,31 @@ class EventsApp {
             
             this.events = allEvents;
             this.log(`Total events loaded: ${this.events.length}`);
+            
+            // Extract unique categories from events
+            this.populateCategories();
         } catch (error) {
             console.error('Error loading events:', error);
             this.events = [];
         }
+    }
+    
+    populateCategories() {
+        const categories = new Set();
+        this.events.forEach(event => {
+            if (event.category) {
+                categories.add(event.category);
+            }
+        });
+        
+        // Populate category filter dropdown
+        const categoryFilter = document.getElementById('category-filter');
+        categories.forEach(category => {
+            const option = document.createElement('option');
+            option.value = category;
+            option.textContent = category;
+            categoryFilter.appendChild(option);
+        });
     }
     
     calculateDistance(lat1, lon1, lat2, lon2) {
@@ -176,6 +225,41 @@ class EventsApp {
                   Math.sin(dLon/2) * Math.sin(dLon/2);
         const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
         return R * c;
+    }
+    
+    getMaxEventTime() {
+        const now = new Date();
+        const timeFilter = this.filters.timeFilter;
+        
+        switch (timeFilter) {
+            case 'sunrise':
+                // Simplified: next sunrise at 6 AM
+                const sunrise = new Date(now);
+                sunrise.setHours(6, 0, 0, 0);
+                if (now.getHours() >= 6) {
+                    sunrise.setDate(sunrise.getDate() + 1);
+                }
+                return sunrise;
+                
+            case '6h':
+                return new Date(now.getTime() + 6 * 60 * 60 * 1000);
+                
+            case '12h':
+                return new Date(now.getTime() + 12 * 60 * 60 * 1000);
+                
+            case '24h':
+                return new Date(now.getTime() + 24 * 60 * 60 * 1000);
+                
+            case '48h':
+                return new Date(now.getTime() + 48 * 60 * 60 * 1000);
+                
+            case 'all':
+                // Return a date far in the future
+                return new Date(now.getFullYear() + 10, 11, 31);
+                
+            default:
+                return this.getNextSunrise();
+        }
     }
     
     getNextSunrise() {
@@ -192,29 +276,46 @@ class EventsApp {
     }
     
     filterEvents() {
-        const nextSunrise = this.getNextSunrise();
-        const maxDistance = this.config.filtering.max_distance_km;
+        const maxEventTime = this.getMaxEventTime();
+        const maxDistance = this.filters.maxDistance;
+        const category = this.filters.category;
+        
+        // Determine which location to use for distance calculation
+        let referenceLocation = this.userLocation;
+        if (this.filters.useCustomLocation && this.filters.customLat && this.filters.customLon) {
+            referenceLocation = {
+                lat: this.filters.customLat,
+                lon: this.filters.customLon
+            };
+        }
         
         this.log('Filtering events:', {
             totalEvents: this.events.length,
-            nextSunrise: nextSunrise,
+            maxEventTime: maxEventTime,
             maxDistance: maxDistance,
-            userLocation: this.userLocation
+            category: category,
+            referenceLocation: referenceLocation
         });
         
         const filtered = this.events.filter(event => {
-            // Filter by time (until next sunrise)
+            // Filter by time
             const eventTime = new Date(event.start_time);
-            if (eventTime > nextSunrise) {
-                this.log(`Event "${event.title}" filtered out: after sunrise`);
+            if (eventTime > maxEventTime) {
+                this.log(`Event "${event.title}" filtered out: after time limit`);
                 return false;
             }
             
-            // Filter by distance if user location is available
-            if (this.userLocation && event.location) {
+            // Filter by category
+            if (category !== 'all' && event.category !== category) {
+                this.log(`Event "${event.title}" filtered out: category mismatch`);
+                return false;
+            }
+            
+            // Filter by distance if location is available
+            if (referenceLocation && event.location) {
                 const distance = this.calculateDistance(
-                    this.userLocation.lat,
-                    this.userLocation.lon,
+                    referenceLocation.lat,
+                    referenceLocation.lon,
                     event.location.lat,
                     event.location.lon
                 );
@@ -233,13 +334,39 @@ class EventsApp {
         return filtered;
     }
     
+    fitMapToMarkers() {
+        if (this.markers.length === 0) {
+            this.log('No markers to fit');
+            return;
+        }
+        
+        // Create bounds from all marker positions
+        const bounds = L.latLngBounds();
+        
+        this.markers.forEach(marker => {
+            bounds.extend(marker.getLatLng());
+        });
+        
+        // Add user location to bounds if available
+        if (this.userLocation) {
+            bounds.extend([this.userLocation.lat, this.userLocation.lon]);
+        }
+        
+        // Fit the map to show all markers with some padding
+        this.map.fitBounds(bounds, {
+            padding: [50, 50],
+            maxZoom: 15
+        });
+        
+        this.log('Map fitted to bounds:', bounds);
+    }
+    
     displayEvents() {
         const filteredEvents = this.filterEvents();
         const container = document.getElementById('events-container');
-        const countEl = document.getElementById('event-count');
         
-        // Update count
-        countEl.textContent = `${filteredEvents.length} events nearby`;
+        // Update count with descriptive sentence
+        this.updateFilterDescription(filteredEvents.length);
         
         // Clear existing content
         container.innerHTML = '';
@@ -249,7 +376,7 @@ class EventsApp {
         this.markers = [];
         
         if (filteredEvents.length === 0) {
-            container.innerHTML = '<p>No upcoming events found nearby.</p>';
+            container.innerHTML = '<p>No events match the current filters.</p>';
             return;
         }
         
@@ -261,6 +388,74 @@ class EventsApp {
             this.displayEventCard(event, container);
             this.addEventMarker(event);
         });
+        
+        // Fit map to show all markers
+        this.fitMapToMarkers();
+    }
+    
+    updateFilterDescription(count) {
+        const countEl = document.getElementById('event-count');
+        
+        // Build descriptive sentence
+        const eventText = `${count} event${count !== 1 ? 's' : ''}`;
+        
+        // Time description
+        let timeText = '';
+        switch (this.filters.timeFilter) {
+            case 'sunrise':
+                timeText = 'till sunrise';
+                break;
+            case '6h':
+                timeText = 'in the next 6 hours';
+                break;
+            case '12h':
+                timeText = 'in the next 12 hours';
+                break;
+            case '24h':
+                timeText = 'in the next 24 hours';
+                break;
+            case '48h':
+                timeText = 'in the next 48 hours';
+                break;
+            case 'all':
+                timeText = 'upcoming';
+                break;
+        }
+        
+        // Distance description (approximate travel time)
+        const distance = this.filters.maxDistance;
+        let distanceText = '';
+        if (distance <= 1) {
+            distanceText = 'within walking distance';
+        } else if (distance <= 5) {
+            const minutes = Math.round(distance * 3); // ~3 min per km walking
+            distanceText = `within ${minutes} minutes walk`;
+        } else if (distance <= 15) {
+            const minutes = Math.round(distance * 4); // ~4 min per km by bike
+            distanceText = `within ${minutes} minutes by bike`;
+        } else {
+            distanceText = `within ${distance} km`;
+        }
+        
+        // Location description
+        let locationText = 'from your location';
+        if (this.filters.useCustomLocation && this.filters.customLat && this.filters.customLon) {
+            locationText = 'from custom location';
+        } else if (!this.userLocation) {
+            locationText = 'from default location';
+        }
+        
+        // Category description
+        let categoryText = '';
+        if (this.filters.category !== 'all') {
+            categoryText = ` in ${this.filters.category}`;
+        }
+        
+        // Construct the full sentence
+        const description = `${eventText}${categoryText} ${timeText} ${distanceText} ${locationText}`;
+        
+        countEl.textContent = description;
+        this.log('Filter description:', description);
     }
     
     displayEventCard(event, container) {
@@ -337,6 +532,98 @@ class EventsApp {
     }
     
     setupEventListeners() {
+        // Distance filter
+        const distanceFilter = document.getElementById('distance-filter');
+        const distanceValue = document.getElementById('distance-value');
+        distanceFilter.addEventListener('input', (e) => {
+            const value = parseFloat(e.target.value);
+            this.filters.maxDistance = value;
+            distanceValue.textContent = `${value} km`;
+            this.displayEvents();
+        });
+        
+        // Time filter
+        const timeFilter = document.getElementById('time-filter');
+        timeFilter.addEventListener('change', (e) => {
+            this.filters.timeFilter = e.target.value;
+            this.displayEvents();
+        });
+        
+        // Category filter
+        const categoryFilter = document.getElementById('category-filter');
+        categoryFilter.addEventListener('change', (e) => {
+            this.filters.category = e.target.value;
+            this.displayEvents();
+        });
+        
+        // Custom location checkbox
+        const useCustomLocation = document.getElementById('use-custom-location');
+        const customLocationInputs = document.getElementById('custom-location-inputs');
+        useCustomLocation.addEventListener('change', (e) => {
+            if (e.target.checked) {
+                customLocationInputs.classList.remove('hidden');
+                // Pre-fill with current location if available
+                if (this.userLocation) {
+                    document.getElementById('custom-lat').value = this.userLocation.lat.toFixed(4);
+                    document.getElementById('custom-lon').value = this.userLocation.lon.toFixed(4);
+                }
+            } else {
+                customLocationInputs.classList.add('hidden');
+                this.filters.useCustomLocation = false;
+                this.filters.customLat = null;
+                this.filters.customLon = null;
+                this.displayEvents();
+            }
+        });
+        
+        // Apply custom location button
+        const applyCustomLocation = document.getElementById('apply-custom-location');
+        applyCustomLocation.addEventListener('click', () => {
+            const lat = parseFloat(document.getElementById('custom-lat').value);
+            const lon = parseFloat(document.getElementById('custom-lon').value);
+            
+            if (!isNaN(lat) && !isNaN(lon) && lat >= -90 && lat <= 90 && lon >= -180 && lon <= 180) {
+                this.filters.useCustomLocation = true;
+                this.filters.customLat = lat;
+                this.filters.customLon = lon;
+                
+                // Update map view to custom location
+                this.map.setView([lat, lon], 13);
+                
+                this.displayEvents();
+            } else {
+                alert('Please enter valid latitude (-90 to 90) and longitude (-180 to 180) values.');
+            }
+        });
+        
+        // Reset filters button
+        const resetFilters = document.getElementById('reset-filters');
+        resetFilters.addEventListener('click', () => {
+            // Reset all filters to defaults
+            this.filters.maxDistance = 5;
+            this.filters.timeFilter = 'sunrise';
+            this.filters.category = 'all';
+            this.filters.useCustomLocation = false;
+            this.filters.customLat = null;
+            this.filters.customLon = null;
+            
+            // Reset UI elements
+            document.getElementById('distance-filter').value = 5;
+            document.getElementById('distance-value').textContent = '5 km';
+            document.getElementById('time-filter').value = 'sunrise';
+            document.getElementById('category-filter').value = 'all';
+            document.getElementById('use-custom-location').checked = false;
+            document.getElementById('custom-location-inputs').classList.add('hidden');
+            
+            // Reset map view
+            if (this.userLocation) {
+                this.map.setView([this.userLocation.lat, this.userLocation.lon], 13);
+            }
+            
+            this.displayEvents();
+        });
+        
+        // Event detail close listeners
         document.getElementById('close-detail').addEventListener('click', () => {
             document.getElementById('event-detail').classList.add('hidden');
         });
