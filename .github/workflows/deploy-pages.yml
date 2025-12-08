@@ -39,7 +39,7 @@ jobs:
           ls -la publish
 
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-pages-artifact@v2
         with:
           path: publish
 
