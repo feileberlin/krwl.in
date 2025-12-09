@@ -30,6 +30,13 @@ jobs:
         with:
           python-version: '3.x'
       
+      - name: Install Python dependencies
+        run: |
+          echo "Installing scraping dependencies..."
+          pip install --upgrade pip
+          pip install -r requirements.txt
+          echo "✓ Dependencies installed"
+      
       - name: Run feature verification
         id: verify
         run: |
