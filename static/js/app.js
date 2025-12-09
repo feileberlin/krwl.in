@@ -803,39 +803,20 @@ class EventsApp {
     }
     
     updateFilterDescription(count) {
-        // Get the category filter element
         const categoryFilter = document.getElementById('category-filter');
+        const categoryCounts = this.calculateCategoryCounts();
         
-        // First, restore all options to their original text
+        // Update each option with its count in a single loop
         for (let i = 0; i < categoryFilter.options.length; i++) {
             const option = categoryFilter.options[i];
             // Store original text on first run
             if (!option.dataset.originalText) {
                 option.dataset.originalText = option.textContent;
             }
-            // Restore to original text
-            option.textContent = option.dataset.originalText;
+            const categoryText = option.dataset.originalText;
+            const categoryCount = categoryCounts[option.value] || 0;
+            option.textContent = `${categoryText} (${categoryCount})`;
         }
-        
-        // Calculate counts for each category based on current filters (excluding category filter)
-        const categoryCounts = this.calculateCategoryCounts();
-        
-        // Update each option with its count
-        for (let i = 0; i < categoryFilter.options.length; i++) {
-            const option = categoryFilter.options[i];
-            const categoryValue = option.value;
-            const categoryText = option.dataset.originalText || option.textContent;
-            const categoryCount = categoryCounts[categoryValue] || 0;
-            
-            // Format the option text with count: "category (count)"
-            const displayText = `${categoryText} (${categoryCount})`;
-            option.textContent = displayText;
-        }
-        
-        // Get the selected option to announce to screen reader
-        const selectedOption = categoryFilter.options[categoryFilter.selectedIndex];
-        const categoryValue = selectedOption.value;
-        const categoryCount = categoryCounts[categoryValue] || 0;
         
         this.log('Filter counts updated:', categoryCounts);
     }
@@ -847,52 +828,30 @@ class EventsApp {
     calculateCategoryCounts() {
         const maxEventTime = this.getMaxEventTime();
         const maxDistance = this.filters.maxDistance;
-        
-        // Determine which location to use for distance calculation
-        let referenceLocation = this.userLocation;
-        if (this.filters.useCustomLocation && this.filters.customLat && this.filters.customLon) {
-            referenceLocation = {
-                lat: this.filters.customLat,
-                lon: this.filters.customLon
-            };
-        }
-        
-        // Initialize counts for all categories
         const categoryCounts = { all: 0 };
         
-        // Filter events by time and distance only (not by category)
-        this.events.forEach(event => {
-            // Filter by time
-            const eventTime = new Date(event.start_time);
-            if (eventTime > maxEventTime) {
-                return; // Skip this event
+        // Determine reference location once
+        const refLoc = (this.filters.useCustomLocation && this.filters.customLat && this.filters.customLon)
+            ? { lat: this.filters.customLat, lon: this.filters.customLon }
+            : this.userLocation;
+        
+        // Count events that pass time and distance filters
+        for (const event of this.events) {
+            // Check time filter
+            if (new Date(event.start_time) > maxEventTime) continue;
+            
+            // Check distance filter
+            if (refLoc && event.location) {
+                const distance = this.calculateDistance(refLoc.lat, refLoc.lon, event.location.lat, event.location.lon);
+                if (distance > maxDistance) continue;
             }
             
-            // Filter by distance if location is available
-            if (referenceLocation && event.location) {
-                const distance = this.calculateDistance(
-                    referenceLocation.lat,
-                    referenceLocation.lon,
-                    event.location.lat,
-                    event.location.lon
-                );
-                
-                if (distance > maxDistance) {
-                    return; // Skip this event
-                }
-            }
-            
-            // Event passed time and distance filters, count it
+            // Count event
             categoryCounts.all++;
-            
-            // Count for specific category
             if (event.category) {
-                if (!categoryCounts[event.category]) {
-                    categoryCounts[event.category] = 0;
-                }
-                categoryCounts[event.category]++;
+                categoryCounts[event.category] = (categoryCounts[event.category] || 0) + 1;
             }
-        });
+        }
         
         return categoryCounts;
     }
