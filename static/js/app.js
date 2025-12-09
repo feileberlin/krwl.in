@@ -98,6 +98,9 @@ class EventsApp {
         // Load event data from events.json
         await this.loadEvents();
         
+        // Initialize UI translations for filters
+        this.updateUITranslations();
+        
         // Setup all event listeners (filters, keyboard nav, etc.)
         this.setupEventListeners();
     }
@@ -346,10 +349,22 @@ class EventsApp {
                     // Center map on user location
                     this.map.setView([this.userLocation.lat, this.userLocation.lon], 13);
                     
-                    // Add user marker with standard Leaflet convention
-                    L.marker([this.userLocation.lat, this.userLocation.lon])
+                    // Create custom icon for user location
+                    const userIcon = L.icon({
+                        iconUrl: 'markers/marker-geolocation.svg',
+                        iconSize: [32, 48],
+                        iconAnchor: [16, 48],
+                        popupAnchor: [0, -48]
+                    });
+                    
+                    // Add user marker with custom icon
+                    const popupText = window.i18n ? window.i18n.t('map.user_location_popup') : 'You are here';
+                    L.marker([this.userLocation.lat, this.userLocation.lon], {
+                        icon: userIcon,
+                        zIndexOffset: 1000  // Keep on top of event markers
+                    })
                         .addTo(this.map)
-                        .bindPopup('You are here');
+                        .bindPopup(popupText);
                     
                     // Update events display
                     this.displayEvents();
@@ -468,10 +483,33 @@ class EventsApp {
         
         // Populate category filter dropdown
         const categoryFilter = document.getElementById('category-filter');
+        
+        // Clear existing dynamically-added options, keeping only the "all" option
+        // Verify first option is the "all" option before clearing
+        if (categoryFilter.options.length > 0 && categoryFilter.options[0].value === 'all') {
+            while (categoryFilter.options.length > 1) {
+                categoryFilter.remove(1);
+            }
+        } else {
+            // If first option isn't "all", clear everything and recreate
+            categoryFilter.innerHTML = '';
+            const allOption = document.createElement('option');
+            allOption.value = 'all';
+            allOption.textContent = window.i18n ? window.i18n.t('filters.categories.all') : 'events';
+            categoryFilter.appendChild(allOption);
+        }
+        
+        // Update the "all" option text with translation
+        if (window.i18n && categoryFilter.options.length > 0) {
+            categoryFilter.options[0].textContent = window.i18n.t('filters.categories.all');
+        }
+        
+        // Add category options with translations
         categories.forEach(category => {
             const option = document.createElement('option');
             option.value = category;
-            option.textContent = category;
+            // Use i18n translation if available, fallback to category name
+            option.textContent = window.i18n ? window.i18n.t(`filters.categories.${category}`) : category;
             categoryFilter.appendChild(option);
         });
     }
@@ -721,6 +759,57 @@ class EventsApp {
         this.log('Filter count updated:', countText);
     }
     
+    /**
+     * Update all UI text with current language translations
+     * Called when language is changed
+     */
+    updateUITranslations() {
+        if (!window.i18n) return;
+        
+        const t = (key) => window.i18n.t(key);
+        
+        // Update time filter options
+        const timeFilter = document.getElementById('time-filter');
+        if (timeFilter) {
+            const timeOptions = timeFilter.options;
+            for (let i = 0; i < timeOptions.length; i++) {
+                const value = timeOptions[i].value;
+                timeOptions[i].textContent = t(`filters.time_ranges.${value}`);
+            }
+        }
+        
+        // Update distance filter options
+        const distanceFilter = document.getElementById('distance-filter');
+        if (distanceFilter) {
+            const distOptions = distanceFilter.options;
+            for (let i = 0; i < distOptions.length; i++) {
+                const value = distOptions[i].value;
+                distOptions[i].textContent = t(`filters.distances.${value}`);
+            }
+        }
+        
+        // Update category filter options
+        const categoryFilter = document.getElementById('category-filter');
+        if (categoryFilter) {
+            const catOptions = categoryFilter.options;
+            for (let i = 0; i < catOptions.length; i++) {
+                const value = catOptions[i].value;
+                catOptions[i].textContent = t(`filters.categories.${value}`);
+            }
+        }
+        
+        // Update location selector options
+        const locationSelector = document.getElementById('location-selector');
+        if (locationSelector) {
+            // Update the geolocation option
+            if (locationSelector.options[0]) {
+                locationSelector.options[0].textContent = t('filters.locations.geolocation');
+            }
+        }
+        
+        this.log('UI translations updated');
+    }
+    
     formatTime(dateString) {
         const date = new Date(dateString);
         const now = new Date();
@@ -763,14 +852,51 @@ class EventsApp {
         }
     }
     
+    /**
+     * Get marker icon based on event category
+     * Returns a Leaflet icon object with the appropriate SVG marker
+     * @param {string} category - Event category (music, sports, arts, food, festivals, workshops, community, etc.)
+     * @returns {L.Icon} Leaflet icon object
+     */
+    getCategoryIcon(category) {
+        // Map categories to marker files
+        const markerMap = {
+            'music': 'markers/marker-music.svg',
+            'sports': 'markers/marker-sports.svg',
+            'arts': 'markers/marker-arts.svg',
+            'food': 'markers/marker-food.svg',
+            'festivals': 'markers/marker-festivals.svg',
+            'workshops': 'markers/marker-workshops.svg',
+            'community': 'markers/marker-community.svg',
+            // Legacy categories (backward compatibility)
+            'on-stage': 'markers/marker-on-stage.svg',
+            'pub-games': 'markers/marker-pub-games.svg'
+        };
+        
+        // Get marker URL for this category, or use default
+        const iconUrl = markerMap[category] || 'markers/marker-default.svg';
+        
+        return L.icon({
+            iconUrl: iconUrl,
+            iconSize: [32, 48],
+            iconAnchor: [16, 48],
+            popupAnchor: [0, -48]
+        });
+    }
+    
     addEventMarker(event) {
         if (!event.location) return;
         
         const eventDate = new Date(event.start_time);
         const previewTime = this.formatTime(event.start_time);
         
-        // Standard Leaflet marker (pure Leaflet convention)
-        const marker = L.marker([event.location.lat, event.location.lon])
+        // Get category-specific icon
+        const icon = this.getCategoryIcon(event.category);
+        
+        // Standard Leaflet marker with custom icon (pure Leaflet convention)
+        const marker = L.marker([event.location.lat, event.location.lon], {
+            icon: icon
+        })
             .addTo(this.map);
         
         // Make marker keyboard accessible after element is created
@@ -808,6 +934,13 @@ class EventsApp {
         // Add line index for staggered typewriter animation
         let lineIndex = 0;
         const eventId = `event-${event.id || Math.random().toString(36).substr(2, 9)}`;
+        
+        // Get translations for popup content
+        const t = (key) => window.i18n ? window.i18n.t(key) : key;
+        const distanceText = event.distance !== undefined ? 
+            t('event_detail.distance_format').replace('{distance}', event.distance.toFixed(1)) : 
+            '';
+        
         const popupContent = `
             <div class="event-popup" data-event-id="${eventId}">
                 <!-- Burger Menu Button (Terminal Style) -->
@@ -820,42 +953,42 @@ class EventsApp {
                 <!-- Dropdown Menu with Terminal-Style Actions -->
                 <div class="burger-menu-dropdown" id="${eventId}-menu" role="menu">
                     <!-- Bookmark/Highlight -->
-                    <button class="menu-item bookmark-event" role="menuitem" data-event-id="${eventId}" title="Save to bookmarks">
-                        <span class="menu-icon">⭐</span> <span class="menu-text">bookmark</span>
+                    <button class="menu-item bookmark-event" role="menuitem" data-event-id="${eventId}" title="${t('burger_menu.actions.bookmark.aria_label')}">
+                        <span class="menu-icon">${t('burger_menu.actions.bookmark.icon')}</span> <span class="menu-text">${t('burger_menu.actions.bookmark.label')}</span>
                     </button>
                     
                     <!-- Copy Event Details (Terminal Style) -->
-                    <button class="menu-item copy-details" role="menuitem" title="Copy to clipboard">
-                        <span class="menu-icon">📋</span> <span class="menu-text">copy_data</span>
+                    <button class="menu-item copy-details" role="menuitem" title="${t('burger_menu.actions.copy.aria_label')}">
+                        <span class="menu-icon">${t('burger_menu.actions.copy.icon')}</span> <span class="menu-text">${t('burger_menu.actions.copy.label')}</span>
                     </button>
                     
                     <!-- Share Event -->
-                    <button class="menu-item share-event" role="menuitem" data-title="${event.title.replace(/"/g, '&quot;')}" data-location="${event.location.name.replace(/"/g, '&quot;')}" title="Share event">
-                        <span class="menu-icon">📤</span> <span class="menu-text">share</span>
+                    <button class="menu-item share-event" role="menuitem" data-title="${event.title.replace(/"/g, '&quot;')}" data-location="${event.location.name.replace(/"/g, '&quot;')}" title="${t('burger_menu.actions.share.aria_label')}">
+                        <span class="menu-icon">${t('burger_menu.actions.share.icon')}</span> <span class="menu-text">${t('burger_menu.actions.share.label')}</span>
                     </button>
                     
-                    ${event.url ? `<a href="${event.url}" target="_blank" rel="noopener noreferrer" class="menu-item" role="menuitem" title="View full details">
-                        <span class="menu-icon">🔗</span> <span class="menu-text">access_url</span>
+                    ${event.url ? `<a href="${event.url}" target="_blank" rel="noopener noreferrer" class="menu-item" role="menuitem" title="${t('burger_menu.actions.url.aria_label')}">
+                        <span class="menu-icon">${t('burger_menu.actions.url.icon')}</span> <span class="menu-text">${t('burger_menu.actions.url.label')}</span>
                     </a>` : ''}
                     
                     <!-- Navigation to Event -->
-                    <button class="menu-item navigate-event" role="menuitem" data-lat="${event.location.lat}" data-lon="${event.location.lon}" title="Get directions">
-                        <span class="menu-icon">🧭</span> <span class="menu-text">navigate</span>
+                    <button class="menu-item navigate-event" role="menuitem" data-lat="${event.location.lat}" data-lon="${event.location.lon}" title="${t('burger_menu.actions.navigate.aria_label')}">
+                        <span class="menu-icon">${t('burger_menu.actions.navigate.icon')}</span> <span class="menu-text">${t('burger_menu.actions.navigate.label')}</span>
                     </button>
                     
                     <!-- Add to Calendar -->
-                    <button class="menu-item add-calendar" role="menuitem" title="Add to calendar" data-event='${JSON.stringify({title: event.title, start: event.start_time, location: event.location.name, description: event.description || ''}).replace(/'/g, "&apos;")}'>
-                        <span class="menu-icon">📅</span> <span class="menu-text">add_to_cal</span>
+                    <button class="menu-item add-calendar" role="menuitem" title="${t('burger_menu.actions.calendar.aria_label')}" data-event='${JSON.stringify({title: event.title, start: event.start_time, location: event.location.name, description: event.description || ''}).replace(/'/g, "&apos;")}'>
+                        <span class="menu-icon">${t('burger_menu.actions.calendar.icon')}</span> <span class="menu-text">${t('burger_menu.actions.calendar.label')}</span>
                     </button>
                     
                     <!-- Visit Counter (Placeholder for future) -->
-                    <div class="menu-item menu-info" role="menuitem" title="View count (coming soon)">
-                        <span class="menu-icon">👁️</span> <span class="menu-text">views: <span class="visit-count">--</span></span>
+                    <div class="menu-item menu-info" role="menuitem" title="${t('burger_menu.actions.views.aria_label')}">
+                        <span class="menu-icon">${t('burger_menu.actions.views.icon')}</span> <span class="menu-text">${t('burger_menu.actions.views.label')}<span class="visit-count">--</span></span>
                     </div>
                     
                     <!-- Close Popup -->
-                    <button class="menu-item close-popup" role="menuitem" title="Close popup">
-                        <span class="menu-icon">✕</span> <span class="menu-text">exit</span>
+                    <button class="menu-item close-popup" role="menuitem" title="${t('burger_menu.actions.exit.aria_label')}">
+                        <span class="menu-icon">${t('burger_menu.actions.exit.icon')}</span> <span class="menu-text">${t('burger_menu.actions.exit.label')}</span>
                     </button>
                 </div>
                 
@@ -870,7 +1003,7 @@ class EventsApp {
                     })}</p>
                     <p style="--line-index: ${lineIndex++};"><span class="icon">📍</span> ${event.location.name}</p>
                     ${event.distance !== undefined ? 
-                        `<p style="--line-index: ${lineIndex++};"><span class="icon">📏</span> ${event.distance.toFixed(1)} km away</p>` : 
+                        `<p style="--line-index: ${lineIndex++};"><span class="icon">📏</span> ${distanceText}</p>` : 
                         ''}
                 </div>
                 ${event.description ? 
@@ -938,7 +1071,8 @@ class EventsApp {
                         
                         if (bookmarkedEvents.includes(eventId)) {
                             bookmarkBtn.classList.add('bookmarked');
-                            bookmarkBtn.querySelector('.menu-text').textContent = 'unbookmark';
+                            const unbookmarkText = window.i18n ? window.i18n.t('burger_menu.actions.bookmark.label_active') : 'unbookmark';
+                            bookmarkBtn.querySelector('.menu-text').textContent = unbookmarkText;
                         }
                         
                         bookmarkBtn.addEventListener('click', () => {
@@ -1157,7 +1291,9 @@ class EventsApp {
                 
                 if (window.i18n) {
                     await window.i18n.switchLanguage(newLocale);
-                    // Re-display events to update time formatting (Today/Tomorrow)
+                    // Update all UI text with new translations
+                    this.updateUITranslations();
+                    // Re-display events to update time formatting (Today/Tomorrow) and popups
                     this.displayEvents();
                 }
             });
@@ -1336,7 +1472,8 @@ class EventsApp {
             // Remove bookmark
             bookmarkedEvents.splice(index, 1);
             button.classList.remove('bookmarked');
-            button.querySelector('.menu-text').textContent = 'bookmark';
+            const bookmarkText = window.i18n ? window.i18n.t('burger_menu.actions.bookmark.label') : 'bookmark';
+            button.querySelector('.menu-text').textContent = bookmarkText;
             
             // Remove highlight from marker
             const markerElement = marker.getElement();
@@ -1349,7 +1486,8 @@ class EventsApp {
             // Add bookmark
             bookmarkedEvents.push(eventId);
             button.classList.add('bookmarked');
-            button.querySelector('.menu-text').textContent = 'unbookmark';
+            const unbookmarkText = window.i18n ? window.i18n.t('burger_menu.actions.bookmark.label_active') : 'unbookmark';
+            button.querySelector('.menu-text').textContent = unbookmarkText;
             
             // Highlight marker
             const markerElement = marker.getElement();
