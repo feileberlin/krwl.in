@@ -837,24 +837,6 @@ class EventsApp {
         const categoryValue = selectedOption.value;
         const categoryCount = categoryCounts[categoryValue] || 0;
         
-        // Helper function to get singular or plural form for screen reader announcement
-        const getCountText = (count) => {
-            if (!window.i18n) {
-                // Fallback without i18n
-                if (count === 0) return 'No events';
-                return count === 1 ? `${count} event` : `${count} events`;
-            }
-            
-            // Use translation system with proper singular/plural
-            if (count === 0) {
-                return window.i18n.t('filters.event_count.none');
-            } else if (count === 1) {
-                return window.i18n.t('filters.event_count.singular', { count: count });
-            } else {
-                return window.i18n.t('filters.event_count.plural', { count: count });
-            }
-        };
-        
         this.log('Filter counts updated:', categoryCounts);
     }
     
