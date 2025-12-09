@@ -12,9 +12,13 @@
     },
     "categories": {
       "all": "events",
-      "on-stage": "on stage",
-      "pub-games": "pub games",
-      "festivals": "festivals"
+      "music": "music",
+      "sports": "sports",
+      "arts": "arts & culture",
+      "food": "food & drink",
+      "festivals": "festivals",
+      "workshops": "workshops & classes",
+      "community": "community & social"
     },
     "time_ranges": {
       "sunrise": "till sunrise",

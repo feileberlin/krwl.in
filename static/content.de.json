@@ -12,9 +12,13 @@
     },
     "categories": {
       "all": "veranstaltungen",
-      "on-stage": "auf der bühne",
-      "pub-games": "kneipenspiele",
-      "festivals": "festivals"
+      "music": "musik",
+      "sports": "sport",
+      "arts": "kunst & kultur",
+      "food": "essen & trinken",
+      "festivals": "festivals",
+      "workshops": "workshops & kurse",
+      "community": "gemeinschaft & soziales"
     },
     "time_ranges": {
       "sunrise": "bis sonnenaufgang",
