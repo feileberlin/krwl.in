@@ -56,6 +56,9 @@ class EventsApp {
         // Current marker index for keyboard navigation
         this.currentMarkerIndex = -1;
         
+        // Regex pattern for removing count suffix from category text
+        this.countPattern = /\s*\(\d+\)/;
+        
         // Start the application
         this.init();
     }
@@ -838,9 +841,6 @@ class EventsApp {
         // Get category filter to access original labels
         const categoryFilter = document.getElementById('category-filter');
         
-        // Regex pattern for removing count suffix
-        const countPattern = /\s*\(\d+\)/;
-        
         // Create overview items for each category (skip 'all')
         for (let i = 0; i < categoryFilter.options.length; i++) {
             const option = categoryFilter.options[i];
@@ -849,7 +849,9 @@ class EventsApp {
             // Skip 'all' category in overview
             if (categoryValue === 'all') continue;
             
-            const categoryText = option.dataset.originalText || option.textContent.replace(countPattern, '');
+            // Use stored original text or fallback to stripping count from current text
+            // Fallback needed during first render before originalText is set
+            const categoryText = option.dataset.originalText || option.textContent.replace(this.countPattern, '');
             const count = categoryCounts[categoryValue] || 0;
             
             // Create category count element safely using DOM methods
