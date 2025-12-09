@@ -727,9 +727,18 @@ class EventsApp {
         const tomorrow = new Date(now);
         tomorrow.setDate(tomorrow.getDate() + 1);
         
-        // Get locale for formatting
+        // Get locale for formatting - use proper BCP 47 locale tags
         const locale = window.i18n ? window.i18n.getLocale() : 'en';
-        const localeString = locale === 'en' ? 'en-US' : `${locale}-${locale.toUpperCase()}`;
+        const localeMap = {
+            'en': 'en-US',
+            'de': 'de-DE',
+            'fr': 'fr-FR',
+            'es': 'es-ES',
+            'it': 'it-IT',
+            'pt': 'pt-PT',
+            'nl': 'nl-NL'
+        };
+        const localeString = localeMap[locale] || locale;
         
         const timeStr = date.toLocaleTimeString(localeString, { hour: '2-digit', minute: '2-digit' });
         
@@ -1153,13 +1162,6 @@ class EventsApp {
                 }
             });
         }
-        
-        // Listen for languageChanged events from i18n system
-        window.addEventListener('languageChanged', (e) => {
-            this.log('Language changed event received:', e.detail.locale);
-            // Re-display events to update time formatting
-            this.displayEvents();
-        });
     }
     
     /**
