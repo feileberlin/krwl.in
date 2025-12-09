@@ -833,10 +833,13 @@ class EventsApp {
         if (!overviewContainer) return;
         
         // Clear existing content
-        overviewContainer.innerHTML = '';
+        overviewContainer.textContent = '';
         
         // Get category filter to access original labels
         const categoryFilter = document.getElementById('category-filter');
+        
+        // Regex pattern for removing count suffix
+        const countPattern = /\s*\(\d+\)/;
         
         // Create overview items for each category (skip 'all')
         for (let i = 0; i < categoryFilter.options.length; i++) {
@@ -846,13 +849,23 @@ class EventsApp {
             // Skip 'all' category in overview
             if (categoryValue === 'all') continue;
             
-            const categoryText = option.dataset.originalText || option.textContent.replace(/\s*\(\d+\)/, '');
+            const categoryText = option.dataset.originalText || option.textContent.replace(countPattern, '');
             const count = categoryCounts[categoryValue] || 0;
             
-            // Create category count element
+            // Create category count element safely using DOM methods
             const countEl = document.createElement('div');
             countEl.className = 'category-count';
-            countEl.innerHTML = `<span class="label">${categoryText}:</span><span class="count">${count}</span>`;
+            
+            const labelSpan = document.createElement('span');
+            labelSpan.className = 'label';
+            labelSpan.textContent = `${categoryText}:`;
+            
+            const countSpan = document.createElement('span');
+            countSpan.className = 'count';
+            countSpan.textContent = String(count);
+            
+            countEl.appendChild(labelSpan);
+            countEl.appendChild(countSpan);
             
             // Add click handler to filter by this category
             countEl.style.cursor = 'pointer';
