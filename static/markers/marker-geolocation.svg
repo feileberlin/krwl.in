@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 48" width="32" height="48">
+  <!-- Terminal style user marker - square shape -->
+  
+  <!-- Drop shadow -->
+  <ellipse cx="16" cy="46" rx="6" ry="2" fill="#000" opacity="0.5"/>
+  
+  <!-- Square pin shape (different from events) -->
+  <path d="M8 4 L24 4 L24 20 L18 20 L16 46 L14 20 L8 20 Z" 
+        fill="none" stroke="#00ff00" stroke-width="2"/>
+  
+  <!-- Inner square -->
+  <rect x="11" y="7" width="10" height="10" fill="none" stroke="#00ff00" stroke-width="1.5"/>
+  
+  <!-- Person icon - minimalist -->
+  <circle cx="16" cy="11" r="2" fill="#00ff00"/>
+  <path d="M13 15 L13 16 L19 16 L19 15" stroke="#00ff00" stroke-width="1.5" fill="none"/>
+</svg>
