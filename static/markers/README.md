@@ -71,6 +71,68 @@ All markers follow the terminal aesthetic:
 - **Use**: Festivals, celebrations, large events
 - **Size**: 32x48px
 
+## Community Place Markers
+
+### Church (`marker-church.svg`)
+- **Shape**: Cross-shaped pin
+- **Icon**: Christian cross
+- **Use**: Churches, chapels, religious buildings
+- **Size**: 32x48px
+
+### Swimming Pool (`marker-swimming.svg`)
+- **Shape**: Wave-topped pin
+- **Icon**: Waves and swimmer
+- **Use**: Swimming pools, aquatic centers, beaches
+- **Size**: 32x48px
+
+### Sports Field (`marker-sports-field.svg`)
+- **Shape**: Rectangular stadium pin
+- **Icon**: Playing field with goals
+- **Use**: Sports fields, stadiums, athletic facilities
+- **Size**: 32x48px
+
+### Cemetery (`marker-cemetery.svg`)
+- **Shape**: Rounded tombstone pin
+- **Icon**: Cross on tombstone
+- **Use**: Cemeteries, memorial gardens
+- **Size**: 32x48px
+
+### Library (`marker-library.svg`)
+- **Shape**: Book spine pin
+- **Icon**: Book with pages
+- **Use**: Libraries, reading rooms, archives
+- **Size**: 32x48px
+
+### Hospital (`marker-hospital.svg`)
+- **Shape**: Pentagon pin
+- **Icon**: Medical cross (equal arms)
+- **Use**: Hospitals, clinics, medical centers
+- **Size**: 32x48px
+
+### Park/Garden (`marker-park.svg`)
+- **Shape**: Tree crown pin
+- **Icon**: Tree with multiple circular crowns
+- **Use**: Parks, gardens, green spaces
+- **Size**: 32x48px
+
+### School (`marker-school.svg`)
+- **Shape**: Trapezoid (graduation cap) pin
+- **Icon**: Graduation cap with tassel
+- **Use**: Schools, universities, educational institutions
+- **Size**: 32x48px
+
+### Shopping (`marker-shopping.svg`)
+- **Shape**: Shopping bag pin
+- **Icon**: Bag with handles and items
+- **Use**: Shopping centers, markets, retail areas
+- **Size**: 32x48px
+
+### Museum (`marker-museum.svg`)
+- **Shape**: Classical temple pin
+- **Icon**: Temple with columns and pediment
+- **Use**: Museums, galleries, cultural centers
+- **Size**: 32x48px
+
 ## Terminal Color Palette
 
 - **Primary**: #00ff00 (bright green)
