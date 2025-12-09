@@ -824,7 +824,7 @@ class EventsApp {
         for (let i = 0; i < categoryFilter.options.length; i++) {
             const option = categoryFilter.options[i];
             const categoryValue = option.value;
-            const categoryText = option.dataset.originalText;
+            const categoryText = option.dataset.originalText || option.textContent;
             const categoryCount = categoryCounts[categoryValue] || 0;
             
             // Format the option text with count: "category (count)"
