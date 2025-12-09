@@ -1086,6 +1086,8 @@ body {
     background: rgba(0, 100, 0, 0.95);
     border: 2px solid #00ff00;
     box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+    max-height: 500px;
+    overflow-y: auto;
 }
 
 .imprint-popup-container .leaflet-popup-tip {
@@ -1098,21 +1100,62 @@ body {
     font-family: 'Courier New', Courier, monospace;
     font-size: 1.2rem;
     font-weight: bold;
-    margin: 0 0 0.5rem 0;
+    margin: 0 0 0.75rem 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(0, 255, 0, 0.3);
     text-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
 }
 
 .imprint-popup p {
     color: #00ff00;
     font-family: 'Courier New', Courier, monospace;
-    font-size: 0.9rem;
-    margin: 0.3rem 0;
+    font-size: 0.85rem;
+    margin: 0.25rem 0;
     line-height: 1.4;
 }
 
 .imprint-popup strong {
     color: #00ff00;
     text-shadow: 0 0 8px rgba(0, 255, 0, 0.6);
+    font-weight: bold;
+}
+
+.imprint-popup a {
+    color: #00ff00;
+    text-decoration: underline;
+    transition: all 0.2s;
+}
+
+.imprint-popup a:hover {
+    text-shadow: 0 0 12px rgba(0, 255, 0, 0.9);
+    color: #00ff00;
+}
+
+.imprint-popup em {
+    color: rgba(0, 255, 0, 0.8);
+    font-style: italic;
+}
+
+.imprint-section {
+    margin: 0.75rem 0;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(0, 255, 0, 0.2);
+}
+
+.imprint-section:last-child {
+    border-bottom: none;
+}
+
+.imprint-legal {
+    margin-top: 1rem;
+    padding-top: 0.75rem;
+    border-top: 2px solid rgba(0, 255, 0, 0.3);
+}
+
+.imprint-legal small {
+    font-size: 0.75rem;
+    color: rgba(0, 255, 0, 0.8);
+    line-height: 1.3;
 }
 
 /* Add pulsing animation to imprint marker */

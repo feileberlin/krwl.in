@@ -1,21 +1,21 @@
 {
   "app": {
     "name": "KRWL HOF Community Events",
-    "description": "Community events scraper and viewer with geolocation filtering",
-    "language": "en",
-    "language_comment": "Set to 'en' for English or 'de' for German. Loads content.json or content.de.json accordingly."
+    "description": "Community-Veranstaltungen Scraper und Viewer mit Geolokalisierungsfilterung",
+    "language": "de",
+    "language_comment": "Auf 'en' für Englisch oder 'de' für Deutsch setzen. Lädt content.json oder content.de.json entsprechend."
   },
   "ui": {
     "logo": "logo.svg",
     "imprint_url": "#",
-    "imprint_url_comment": "Set to '#' to show project location on map, or 'imprint.html' for separate page",
-    "imprint_text": "Imprint",
+    "imprint_url_comment": "Auf '#' setzen, um Projektstandort auf Karte anzuzeigen, oder 'imprint.html' für separate Seite",
+    "imprint_text": "Impressum",
     "imprint_location": {
-      "name": "KRWL HOF Project Location",
+      "name": "KRWL HOF Projektstandort",
       "lat": 50.3167,
       "lon": 11.9167,
       "marker": "marker-city-center.svg",
-      "description": "Project address based on krwl.in domain registration"
+      "description": "Projektadresse basierend auf krwl.in Domain-Registrierung"
     },
     "theme_color": "#4CAF50",
     "background_color": "#1a1a1a"
@@ -24,13 +24,13 @@
     "enabled": true,
     "operator": {
       "name": "KRWL HOF Community Events",
-      "type": "community_project",
+      "type": "Gemeinschaftsprojekt",
       "address": {
         "street": "",
         "postal_code": "95028",
         "city": "Hof",
-        "state": "Bavaria",
-        "country": "Germany"
+        "state": "Bayern",
+        "country": "Deutschland"
       }
     },
     "contact": {
@@ -40,15 +40,15 @@
     },
     "responsible": {
       "name": "",
-      "role": "Project Maintainer",
+      "role": "Projektbetreuer",
       "email": ""
     },
     "legal": {
-      "disclaimer": "All event information is collected from public sources. We do not guarantee accuracy or completeness. Please verify details with event organizers.",
-      "privacy_policy": "This application uses browser geolocation with your explicit permission. Location data is processed locally and not transmitted to any server. Event bookmarks are stored in browser localStorage.",
-      "data_sources": "Event data is aggregated from public sources including city websites, cultural institutions, and community event calendars. See scraping configuration for full list of sources.",
-      "license": "Open Source Project - See GitHub repository for license details",
-      "copyright": "© 2024 KRWL HOF Community. Map data © OpenStreetMap contributors."
+      "disclaimer": "Alle Veranstaltungsinformationen werden aus öffentlichen Quellen gesammelt. Wir übernehmen keine Gewähr für Richtigkeit oder Vollständigkeit. Bitte überprüfen Sie Details bei den Veranstaltern.",
+      "privacy_policy": "Diese Anwendung verwendet Browser-Geolokalisierung mit Ihrer ausdrücklichen Erlaubnis. Standortdaten werden lokal verarbeitet und nicht an einen Server übermittelt. Veranstaltungslesezeichen werden im Browser-localStorage gespeichert.",
+      "data_sources": "Veranstaltungsdaten werden aus öffentlichen Quellen aggregiert, einschließlich Stadtwebsites, Kultureinrichtungen und Community-Veranstaltungskalendern. Siehe Scraping-Konfiguration für vollständige Quellenliste.",
+      "license": "Open-Source-Projekt - Siehe GitHub-Repository für Lizenzdetails",
+      "copyright": "© 2024 KRWL HOF Community. Kartendaten © OpenStreetMap-Mitwirkende."
     },
     "technical": {
       "hosting": "GitHub Pages",

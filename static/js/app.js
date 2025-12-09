@@ -140,20 +140,35 @@ class EventsApp {
     }
     
     /**
-     * Load application configuration from config.json
-     * Fetches app settings, UI preferences, map configuration
+     * Load application configuration from config.json or config.de.json
+     * Detects language and loads appropriate config file
      * Falls back to defaults if config file is missing
      * @async
      */
     async loadConfig() {
         try {
-            // Fetch configuration file
-            const response = await fetch('config.json');
+            // Detect browser language for config file selection
+            const browserLang = (navigator.language || navigator.userLanguage).split('-')[0].toLowerCase();
+            
+            // Try language-specific config first (e.g., config.de.json)
+            let configFile = 'config.json';  // Default English
+            if (browserLang === 'de') {
+                configFile = 'config.de.json';
+            }
+            
+            // Try to fetch language-specific config
+            let response = await fetch(configFile);
+            if (!response.ok && configFile !== 'config.json') {
+                // Fallback to default config if language-specific not found
+                console.log(`[Config] ${configFile} not found, falling back to config.json`);
+                response = await fetch('config.json');
+            }
+            
             this.config = await response.json();
             
             // Enable debug mode if configured
             this.debug = this.config.debug || false;
-            this.log('Config loaded:', this.config);
+            this.log('Config loaded:', configFile, this.config);
             
             // Fetch next full moon date for "till next full moon" filter
             await this.fetchNextFullMoon();
@@ -163,12 +178,22 @@ class EventsApp {
             this.config = {
                 debug: false,
                 app: {
-                    name: 'KRWL HOF Community Events'
+                    name: 'KRWL HOF Community Events',
+                    language: 'en'
                 },
                 ui: {
                     logo: '',
-                    imprint_url: 'imprint.html',
-                    imprint_text: 'Imprint'
+                    imprint_url: '#',
+                    imprint_text: 'Imprint',
+                    imprint_location: {
+                        name: 'KRWL HOF Project Location',
+                        lat: 50.3167,
+                        lon: 11.9167,
+                        marker: 'marker-city-center.svg'
+                    }
+                },
+                imprint: {
+                    enabled: false
                 },
                 map: {
                     default_center: { lat: 50.3167, lon: 11.9167 },
@@ -1115,10 +1140,11 @@ class EventsApp {
     
     /**
      * Show the project/imprint location on the map with a marker
-     * Creates a special marker at the project location based on WHOIS/config
+     * Creates a special marker at the project location and shows full imprint data
      */
     showImprintLocation() {
         const imprintLoc = this.config.ui.imprint_location;
+        const imprintData = this.config.imprint;
         if (!imprintLoc) return;
         
         // Pan to imprint location
@@ -1144,23 +1170,101 @@ class EventsApp {
             zIndexOffset: 1000  // Keep on top
         }).addTo(this.map);
         
-        // Create popup content
-        const popupContent = `
-            <div class="imprint-popup">
-                <h3>${imprintLoc.name}</h3>
-                ${imprintLoc.description ? `<p>${imprintLoc.description}</p>` : ''}
-                <p><strong>Location:</strong> ${imprintLoc.lat.toFixed(4)}, ${imprintLoc.lon.toFixed(4)}</p>
-            </div>
-        `;
+        // Build imprint popup content from config data
+        let popupContent = `<div class="imprint-popup">`;
         
-        // Bind and open popup
+        // Header
+        popupContent += `<h3>${imprintLoc.name}</h3>`;
+        
+        // Operator information
+        if (imprintData && imprintData.enabled && imprintData.operator) {
+            const op = imprintData.operator;
+            popupContent += `<div class="imprint-section">`;
+            popupContent += `<p><strong>${op.name}</strong></p>`;
+            if (op.type) {
+                popupContent += `<p><em>${op.type.replace(/_/g, ' ')}</em></p>`;
+            }
+            if (op.address) {
+                const addr = op.address;
+                if (addr.street) popupContent += `<p>${addr.street}</p>`;
+                popupContent += `<p>${addr.postal_code || ''} ${addr.city || ''}</p>`;
+                if (addr.state || addr.country) {
+                    popupContent += `<p>${[addr.state, addr.country].filter(Boolean).join(', ')}</p>`;
+                }
+            }
+            popupContent += `</div>`;
+        }
+        
+        // Contact information
+        if (imprintData && imprintData.contact) {
+            const contact = imprintData.contact;
+            popupContent += `<div class="imprint-section">`;
+            if (contact.email) {
+                popupContent += `<p>📧 <a href="mailto:${contact.email}">${contact.email}</a></p>`;
+            }
+            if (contact.website) {
+                popupContent += `<p>🌐 <a href="${contact.website}" target="_blank" rel="noopener">${contact.website}</a></p>`;
+            }
+            if (contact.github) {
+                popupContent += `<p>💻 <a href="${contact.github}" target="_blank" rel="noopener">GitHub</a></p>`;
+            }
+            popupContent += `</div>`;
+        }
+        
+        // Responsible person
+        if (imprintData && imprintData.responsible && imprintData.responsible.name) {
+            const resp = imprintData.responsible;
+            popupContent += `<div class="imprint-section">`;
+            popupContent += `<p><strong>${resp.role || 'Responsible'}:</strong></p>`;
+            popupContent += `<p>${resp.name}</p>`;
+            if (resp.email) {
+                popupContent += `<p>📧 <a href="mailto:${resp.email}">${resp.email}</a></p>`;
+            }
+            popupContent += `</div>`;
+        }
+        
+        // Technical information
+        if (imprintData && imprintData.technical) {
+            const tech = imprintData.technical;
+            popupContent += `<div class="imprint-section">`;
+            popupContent += `<p><strong>Technical:</strong></p>`;
+            if (tech.hosting) popupContent += `<p>Hosting: ${tech.hosting}</p>`;
+            if (tech.domain) popupContent += `<p>Domain: ${tech.domain}</p>`;
+            if (tech.open_source && tech.repository) {
+                popupContent += `<p><a href="${tech.repository}" target="_blank" rel="noopener">Open Source Project</a></p>`;
+            }
+            popupContent += `</div>`;
+        }
+        
+        // Legal information
+        if (imprintData && imprintData.legal) {
+            const legal = imprintData.legal;
+            popupContent += `<div class="imprint-section imprint-legal">`;
+            if (legal.disclaimer) {
+                popupContent += `<p><small>${legal.disclaimer}</small></p>`;
+            }
+            if (legal.copyright) {
+                popupContent += `<p><small>${legal.copyright}</small></p>`;
+            }
+            popupContent += `</div>`;
+        }
+        
+        // Coordinates
+        popupContent += `<div class="imprint-section">`;
+        popupContent += `<p><small>📍 ${imprintLoc.lat.toFixed(4)}, ${imprintLoc.lon.toFixed(4)}</small></p>`;
+        popupContent += `</div>`;
+        
+        popupContent += `</div>`;
+        
+        // Bind and open popup with larger size for imprint data
         this.imprintMarker.bindPopup(popupContent, {
-            maxWidth: 300,
+            maxWidth: 400,
+            maxHeight: 500,
             className: 'imprint-popup-container'
         }).openPopup();
         
         // Announce to screen reader
-        this.announceToScreenReader(`Showing project location: ${imprintLoc.name}`);
+        this.announceToScreenReader(`Showing imprint and legal information for: ${imprintLoc.name}`);
     }
     
     navigateToNextMarker() {
