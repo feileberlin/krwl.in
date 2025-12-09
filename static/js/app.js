@@ -140,35 +140,19 @@ class EventsApp {
     }
     
     /**
-     * Load application configuration from config.json or config.de.json
-     * Detects language and loads appropriate config file
-     * Falls back to defaults if config file is missing
+     * Load application configuration from config.json
+     * Config contains functional settings only, not translated content
      * @async
      */
     async loadConfig() {
         try {
-            // Detect browser language for config file selection
-            const browserLang = (navigator.language || navigator.userLanguage).split('-')[0].toLowerCase();
-            
-            // Try language-specific config first (e.g., config.de.json)
-            let configFile = 'config.json';  // Default English
-            if (browserLang === 'de') {
-                configFile = 'config.de.json';
-            }
-            
-            // Try to fetch language-specific config
-            let response = await fetch(configFile);
-            if (!response.ok && configFile !== 'config.json') {
-                // Fallback to default config if language-specific not found
-                console.log(`[Config] ${configFile} not found, falling back to config.json`);
-                response = await fetch('config.json');
-            }
-            
+            // Fetch configuration file (language-independent)
+            const response = await fetch('config.json');
             this.config = await response.json();
             
             // Enable debug mode if configured
             this.debug = this.config.debug || false;
-            this.log('Config loaded:', configFile, this.config);
+            this.log('Config loaded:', this.config);
             
             // Fetch next full moon date for "till next full moon" filter
             await this.fetchNextFullMoon();
@@ -179,21 +163,22 @@ class EventsApp {
                 debug: false,
                 app: {
                     name: 'KRWL HOF Community Events',
-                    language: 'en'
+                    language: 'auto'
                 },
                 ui: {
                     logo: '',
-                    imprint_url: '#',
-                    imprint_text: 'Imprint',
-                    imprint_location: {
-                        name: 'KRWL HOF Project Location',
+                    imprint_url: '#'
+                },
+                imprint: {
+                    enabled: true,
+                    location: {
                         lat: 50.3167,
                         lon: 11.9167,
                         marker: 'marker-city-center.svg'
-                    }
-                },
-                imprint: {
-                    enabled: false
+                    },
+                    contact: {},
+                    responsible: {},
+                    technical: {}
                 },
                 map: {
                     default_center: { lat: 50.3167, lon: 11.9167 },
@@ -1140,18 +1125,20 @@ class EventsApp {
     
     /**
      * Show the project/imprint location on the map with a marker
-     * Creates a special marker at the project location and shows full imprint data
+     * Uses config for functional data (coordinates, URLs) and content for translated text
      */
     showImprintLocation() {
-        const imprintLoc = this.config.ui.imprint_location;
-        const imprintData = this.config.imprint;
-        if (!imprintLoc) return;
+        const imprintConfig = this.config.imprint;
+        if (!imprintConfig || !imprintConfig.enabled || !imprintConfig.location) return;
+        
+        const loc = imprintConfig.location;
+        const content = window.i18n.content.imprint;  // Get translated content
         
         // Pan to imprint location
-        this.map.setView([imprintLoc.lat, imprintLoc.lon], 16);
+        this.map.setView([loc.lat, loc.lon], 16);
         
         // Create custom icon for imprint location
-        const iconUrl = imprintLoc.marker || 'markers/marker-city-center.svg';
+        const iconUrl = loc.marker || 'markers/marker-city-center.svg';
         const imprintIcon = L.icon({
             iconUrl: iconUrl,
             iconSize: [32, 48],
@@ -1165,93 +1152,78 @@ class EventsApp {
         }
         
         // Create marker
-        this.imprintMarker = L.marker([imprintLoc.lat, imprintLoc.lon], {
+        this.imprintMarker = L.marker([loc.lat, loc.lon], {
             icon: imprintIcon,
             zIndexOffset: 1000  // Keep on top
         }).addTo(this.map);
         
-        // Build imprint popup content from config data
+        // Build imprint popup content using translated content + functional config
         let popupContent = `<div class="imprint-popup">`;
         
-        // Header
-        popupContent += `<h3>${imprintLoc.name}</h3>`;
+        // Header (translated)
+        popupContent += `<h3>${content.title}</h3>`;
         
-        // Operator information
-        if (imprintData && imprintData.enabled && imprintData.operator) {
-            const op = imprintData.operator;
-            popupContent += `<div class="imprint-section">`;
-            popupContent += `<p><strong>${op.name}</strong></p>`;
-            if (op.type) {
-                popupContent += `<p><em>${op.type.replace(/_/g, ' ')}</em></p>`;
-            }
-            if (op.address) {
-                const addr = op.address;
-                if (addr.street) popupContent += `<p>${addr.street}</p>`;
-                popupContent += `<p>${addr.postal_code || ''} ${addr.city || ''}</p>`;
-                if (addr.state || addr.country) {
-                    popupContent += `<p>${[addr.state, addr.country].filter(Boolean).join(', ')}</p>`;
-                }
-            }
-            popupContent += `</div>`;
+        // Operator information (translated labels + data)
+        popupContent += `<div class="imprint-section">`;
+        popupContent += `<p><strong>${content.operator.name}</strong></p>`;
+        popupContent += `<p><em>${content.operator.type}</em></p>`;
+        
+        // Address (from content - allows translation of state/country names)
+        const addr = content.address;
+        popupContent += `<p>${addr.postal_code} ${addr.city}</p>`;
+        popupContent += `<p>${addr.state}, ${addr.country}</p>`;
+        popupContent += `</div>`;
+        
+        // Contact information (functional URLs from config, labels from content)
+        const contact = imprintConfig.contact;
+        popupContent += `<div class="imprint-section">`;
+        if (contact.email) {
+            popupContent += `<p>📧 <a href="mailto:${contact.email}">${contact.email}</a></p>`;
         }
-        
-        // Contact information
-        if (imprintData && imprintData.contact) {
-            const contact = imprintData.contact;
-            popupContent += `<div class="imprint-section">`;
-            if (contact.email) {
-                popupContent += `<p>📧 <a href="mailto:${contact.email}">${contact.email}</a></p>`;
-            }
-            if (contact.website) {
-                popupContent += `<p>🌐 <a href="${contact.website}" target="_blank" rel="noopener">${contact.website}</a></p>`;
-            }
-            if (contact.github) {
-                popupContent += `<p>💻 <a href="${contact.github}" target="_blank" rel="noopener">GitHub</a></p>`;
-            }
-            popupContent += `</div>`;
+        if (contact.website) {
+            popupContent += `<p>🌐 <a href="${contact.website}" target="_blank" rel="noopener">${content.contact.website}</a></p>`;
         }
+        if (contact.github) {
+            popupContent += `<p>💻 <a href="${contact.github}" target="_blank" rel="noopener">${content.contact.github}</a></p>`;
+        }
+        popupContent += `</div>`;
         
-        // Responsible person
-        if (imprintData && imprintData.responsible && imprintData.responsible.name) {
-            const resp = imprintData.responsible;
+        // Responsible person (functional data from config, labels from content)
+        const resp = imprintConfig.responsible;
+        if (resp.name) {
             popupContent += `<div class="imprint-section">`;
-            popupContent += `<p><strong>${resp.role || 'Responsible'}:</strong></p>`;
-            popupContent += `<p>${resp.name}</p>`;
+            popupContent += `<p><strong>${content.responsible.label}:</strong></p>`;
+            popupContent += `<p>${resp.name} - ${content.responsible.role}</p>`;
             if (resp.email) {
                 popupContent += `<p>📧 <a href="mailto:${resp.email}">${resp.email}</a></p>`;
             }
             popupContent += `</div>`;
         }
         
-        // Technical information
-        if (imprintData && imprintData.technical) {
-            const tech = imprintData.technical;
-            popupContent += `<div class="imprint-section">`;
-            popupContent += `<p><strong>Technical:</strong></p>`;
-            if (tech.hosting) popupContent += `<p>Hosting: ${tech.hosting}</p>`;
-            if (tech.domain) popupContent += `<p>Domain: ${tech.domain}</p>`;
-            if (tech.open_source && tech.repository) {
-                popupContent += `<p><a href="${tech.repository}" target="_blank" rel="noopener">Open Source Project</a></p>`;
-            }
-            popupContent += `</div>`;
+        // Technical information (functional data from config, labels from content)
+        const tech = imprintConfig.technical;
+        popupContent += `<div class="imprint-section">`;
+        popupContent += `<p><strong>${content.technical.label}:</strong></p>`;
+        if (tech.hosting) popupContent += `<p>${content.technical.hosting}: ${tech.hosting}</p>`;
+        if (tech.domain) popupContent += `<p>${content.technical.domain}: ${tech.domain}</p>`;
+        if (tech.open_source && tech.repository) {
+            popupContent += `<p><a href="${tech.repository}" target="_blank" rel="noopener">${content.technical.open_source}</a></p>`;
         }
+        popupContent += `</div>`;
         
-        // Legal information
-        if (imprintData && imprintData.legal) {
-            const legal = imprintData.legal;
-            popupContent += `<div class="imprint-section imprint-legal">`;
-            if (legal.disclaimer) {
-                popupContent += `<p><small>${legal.disclaimer}</small></p>`;
-            }
-            if (legal.copyright) {
-                popupContent += `<p><small>${legal.copyright}</small></p>`;
-            }
-            popupContent += `</div>`;
+        // Legal information (all from translated content)
+        popupContent += `<div class="imprint-section imprint-legal">`;
+        if (content.legal.disclaimer) {
+            popupContent += `<p><small>${content.legal.disclaimer}</small></p>`;
         }
+        if (content.legal.copyright) {
+            popupContent += `<p><small>${content.legal.copyright}</small></p>`;
+        }
+        popupContent += `</div>`;
         
         // Coordinates
         popupContent += `<div class="imprint-section">`;
-        popupContent += `<p><small>📍 ${imprintLoc.lat.toFixed(4)}, ${imprintLoc.lon.toFixed(4)}</small></p>`;
+        popupContent += `<p><small>📍 ${loc.lat.toFixed(4)}, ${loc.lon.toFixed(4)}</small></p>`;
         popupContent += `</div>`;
         
         popupContent += `</div>`;
@@ -1264,7 +1236,7 @@ class EventsApp {
         }).openPopup();
         
         // Announce to screen reader
-        this.announceToScreenReader(`Showing imprint and legal information for: ${imprintLoc.name}`);
+        this.announceToScreenReader(`Showing imprint and legal information for: ${content.title}`);
     }
     
     navigateToNextMarker() {

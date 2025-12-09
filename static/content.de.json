@@ -174,5 +174,39 @@
     "attribution": "Kartendaten © OpenStreetMap-Mitwirkende",
     "zoom_in": "Vergrößern",
     "zoom_out": "Verkleinern"
+  },
+  "imprint": {
+    "title": "KRWL HOF Projektstandort",
+    "operator": {
+      "name": "KRWL HOF Community Events",
+      "type": "Gemeinschaftsprojekt"
+    },
+    "address": {
+      "city": "Hof",
+      "postal_code": "95028",
+      "state": "Bayern",
+      "country": "Deutschland"
+    },
+    "contact": {
+      "website": "Webseite",
+      "github": "GitHub"
+    },
+    "responsible": {
+      "label": "Verantwortlich",
+      "role": "Projektbetreuer"
+    },
+    "legal": {
+      "disclaimer": "Alle Veranstaltungsinformationen werden aus öffentlichen Quellen gesammelt. Wir übernehmen keine Gewähr für Richtigkeit oder Vollständigkeit. Bitte überprüfen Sie Details bei den Veranstaltern.",
+      "privacy_policy": "Diese Anwendung verwendet Browser-Geolokalisierung mit Ihrer ausdrücklichen Erlaubnis. Standortdaten werden lokal verarbeitet und nicht an einen Server übermittelt. Veranstaltungslesezeichen werden im Browser-localStorage gespeichert.",
+      "data_sources": "Veranstaltungsdaten werden aus öffentlichen Quellen aggregiert, einschließlich Stadtwebsites, Kultureinrichtungen und Community-Veranstaltungskalendern. Siehe Scraping-Konfiguration für vollständige Quellenliste.",
+      "license": "Open-Source-Projekt - Siehe GitHub-Repository für Lizenzdetails",
+      "copyright": "© 2024 KRWL HOF Community. Kartendaten © OpenStreetMap-Mitwirkende."
+    },
+    "technical": {
+      "label": "Technisch",
+      "hosting": "Hosting",
+      "domain": "Domain",
+      "open_source": "Open-Source-Projekt"
+    }
   }
 }

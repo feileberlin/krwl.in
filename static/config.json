@@ -2,36 +2,22 @@
   "app": {
     "name": "KRWL HOF Community Events",
     "description": "Community events scraper and viewer with geolocation filtering",
-    "language": "en",
-    "language_comment": "Set to 'en' for English or 'de' for German. Loads content.json or content.de.json accordingly."
+    "language": "auto",
+    "language_comment": "Set to 'en' for English, 'de' for German, or 'auto' for browser detection. Loads content.json or content.de.json accordingly."
   },
   "ui": {
     "logo": "logo.svg",
     "imprint_url": "#",
-    "imprint_url_comment": "Set to '#' to show project location on map, or 'imprint.html' for separate page",
-    "imprint_text": "Imprint",
-    "imprint_location": {
-      "name": "KRWL HOF Project Location",
-      "lat": 50.3167,
-      "lon": 11.9167,
-      "marker": "marker-city-center.svg",
-      "description": "Project address based on krwl.in domain registration"
-    },
+    "imprint_url_comment": "Set to '#' to show project location on map, or URL for separate page",
     "theme_color": "#4CAF50",
     "background_color": "#1a1a1a"
   },
   "imprint": {
     "enabled": true,
-    "operator": {
-      "name": "KRWL HOF Community Events",
-      "type": "community_project",
-      "address": {
-        "street": "",
-        "postal_code": "95028",
-        "city": "Hof",
-        "state": "Bavaria",
-        "country": "Germany"
-      }
+    "location": {
+      "lat": 50.3167,
+      "lon": 11.9167,
+      "marker": "marker-city-center.svg"
     },
     "contact": {
       "email": "",
@@ -40,15 +26,7 @@
     },
     "responsible": {
       "name": "",
-      "role": "Project Maintainer",
       "email": ""
-    },
-    "legal": {
-      "disclaimer": "All event information is collected from public sources. We do not guarantee accuracy or completeness. Please verify details with event organizers.",
-      "privacy_policy": "This application uses browser geolocation with your explicit permission. Location data is processed locally and not transmitted to any server. Event bookmarks are stored in browser localStorage.",
-      "data_sources": "Event data is aggregated from public sources including city websites, cultural institutions, and community event calendars. See scraping configuration for full list of sources.",
-      "license": "Open Source Project - See GitHub repository for license details",
-      "copyright": "© 2024 KRWL HOF Community. Map data © OpenStreetMap contributors."
     },
     "technical": {
       "hosting": "GitHub Pages",

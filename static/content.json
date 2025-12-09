@@ -174,5 +174,39 @@
     "attribution": "Map data © OpenStreetMap contributors",
     "zoom_in": "Zoom in",
     "zoom_out": "Zoom out"
+  },
+  "imprint": {
+    "title": "KRWL HOF Project Location",
+    "operator": {
+      "name": "KRWL HOF Community Events",
+      "type": "Community Project"
+    },
+    "address": {
+      "city": "Hof",
+      "postal_code": "95028",
+      "state": "Bavaria",
+      "country": "Germany"
+    },
+    "contact": {
+      "website": "Website",
+      "github": "GitHub"
+    },
+    "responsible": {
+      "label": "Responsible",
+      "role": "Project Maintainer"
+    },
+    "legal": {
+      "disclaimer": "All event information is collected from public sources. We do not guarantee accuracy or completeness. Please verify details with event organizers.",
+      "privacy_policy": "This application uses browser geolocation with your explicit permission. Location data is processed locally and not transmitted to any server. Event bookmarks are stored in browser localStorage.",
+      "data_sources": "Event data is aggregated from public sources including city websites, cultural institutions, and community event calendars. See scraping configuration for full list of sources.",
+      "license": "Open Source Project - See GitHub repository for license details",
+      "copyright": "© 2024 KRWL HOF Community. Map data © OpenStreetMap contributors."
+    },
+    "technical": {
+      "label": "Technical",
+      "hosting": "Hosting",
+      "domain": "Domain",
+      "open_source": "Open Source Project"
+    }
   }
 }
