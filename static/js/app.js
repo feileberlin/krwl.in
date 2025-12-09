@@ -162,13 +162,10 @@ class EventsApp {
                     // Center map on user location
                     this.map.setView([this.userLocation.lat, this.userLocation.lon], 13);
                     
-                    // Add user marker
-                    L.marker([this.userLocation.lat, this.userLocation.lon], {
-                        icon: L.divIcon({
-                            className: 'user-marker',
-                            html: '<div class="user-marker-dot"></div>'
-                        })
-                    }).addTo(this.map).bindPopup('You are here');
+                    // Add user marker with standard Leaflet convention
+                    L.marker([this.userLocation.lat, this.userLocation.lon])
+                        .addTo(this.map)
+                        .bindPopup('You are here');
                     
                     // Update events display
                     this.displayEvents();
@@ -551,20 +548,19 @@ class EventsApp {
         const eventDate = new Date(event.start_time);
         const previewTime = this.formatTime(event.start_time);
         
-        // Create marker with preview label showing start time
-        const marker = L.marker([event.location.lat, event.location.lon], {
-            icon: L.divIcon({
-                className: 'event-marker',
-                html: `
-                    <div class="event-marker-container">
-                        <div class="event-marker-preview">${previewTime}</div>
-                        <div class="event-marker-dot"></div>
-                    </div>
-                `
-            })
-        }).addTo(this.map);
+        // Standard Leaflet marker (pure Leaflet convention)
+        const marker = L.marker([event.location.lat, event.location.lon])
+            .addTo(this.map);
         
-        // Create rich popup with all event details
+        // Use Leaflet's bindTooltip for time preview (permanent tooltip above marker)
+        marker.bindTooltip(previewTime, {
+            permanent: true,
+            direction: 'top',
+            offset: [0, -10],
+            className: 'event-time-tooltip'
+        });
+        
+        // Create rich popup with all event details (pure Leaflet convention)
         const popupContent = `
             <div class="event-popup">
                 <h3>${event.title}</h3>
@@ -592,6 +588,7 @@ class EventsApp {
         
         marker.bindPopup(popupContent, {
             maxWidth: 300,
+            minWidth: 200,
             className: 'event-popup-container'
         });
         
