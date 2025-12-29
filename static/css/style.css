@@ -209,12 +209,6 @@ header h1 {
     transform: rotate(-90deg);
 }
 
-#distance-value {
-    color: #FF69B4;
-    font-weight: 600;
-    margin-left: 0.5rem;
-}
-
 #imprint-link {
     position: absolute;
     bottom: 0;
@@ -300,12 +294,6 @@ header h1 {
     background: rgba(100, 100, 100, 0.3);
     border-color: #888;
     color: #ccc;
-}
-
-#distance-value {
-    color: #FF69B4;
-    font-weight: bold;
-    font-size: 0.9rem;
 }
 
 .location-override label {
