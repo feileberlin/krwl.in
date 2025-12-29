@@ -116,7 +116,42 @@ class StaticSiteGenerator:
     
     def _get_html_content(self):
         """Get HTML content from template"""
-        return '''<!DOCTYPE html>
+        # Load events for noscript fallback
+        events_data = load_events(self.base_path)
+        events = events_data.get('events', []) if isinstance(events_data, dict) else []
+        
+        # Generate noscript event cards
+        noscript_events_html = ""
+        if events and len(events) > 0:
+            for event in events[:20]:  # Limit to 20 events for performance
+                # Format date
+                try:
+                    from datetime import datetime
+                    event_date = datetime.fromisoformat(event['start_time'].replace('Z', '+00:00'))
+                    formatted_date = event_date.strftime('%A, %B %d, %Y at %I:%M %p')
+                except:
+                    formatted_date = event.get('start_time', 'Date TBA')
+                
+                location_name = event.get('location', {}).get('name', 'Location TBA')
+                category = event.get('category', 'other')
+                
+                noscript_events_html += f'''
+                    <div class="noscript-event-card">
+                        <h3>{event.get('title', 'Untitled Event')}</h3>
+                        <p><strong>📅 When:</strong> {formatted_date}</p>
+                        <p><strong>📍 Where:</strong> {location_name}</p>
+                        <p><strong>🏷️ Category:</strong> {category}</p>
+                        {f'<p>{event.get("description", "")}</p>' if event.get('description') else ''}
+                        {f'<p><a href="{event.get("url", "#")}" target="_blank" rel="noopener">More information →</a></p>' if event.get('url') else ''}
+                    </div>'''
+        else:
+            noscript_events_html = '''
+                    <div class="noscript-no-events">
+                        <p>No events currently scheduled.</p>
+                        <p style="font-size: 0.9rem; margin-top: 1rem;">Events will appear here when they are added by organizers.</p>
+                    </div>'''
+        
+        return f'''<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -132,10 +167,86 @@ class StaticSiteGenerator:
     
     <div id="app">
         <noscript>
-            <div style="padding: 2rem; background: rgba(255, 105, 180, 0.2); border: 2px solid #FF69B4; border-radius: 8px; margin: 1rem; color: #fff; text-align: center;">
-                <p style="font-size: 1.2rem; margin-bottom: 1rem;">⚠️ JavaScript Required</p>
-                <p>This interactive event map requires JavaScript to function. Please enable JavaScript in your browser to view and filter community events.</p>
-                <p style="margin-top: 1rem; font-size: 0.9rem;">Events are available in all categories, upcoming times, and various distances from your location.</p>
+            <style>
+                #noscript-fallback {{
+                    max-width: 1200px;
+                    margin: 0 auto;
+                    padding: 2rem;
+                    background: #1a1a1a;
+                    color: #fff;
+                }}
+                #noscript-fallback header {{
+                    text-align: center;
+                    margin-bottom: 2rem;
+                }}
+                #noscript-fallback h1 {{
+                    color: #FF69B4;
+                    margin-bottom: 0.5rem;
+                }}
+                .noscript-filter-sentence {{
+                    padding: 1rem;
+                    background: rgba(30, 30, 30, 0.95);
+                    border: 2px solid #FF69B4;
+                    border-radius: 8px;
+                    margin-bottom: 2rem;
+                    color: #FF69B4;
+                    line-height: 1.6;
+                }}
+                .noscript-events-list {{
+                    display: grid;
+                    gap: 1.5rem;
+                }}
+                .noscript-event-card {{
+                    background: rgba(30, 30, 30, 0.95);
+                    border: 1px solid #555;
+                    border-radius: 8px;
+                    padding: 1.5rem;
+                    transition: border-color 0.2s;
+                }}
+                .noscript-event-card:hover {{
+                    border-color: #FF69B4;
+                }}
+                .noscript-event-card h3 {{
+                    color: #FF69B4;
+                    margin-bottom: 0.5rem;
+                }}
+                .noscript-event-card p {{
+                    margin: 0.5rem 0;
+                    color: #ccc;
+                }}
+                .noscript-event-card strong {{
+                    color: #fff;
+                }}
+                .noscript-event-card a {{
+                    color: #FF69B4;
+                    text-decoration: none;
+                }}
+                .noscript-event-card a:hover {{
+                    text-decoration: underline;
+                }}
+                .noscript-no-events {{
+                    text-align: center;
+                    padding: 3rem;
+                    color: #aaa;
+                }}
+            </style>
+            <div id="noscript-fallback">
+                <header>
+                    <h1>KRWL HOF Community Events</h1>
+                    <p style="color: #aaa;">This is a static version. Enable JavaScript for the interactive map and filters.</p>
+                </header>
+                
+                <div class="noscript-filter-sentence">
+                    All upcoming community events in all categories
+                </div>
+                
+                <div class="noscript-events-list">
+                    {noscript_events_html}
+                </div>
+                
+                <footer style="text-align: center; margin-top: 3rem; padding: 2rem; border-top: 1px solid #555;">
+                    <p style="color: #aaa; font-size: 0.9rem;">For the best experience with interactive filters and maps, please enable JavaScript.</p>
+                </footer>
             </div>
         </noscript>
         

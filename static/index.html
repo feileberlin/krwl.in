@@ -14,10 +14,90 @@
     
     <div id="app">
         <noscript>
-            <div style="padding: 2rem; background: rgba(255, 105, 180, 0.2); border: 2px solid #FF69B4; border-radius: 8px; margin: 1rem; color: #fff; text-align: center;">
-                <p style="font-size: 1.2rem; margin-bottom: 1rem;">⚠️ JavaScript Required</p>
-                <p>This interactive event map requires JavaScript to function. Please enable JavaScript in your browser to view and filter community events.</p>
-                <p style="margin-top: 1rem; font-size: 0.9rem;">Events are available in all categories, upcoming times, and various distances from your location.</p>
+            <style>
+                #noscript-fallback {
+                    max-width: 1200px;
+                    margin: 0 auto;
+                    padding: 2rem;
+                    background: #1a1a1a;
+                    color: #fff;
+                }
+                #noscript-fallback header {
+                    text-align: center;
+                    margin-bottom: 2rem;
+                }
+                #noscript-fallback h1 {
+                    color: #FF69B4;
+                    margin-bottom: 0.5rem;
+                }
+                .noscript-filter-sentence {
+                    padding: 1rem;
+                    background: rgba(30, 30, 30, 0.95);
+                    border: 2px solid #FF69B4;
+                    border-radius: 8px;
+                    margin-bottom: 2rem;
+                    color: #FF69B4;
+                    line-height: 1.6;
+                }
+                .noscript-events-list {
+                    display: grid;
+                    gap: 1.5rem;
+                }
+                .noscript-event-card {
+                    background: rgba(30, 30, 30, 0.95);
+                    border: 1px solid #555;
+                    border-radius: 8px;
+                    padding: 1.5rem;
+                    transition: border-color 0.2s;
+                }
+                .noscript-event-card:hover {
+                    border-color: #FF69B4;
+                }
+                .noscript-event-card h3 {
+                    color: #FF69B4;
+                    margin-bottom: 0.5rem;
+                }
+                .noscript-event-card p {
+                    margin: 0.5rem 0;
+                    color: #ccc;
+                }
+                .noscript-event-card strong {
+                    color: #fff;
+                }
+                .noscript-event-card a {
+                    color: #FF69B4;
+                    text-decoration: none;
+                }
+                .noscript-event-card a:hover {
+                    text-decoration: underline;
+                }
+                .noscript-no-events {
+                    text-align: center;
+                    padding: 3rem;
+                    color: #aaa;
+                }
+            </style>
+            <div id="noscript-fallback">
+                <header>
+                    <h1>KRWL HOF Community Events</h1>
+                    <p style="color: #aaa;">This is a static version. Enable JavaScript for the interactive map and filters.</p>
+                </header>
+                
+                <div class="noscript-filter-sentence">
+                    All upcoming community events in all categories
+                </div>
+                
+                <div class="noscript-events-list">
+                    
+                    <div class="noscript-no-events">
+                        <p>No events currently scheduled.</p>
+                        <p style="font-size: 0.9rem; margin-top: 1rem;">Events will appear here when they are added by organizers.</p>
+                    </div>
+                </div>
+                
+                <footer style="text-align: center; margin-top: 3rem; padding: 2rem; border-top: 1px solid #555;">
+                    <p style="color: #aaa; font-size: 0.9rem;">For the best experience with interactive filters and maps, please enable JavaScript.</p>
+                </footer>
             </div>
         </noscript>
         
