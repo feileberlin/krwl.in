@@ -94,7 +94,7 @@ jobs:
           echo "📖 Syncing documentation to GitHub Wiki..."
           
           # Clone wiki repository
-          git clone https://github.com/${{ github.repository }}.wiki.git /tmp/wiki
+          git clone https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.wiki.git /tmp/wiki
           cd /tmp/wiki
           
           # Copy documentation files
