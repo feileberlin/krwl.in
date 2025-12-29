@@ -1,3 +1,20 @@
+/* 
+This devcontainer configuration defines a reproducible development environment for the KRWL HOF project. It:
+
+- Standardizes the development setup - Every developer gets the same Python 3.11 environment with identical tools and extensions
+- Automates environment setup - Automatically installs dependencies via requirements.txt and runs download-libs.sh
+- Integrates with VS Code - Pre-configures extensions (Python, Copilot, Git tools, linters) and settings
+- Enables containerized development - Uses Docker to isolate the project environment from the host system
+- Facilitates collaboration - Ensures consistent tooling across the team and with GitHub Codespaces
+
+This is particularly useful for:
+
+- Onboarding new developers quickly
+- Running the project in GitHub Codespaces
+- Avoiding "works on my machine" problems
+- Maintaining consistent code formatting and linting rules 
+*/
+
 {
   // Display name for the development container
   "name": "KRWL HOF Development Container",
