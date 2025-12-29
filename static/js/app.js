@@ -155,11 +155,18 @@ class EventsApp {
                     this.map.setView([this.userLocation.lat, this.userLocation.lon], 13);
                     
                     // Add user marker with custom geolocation icon
+                    // Support customization from config or use default
+                    const userMarkerConfig = this.config.map.user_location_marker || {};
+                    const userIconUrl = userMarkerConfig.icon || 'markers/marker-geolocation.svg';
+                    const userIconSize = userMarkerConfig.size || [32, 48];
+                    const userIconAnchor = userMarkerConfig.anchor || [userIconSize[0] / 2, userIconSize[1]];
+                    const userPopupAnchor = userMarkerConfig.popup_anchor || [0, -userIconSize[1]];
+                    
                     const userIcon = L.icon({
-                        iconUrl: 'markers/marker-geolocation.svg',
-                        iconSize: [32, 48],
-                        iconAnchor: [16, 48],
-                        popupAnchor: [0, -48]
+                        iconUrl: userIconUrl,
+                        iconSize: userIconSize,
+                        iconAnchor: userIconAnchor,
+                        popupAnchor: userPopupAnchor
                     });
                     
                     L.marker([this.userLocation.lat, this.userLocation.lon], {
@@ -545,15 +552,20 @@ class EventsApp {
     addEventMarker(event) {
         if (!event.location) return;
         
-        // Get SVG icon path based on event category
-        const iconUrl = this.getMarkerIconForCategory(event.category);
+        // Check if event has custom marker icon, otherwise use category-based icon
+        const iconUrl = event.marker_icon || this.getMarkerIconForCategory(event.category);
+        
+        // Support custom marker size if specified in event data
+        const iconSize = event.marker_size || [32, 48];
+        const iconAnchor = event.marker_anchor || [iconSize[0] / 2, iconSize[1]];
+        const popupAnchor = event.marker_popup_anchor || [0, -iconSize[1]];
         
         // Create custom SVG icon using Leaflet's L.icon
         const customIcon = L.icon({
             iconUrl: iconUrl,
-            iconSize: [32, 48],        // Size from marker design specs
-            iconAnchor: [16, 48],      // Anchor at bottom center
-            popupAnchor: [0, -48]      // Popup above marker
+            iconSize: iconSize,
+            iconAnchor: iconAnchor,
+            popupAnchor: popupAnchor
         });
         
         const marker = L.marker([event.location.lat, event.location.lon], {
