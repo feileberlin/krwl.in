@@ -389,7 +389,7 @@ body {
     background: transparent;
     border: 1px solid #4CAF50;
     color: #333333;
-    font-family: inherit, monospace;
+    font-family: inherit;
     font-size: 0.75rem;
     padding: 0.3rem 0.5rem;
     border-radius: 4px;
@@ -592,7 +592,7 @@ body {
 /* Enhanced popup styling with terminal theme */
 .event-popup {
     padding: 1rem;
-    font-family: inherit, monospace;
+    font-family: inherit;
     position: relative;
 }
 
@@ -692,7 +692,7 @@ body {
     width: 100%;
     text-align: left;
     cursor: pointer;
-    font-family: inherit, monospace;
+    font-family: inherit;
     font-size: 0.85rem;
     text-decoration: none;
     transition: all 0.2s;
@@ -797,7 +797,6 @@ body {
 
 /* Apply typewriter animation on popup open */
 .leaflet-popup-content-wrapper.typing .event-popup-info p {
-    animation: typewriter 0.5s steps(40) forwards;
     animation-delay: calc(var(--line-index, 0) * 0.3s);
 }
 
@@ -841,7 +840,7 @@ body {
     margin-top: 0.5rem;
     transition: all 0.2s;
     text-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
-    font-family: inherit, monospace;
+    font-family: inherit;
 }
 
 /* Command prefix */
@@ -885,7 +884,7 @@ body {
     min-height: 100vh;
     background: #000000;
     color: #333333;
-    font-family: inherit, monospace;
+    font-family: inherit;
     padding: 2rem;
     max-width: 1200px;
     margin: 0 auto;
@@ -1016,7 +1015,7 @@ body {
     border: 1px solid #4CAF50;
     padding: 0.4rem 0.8rem;
     font-size: 0.8rem;
-    font-family: inherit, monospace;
+    font-family: inherit;
     cursor: pointer;
     border-radius: 3px;
     text-decoration: none;
@@ -1211,6 +1210,5 @@ body {
 }
 
 .leaflet-marker-icon.imprint-marker {
-    animation: pulse-imprint 2s ease-in-out infinite;
 }
 
