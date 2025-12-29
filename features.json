@@ -650,6 +650,31 @@
             ],
             "test_method": "manual",
             "test_instructions": "1. Navigate to GitHub repository\n2. Click 'Environments' in sidebar\n3. Verify 'production' and 'preview' environments are listed\n4. Click on environment to see deployment history\n5. Click 'View deployment' button to open deployed site"
+        },
+        {
+            "id": "copilot-instructions-verification",
+            "name": "Copilot Instructions Verification",
+            "description": "Automated verification tool that checks if .github/copilot-instructions.md is up to date with the repository structure, including file paths, modules, documentation references, and configuration files",
+            "category": "infrastructure",
+            "implemented": true,
+            "files": [
+                "verify_copilot_instructions.py",
+                ".github/copilot-instructions.md"
+            ],
+            "test_method": "executable",
+            "test_command": "python3 verify_copilot_instructions.py --verbose",
+            "code_patterns": [
+                {
+                    "file": "verify_copilot_instructions.py",
+                    "pattern": "class CopilotInstructionsVerifier",
+                    "description": "Main verification class"
+                },
+                {
+                    "file": "verify_copilot_instructions.py",
+                    "pattern": "def check_file_references|def check_module_references|def check_documentation_references",
+                    "description": "Verification methods for different aspects"
+                }
+            ]
         }
     ]
 }
