@@ -22,6 +22,11 @@ KRWL HOF is a **mobile-first Progressive Web App (PWA)** for discovering communi
   - `src/modules/generator.py` - Static site generation
   - `src/modules/filter_tester.py` - Filter testing
   - `src/modules/feature_verifier.py` - Feature registry validation
+  - `src/modules/scheduler.py` - Event scheduling logic
+  - `src/modules/workflow_launcher.py` - Workflow management
+  - `src/modules/config_editor.py` - Configuration editing
+  - `src/modules/kiss_checker.py` - KISS principle validation
+  - `src/modules/utils.py` - Utility functions
 
 ### Frontend (JavaScript)
 - **Framework**: None (vanilla JS)
@@ -36,7 +41,8 @@ KRWL HOF is a **mobile-first Progressive Web App (PWA)** for discovering communi
 ### Configuration
 - `config.prod.json` - Production (optimized, real events only)
 - `config.dev.json` - Development (debug enabled, demo events)
-- `static/config.json` - Runtime configuration (copied from prod/dev during deployment)
+- `config.preview.json` - Preview environment (shared testing)
+- `static/config.json` - Runtime configuration (copied from prod/dev/preview during deployment)
 
 ## Critical: Auto-Generated Files 🚫
 
@@ -311,11 +317,11 @@ See `.github/DEPLOYMENT.md` and `.github/PROMOTE_WORKFLOW.md` for details.
 
 ## Questions or Issues?
 
-- Check `TESTING.md` for comprehensive testing guide
+- Check `docs/TESTING.md` for comprehensive testing guide
 - Check `.github/DEPLOYMENT.md` for deployment details
-- Check `.github/FEATURE_REGISTRY.md` for feature registry documentation
+- Check `docs/FEATURE_REGISTRY.md` for feature registry documentation
 - Check `docs/SCRAPING.md` for event scraping guide
-- Check `static/LOCALIZATION.md` for i18n details
+- Check `docs/LOCALIZATION.md` for i18n details
 
 ## Remember
 
