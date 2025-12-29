@@ -393,15 +393,12 @@ body {
 
 #app {
     height: 100vh;
-    display: flex;
-    flex-direction: column;
+    width: 100vw;
+    position: relative;
 }
 
 header {
-    background: #2d2d2d;
-    padding: 1rem 2rem;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-    z-index: 1000;
+    display: none; /* Hidden for fullscreen map */
 }
 
 header h1 {
@@ -425,8 +422,11 @@ header h1 {
 }
 
 #map {
-    flex: 1;
-    position: relative;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
     z-index: 1;
 }
 
@@ -655,17 +655,7 @@ header h1 {
 }
 
 #event-list {
-    position: fixed;
-    right: 0;
-    top: 100px;
-    bottom: 0;
-    width: 350px;
-    background: rgba(30, 30, 30, 0.95);
-    backdrop-filter: blur(10px);
-    padding: 1.5rem;
-    overflow-y: auto;
-    box-shadow: -5px 0 20px rgba(0, 0, 0, 0.3);
-    z-index: 999;
+    display: none; /* Hidden for fullscreen map */
 }
 
     background: rgba(100, 100, 100, 0.2);
@@ -865,14 +855,15 @@ header h1 {
     }
     
     #event-list {
-        width: 100%;
-        top: auto;
-        bottom: 0;
-        height: 40vh;
+        display: none; /* Hidden for fullscreen map */
     }
     
     #map {
-        height: 60vh;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
     }
 }
 
