@@ -180,7 +180,8 @@ body {
     font-size: 0.85rem;
     font-weight: 600;
     color: #00ff00;
-    padding: 0.6rem;
+    /* Mobile-first: More padding for better touch targets */
+    padding: 0.8rem;
     background: rgba(0, 0, 0, 0.95);
     backdrop-filter: blur(10px);
     border-radius: 0 0 8px 8px;
@@ -190,8 +191,9 @@ body {
     box-shadow: 0 0 20px rgba(0, 255, 0, 0.3), inset 0 0 10px rgba(0, 255, 0, 0.1);
     display: flex;
     flex-wrap: wrap;
-    gap: 0.3rem;
-    align-items: center;
+    /* Mobile-first: Slightly larger gap for better touch separation */
+    gap: 0.5rem;
+    align-items: stretch;
     text-shadow: 0 0 5px rgba(0, 255, 0, 0.7);
 }
 
@@ -204,6 +206,8 @@ body {
         font-size: 0.95rem;
         padding: 0.8rem;
         border-radius: 8px;
+        gap: 0.3rem;
+        align-items: center;
     }
 }
 
@@ -271,9 +275,19 @@ body {
 }
 
 .filter-part {
-    display: inline-flex;
+    display: flex;
     align-items: center;
     gap: 0.3rem;
+    /* Mobile-first: Each filter takes full width for better touch targets */
+    flex: 1 1 100%;
+}
+
+/* Tablet and up: filters can be inline */
+@media (min-width: 640px) {
+    .filter-part {
+        display: inline-flex;
+        flex: 0 1 auto;
+    }
 }
 
 .inline-filter {
@@ -285,19 +299,31 @@ body {
     font-size: 0.85rem;
     font-weight: 500;
     font-family: inherit;
-    padding: 0.2rem 1.5rem 0.2rem 0.2rem;
+    /* Mobile-first: Better touch targets with more padding */
+    padding: 0.5rem 1.8rem 0.5rem 0.4rem;
     cursor: pointer;
     transition: all 0.2s;
     background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="8" viewBox="0 0 12 8"><path fill="%234CAF50" d="M1.41 0L6 4.59L10.59 0L12 1.41l-6 6l-6-6z"/></svg>');
     background-repeat: no-repeat;
-    background-position: right 0.2rem center;
-    background-size: 10px;
+    background-position: right 0.4rem center;
+    background-size: 12px;
+    /* Mobile-first: Constrain width and handle overflow */
+    max-width: 100%;
+    width: 100%;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
 }
 
-/* Tablet and up */
+/* Tablet and up: reduce padding and allow auto width */
 @media (min-width: 640px) {
     .inline-filter {
         font-size: 0.95rem;
+        padding: 0.2rem 1.5rem 0.2rem 0.2rem;
+        background-position: right 0.2rem center;
+        background-size: 10px;
+        width: auto;
+        min-height: auto;
     }
 }
 
