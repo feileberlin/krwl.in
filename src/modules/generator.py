@@ -116,9 +116,15 @@ class StaticSiteGenerator:
     
     def _get_html_content(self):
         """Get HTML content from template"""
-        # Load events for noscript fallback
+        # Load events for noscript fallback and inline data
         events_data = load_events(self.base_path)
         events = events_data.get('events', []) if isinstance(events_data, dict) else []
+        
+        # Serialize events data for inline injection with XSS protection
+        # Use Unicode escape sequences to prevent XSS attacks from malicious event data
+        # while maintaining JSON validity (html.escape would break JSON parsing)
+        events_json_raw = json.dumps(events_data)
+        events_json = events_json_raw.replace('<', '\\u003c').replace('>', '\\u003e').replace('&', '\\u0026')
         
         # Generate noscript event cards
         noscript_events_html = ""
@@ -300,6 +306,11 @@ class StaticSiteGenerator:
             </div>
         </div>
     </div>
+    
+    <!-- Inline events data -->
+    <script>
+        window.__INLINE_EVENTS_DATA__ = {events_json};
+    </script>
     
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="js/app.js"></script>
@@ -1103,6 +1114,17 @@ class EventsApp {
         try {
             this.log('Loading events...', 'Data source:', this.config.data?.source);
             
+            // Check for inline events data first
+            if (window.__INLINE_EVENTS_DATA__) {
+                this.log('Using inline events data');
+                const data = window.__INLINE_EVENTS_DATA__;
+                this.events = data.events || [];
+                this.log(`Loaded ${this.events.length} events from inline data`);
+                this.populateCategories();
+                return;
+            }
+            
+            // Fallback to fetching events if no inline data
             // Determine which data source(s) to load
             const dataSource = this.config.data?.source || 'real';
             const dataSources = this.config.data?.sources || {};
