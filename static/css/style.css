@@ -308,11 +308,11 @@ body {
     background-position: right 0.4rem center;
     background-size: 12px;
     /* Mobile-first: Constrain width and handle overflow */
-    max-width: 100%;
     width: 100%;
     min-height: 44px;
-    display: flex;
-    align-items: center;
+    /* Use line-height for vertical centering instead of flexbox */
+    line-height: 1.5;
+    box-sizing: border-box;
 }
 
 /* Tablet and up: reduce padding and allow auto width */
