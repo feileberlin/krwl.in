@@ -449,22 +449,6 @@ header {
     text-align: center;
 }
 
-#reset-filters-btn {
-    background: none;
-    border: none;
-    color: #FF69B4;
-    font-size: 1.2rem;
-    cursor: pointer;
-    padding: 0 0.3rem;
-    margin-left: 0.3rem;
-    transition: all 0.2s;
-}
-
-#reset-filters-btn:hover {
-    color: #ffffff;
-    transform: rotate(-90deg);
-}
-
 /* Filter dropdowns */
 .filter-dropdown {
     position: fixed;
@@ -521,22 +505,6 @@ header {
     text-align: center;
     font-size: 1.1rem;
     margin-bottom: 0.5rem;
-}
-
-#reset-filters-btn {
-    background: none;
-    border: none;
-    color: #FF69B4;
-    font-size: 1.2rem;
-    cursor: pointer;
-    padding: 0 0.3rem;
-    margin-left: 0.3rem;
-    transition: all 0.2s;
-}
-
-#reset-filters-btn:hover {
-    color: #ffffff;
-    transform: rotate(-90deg);
 }
 
 #imprint-link {
@@ -2055,29 +2023,6 @@ class EventsApp {
                 hideAllDropdowns();
             }
         });
-        
-        // Reset filters button
-        const resetFilters = document.getElementById('reset-filters-btn');
-        if (resetFilters) {
-            resetFilters.addEventListener('click', (e) => {
-                e.stopPropagation();
-                // Reset all filters to defaults
-                this.filters.maxDistance = 5;
-                this.filters.timeFilter = 'sunrise';
-                this.filters.category = 'all';
-                this.filters.useCustomLocation = false;
-                this.filters.customLat = null;
-                this.filters.customLon = null;
-                
-                // Reset map view
-                if (this.userLocation && this.map) {
-                    this.map.setView([this.userLocation.lat, this.userLocation.lon], 13);
-                }
-                
-                this.displayEvents();
-                hideAllDropdowns();
-            });
-        }
         
         // Event detail close listeners
         const closeDetail = document.getElementById('close-detail');
