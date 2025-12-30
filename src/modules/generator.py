@@ -263,11 +263,19 @@ class StaticSiteGenerator:
                     <!-- Logo: Inline SVG megaphone (barbie red stroke) -->
                     <!-- Source: Generated from src/modules/generator.py template -->
                     <a href="imprint.html" id="imprint-link">
-                        <svg xmlns="http://www.w3.org/2000/svg" id="site-logo" width="40" height="40" viewBox="0 0 20 20">
-                            <g transform="translate(2, 1)">
-                                <path style="fill:none;stroke:#FF69B4;stroke-width:1.2;" 
-                                      d="M 4.43,15.8 H 3.81 c -0.64,-0.19 -0.9,-4.46 -0.02,-5.45 0.61,-0.06 3.81,-0.06 3.81,-0.06 0,0 2.37,0.19 7.44,-3.62 0,0 0.17,0.02 0.85,4.58 0,0 1.42,1.76 -0.11,3.71 0,0 -0.27,3.6 -0.7,4.52 0,0 -4.17,-3.43 -8.8,-3.73 l -0.04,3.58 c -0.07,0.43 -1.71,0.37 -1.72,0 z" />
-                            </g>
+                        <svg xmlns="http://www.w3.org/2000/svg" id="site-logo" width="40" height="40" viewBox="0 0 20 20" aria-hidden="true">
+                          <!--
+                            Centered and scaled to fit with ~8% padding.
+                            Transform = translate(10 10) scale(1.166667) translate(-10.11 -13.215)
+                            (This replaces the original group translate(2,1) and bakes the fit/center.)
+                            I added vector-effect="non-scaling-stroke" so the stroke stays 1.2 units visually.
+                            Remove it if you want the stroke to scale with the shape.
+                          -->
+                          <g id="logo-art" transform="translate(10 10) scale(1.166667) translate(-10.11 -13.215)">
+                            <path style="fill:none;stroke:#FF69B4;stroke-width:1.2;"
+                                  vector-effect="non-scaling-stroke"
+                                  d="M 4.43,15.8 H 3.81 c -0.64,-0.19 -0.9,-4.46 -0.02,-5.45 0.61,-0.06 3.81,-0.06 3.81,-0.06 0,0 2.37,0.19 7.44,-3.62 0,0 0.17,0.02 0.85,4.58 0,0 1.42,1.76 -0.11,3.71 0,0 -0.27,3.6 -0.7,4.52 0,0 -4.17,-3.43 -8.8,-3.73 l -0.04,3.58 c -0.07,0.43 -1.71,0.37 -1.72,0 z"/>
+                          </g>
                         </svg>
                     </a>
                     
