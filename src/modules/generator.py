@@ -357,8 +357,8 @@ body {
 
 #app {
     height: 100vh;
-    display: flex;
-    flex-direction: column;
+    width: 100vw;
+    position: relative;
 }
 
 /* Header is removed from UI but styles kept for backwards compatibility */
@@ -367,8 +367,11 @@ header {
 }
 
 #map {
-    flex: 1;
-    position: relative;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
     z-index: 1;
     background: #2a2a2a;
 }
@@ -429,6 +432,7 @@ header {
     text-underline-offset: 3px;
     transition: all 0.2s;
     position: relative;
+    display: inline-block;
 }
 
 #filter-sentence .filter-part:hover {
@@ -437,11 +441,14 @@ header {
     text-decoration-style: solid;
 }
 
-#filter-sentence .filter-part.active {
+#filter-sentence .filter-part.editing {
     color: #ffffff;
-    background: rgba(255, 105, 180, 0.2);
-    padding: 0.1rem 0.3rem;
+    background: rgba(255, 105, 180, 0.3);
+    padding: 0.1rem 0.5rem;
     border-radius: 4px;
+    text-decoration: none;
+    min-width: 150px;
+    text-align: center;
 }
 
 #reset-filters-btn {
@@ -467,10 +474,10 @@ header {
     backdrop-filter: blur(10px);
     border: 2px solid #FF69B4;
     border-radius: 8px;
-    padding: 0.8rem;
+    padding: 0.5rem 0;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5),
                 0 0 10px rgba(255, 105, 180, 0.3);
-    z-index: 2000;
+    z-index: 3000;
     min-width: 200px;
     white-space: normal;
 }
@@ -484,34 +491,54 @@ header {
     padding: 0.5rem;
     background: #2a2a2a;
     color: #ffffff;
-    border: 1px solid #555;
-    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
     font-size: 0.9rem;
 }
 
-.filter-dropdown select:focus,
-.filter-dropdown input:focus,
-.filter-dropdown button:focus {
-    outline: none;
-    border-color: #FF69B4;
+.custom-dropdown-item:hover {
+    background: rgba(255, 105, 180, 0.2);
+    color: #FF69B4;
 }
 
-.filter-dropdown label {
-    display: block;
-    color: #ccc;
-    margin: 0.5rem 0;
-    font-size: 0.85rem;
-}
-
-.filter-dropdown input[type="checkbox"] {
-    width: auto;
-    margin-right: 0.5rem;
-}
-
-#distance-value {
+.custom-dropdown-item.selected {
+    background: rgba(255, 105, 180, 0.3);
     color: #FF69B4;
     font-weight: 600;
-    margin-left: 0.5rem;
+}
+
+/* Distance slider container */
+.distance-slider-container {
+    padding: 1rem;
+}
+
+.distance-slider-container input[type="range"] {
+    width: 100%;
+    margin: 0.5rem 0;
+}
+
+.distance-slider-container .distance-display {
+    color: #FF69B4;
+    font-weight: 600;
+    text-align: center;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+}
+
+#reset-filters-btn {
+    background: none;
+    border: none;
+    color: #FF69B4;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0 0.3rem;
+    margin-left: 0.3rem;
+    transition: all 0.2s;
+}
+
+#reset-filters-btn:hover {
+    color: #ffffff;
+    transform: rotate(-90deg);
 }
 
 #imprint-link {
@@ -615,12 +642,6 @@ header {
     background: rgba(100, 100, 100, 0.3);
     border-color: #888;
     color: #ccc;
-}
-
-#distance-value {
-    color: #FF69B4;
-    font-weight: bold;
-    font-size: 0.9rem;
 }
 
 .location-override label {
@@ -854,14 +875,15 @@ header {
     }
     
     #event-list {
-        width: 100%;
-        top: auto;
-        bottom: 0;
-        height: 40vh;
+        display: none; /* Hidden for fullscreen map */
     }
     
     #map {
-        height: 60vh;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
     }
 }
 
@@ -1158,31 +1180,10 @@ class EventsApp {
             }
             
             this.events = allEvents;
-            
-            // Extract unique categories from events
-            this.populateCategories();
         } catch (error) {
             console.error('Error loading events:', error);
             this.events = [];
         }
-    }
-    
-    populateCategories() {
-        const categories = new Set();
-        this.events.forEach(event => {
-            if (event.category) {
-                categories.add(event.category);
-            }
-        });
-        
-        // Populate category filter dropdown
-        const categoryFilter = document.getElementById('category-filter');
-        categories.forEach(category => {
-            const option = document.createElement('option');
-            option.value = category;
-            option.textContent = category;
-            categoryFilter.appendChild(option);
-        });
     }
     
     calculateDistance(lat1, lon1, lat2, lon2) {
@@ -1749,6 +1750,82 @@ class EventsApp {
     }
     
     setupEventListeners() {
+        // Custom dropdown helper class
+        class CustomDropdown {
+            constructor(triggerEl, items, currentValue, onSelect, app) {
+                this.triggerEl = triggerEl;
+                this.items = items;
+                this.currentValue = currentValue;
+                this.onSelect = onSelect;
+                this.app = app;
+                this.dropdownEl = null;
+                this.isOpen = false;
+                
+                this.triggerEl.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    if (this.isOpen) {
+                        this.close();
+                    } else {
+                        // Close other dropdowns first
+                        document.querySelectorAll('.custom-dropdown').forEach(d => d.remove());
+                        document.querySelectorAll('.filter-part').forEach(el => el.classList.remove('editing'));
+                        this.open();
+                    }
+                });
+            }
+            
+            open() {
+                this.isOpen = true;
+                this.triggerEl.classList.add('editing');
+                
+                // Create dropdown element
+                this.dropdownEl = document.createElement('div');
+                this.dropdownEl.className = 'custom-dropdown';
+                
+                // Add items
+                this.items.forEach(item => {
+                    const itemEl = document.createElement('div');
+                    itemEl.className = 'custom-dropdown-item';
+                    if (item.value === this.currentValue) {
+                        itemEl.classList.add('selected');
+                    }
+                    itemEl.textContent = item.label;
+                    itemEl.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        this.onSelect(item.value);
+                        this.close();
+                    });
+                    this.dropdownEl.appendChild(itemEl);
+                });
+                
+                // Position dropdown near trigger
+                document.body.appendChild(this.dropdownEl);
+                const rect = this.triggerEl.getBoundingClientRect();
+                this.dropdownEl.style.left = `${rect.left}px`;
+                this.dropdownEl.style.top = `${rect.bottom + 5}px`;
+                
+                // Adjust if off-screen
+                setTimeout(() => {
+                    const dropRect = this.dropdownEl.getBoundingClientRect();
+                    if (dropRect.right > window.innerWidth) {
+                        this.dropdownEl.style.left = `${window.innerWidth - dropRect.width - 10}px`;
+                    }
+                    if (dropRect.bottom > window.innerHeight) {
+                        this.dropdownEl.style.top = `${rect.top - dropRect.height - 5}px`;
+                    }
+                }, 0);
+            }
+            
+            close() {
+                this.isOpen = false;
+                this.triggerEl.classList.remove('editing');
+                if (this.dropdownEl) {
+                    this.dropdownEl.remove();
+                    this.dropdownEl = null;
+                }
+            }
+        }
+        
         // Interactive filter sentence parts
         const categoryTextEl = document.getElementById('category-text');
         const timeTextEl = document.getElementById('time-text');

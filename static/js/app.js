@@ -267,31 +267,10 @@ class EventsApp {
             }
             
             this.events = allEvents;
-            
-            // Extract unique categories from events
-            this.populateCategories();
         } catch (error) {
             console.error('Error loading events:', error);
             this.events = [];
         }
-    }
-    
-    populateCategories() {
-        const categories = new Set();
-        this.events.forEach(event => {
-            if (event.category) {
-                categories.add(event.category);
-            }
-        });
-        
-        // Populate category filter dropdown
-        const categoryFilter = document.getElementById('category-filter');
-        categories.forEach(category => {
-            const option = document.createElement('option');
-            option.value = category;
-            option.textContent = category;
-            categoryFilter.appendChild(option);
-        });
     }
     
     calculateDistance(lat1, lon1, lat2, lon2) {
@@ -858,6 +837,82 @@ class EventsApp {
     }
     
     setupEventListeners() {
+        // Custom dropdown helper class
+        class CustomDropdown {
+            constructor(triggerEl, items, currentValue, onSelect, app) {
+                this.triggerEl = triggerEl;
+                this.items = items;
+                this.currentValue = currentValue;
+                this.onSelect = onSelect;
+                this.app = app;
+                this.dropdownEl = null;
+                this.isOpen = false;
+                
+                this.triggerEl.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    if (this.isOpen) {
+                        this.close();
+                    } else {
+                        // Close other dropdowns first
+                        document.querySelectorAll('.custom-dropdown').forEach(d => d.remove());
+                        document.querySelectorAll('.filter-part').forEach(el => el.classList.remove('editing'));
+                        this.open();
+                    }
+                });
+            }
+            
+            open() {
+                this.isOpen = true;
+                this.triggerEl.classList.add('editing');
+                
+                // Create dropdown element
+                this.dropdownEl = document.createElement('div');
+                this.dropdownEl.className = 'custom-dropdown';
+                
+                // Add items
+                this.items.forEach(item => {
+                    const itemEl = document.createElement('div');
+                    itemEl.className = 'custom-dropdown-item';
+                    if (item.value === this.currentValue) {
+                        itemEl.classList.add('selected');
+                    }
+                    itemEl.textContent = item.label;
+                    itemEl.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        this.onSelect(item.value);
+                        this.close();
+                    });
+                    this.dropdownEl.appendChild(itemEl);
+                });
+                
+                // Position dropdown near trigger
+                document.body.appendChild(this.dropdownEl);
+                const rect = this.triggerEl.getBoundingClientRect();
+                this.dropdownEl.style.left = `${rect.left}px`;
+                this.dropdownEl.style.top = `${rect.bottom + 5}px`;
+                
+                // Adjust if off-screen
+                setTimeout(() => {
+                    const dropRect = this.dropdownEl.getBoundingClientRect();
+                    if (dropRect.right > window.innerWidth) {
+                        this.dropdownEl.style.left = `${window.innerWidth - dropRect.width - 10}px`;
+                    }
+                    if (dropRect.bottom > window.innerHeight) {
+                        this.dropdownEl.style.top = `${rect.top - dropRect.height - 5}px`;
+                    }
+                }, 0);
+            }
+            
+            close() {
+                this.isOpen = false;
+                this.triggerEl.classList.remove('editing');
+                if (this.dropdownEl) {
+                    this.dropdownEl.remove();
+                    this.dropdownEl = null;
+                }
+            }
+        }
+        
         // Interactive filter sentence parts
         const categoryTextEl = document.getElementById('category-text');
         const timeTextEl = document.getElementById('time-text');
