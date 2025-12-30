@@ -1,0 +1,955 @@
+Warning: Scraping libraries not installed. Install with: pip install -r requirements.txt
+
+{
+  "overall_score": "poor",
+  "total_files_checked": 23,
+  "violations": [
+    {
+      "type": "file_too_large",
+      "severity": "error",
+      "file": "src/main.py",
+      "lines": 1068,
+      "threshold": 500,
+      "message": "File has 1068 lines (max 500)"
+    },
+    {
+      "type": "function_too_long",
+      "severity": "error",
+      "file": "src/main.py",
+      "function": "launch_workflows",
+      "lines": 58,
+      "threshold": 50,
+      "message": "Function 'launch_workflows' has 58 lines (max 50)"
+    },
+    {
+      "type": "function_too_long",
+      "severity": "error",
+      "file": "src/main.py",
+      "function": "_launch_specific_workflow",
+      "lines": 74,
+      "threshold": 50,
+      "message": "Function '_launch_specific_workflow' has 74 lines (max 50)"
+    },
+    {
+      "type": "function_too_long",
+      "severity": "error",
+      "file": "src/main.py",
+      "function": "load_example_data",
+      "lines": 53,
+      "threshold": 50,
+      "message": "Function 'load_example_data' has 53 lines (max 50)"
+    },
+    {
+      "type": "function_too_long",
+      "severity": "error",
+      "file": "src/main.py",
+      "function": "cli_workflow",
+      "lines": 112,
+      "threshold": 50,
+      "message": "Function 'cli_workflow' has 112 lines (max 50)"
+    },
+    {
+      "type": "function_too_long",
+      "severity": "error",
+      "file": "src/main.py",
+      "function": "main",
+      "lines": 110,
+      "threshold": 50,
+      "message": "Function 'main' has 110 lines (max 50)"
+    },
+    {
+      "type": "too_many_imports",
+      "severity": "error",
+      "file": "src/main.py",
+      "count": 17,
+      "threshold": 15,
+      "message": "File has 17 imports (max 15)"
+    },
+    {
+      "type": "nesting_too_deep",
+      "severity": "error",
+      "file": "src/main.py",
+      "depth": 5,
+      "threshold": 4,
+      "message": "Max nesting depth is 5 (max 4)"
+    },
+    {
+      "type": "function_too_long",
+      "severity": "error",
+      "file": "src/modules/filter_tester.py",
+      "function": "test_combined_filters",
+      "lines": 56,
+      "threshold": 50,
+      "message": "Function 'test_combined_filters' has 56 lines (max 50)"
+    },
+    {
+      "type": "nesting_too_deep",
+      "severity": "error",
+      "file": "src/modules/filter_tester.py",
+      "depth": 5,
+      "threshold": 4,
+      "message": "Max nesting depth is 5 (max 4)"
+    },
+    {
+      "type": "file_too_large",
+      "severity": "error",
+      "file": "src/modules/feature_verifier.py",
+      "lines": 527,
+      "threshold": 500,
+      "message": "File has 527 lines (max 500)"
+    },
+    {
+      "type": "function_too_long",
+      "severity": "error",
+      "file": "src/modules/feature_verifier.py",
+      "function": "verify_feature",
+      "lines": 56,
+      "threshold": 50,
+      "message": "Function 'verify_feature' has 56 lines (max 50)"
+    },
+    {
+      "type": "function_too_long",
+      "severity": "error",
+      "file": "src/modules/feature_verifier.py",
+      "function": "main",
+      "lines": 77,
+      "threshold": 50,
+      "message": "Function 'main' has 77 lines (max 50)"
+    },
+    {
+      "type": "nesting_too_deep",
+      "severity": "error",
+      "file": "src/modules/feature_verifier.py",
+      "depth": 7,
+      "threshold": 4,
+      "message": "Max nesting depth is 7 (max 4)"
+    },
+    {
+      "type": "function_too_long",
+      "severity": "error",
+      "file": "src/modules/utils.py",
+      "function": "archive_old_events",
+      "lines": 63,
+      "threshold": 50,
+      "message": "Function 'archive_old_events' has 63 lines (max 50)"
+    },
+    {
+      "type": "nesting_too_deep",
+      "severity": "error",
+      "file": "src/modules/utils.py",
+      "depth": 9,
+      "threshold": 4,
+      "message": "Max nesting depth is 9 (max 4)"
+    },
+    {
+      "type": "function_too_long",
+      "severity": "error",
+      "file": "src/modules/workflow_launcher.py",
+      "function": "main",
+      "lines": 73,
+      "threshold": 50,
+      "message": "Function 'main' has 73 lines (max 50)"
+    },
+    {
+      "type": "nesting_too_deep",
+      "severity": "error",
+      "file": "src/modules/workflow_launcher.py",
+      "depth": 5,
+      "threshold": 4,
+      "message": "Max nesting depth is 5 (max 4)"
+    },
+    {
+      "type": "function_too_long",
+      "severity": "error",
+      "file": "src/modules/editor.py",
+      "function": "_edit_event",
+      "lines": 60,
+      "threshold": 50,
+      "message": "Function '_edit_event' has 60 lines (max 50)"
+    },
+    {
+      "type": "nesting_too_deep",
+      "severity": "error",
+      "file": "src/modules/editor.py",
+      "depth": 5,
+      "threshold": 4,
+      "message": "Max nesting depth is 5 (max 4)"
+    },
+    {
+      "type": "nesting_too_deep",
+      "severity": "error",
+      "file": "src/modules/scraper.py",
+      "depth": 6,
+      "threshold": 4,
+      "message": "Max nesting depth is 6 (max 4)"
+    },
+    {
+      "type": "file_too_large",
+      "severity": "error",
+      "file": "src/modules/generator.py",
+      "lines": 2103,
+      "threshold": 500,
+      "message": "File has 2103 lines (max 500)"
+    },
+    {
+      "type": "nesting_too_deep",
+      "severity": "error",
+      "file": "src/modules/generator.py",
+      "depth": 9,
+      "threshold": 4,
+      "message": "Max nesting depth is 9 (max 4)"
+    },
+    {
+      "type": "file_too_large",
+      "severity": "error",
+      "file": "src/modules/config_editor.py",
+      "lines": 727,
+      "threshold": 500,
+      "message": "File has 727 lines (max 500)"
+    },
+    {
+      "type": "function_too_long",
+      "severity": "error",
+      "file": "src/modules/config_editor.py",
+      "function": "main",
+      "lines": 181,
+      "threshold": 50,
+      "message": "Function 'main' has 181 lines (max 50)"
+    },
+    {
+      "type": "nesting_too_deep",
+      "severity": "error",
+      "file": "src/modules/config_editor.py",
+      "depth": 6,
+      "threshold": 4,
+      "message": "Max nesting depth is 6 (max 4)"
+    },
+    {
+      "type": "nesting_too_deep",
+      "severity": "error",
+      "file": "src/modules/kiss_checker.py",
+      "depth": 6,
+      "threshold": 4,
+      "message": "Max nesting depth is 6 (max 4)"
+    },
+    {
+      "type": "nesting_too_deep",
+      "severity": "error",
+      "file": "manage_libs.py",
+      "depth": 6,
+      "threshold": 4,
+      "message": "Max nesting depth is 6 (max 4)"
+    },
+    {
+      "type": "function_too_long",
+      "severity": "error",
+      "file": "test_dev_environment.py",
+      "function": "main",
+      "lines": 100,
+      "threshold": 50,
+      "message": "Function 'main' has 100 lines (max 50)"
+    },
+    {
+      "type": "nesting_too_deep",
+      "severity": "error",
+      "file": "test_dev_environment.py",
+      "depth": 5,
+      "threshold": 4,
+      "message": "Max nesting depth is 5 (max 4)"
+    },
+    {
+      "type": "nesting_too_deep",
+      "severity": "error",
+      "file": "test_scheduler.py",
+      "depth": 5,
+      "threshold": 4,
+      "message": "Max nesting depth is 5 (max 4)"
+    },
+    {
+      "type": "file_too_large",
+      "severity": "error",
+      "file": "test_event_schema.py",
+      "lines": 844,
+      "threshold": 500,
+      "message": "File has 844 lines (max 500)"
+    },
+    {
+      "type": "function_too_long",
+      "severity": "error",
+      "file": "test_event_schema.py",
+      "function": "validate_event_field",
+      "lines": 77,
+      "threshold": 50,
+      "message": "Function 'validate_event_field' has 77 lines (max 50)"
+    },
+    {
+      "type": "function_too_long",
+      "severity": "error",
+      "file": "test_event_schema.py",
+      "function": "test_filter_stringency_time",
+      "lines": 53,
+      "threshold": 50,
+      "message": "Function 'test_filter_stringency_time' has 53 lines (max 50)"
+    },
+    {
+      "type": "nesting_too_deep",
+      "severity": "error",
+      "file": "test_event_schema.py",
+      "depth": 7,
+      "threshold": 4,
+      "message": "Max nesting depth is 7 (max 4)"
+    },
+    {
+      "type": "nesting_too_deep",
+      "severity": "error",
+      "file": "test_translations.py",
+      "depth": 6,
+      "threshold": 4,
+      "message": "Max nesting depth is 6 (max 4)"
+    },
+    {
+      "type": "nesting_too_deep",
+      "severity": "error",
+      "file": "generate_demo_events.py",
+      "depth": 6,
+      "threshold": 4,
+      "message": "Max nesting depth is 6 (max 4)"
+    },
+    {
+      "type": "file_too_large",
+      "severity": "error",
+      "file": "test_scraper.py",
+      "lines": 550,
+      "threshold": 500,
+      "message": "File has 550 lines (max 500)"
+    },
+    {
+      "type": "function_too_long",
+      "severity": "error",
+      "file": "test_scraper.py",
+      "function": "test_manual_event_creation",
+      "lines": 79,
+      "threshold": 50,
+      "message": "Function 'test_manual_event_creation' has 79 lines (max 50)"
+    },
+    {
+      "type": "function_too_long",
+      "severity": "error",
+      "file": "test_scraper.py",
+      "function": "test_event_deduplication",
+      "lines": 75,
+      "threshold": 50,
+      "message": "Function 'test_event_deduplication' has 75 lines (max 50)"
+    },
+    {
+      "type": "function_too_long",
+      "severity": "error",
+      "file": "test_scraper.py",
+      "function": "test_source_scraping_placeholders",
+      "lines": 74,
+      "threshold": 50,
+      "message": "Function 'test_source_scraping_placeholders' has 74 lines (max 50)"
+    },
+    {
+      "type": "function_too_long",
+      "severity": "error",
+      "file": "test_scraper.py",
+      "function": "test_data_validation",
+      "lines": 71,
+      "threshold": 50,
+      "message": "Function 'test_data_validation' has 71 lines (max 50)"
+    },
+    {
+      "type": "function_too_long",
+      "severity": "error",
+      "file": "test_scraper.py",
+      "function": "test_error_handling",
+      "lines": 69,
+      "threshold": 50,
+      "message": "Function 'test_error_handling' has 69 lines (max 50)"
+    },
+    {
+      "type": "too_many_imports",
+      "severity": "error",
+      "file": "test_scraper.py",
+      "count": 21,
+      "threshold": 15,
+      "message": "File has 21 imports (max 15)"
+    },
+    {
+      "type": "nesting_too_deep",
+      "severity": "error",
+      "file": "test_scraper.py",
+      "depth": 6,
+      "threshold": 4,
+      "message": "Max nesting depth is 6 (max 4)"
+    }
+  ],
+  "warnings": [
+    {
+      "type": "function_length_warning",
+      "severity": "warning",
+      "file": "src/main.py",
+      "function": "clear_all_data",
+      "lines": 41,
+      "threshold": 30,
+      "message": "Function 'clear_all_data' has 41 lines (consider refactoring)"
+    },
+    {
+      "type": "function_length_warning",
+      "severity": "warning",
+      "file": "src/main.py",
+      "function": "view_documentation",
+      "lines": 38,
+      "threshold": 30,
+      "message": "Function 'view_documentation' has 38 lines (consider refactoring)"
+    },
+    {
+      "type": "function_length_warning",
+      "severity": "warning",
+      "file": "src/main.py",
+      "function": "_search_docs",
+      "lines": 31,
+      "threshold": 30,
+      "message": "Function '_search_docs' has 31 lines (consider refactoring)"
+    },
+    {
+      "type": "function_length_warning",
+      "severity": "warning",
+      "file": "src/main.py",
+      "function": "_view_full_docs",
+      "lines": 34,
+      "threshold": 30,
+      "message": "Function '_view_full_docs' has 34 lines (consider refactoring)"
+    },
+    {
+      "type": "function_length_warning",
+      "severity": "warning",
+      "file": "src/main.py",
+      "function": "cli_publish_event",
+      "lines": 34,
+      "threshold": 30,
+      "message": "Function 'cli_publish_event' has 34 lines (consider refactoring)"
+    },
+    {
+      "type": "function_length_warning",
+      "severity": "warning",
+      "file": "src/main.py",
+      "function": "cli_load_examples",
+      "lines": 33,
+      "threshold": 30,
+      "message": "Function 'cli_load_examples' has 33 lines (consider refactoring)"
+    },
+    {
+      "type": "function_length_warning",
+      "severity": "warning",
+      "file": "src/modules/filter_tester.py",
+      "function": "test_distance_calculation",
+      "lines": 33,
+      "threshold": 30,
+      "message": "Function 'test_distance_calculation' has 33 lines (consider refactoring)"
+    },
+    {
+      "type": "function_length_warning",
+      "severity": "warning",
+      "file": "src/modules/filter_tester.py",
+      "function": "test_event_type_filtering",
+      "lines": 43,
+      "threshold": 30,
+      "message": "Function 'test_event_type_filtering' has 43 lines (consider refactoring)"
+    },
+    {
+      "type": "function_length_warning",
+      "severity": "warning",
+      "file": "src/modules/filter_tester.py",
+      "function": "test_time_filtering",
+      "lines": 37,
+      "threshold": 30,
+      "message": "Function 'test_time_filtering' has 37 lines (consider refactoring)"
+    },
+    {
+      "type": "function_length_warning",
+      "severity": "warning",
+      "file": "src/modules/filter_tester.py",
+      "function": "test_predefined_locations",
+      "lines": 33,
+      "threshold": 30,
+      "message": "Function 'test_predefined_locations' has 33 lines (consider refactoring)"
+    },
+    {
+      "type": "function_length_warning",
+      "severity": "warning",
+      "file": "src/modules/feature_verifier.py",
+      "function": "print_summary",
+      "lines": 46,
+      "threshold": 30,
+      "message": "Function 'print_summary' has 46 lines (consider refactoring)"
+    },
+    {
+      "type": "function_length_warning",
+      "severity": "warning",
+      "file": "src/modules/utils.py",
+      "function": "filter_events_by_time",
+      "lines": 39,
+      "threshold": 30,
+      "message": "Function 'filter_events_by_time' has 39 lines (consider refactoring)"
+    },
+    {
+      "type": "file_size_warning",
+      "severity": "warning",
+      "file": "src/modules/workflow_launcher.py",
+      "lines": 418,
+      "threshold": 350,
+      "message": "File has 418 lines (consider splitting if it grows)"
+    },
+    {
+      "type": "function_length_warning",
+      "severity": "warning",
+      "file": "src/modules/workflow_launcher.py",
+      "function": "get_workflow_runs",
+      "lines": 49,
+      "threshold": 30,
+      "message": "Function 'get_workflow_runs' has 49 lines (consider refactoring)"
+    },
+    {
+      "type": "function_length_warning",
+      "severity": "warning",
+      "file": "src/modules/editor.py",
+      "function": "review_pending",
+      "lines": 50,
+      "threshold": 30,
+      "message": "Function 'review_pending' has 50 lines (consider refactoring)"
+    },
+    {
+      "type": "nesting_depth_warning",
+      "severity": "warning",
+      "file": "src/modules/scheduler.py",
+      "depth": 4,
+      "threshold": 3,
+      "message": "Max nesting depth is 4 (consider flattening)"
+    },
+    {
+      "type": "function_length_warning",
+      "severity": "warning",
+      "file": "src/modules/scraper.py",
+      "function": "scrape_all_sources",
+      "lines": 34,
+      "threshold": 30,
+      "message": "Function 'scrape_all_sources' has 34 lines (consider refactoring)"
+    },
+    {
+      "type": "function_length_warning",
+      "severity": "warning",
+      "file": "src/modules/scraper.py",
+      "function": "_parse_rss_entry",
+      "lines": 35,
+      "threshold": 30,
+      "message": "Function '_parse_rss_entry' has 35 lines (consider refactoring)"
+    },
+    {
+      "type": "function_length_warning",
+      "severity": "warning",
+      "file": "src/modules/scraper.py",
+      "function": "_parse_html_event",
+      "lines": 39,
+      "threshold": 30,
+      "message": "Function '_parse_html_event' has 39 lines (consider refactoring)"
+    },
+    {
+      "type": "function_length_warning",
+      "severity": "warning",
+      "file": "src/modules/generator.py",
+      "function": "check_manual_changes",
+      "lines": 43,
+      "threshold": 30,
+      "message": "Function 'check_manual_changes' has 43 lines (consider refactoring)"
+    },
+    {
+      "type": "function_length_warning",
+      "severity": "warning",
+      "file": "src/modules/generator.py",
+      "function": "generate_all",
+      "lines": 36,
+      "threshold": 30,
+      "message": "Function 'generate_all' has 36 lines (consider refactoring)"
+    },
+    {
+      "type": "function_length_warning",
+      "severity": "warning",
+      "file": "src/modules/generator.py",
+      "function": "_get_html_content",
+      "lines": 44,
+      "threshold": 30,
+      "message": "Function '_get_html_content' has 44 lines (consider refactoring)"
+    },
+    {
+      "type": "function_length_warning",
+      "severity": "warning",
+      "file": "src/modules/config_editor.py",
+      "function": "set_value",
+      "lines": 33,
+      "threshold": 30,
+      "message": "Function 'set_value' has 33 lines (consider refactoring)"
+    },
+    {
+      "type": "function_length_warning",
+      "severity": "warning",
+      "file": "src/modules/config_editor.py",
+      "function": "validate_config",
+      "lines": 38,
+      "threshold": 30,
+      "message": "Function 'validate_config' has 38 lines (consider refactoring)"
+    },
+    {
+      "type": "file_size_warning",
+      "severity": "warning",
+      "file": "src/modules/kiss_checker.py",
+      "lines": 457,
+      "threshold": 350,
+      "message": "File has 457 lines (consider splitting if it grows)"
+    },
+    {
+      "type": "function_length_warning",
+      "severity": "warning",
+      "file": "src/modules/kiss_checker.py",
+      "function": "__init__",
+      "lines": 34,
+      "threshold": 30,
+      "message": "Function '__init__' has 34 lines (consider refactoring)"
+    },
+    {
+      "type": "function_length_warning",
+      "severity": "warning",
+      "file": "src/modules/kiss_checker.py",
+      "function": "check_file_size",
+      "lines": 34,
+      "threshold": 30,
+      "message": "Function 'check_file_size' has 34 lines (consider refactoring)"
+    },
+    {
+      "type": "function_length_warning",
+      "severity": "warning",
+      "file": "src/modules/kiss_checker.py",
+      "function": "check_function_complexity",
+      "lines": 45,
+      "threshold": 30,
+      "message": "Function 'check_function_complexity' has 45 lines (consider refactoring)"
+    },
+    {
+      "type": "function_length_warning",
+      "severity": "warning",
+      "file": "src/modules/kiss_checker.py",
+      "function": "check_imports",
+      "lines": 36,
+      "threshold": 30,
+      "message": "Function 'check_imports' has 36 lines (consider refactoring)"
+    },
+    {
+      "type": "function_length_warning",
+      "severity": "warning",
+      "file": "src/modules/kiss_checker.py",
+      "function": "check_nesting_depth",
+      "lines": 46,
+      "threshold": 30,
+      "message": "Function 'check_nesting_depth' has 46 lines (consider refactoring)"
+    },
+    {
+      "type": "function_length_warning",
+      "severity": "warning",
+      "file": "src/modules/kiss_checker.py",
+      "function": "check_workflow_files",
+      "lines": 39,
+      "threshold": 30,
+      "message": "Function 'check_workflow_files' has 39 lines (consider refactoring)"
+    },
+    {
+      "type": "function_length_warning",
+      "severity": "warning",
+      "file": "src/modules/kiss_checker.py",
+      "function": "print_report",
+      "lines": 49,
+      "threshold": 30,
+      "message": "Function 'print_report' has 49 lines (consider refactoring)"
+    },
+    {
+      "type": "function_length_warning",
+      "severity": "warning",
+      "file": "src/modules/kiss_checker.py",
+      "function": "main",
+      "lines": 41,
+      "threshold": 30,
+      "message": "Function 'main' has 41 lines (consider refactoring)"
+    },
+    {
+      "type": "file_size_warning",
+      "severity": "warning",
+      "file": "manage_libs.py",
+      "lines": 436,
+      "threshold": 350,
+      "message": "File has 436 lines (consider splitting if it grows)"
+    },
+    {
+      "type": "function_length_warning",
+      "severity": "warning",
+      "file": "manage_libs.py",
+      "function": "download_file",
+      "lines": 36,
+      "threshold": 30,
+      "message": "Function 'download_file' has 36 lines (consider refactoring)"
+    },
+    {
+      "type": "function_length_warning",
+      "severity": "warning",
+      "file": "manage_libs.py",
+      "function": "download_library",
+      "lines": 36,
+      "threshold": 30,
+      "message": "Function 'download_library' has 36 lines (consider refactoring)"
+    },
+    {
+      "type": "function_length_warning",
+      "severity": "warning",
+      "file": "manage_libs.py",
+      "function": "verify_all",
+      "lines": 31,
+      "threshold": 30,
+      "message": "Function 'verify_all' has 31 lines (consider refactoring)"
+    },
+    {
+      "type": "function_length_warning",
+      "severity": "warning",
+      "file": "manage_libs.py",
+      "function": "list_libraries",
+      "lines": 39,
+      "threshold": 30,
+      "message": "Function 'list_libraries' has 39 lines (consider refactoring)"
+    },
+    {
+      "type": "function_length_warning",
+      "severity": "warning",
+      "file": "manage_libs.py",
+      "function": "update_library",
+      "lines": 50,
+      "threshold": 30,
+      "message": "Function 'update_library' has 50 lines (consider refactoring)"
+    },
+    {
+      "type": "import_count_warning",
+      "severity": "warning",
+      "file": "manage_libs.py",
+      "count": 14,
+      "threshold": 10,
+      "message": "File has 14 imports (consider reducing dependencies)"
+    },
+    {
+      "type": "function_length_warning",
+      "severity": "warning",
+      "file": "test_event_schema.py",
+      "function": "test_schema_definition",
+      "lines": 31,
+      "threshold": 30,
+      "message": "Function 'test_schema_definition' has 31 lines (consider refactoring)"
+    },
+    {
+      "type": "function_length_warning",
+      "severity": "warning",
+      "file": "test_event_schema.py",
+      "function": "test_events_example_file",
+      "lines": 39,
+      "threshold": 30,
+      "message": "Function 'test_events_example_file' has 39 lines (consider refactoring)"
+    },
+    {
+      "type": "function_length_warning",
+      "severity": "warning",
+      "file": "test_event_schema.py",
+      "function": "test_events_file",
+      "lines": 46,
+      "threshold": 30,
+      "message": "Function 'test_events_file' has 46 lines (consider refactoring)"
+    },
+    {
+      "type": "function_length_warning",
+      "severity": "warning",
+      "file": "test_event_schema.py",
+      "function": "test_example_vs_schema_consistency",
+      "lines": 39,
+      "threshold": 30,
+      "message": "Function 'test_example_vs_schema_consistency' has 39 lines (consider refactoring)"
+    },
+    {
+      "type": "function_length_warning",
+      "severity": "warning",
+      "file": "test_event_schema.py",
+      "function": "test_filter_stringency_distance",
+      "lines": 41,
+      "threshold": 30,
+      "message": "Function 'test_filter_stringency_distance' has 41 lines (consider refactoring)"
+    },
+    {
+      "type": "function_length_warning",
+      "severity": "warning",
+      "file": "test_event_schema.py",
+      "function": "test_filter_stringency_category",
+      "lines": 41,
+      "threshold": 30,
+      "message": "Function 'test_filter_stringency_category' has 41 lines (consider refactoring)"
+    },
+    {
+      "type": "function_length_warning",
+      "severity": "warning",
+      "file": "test_event_schema.py",
+      "function": "print_recovery_suggestions",
+      "lines": 31,
+      "threshold": 30,
+      "message": "Function 'print_recovery_suggestions' has 31 lines (consider refactoring)"
+    },
+    {
+      "type": "function_length_warning",
+      "severity": "warning",
+      "file": "test_event_schema.py",
+      "function": "run_all_tests",
+      "lines": 40,
+      "threshold": 30,
+      "message": "Function 'run_all_tests' has 40 lines (consider refactoring)"
+    },
+    {
+      "type": "function_length_warning",
+      "severity": "warning",
+      "file": "test_event_schema.py",
+      "function": "main",
+      "lines": 38,
+      "threshold": 30,
+      "message": "Function 'main' has 38 lines (consider refactoring)"
+    },
+    {
+      "type": "file_size_warning",
+      "severity": "warning",
+      "file": "test_translations.py",
+      "lines": 473,
+      "threshold": 350,
+      "message": "File has 473 lines (consider splitting if it grows)"
+    },
+    {
+      "type": "function_length_warning",
+      "severity": "warning",
+      "file": "test_translations.py",
+      "function": "load_content_files",
+      "lines": 36,
+      "threshold": 30,
+      "message": "Function 'load_content_files' has 36 lines (consider refactoring)"
+    },
+    {
+      "type": "function_length_warning",
+      "severity": "warning",
+      "file": "test_translations.py",
+      "function": "test_locale_field",
+      "lines": 31,
+      "threshold": 30,
+      "message": "Function 'test_locale_field' has 31 lines (consider refactoring)"
+    },
+    {
+      "type": "function_length_warning",
+      "severity": "warning",
+      "file": "test_translations.py",
+      "function": "test_key_completeness",
+      "lines": 32,
+      "threshold": 30,
+      "message": "Function 'test_key_completeness' has 32 lines (consider refactoring)"
+    },
+    {
+      "type": "function_length_warning",
+      "severity": "warning",
+      "file": "test_translations.py",
+      "function": "test_placeholder_consistency",
+      "lines": 46,
+      "threshold": 30,
+      "message": "Function 'test_placeholder_consistency' has 46 lines (consider refactoring)"
+    },
+    {
+      "type": "function_length_warning",
+      "severity": "warning",
+      "file": "test_translations.py",
+      "function": "test_non_empty_values",
+      "lines": 43,
+      "threshold": 30,
+      "message": "Function 'test_non_empty_values' has 43 lines (consider refactoring)"
+    },
+    {
+      "type": "function_length_warning",
+      "severity": "warning",
+      "file": "test_translations.py",
+      "function": "test_icon_consistency",
+      "lines": 33,
+      "threshold": 30,
+      "message": "Function 'test_icon_consistency' has 33 lines (consider refactoring)"
+    },
+    {
+      "type": "function_length_warning",
+      "severity": "warning",
+      "file": "test_translations.py",
+      "function": "run_all_tests",
+      "lines": 32,
+      "threshold": 30,
+      "message": "Function 'run_all_tests' has 32 lines (consider refactoring)"
+    },
+    {
+      "type": "file_size_warning",
+      "severity": "warning",
+      "file": "generate_demo_events.py",
+      "lines": 366,
+      "threshold": 350,
+      "message": "File has 366 lines (consider splitting if it grows)"
+    },
+    {
+      "type": "function_length_warning",
+      "severity": "warning",
+      "file": "generate_demo_events.py",
+      "function": "cleanup_old_files",
+      "lines": 36,
+      "threshold": 30,
+      "message": "Function 'cleanup_old_files' has 36 lines (consider refactoring)"
+    },
+    {
+      "type": "function_length_warning",
+      "severity": "warning",
+      "file": "test_scraper.py",
+      "function": "setup_test_environment",
+      "lines": 47,
+      "threshold": 30,
+      "message": "Function 'setup_test_environment' has 47 lines (consider refactoring)"
+    },
+    {
+      "type": "function_length_warning",
+      "severity": "warning",
+      "file": "test_scraper.py",
+      "function": "test_scrape_all_sources",
+      "lines": 36,
+      "threshold": 30,
+      "message": "Function 'test_scrape_all_sources' has 36 lines (consider refactoring)"
+    },
+    {
+      "type": "workflow_complexity_warning",
+      "severity": "warning",
+      "file": ".github/workflows/scrape-events.yml",
+      "steps": 16,
+      "threshold": 15,
+      "message": "Workflow has 16 steps (consider simplifying)"
+    },
+    {
+      "type": "workflow_complexity_warning",
+      "severity": "warning",
+      "file": ".github/workflows/lint.yml",
+      "steps": 17,
+      "threshold": 15,
+      "message": "Workflow has 17 steps (consider simplifying)"
+    }
+  ],
+  "metrics": {},
+  "summary": {
+    "score": "poor",
+    "total_violations": 45,
+    "total_warnings": 63,
+    "files_checked": 23
+  }
+}
