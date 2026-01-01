@@ -61,7 +61,20 @@ jobs:
         run: |
           # Check if scrape status file exists and read added count
           if [[ -f .scrape_status ]]; then
-            added_count=$(python3 -c "import json; print(json.load(open('.scrape_status'))['added'])")
+            # Read added count with error handling
+            added_count=$(python3 -c "
+          import json
+          import sys
+          try:
+              with open('.scrape_status') as f:
+                  data = json.load(f)
+                  print(data.get('added', 0))
+          except (json.JSONDecodeError, KeyError, FileNotFoundError) as e:
+              print('0', file=sys.stderr)
+              print(f'Warning: Failed to read status file: {e}', file=sys.stderr)
+              print('0')
+          " 2>&1)
+            
             echo "added_count=$added_count" >> $GITHUB_OUTPUT
             
             if [[ $added_count -gt 0 ]]; then
@@ -104,10 +117,11 @@ jobs:
           
           # Get detailed stats from status file if available
           if [[ -f .scrape_status ]]; then
-            scraped=$(python3 -c "import json; print(json.load(open('.scrape_status'))['scraped'])")
-            added=$(python3 -c "import json; print(json.load(open('.scrape_status'))['added'])")
-            duplicates=$(python3 -c "import json; print(json.load(open('.scrape_status'))['duplicates'])")
-            rejected=$(python3 -c "import json; print(json.load(open('.scrape_status'))['rejected'])")
+            # Read all stats with error handling
+            scraped=$(python3 -c "import json; import sys; data = json.load(open('.scrape_status')); print(data.get('scraped', 0))" 2>/dev/null || echo "0")
+            added=$(python3 -c "import json; import sys; data = json.load(open('.scrape_status')); print(data.get('added', 0))" 2>/dev/null || echo "0")
+            duplicates=$(python3 -c "import json; import sys; data = json.load(open('.scrape_status')); print(data.get('duplicates', 0))" 2>/dev/null || echo "0")
+            rejected=$(python3 -c "import json; import sys; data = json.load(open('.scrape_status')); print(data.get('rejected', 0))" 2>/dev/null || echo "0")
             
             echo "- **Events Scraped**: $scraped" >> $GITHUB_STEP_SUMMARY
             echo "- **New Events Added**: $added" >> $GITHUB_STEP_SUMMARY

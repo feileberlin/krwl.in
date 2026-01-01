@@ -54,6 +54,22 @@ class EventScraper:
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
             })
         
+    def _write_scrape_status(self, scraped_count, added_count, duplicate_count, rejected_count, error=None):
+        """Write scrape status file for workflow automation"""
+        status = {
+            'scraped': scraped_count,
+            'added': added_count,
+            'duplicates': duplicate_count,
+            'rejected': rejected_count,
+            'timestamp': datetime.now().isoformat()
+        }
+        if error:
+            status['error'] = error
+        
+        status_file = self.base_path / '.scrape_status'
+        with open(status_file, 'w') as f:
+            json.dump(status, f, indent=2)
+    
     def scrape_all_sources(self):
         """Scrape events from all configured sources"""
         if not SCRAPING_ENABLED:
@@ -61,19 +77,8 @@ class EventScraper:
             print("Install with: pip install -r requirements.txt", file=sys.stderr)
             print("Or install directly: pip install requests beautifulsoup4 lxml feedparser", file=sys.stderr)
             
-            # Still write status file even if scraping is disabled
-            status = {
-                'scraped': 0,
-                'added': 0,
-                'duplicates': 0,
-                'rejected': 0,
-                'timestamp': datetime.now().isoformat(),
-                'error': 'Scraping libraries not installed'
-            }
-            status_file = self.base_path / '.scrape_status'
-            with open(status_file, 'w') as f:
-                json.dump(status, f, indent=2)
-            
+            # Write status file even if scraping is disabled
+            self._write_scrape_status(0, 0, 0, 0, error='Scraping libraries not installed')
             return []
             
         pending_data = load_pending_events(self.base_path)
@@ -134,16 +139,7 @@ class EventScraper:
         print(f"\n📊 Total: {len(new_events)} scraped, {added_count} new, {skipped_duplicate} duplicates skipped, {skipped_rejected} rejected")
         
         # Write scrape status for workflow automation
-        status = {
-            'scraped': len(new_events),
-            'added': added_count,
-            'duplicates': skipped_duplicate,
-            'rejected': skipped_rejected,
-            'timestamp': datetime.now().isoformat()
-        }
-        status_file = self.base_path / '.scrape_status'
-        with open(status_file, 'w') as f:
-            json.dump(status, f, indent=2)
+        self._write_scrape_status(len(new_events), added_count, skipped_duplicate, skipped_rejected)
         
         return new_events
         
