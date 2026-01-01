@@ -100,6 +100,8 @@ python3 tests/test_filters.py --verbose
 krwl-hof/
 ├── static/          # The actual web app (HTML, CSS, JS) and event data
 ├── src/             # Python backend (scraping, generation)
+├── scripts/         # Utility and wrapper scripts
+├── tests/           # Test scripts
 ├── docs/            # Documentation (auto-synced to wiki)
 ├── backups/         # Individual event backups
 ├── examples/        # Example event data
