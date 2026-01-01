@@ -105,8 +105,8 @@ class StaticSiteGenerator:
         print("Generating JavaScript...")
         self._generate_js()
         
-        print("Copying data files...")
-        self._copy_data_files()
+        # Note: Data files (events.json, etc.) now live directly in static/
+        # No need to copy from data/ folder anymore
         
         print("Creating warning notice...")
         self._create_warning_notice()
