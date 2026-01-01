@@ -54,12 +54,31 @@ class EventScraper:
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
             })
         
+    def _write_scrape_status(self, scraped_count, added_count, duplicate_count, rejected_count, error=None):
+        """Write scrape status file for workflow automation"""
+        status = {
+            'scraped': scraped_count,
+            'added': added_count,
+            'duplicates': duplicate_count,
+            'rejected': rejected_count,
+            'timestamp': datetime.now().isoformat()
+        }
+        if error:
+            status['error'] = error
+        
+        status_file = self.base_path / '.scrape_status'
+        with open(status_file, 'w') as f:
+            json.dump(status, f, indent=2)
+    
     def scrape_all_sources(self):
         """Scrape events from all configured sources"""
         if not SCRAPING_ENABLED:
             print("ERROR: Scraping libraries not installed. Cannot scrape events.", file=sys.stderr)
             print("Install with: pip install -r requirements.txt", file=sys.stderr)
             print("Or install directly: pip install requests beautifulsoup4 lxml feedparser", file=sys.stderr)
+            
+            # Write status file even if scraping is disabled
+            self._write_scrape_status(0, 0, 0, 0, error='Scraping libraries not installed')
             return []
             
         pending_data = load_pending_events(self.base_path)
@@ -115,9 +134,16 @@ class EventScraper:
             # Event is new - add to pending
             pending_data['pending_events'].append(event)
             added_count += 1
-                
-        save_pending_events(self.base_path, pending_data)
+        
+        # Only save (and update timestamp) if events were actually added
+        if added_count > 0:
+            save_pending_events(self.base_path, pending_data)
+        
         print(f"\n📊 Total: {len(new_events)} scraped, {added_count} new, {skipped_duplicate} duplicates skipped, {skipped_rejected} rejected")
+        
+        # Write scrape status for workflow automation
+        self._write_scrape_status(len(new_events), added_count, skipped_duplicate, skipped_rejected)
+        
         return new_events
         
     def scrape_source(self, source):
