@@ -220,11 +220,11 @@
         {
             "id": "production-deployment",
             "name": "Production Deployment",
-            "description": "Deploy production version to main branch",
+            "description": "Automated event scraping and deployment to GitHub Pages",
             "category": "deployment",
             "implemented": true,
             "files": [
-                ".github/workflows/deploy-pages.yml"
+                ".github/workflows/scrape-events.yml"
             ],
             "test_method": "check_files_exist"
         },
@@ -280,7 +280,7 @@
             "implemented": true,
             "files": [
                 "CNAME",
-                ".github/workflows/deploy-pages.yml"
+                ".github/workflows/scrape-events.yml"
             ],
             "test_method": "check_files_exist"
         },
@@ -632,16 +632,10 @@
             "category": "infrastructure",
             "implemented": true,
             "files": [
-                ".github/workflows/deploy-pages.yml",
                 ".github/workflows/deploy-preview.yml"
             ],
             "config_keys": [],
             "code_patterns": [
-                {
-                    "file": ".github/workflows/deploy-pages.yml",
-                    "pattern": "environment:\\s+name: production",
-                    "description": "Production environment configuration"
-                },
                 {
                     "file": ".github/workflows/deploy-preview.yml",
                     "pattern": "environment:\\s+name: preview",
@@ -649,7 +643,7 @@
                 }
             ],
             "test_method": "manual",
-            "test_instructions": "1. Navigate to GitHub repository\n2. Click 'Environments' in sidebar\n3. Verify 'production' and 'preview' environments are listed\n4. Click on environment to see deployment history\n5. Click 'View deployment' button to open deployed site"
+            "test_instructions": "1. Navigate to GitHub repository\n2. Click 'Environments' in sidebar\n3. Verify 'preview' environment is listed\n4. Click on environment to see deployment history\n5. Click 'View deployment' button to open deployed site"
         }
     ]
 }

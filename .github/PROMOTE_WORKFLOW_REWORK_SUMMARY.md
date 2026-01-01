@@ -399,7 +399,7 @@ The workflow changes have been implemented and validated syntactically, but requ
 
 - ⏳ Live workflow execution in GitHub Actions
 - ⏳ All scenario testing (listed above)
-- ⏳ Integration with deploy-pages workflow
+- ⏳ Integration with scrape-events workflow (automated event scraping & deployment)
 - ⏳ Integration with deploy-preview workflow
 
 ## 🎓 User Guide Quick Reference

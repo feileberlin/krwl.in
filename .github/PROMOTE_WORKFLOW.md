@@ -309,10 +309,10 @@ This PR promotes changes from the `preview` branch to `main` (production).
    - Click "Merge pull request"
    - Choose merge method (merge/squash/rebase)
    - Confirm merge
-5. **Production deploys automatically**:
-   - `deploy-pages.yml` workflow triggers
-   - Site builds with `config.prod.json`
-   - Deploys to production
+5. **Production updates automatically**:
+   - Event scraping workflow (`scrape-events.yml`) runs twice daily
+   - Scrapes new events, regenerates site, and deploys to production
+   - Manual deployments can be triggered via workflow_dispatch
 
 ### If auto_merge = true (Automatic)
 
@@ -543,7 +543,7 @@ Rules:
   - Dismiss stale reviews: ✓
   - Require review from Code Owners: ○ (optional)
   - Require status checks: ✓
-    - Check: deploy-pages / deploy
+    - Check: deploy-preview / deploy
   - Require branches to be up to date: ✓
   - Require conversation resolution: ✓
   - Include administrators: ○ (your choice)
@@ -653,7 +653,7 @@ permissions:
 
 - [DEPLOYMENT.md](.github/DEPLOYMENT.md) - Full deployment guide
 - [README.md](../README.md) - Project overview and setup
-- [deploy-pages.yml](workflows/deploy-pages.yml) - Production deploy workflow
+- [scrape-events.yml](workflows/scrape-events.yml) - Automated event scraping & deployment
 - [deploy-preview.yml](workflows/deploy-preview.yml) - Preview deploy workflow
 
 ## Questions?

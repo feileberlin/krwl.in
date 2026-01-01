@@ -466,13 +466,14 @@ Exit (FAILURE)
                 │
                 ▼
 ┌──────────────────────────────────┐
-│  deploy-pages.yml triggers       │
-│  (automatic)                     │
+│  scrape-events.yml runs          │
+│  (twice daily, scheduled)        │
 └───────────────┬──────────────────┘
                 │
                 ▼
 ┌──────────────────────────────────┐
-│  Production site deployed        │
+│  Production site updated with    │
+│  fresh events and changes        │
 │  (optimized, no debug)           │
 └──────────────────────────────────┘
 ```

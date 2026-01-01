@@ -181,15 +181,16 @@ Each environment has a distinct border color:
 
 ### Production Deployment (main branch)
 
-File: `.github/workflows/deploy-pages.yml`
+File: `.github/workflows/scrape-events.yml`
 
 ```yaml
 # Use production config
 cp config.prod.json publish/config.json
 
-# Inject build metadata
-jq --argjson build_info "$BUILD_INFO" '. + {build_info: $build_info}' \
-  publish/config.json > publish/config.json.tmp
+# Workflow handles:
+# 1. Event scraping from configured sources
+# 2. Static site generation
+# 3. Deployment to GitHub Pages
 ```
 
 ### Preview Deployment (preview branch)

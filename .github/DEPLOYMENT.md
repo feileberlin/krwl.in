@@ -50,16 +50,19 @@ Demo events are automatically generated from real event templates with fresh tim
 
 ## Workflows
 
-### 1. Production Deploy (`deploy-pages.yml`)
-**Triggers**: Push to `main`, manual dispatch
+### 1. Scrape Events & Deploy (`scrape-events.yml`)
+**Triggers**: Scheduled (twice daily at 3 AM & 3 PM UTC), manual dispatch
 
 **What it does**:
+- Scrapes events from configured sources
+- Commits new events to `data/` directory
+- Generates static site from templates
 - Copies `static/` → `publish/`
 - Uses `config.prod.json` (optimized, no debug)
 - Includes CNAME for custom domain
 - Deploys to GitHub Pages root
 
-**Result**: Fast production site at custom domain
+**Result**: Automatically updated production site with fresh events
 
 ### 2. Preview Deploy (`deploy-preview.yml`)
 **Triggers**: Push to `preview`, manual dispatch
@@ -169,7 +172,7 @@ cp config.prod.json static/config.json
 
 ### Production site missing config
 - Check `config.prod.json` exists in repo root
-- Verify workflow copies it: see `deploy-pages.yml` logs
+- Verify workflow copies it: see `scrape-events.yml` logs
 
 ### Assets not loading in preview
 - Base tag might be missing

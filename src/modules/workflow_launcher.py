@@ -21,19 +21,6 @@ class WorkflowLauncher:
     # For a more dynamic approach, consider parsing workflow YAML files directly
     # or maintaining a separate configuration file if the workflow list grows significantly.
     AVAILABLE_WORKFLOWS = {
-        'deploy-pages': {
-            'file': 'deploy-pages.yml',
-            'name': '🚀 Deploy to Production',
-            'description': 'Deploy the main branch to GitHub Pages (production)',
-            'inputs': {
-                'reason': {
-                    'description': 'Reason for manual deployment',
-                    'type': 'string',
-                    'default': 'Manual deployment triggered',
-                    'required': False
-                }
-            }
-        },
         'deploy-preview': {
             'file': 'deploy-preview.yml',
             'name': '🔍 Deploy Preview Environment',
