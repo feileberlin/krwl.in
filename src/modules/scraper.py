@@ -134,8 +134,11 @@ class EventScraper:
             # Event is new - add to pending
             pending_data['pending_events'].append(event)
             added_count += 1
-                
-        save_pending_events(self.base_path, pending_data)
+        
+        # Only save (and update timestamp) if events were actually added
+        if added_count > 0:
+            save_pending_events(self.base_path, pending_data)
+        
         print(f"\n📊 Total: {len(new_events)} scraped, {added_count} new, {skipped_duplicate} duplicates skipped, {skipped_rejected} rejected")
         
         # Write scrape status for workflow automation
