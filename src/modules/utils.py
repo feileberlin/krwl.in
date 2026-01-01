@@ -42,6 +42,78 @@ def save_pending_events(base_path, pending_data):
         json.dump(pending_data, f, indent=2)
 
 
+def load_rejected_events(base_path):
+    """Load rejected events from rejected_events.json"""
+    rejected_path = base_path / 'static' / 'rejected_events.json'
+    try:
+        with open(rejected_path, 'r') as f:
+            return json.load(f)
+    except FileNotFoundError:
+        # Create empty rejected events file if it doesn't exist
+        rejected_data = {'rejected_events': [], 'last_updated': datetime.now().isoformat()}
+        save_rejected_events(base_path, rejected_data)
+        return rejected_data
+
+
+def save_rejected_events(base_path, rejected_data):
+    """Save rejected events to rejected_events.json"""
+    rejected_path = base_path / 'static' / 'rejected_events.json'
+    rejected_data['last_updated'] = datetime.now().isoformat()
+    with open(rejected_path, 'w') as f:
+        json.dump(rejected_data, f, indent=2)
+
+
+def is_event_rejected(rejected_events, event_title, event_source):
+    """
+    Check if an event with given title and source has been rejected before.
+    
+    Args:
+        rejected_events: List of rejected event records
+        event_title: Title of the event to check
+        event_source: Source of the event to check
+        
+    Returns:
+        True if event matches a rejected record, False otherwise
+    """
+    title_lower = event_title.lower().strip()
+    source_lower = event_source.lower().strip()
+    
+    for rejected in rejected_events:
+        rejected_title = rejected.get('title', '').lower().strip()
+        rejected_source = rejected.get('source', '').lower().strip()
+        
+        # Match if both title and source match
+        if rejected_title == title_lower and rejected_source == source_lower:
+            return True
+    
+    return False
+
+
+def add_rejected_event(base_path, event_title, event_source):
+    """
+    Add an event to the rejected events list.
+    
+    Args:
+        base_path: Root path of the repository
+        event_title: Title of the event to reject
+        event_source: Source of the event to reject
+    """
+    rejected_data = load_rejected_events(base_path)
+    
+    # Check if already in rejected list
+    if is_event_rejected(rejected_data['rejected_events'], event_title, event_source):
+        return  # Already rejected
+    
+    # Add to rejected list
+    rejected_data['rejected_events'].append({
+        'title': event_title,
+        'source': event_source,
+        'rejected_at': datetime.now().isoformat()
+    })
+    
+    save_rejected_events(base_path, rejected_data)
+
+
 def calculate_distance(lat1, lon1, lat2, lon2):
     """
     Calculate distance between two coordinates using Haversine formula

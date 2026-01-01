@@ -1,7 +1,8 @@
 """Event editor module for reviewing and publishing events"""
 
 from datetime import datetime
-from .utils import load_pending_events, save_pending_events, load_events, save_events
+from .utils import (load_pending_events, save_pending_events, load_events, 
+                   save_events, add_rejected_event)
 
 
 class EventEditor:
@@ -69,8 +70,9 @@ class EventEditor:
                 self._edit_event(event)
                 i += 1
             elif choice == 'r':
+                self._reject_event(event)
                 pending_events.pop(i)
-                print("\nEvent rejected and deleted!")
+                print("\nEvent rejected and saved to rejected list!")
             elif choice == 's':
                 i += 1
             elif choice == 'q':
@@ -85,7 +87,8 @@ class EventEditor:
         """Print footer with editorial tooltips"""
         print()
         print("─" * 60)
-        print("💡 Editorial Tip: Approved events publish to website | Edit to fix details | Reject removes from queue")
+        print("💡 Editorial Tip: Approved events publish to website | Edit to fix details")
+        print("   Reject saves to auto-reject list (prevents re-scraping of recurring spam)")
         print("─" * 60)
         
     def _display_event(self, event):
@@ -114,6 +117,15 @@ class EventEditor:
         events_data = load_events(self.base_path)
         events_data['events'].append(event)
         save_events(self.base_path, events_data)
+        
+    def _reject_event(self, event):
+        """Reject an event and add it to the rejected events list"""
+        # Add to rejected events to prevent future scraping of same event
+        event_title = event.get('title', '')
+        event_source = event.get('source', '')
+        
+        if event_title and event_source:
+            add_rejected_event(self.base_path, event_title, event_source)
         
     def _edit_event(self, event):
         """Edit event details"""
