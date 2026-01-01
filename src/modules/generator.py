@@ -2172,15 +2172,14 @@ For more information, see the project README.md
             f.write(notice_content)
             
     def _copy_data_files(self):
-        """Copy data and config files to static directory"""
-        import shutil
+        """
+        DEPRECATED: This method is no longer used.
         
-        # Copy events.json
-        events_src = self.base_path / 'data' / 'events.json'
-        events_dst = self.static_path / 'events.json'
-        shutil.copy(events_src, events_dst)
+        Data files now live directly in static/ folder as the single source of truth:
+        - static/events.json (published events)
+        - static/pending_events.json (events awaiting review)
+        - static/archived_events.json (historical events)
         
-        # Copy config.json
-        config_src = self.base_path / 'config' / 'config.json'
-        config_dst = self.static_path / 'config.json'
-        shutil.copy(config_src, config_dst)
+        No copying is needed anymore.
+        """
+        pass
