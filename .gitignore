@@ -50,6 +50,9 @@ kiss_results.json
 kiss_report.txt
 .scrape_status
 
+# Library management metadata
+static/lib/.library_inventory.json
+
 # Deployment artifacts
 publish/
 
