@@ -1,4 +1,4 @@
-name: 👁️ Generate Preview
+name: 📄 Generate HTML
 
 on:
   push:
@@ -22,25 +22,24 @@ jobs:
       - name: Generate fresh demo events
         run: python3 scripts/generate_demo_events.py > static/events.demo.json
 
-      - name: Generate self-contained preview HTML
+      - name: Generate self-contained HTML
         run: python3 scripts/generate_html.py preview
 
-      - name: Commit preview file
+      - name: Commit generated file
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add preview/index.html static/events.demo.json
           if git diff --staged --quiet; then
-            echo "No changes to preview"
+            echo "No changes"
           else
-            git commit -m "Update preview/index.html [skip ci]"
+            git commit -m "Generate preview/index.html [skip ci]"
             git push
             echo ""
             echo "✓ Self-contained preview/index.html generated!"
             echo ""
-            echo "📥 To test the preview (NO DEPLOYMENT NEEDED):"
-            echo "  1. Download: https://github.com/${{ github.repository }}/raw/preview/preview/index.html"
-            echo "  2. Open the file in your browser (works completely offline)"
+            echo "📥 NO DEPLOYMENT NEEDED - Just download and open:"
+            echo "  https://github.com/${{ github.repository }}/raw/preview/preview/index.html"
             echo ""
-            echo "🔗 Or merge to main to make available at /preview/ on production site"
+            echo "🔗 Or merge to main for /preview/ on production site"
           fi

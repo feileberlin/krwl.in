@@ -50,29 +50,28 @@ Demo events are automatically generated from real event templates with fresh tim
 
 ## Workflows
 
-### 1. Production Deploy
-**Method**: GitHub Pages configured to deploy from `main` branch
+### 1. Production Generation (`generate-production.yml`)
+**Triggers**: Push to `main` branch, manual dispatch
 
 **What it does**:
-- Serves `static/` directory at root
-- Uses `config.prod.json` (optimized, no debug)
-- Includes CNAME for custom domain
-- Serves `preview/index.html` at `/preview/` (if present)
+- Runs `scripts/generate_html.py production`
+- Inlines all CSS, JavaScript, config, event data, and icons
+- Commits `static/index.html` to main branch (~247KB, production events only)
 
-**Result**: Fast production site at `krwl.in` + preview at `krwl.in/preview/`
+**Result**: Production HTML automatically deployed via GitHub Pages at root
 
-### 2. Preview Generation (`generate-preview.yml`)
+### 2. Preview Generation (`generate-html.yml`)
 **Triggers**: Push to `preview` branch, manual dispatch
 
 **What it does**:
 - Generates fresh demo events from real event templates
-- Runs `scripts/generate_preview.py` to create self-contained HTML
-- Inlines all CSS, JavaScript, config, and event data
+- Runs `scripts/generate_html.py preview` to create self-contained HTML
+- Inlines all CSS, JavaScript, config, event data, and icons
 - Commits `preview/index.html` to preview branch (single file, ~260KB)
 
 **Result**: Self-contained HTML file - NO DEPLOYMENT, just download and open
 
-**To test preview**:
+**To test**:
 1. Download `preview/index.html` from preview branch
 2. Open in browser (works completely offline, no server needed)
 3. OR merge to main to make it available at `krwl.in/preview/`

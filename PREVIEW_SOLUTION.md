@@ -28,10 +28,10 @@ Instead of deploying anywhere, we generate a **single, self-contained HTML file*
                   │
                   ▼
 ┌─────────────────────────────────────────────────────┐
-│ 2. GitHub Action (generate-preview.yml) runs:      │
+│ 2. GitHub Action (generate-html.yml) runs:         │
 │    - Download Leaflet library                      │
 │    - Generate fresh demo events                    │
-│    - Run scripts/generate_preview.py               │
+│    - Run scripts/generate_html.py preview          │
 └─────────────────┬───────────────────────────────────┘
                   │
                   ▼
@@ -43,6 +43,7 @@ Instead of deploying anywhere, we generate a **single, self-contained HTML file*
 │    - Inlining Leaflet CSS/JS                       │
 │    - Inlining app CSS/JS (style.css + app.js)     │
 │    - Embedding all data as window.EMBEDDED_*       │
+│    - Encoding favicon as data URI                  │
 └─────────────────┬───────────────────────────────────┘
                   │
                   ▼
@@ -125,11 +126,17 @@ https://raw.githubusercontent.com/feileberlin/krwl-hof/preview/preview/index.htm
 
 ## Files Changed
 
-1. **scripts/generate_preview.py** - New 101-line script (KISS compliant)
-2. **.github/workflows/deploy-preview.yml** - Simplified to just generate + commit
-3. **preview/index.html** - Generated self-contained HTML (260KB)
-4. **preview/README.md** - Documentation for preview usage
-5. **.github/DEPLOYMENT.md** - Updated deployment guide
+1. **scripts/generate_html.py** - New unified 59-line script (KISS compliant)
+   - Generates both production AND preview HTML
+   - `python3 scripts/generate_html.py production` → `static/index.html`
+   - `python3 scripts/generate_html.py preview` → `preview/index.html`
+
+2. **.github/workflows/generate-production.yml** - Production HTML generation
+3. **.github/workflows/generate-html.yml** - Preview HTML generation (renamed from deploy-preview.yml)
+4. **preview/index.html** - Generated self-contained HTML (260KB)
+5. **static/index.html** - Generated production HTML (247KB)
+6. **preview/README.md** - Documentation for preview usage
+7. **.github/DEPLOYMENT.md** - Updated deployment guide
 
 ## Technical Details
 
