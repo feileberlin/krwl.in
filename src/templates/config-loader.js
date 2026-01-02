@@ -1,3 +1,23 @@
+/**
+ * KRWL HOF - Runtime Configuration Loader
+ * 
+ * Purpose: Detects environment and selects appropriate config
+ * Used by: Embedded in static/index.html during generation
+ * 
+ * How it works:
+ * 1. Checks hostname and pathname for dev indicators
+ * 2. Selects config from window.ALL_CONFIGS array
+ * 3. Filters events based on config.data.source
+ * 
+ * Environment detection:
+ * - localhost/127.0.0.1 → development (index 1)
+ * - /dev/ or /test/ in path → development (index 1)
+ * - Everything else → production (index 0)
+ * 
+ * Result:
+ * - window.ACTIVE_CONFIG - Selected configuration
+ * - window.ACTIVE_EVENTS - Filtered events (real only in prod)
+ */
 // Runtime configuration loader - detects environment
 (function() {
     const hostname = window.location.hostname;
