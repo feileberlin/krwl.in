@@ -174,10 +174,23 @@ class EventsApp {
     }
     
     getUserLocation() {
-        const statusEl = document.getElementById('location-status');
+        // Update watermark with location status
+        const updateLocationStatus = (status) => {
+            const watermark = document.getElementById('env-watermark');
+            if (!watermark) return;
+            
+            // Get or create location status span
+            let statusSpan = watermark.querySelector('.location-status');
+            if (!statusSpan) {
+                statusSpan = document.createElement('span');
+                statusSpan.className = 'location-status';
+                watermark.appendChild(statusSpan);
+            }
+            statusSpan.textContent = status;
+        };
         
         if ('geolocation' in navigator) {
-            if (statusEl) statusEl.textContent = 'Getting your location...';
+            updateLocationStatus('Getting your location...');
             
             navigator.geolocation.getCurrentPosition(
                 (position) => {
@@ -210,14 +223,14 @@ class EventsApp {
                         }).addTo(this.map).bindPopup('You are here');
                     }
                     
-                    if (statusEl) statusEl.textContent = '📍 Location found';
+                    updateLocationStatus('📍 Location found');
                     
                     // Update events display
                     this.displayEvents();
                 },
                 (error) => {
                     console.error('Location error:', error);
-                    if (statusEl) statusEl.textContent = '⚠️ Location unavailable - using default location';
+                    updateLocationStatus('⚠️ Location unavailable - using default location');
                     
                     // Use config default location as fallback
                     const defaultCenter = this.config.map.default_center;
@@ -236,7 +249,7 @@ class EventsApp {
                 }
             );
         } else {
-            if (statusEl) statusEl.textContent = '⚠️ Geolocation not supported - using default location';
+            updateLocationStatus('⚠️ Geolocation not supported - using default location');
             
             // Use config default location as fallback
             const defaultCenter = this.config.map.default_center;
