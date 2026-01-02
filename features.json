@@ -708,8 +708,8 @@
       "files": [
         "assets/js/app.js",
         "static/js/app.js",
-        "docs/SCREENSHOT_GUIDE.md",
-        "scripts/generate_screenshots.py"
+        "scripts/generate_screenshots.py",
+        "README.md"
       ],
       "code_patterns": [
         {

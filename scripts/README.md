@@ -34,5 +34,4 @@ python3 scripts/cleanup_obsolete.py
 
 ## See Also
 - Test scripts: [`../tests/`](../tests/)
-- Main application: [`../src/main.py`](../src/main.py)
-- Documentation: [`../docs/`](../docs/)
+- Main application: [`../src/event_manager.py`](../src/event_manager.py)

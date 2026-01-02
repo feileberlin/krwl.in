@@ -566,8 +566,8 @@ Automated Updates
      $ python3 src/event_manager.py
 
   2. Read full documentation:
-     - README.md
-     - docs/ directory
+     - README.md (consolidated guide)
+     - Inline code comments for technical details
 
   3. Join the community:
      - GitHub: https://github.com/feileberlin/krwl-hof
