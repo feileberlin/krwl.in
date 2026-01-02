@@ -1,4 +1,4 @@
-name: Deploy (Fast Update)
+name: Update Events Data
 
 on:
   push:
