@@ -34,8 +34,24 @@ KRWL HOF is a **mobile-first Progressive Web App (PWA)** for discovering communi
   - `static/css/style.css` - Styles
 
 ### Configuration
-- `config.prod.json` - Production (optimized, real events only)
-- `config.dev.json` - Development (debug enabled, demo events, DEV badge)
+
+**IMPORTANT: Automatic Environment Detection**
+
+This project uses a **single unified config file** (`config.json`) with automatic environment detection:
+
+- **config.json** - Unified configuration with smart defaults that automatically adapt based on environment
+  - Local Development: `debug=true`, `data.source="both"` (real + demo events), `watermark="DEV"`
+  - CI/Production: `debug=false`, `data.source="real"`, `watermark="PRODUCTION"`
+
+**How It Works:**
+- Environment is detected automatically using `os.environ` checks in Python
+- **CI Detection**: `CI=true` or `GITHUB_ACTIONS=true` (set automatically by CI providers)
+- **Production**: `NODE_ENV=production` (requires explicit setting)
+- **Development**: Default when NOT in CI and NOT in production (typical for local developers)
+
+**NO MANUAL SWITCHING NEEDED** - The code detects the environment and applies the right settings automatically!
+
+See detailed documentation in the "Project Configuration" section below.
 
 ## Critical: Auto-Generated Files 🚫
 
@@ -154,6 +170,124 @@ This project follows **strict KISS principles**. Always:
 - **CSS Variables**: Use for theming (see `static/css/style.css`)
 - **Responsive**: Use media queries, flexbox, grid
 - **Accessibility**: Ensure sufficient contrast, focus indicators
+
+## Project Configuration
+
+### Environment Detection (IMPORTANT)
+
+This project uses **automatic environment detection** with smart defaults. Configuration is stored in a single unified file (`config.json`) that intelligently adapts based on where the code runs.
+
+#### Environment Modes
+
+- **Local Development** (developer's machine):
+  - `debug = true` - Verbose logging and debug features enabled
+  - `data.source = "both"` - Load both real events AND demo events for testing
+  - `watermark.text = "DEV"` - Show DEV watermark in UI
+  - `app.name` includes `[DEV]` suffix
+  - `performance.cache_enabled = false` - Fresh data on each load
+  - `performance.prefetch_events = false` - On-demand loading
+  - **Detection**: Automatically detected when NOT in CI and NOT in production
+
+- **CI/Production** (GitHub Actions, Travis, CircleCI, deployed sites):
+  - `debug = false` - Production mode, minimal logging
+  - `data.source = "real"` - Only real scraped events (no demo data)
+  - `watermark.text = "PRODUCTION"` - Show PRODUCTION watermark
+  - `app.name` without `[DEV]` suffix
+  - `performance.cache_enabled = true` - Enable caching for speed
+  - `performance.prefetch_events = true` - Preload events for performance
+  - **Detection**: `CI=true` OR `GITHUB_ACTIONS=true` OR `NODE_ENV=production`
+
+#### How Environment Detection Works
+
+The configuration system uses Python's `os.environ` to automatically detect the environment:
+
+```python
+import os
+
+def is_ci():
+    """Detect if running in CI environment"""
+    return os.environ.get('CI') == 'true' or os.environ.get('GITHUB_ACTIONS') == 'true'
+
+def is_production():
+    """Detect if running in production"""
+    return os.environ.get('NODE_ENV') == 'production'
+
+def is_development():
+    """Detect if running in local development"""
+    return not is_production() and not is_ci()
+```
+
+#### Configuration Loading
+
+The `load_config()` function in `src/modules/utils.py` handles automatic environment detection:
+
+```python
+from src.modules.utils import load_config
+
+# Automatically detects environment and applies appropriate overrides
+config = load_config(base_path)
+
+# Logs which mode is active: "🚀 Running in development mode (debug: True, data source: both)"
+# Or: "🚀 Running in ci mode (debug: False, data source: real)"
+```
+
+#### NO MANUAL SWITCHING NEEDED
+
+The beauty of this system is that **you never need to manually switch configurations**:
+- Developers working locally get debug mode automatically
+- CI systems get production mode automatically
+- Deployed production sites get production mode automatically
+
+Just write your code and let the environment detection handle the rest!
+
+#### Configuration File Structure
+
+The unified `config.json` contains:
+- Inline comments (using `_comment_*` keys) explaining auto-detection behavior
+- Base configuration values (defaults used for production/CI)
+- All sections: `app`, `debug`, `watermark`, `performance`, `data`, `scraping`, `filtering`, `map`, `editor`
+
+**Important**: The values in `config.json` represent the **base/production defaults**. Development-specific overrides are applied automatically by `load_config()` when running locally.
+
+#### Environment Variables
+
+Optional `.env` file (gitignored) can be used to force specific environment:
+```bash
+# Force production mode locally (rarely needed)
+NODE_ENV=production
+
+# Force development mode in CI (rarely needed)
+# Leave empty or unset for automatic detection
+```
+
+See `.env.example` for the template.
+
+### When Suggesting Code Changes
+
+**ALWAYS follow these guidelines:**
+
+1. **Never hardcode environment checks scattered throughout code**
+   - ❌ Bad: `if os.environ.get('CI') == 'true': ...` in multiple files
+   - ✅ Good: Use `config['debug']`, `config['data']['source']` from centralized config
+
+2. **Always use the centralized config loader with automatic detection**
+   - Import: `from src.modules.utils import load_config`
+   - Load: `config = load_config(base_path)`
+   - Use: `if config['debug']: print("Debug info...")`
+
+3. **Never suggest placing config in static folders** 
+   - Security risk: Config files should stay in repository root
+   - Never put `config.json` in `static/` directory
+
+4. **Use environment flags from config object**
+   - Debug mode: `if config['debug']:`
+   - Data source: `source = config['data']['source']`
+   - Watermark: `text = config['watermark']['text']`
+
+5. **When adding new environment-specific behavior**
+   - Add the setting to `config.json` with inline comments
+   - Add override logic to `load_config()` in `src/modules/utils.py`
+   - Document in this copilot instructions file
 
 ## Feature Registry System
 

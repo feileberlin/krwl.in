@@ -138,7 +138,7 @@ class FeatureVerifier:
                 key = key_def
                 # Try both config files
                 found = False
-                for config_file in ['config.dev.json', 'config.prod.json']:
+                for config_file in ['config.json', 'config.json']:
                     if self._check_config_key_in_file(config_file, key):
                         found = True
                         break
