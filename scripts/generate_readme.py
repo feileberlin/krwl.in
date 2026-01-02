@@ -67,6 +67,8 @@ def generate_readme():
 
 > {app_description}
 
+**🌐 Live Site: [https://krwl.in](https://krwl.in)**
+
 [![PWA Ready](https://img.shields.io/badge/PWA-Ready-success)](https://web.dev/progressive-web_apps/)
 [![Accessibility](https://img.shields.io/badge/A11y-Compliant-blue)](https://www.w3.org/WAI/WCAG21/quickref/)
 [![Mobile First](https://img.shields.io/badge/Mobile-First-orange)](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps)
@@ -74,6 +76,8 @@ def generate_readme():
 ## 🎯 What is This?
 
 A **grassroots, mobile-first** Progressive Web App (PWA) for discovering local community events in Hof and surrounding region (Bavaria, Germany). Built by and for the local community - from punk concerts to farmers markets, from Off-Theater to VHS courses.
+
+**Visit the live app at [krwl.in](https://krwl.in)** to see events on an interactive map!
 
 ### ✨ Features
 
@@ -366,6 +370,12 @@ Found a security issue? Please report it privately via GitHub Security Advisorie
 ## 🙏 Acknowledgments
 
 Built with love for the Hof community. Special thanks to all the local venues and organizations sharing their event information.
+
+## 🔗 Links
+
+- **Live App**: [krwl.in](https://krwl.in)
+- **GitHub Repository**: [github.com/feileberlin/krwl-hof](https://github.com/feileberlin/krwl-hof)
+- **Report Issues**: [GitHub Issues](https://github.com/feileberlin/krwl-hof/issues)
 
 ---
 
