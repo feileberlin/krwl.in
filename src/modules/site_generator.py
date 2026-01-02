@@ -323,7 +323,7 @@ class SiteGenerator:
 <p>Enable JavaScript to view events</p>
 </div>
 </noscript>
-<div id="main-content" style="display:none">
+<div id="main-content">
 <div id="filter-sentence">
 <span id="filter-logo" class="filter-logo" aria-hidden="true">{logo_svg}</span>
 <span id="event-count-category-text" class="filter-part">0 events</span>
@@ -331,10 +331,9 @@ class SiteGenerator:
 <span id="distance-text" class="filter-part">within 5 km</span>
 <span id="location-text" class="filter-part">from here</span>
 </div>
-<div id="location-status"></div>
 <div id="map"></div>
 <div id="event-detail" class="hidden">
-<div class="event-detail-content">
+<div class="detail-content">
 <button id="close-detail">&times;</button>
 <h2 id="detail-title"></h2>
 <p id="detail-description"></p>
