@@ -1,10 +1,38 @@
 #!/usr/bin/env python3
 """
 Generate demo events with dynamic timestamps relative to current time.
-Uses real events from production as templates for realistic demo data.
-Includes timezone-aware test cases to ensure proper timezone handling.
-This ensures demo events always appear fresh and useful for testing.
-Also cleans up old unnecessary files.
+
+FEATURE: Dynamic Event Templates with Relative Times
+PURPOSE: Create demo events that always display accurate relative times like 
+         "happening now" or "starting in 5 minutes" without manual updates
+
+HOW IT WORKS:
+1. Loads real events from production as templates for realistic demo data
+2. Generates demo events with both:
+   - Static timestamps (for backward compatibility)
+   - relative_time field (for dynamic processing by frontend)
+
+RELATIVE TIME TYPES:
+1. "offset" - Relative to current time
+   Example: {"type": "offset", "minutes": -30, "duration_hours": 2}
+   Creates event that started 30 minutes ago, lasting 2 hours
+
+2. "sunrise_relative" - Relative to next sunrise (simplified as 6:00 AM)
+   Example: {"type": "sunrise_relative", "start_offset_hours": -2, "end_offset_hours": 1}
+   Creates event starting 2 hours before sunrise, ending 1 hour after
+
+TIMEZONE SUPPORT:
+Includes timezone-aware test cases to ensure proper international time handling.
+Timezone offset example: {"timezone_offset": 1} generates "2026-01-02T14:07:41+01:00"
+
+USAGE:
+    python3 scripts/generate_demo_events.py > event-data/events.demo.json
+
+FRONTEND INTEGRATION:
+The frontend's processTemplateEvents() method in assets/js/app.js detects 
+events with relative_time and calculates actual timestamps at page load.
+
+See README.md section "Advanced Features > Dynamic Event Templates" for complete documentation.
 """
 
 import json

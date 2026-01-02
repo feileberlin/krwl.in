@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Two types supported: `offset` (relative to current time) and `sunrise_relative` (relative to next sunrise)
   - Timezone offset support for international testing
   - Comprehensive test suite (`tests/test_relative_times.py` and HTML test page)
-  - Full documentation in `docs/RELATIVE_TIME_TEMPLATES.md`
+  - Full documentation in README.md section "Advanced Features > Dynamic Event Templates"
 - Demo events always show accurate relative times like "happening now" or "starting in 5 minutes"
 - `processTemplateEvents()` method in frontend to calculate timestamps dynamically
 - All 23 demo events now include `relative_time` field for automatic updating
@@ -106,14 +106,12 @@ See [SMART_SCRAPER_SUMMARY.md](SMART_SCRAPER_SUMMARY.md) for complete details.
 - **Feature Registry System**: Documents all 38+ implemented features with validation
 
 #### Documentation
-- **Comprehensive Docs**: 22 markdown files covering all aspects of the project
-- **Auto-Generated README**: Built from modular docs in `docs/` directory
-- **GitHub Wiki Integration**: Auto-sync documentation to GitHub Wiki
-- **API Documentation**: Complete documentation for AI providers and image analysis
-- **Configuration Guide**: Detailed configuration documentation
-- **Testing Guide**: Comprehensive testing instructions
-- **Setup Guide**: Complete setup and installation instructions
-- **Deployment Guide**: Step-by-step deployment documentation
+- **KISS Documentation Philosophy**: All documentation consolidated in README.md, inline code comments, and CLI help
+- **Auto-Generated README**: Built from templates by `scripts/generate_readme.py`
+- **Comprehensive Inline Comments**: Technical details live in the source code where they're relevant
+- **Configuration Guide**: Detailed configuration documentation in README.md
+- **Testing Guide**: Comprehensive testing instructions in README.md
+- **Setup Guide**: Complete setup and installation instructions in README.md
 - **Management Interfaces Guide**: Documentation for GitHub UI, CLI, and TUI interfaces
 
 ### Changed

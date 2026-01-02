@@ -95,7 +95,7 @@
     {
       "label": "Generate: Documentation",
       "type": "shell",
-      "command": "python3 docs/build_docs.py",
+      "command": "python3 scripts/generate_readme.py",
       "group": "build",
       "presentation": {
         "reveal": "always",

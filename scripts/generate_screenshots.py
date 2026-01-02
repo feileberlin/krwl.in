@@ -2,17 +2,47 @@
 """
 Generate PWA screenshots for KRWL HOF Community Events app.
 
-This script uses Playwright to capture mobile and desktop screenshots
-after waiting for the app to fully initialize (map loaded, events loaded, etc.).
+FEATURE: Screenshot Generation with App Ready Signal
+PURPOSE: Capture reliable screenshots after the app is fully initialized
+         (config loaded, map initialized, events loaded, map tiles rendered)
 
-Requirements:
+HOW IT WORKS:
+This script uses Playwright to:
+1. Navigate to the app URL
+2. Wait for the app-ready signal (body[data-app-ready="true"] attribute)
+3. Wait additional 2 seconds for map tiles to finish loading
+4. Capture screenshots at mobile (640×1136) and desktop (1280×800) sizes
+
+APP READY SIGNAL:
+The frontend emits a ready signal via two methods:
+1. Body attribute: <body data-app-ready="true">
+2. Custom event: window 'app-ready' event with metadata
+
+This signal is emitted after all async operations complete:
+- Config loaded
+- Map initialized
+- Geolocation requested (or skipped)
+- Events loaded and processed
+- Event listeners set up
+
+Note: Map tiles load asynchronously after the ready signal, hence the 2s wait.
+
+REQUIREMENTS:
     pip install playwright
     playwright install chromium
 
-Usage:
+USAGE:
     python3 scripts/generate_screenshots.py
     python3 scripts/generate_screenshots.py --url http://localhost:8000
-    python3 scripts/generate_screenshots.py --output-dir assets
+    python3 scripts/generate_screenshots.py --output-dir assets --verbose
+
+OTHER AUTOMATION TOOLS:
+This pattern works with any browser automation tool:
+- Playwright (Python/Node.js) - Used in this script
+- Puppeteer (Node.js) - Similar API
+- Selenium (Python/Java/etc.) - Via WebDriverWait for selector
+
+For examples with other tools, see README.md section "Advanced Features > Screenshot Generation"
 """
 
 import argparse

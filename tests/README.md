@@ -50,5 +50,4 @@ These tests cover:
 
 ## See Also
 - Scripts: [`../scripts/`](../scripts/)
-- Main application: [`../src/main.py`](../src/main.py)
-- Testing documentation: [`../docs/TESTING.md`](../docs/TESTING.md)
+- Main application: [`../src/event_manager.py`](../src/event_manager.py)
