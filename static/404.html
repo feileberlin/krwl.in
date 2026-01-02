@@ -61,14 +61,22 @@
                 return;
             }
             
-            // Redirect to home page
-            var baseUrl = window.location.origin + window.location.pathname.split('/').slice(0, -1).join('/');
-            if (!baseUrl.endsWith('/')) {
-                baseUrl += '/';
+            // Determine the base path of the app
+            // For custom domains or localhost: base is '/'
+            // For github.io: base is '/repo-name/'
+            var baseHref = '/';
+            var hostname = window.location.hostname;
+            
+            if (hostname.includes('github.io')) {
+                // Extract repo name from path (first segment)
+                var parts = path.split('/').filter(function(part) { return part; });
+                if (parts.length > 0) {
+                    baseHref = '/' + parts[0] + '/';
+                }
             }
             
-            // Try to preserve any hash/query parameters
-            var newUrl = baseUrl + 'index.html' + window.location.search + window.location.hash;
+            // Build the redirect URL to the app root
+            var newUrl = window.location.origin + baseHref + 'index.html' + window.location.search + window.location.hash;
             
             window.location.replace(newUrl);
         })();
