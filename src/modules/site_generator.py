@@ -58,7 +58,8 @@ class SiteGenerator:
     def __init__(self, base_path):
         self.base_path = Path(base_path)
         self.static_path = self.base_path / 'static'
-        self.dependencies_dir = self.static_path / 'lib'
+        self.assets_path = self.base_path / 'assets'
+        self.dependencies_dir = self.assets_path / 'lib'
         self.dependencies_dir.mkdir(parents=True, exist_ok=True)
     
     # ==================== Dependency Management ====================
@@ -167,17 +168,18 @@ class SiteGenerator:
             return f.read()
     
     def load_all_events(self) -> List[Dict]:
-        """Load all event data (real + demo)"""
+        """Load all event data (real + demo) from event-data directory"""
         events = []
+        event_data_path = self.base_path / 'event-data'
         
         # Real events
-        events_file = self.static_path / 'events.json'
+        events_file = event_data_path / 'events.json'
         if events_file.exists():
             with open(events_file, 'r') as f:
                 events.extend(json.load(f).get('events', []))
         
         # Demo events (always include - config determines if they're shown)
-        demo_file = self.static_path / 'events.demo.json'
+        demo_file = event_data_path / 'events.demo.json'
         if demo_file.exists():
             with open(demo_file, 'r') as f:
                 events.extend(json.load(f).get('events', []))
@@ -206,10 +208,10 @@ class SiteGenerator:
                 self.dependencies_dir / 'leaflet' / 'leaflet.css'
             ),
             'app_css': self.read_text_file(
-                self.static_path / 'css' / 'style.css'
+                self.assets_path / 'css' / 'style.css'
             ),
             'time_drawer_css': self.read_text_file(
-                self.static_path / 'css' / 'time-drawer.css'
+                self.assets_path / 'css' / 'time-drawer.css'
             )
         }
     
@@ -220,13 +222,13 @@ class SiteGenerator:
                 self.dependencies_dir / 'leaflet' / 'leaflet.js'
             ),
             'i18n_js': self.read_text_file(
-                self.static_path / 'js' / 'i18n.js'
+                self.assets_path / 'js' / 'i18n.js'
             ),
             'time_drawer_js': self.read_text_file(
-                self.static_path / 'js' / 'time-drawer.js'
+                self.assets_path / 'js' / 'time-drawer.js'
             ),
             'app_js': self.read_text_file(
-                self.static_path / 'js' / 'app.js'
+                self.assets_path / 'js' / 'app.js'
             )
         }
     

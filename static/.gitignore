@@ -1,0 +1,12 @@
+# IMPORTANT: static/ should contain ONLY index.html
+# All source files belong in assets/ or other directories
+# Everything is inlined into index.html during build
+
+# Ignore everything in this directory
+*
+
+# EXCEPT index.html (the generated file)
+!index.html
+
+# And this .gitignore file itself
+!.gitignore
