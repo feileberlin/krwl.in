@@ -8,7 +8,7 @@
 # USAGE:
 #   1. SSH into your hosting server
 #   2. cd /path/to/your/app
-#   3. bash hosting-examples/setup-hosting-gitignore.sh
+#   3. bash scripts/setup-hosting-gitignore.sh
 # 
 # WHAT IT DOES:
 #   - Configures git to use hosting-specific .gitignore
@@ -36,11 +36,11 @@ echo ""
 
 # Step 1: Copy hosting .gitignore
 echo "Step 1: Setting up hosting-specific .gitignore..."
-if [ -f "hosting-examples/.gitignore.hosting.example" ]; then
-    cp hosting-examples/.gitignore.hosting.example .gitignore.hosting
+if [ -f "scripts/.gitignore.hosting.example" ]; then
+    cp scripts/.gitignore.hosting.example .gitignore.hosting
     echo "✅ Created .gitignore.hosting"
 else
-    echo "⚠️  Warning: hosting-examples/.gitignore.hosting.example not found"
+    echo "⚠️  Warning: scripts/.gitignore.hosting.example not found"
     echo "   Skipping this step..."
 fi
 echo ""
@@ -68,7 +68,10 @@ if [ ! -f ".env" ]; then
 # by git pull (protected by .gitignore.hosting)
 
 # Force production mode (usually auto-detected, but this ensures it)
-NODE_ENV=production
+ENVIRONMENT=production
+
+# Legacy support (still works for backward compatibility)
+# NODE_ENV=production
 
 # Add your production-specific variables below:
 # DATABASE_URL=postgresql://...
