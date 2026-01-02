@@ -138,7 +138,6 @@ def load_config(base_path):
     # Detect environment
     env_is_dev = is_development()
     env_is_ci = is_ci()
-    env_is_prod = is_production()
     
     # Determine environment name for logging
     if env_is_dev:
@@ -150,6 +149,8 @@ def load_config(base_path):
     
     # Apply environment-specific overrides
     # These smart defaults automatically adjust behavior based on where the code runs
+    # NOTE: CI and Production intentionally use the same settings (production-like)
+    # to ensure builds and deployments are tested with production configuration
     if env_is_dev:
         # Development mode: Optimized for local testing and debugging
         config['debug'] = True
@@ -162,7 +163,8 @@ def load_config(base_path):
         config['performance']['cache_enabled'] = False  # Fresh data each time
         config['performance']['prefetch_events'] = False  # On-demand loading
     else:
-        # CI or Production mode: Optimized for performance and real data only
+        # CI or Production mode: Both use production settings
+        # This ensures CI builds match production behavior exactly
         config['debug'] = False
         config['data']['source'] = 'real'  # Real events only
         config['watermark']['text'] = 'PRODUCTION'

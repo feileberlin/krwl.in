@@ -214,8 +214,7 @@ python3 scripts/check_kiss.py --verbose
 
 ```
 krwl-hof/
-├── config.json      # Development environment config
-├── config.json     # Production environment config (default)
+├── config.json          # Unified configuration (auto-detects environment)
 ├── static/              # Only index.html
 │   └── index.html       # Main app (auto-generated, DO NOT EDIT)
 ├── assets/              # Frontend assets (CSS, JS, libraries, icons)
