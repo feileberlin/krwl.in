@@ -2611,8 +2611,16 @@ class EventsApp {
             text += ` • PR#${buildInfo.pr_number}`;
         }
         
+        // Get or create environment span for consistent DOM structure
+        let envSpan = watermark.querySelector('.env-text');
+        if (!envSpan) {
+            envSpan = document.createElement('span');
+            envSpan.className = 'env-text';
+            watermark.appendChild(envSpan);
+        }
+        
         // Set watermark text and style
-        watermark.textContent = text;
+        envSpan.textContent = text;
         watermark.classList.remove('hidden', 'production', 'preview', 'testing', 'development');
         watermark.classList.add(environment.toLowerCase());
         
@@ -3187,11 +3195,21 @@ class EventsApp {
             watermark.appendChild(statsSpan);
         }
         
+        // Helper to get proper singular/plural form
+        const getEventWord = (count) => {
+            // Use i18n translations when available, fall back to English
+            if (window.i18n && typeof window.i18n.t === 'function') {
+                const key = count === 1 ? 'filters.event_word.singular' : 'filters.event_word.plural';
+                return window.i18n.t(key);
+            }
+            return count === 1 ? 'event' : 'events';
+        };
+        
         // Create descriptive text about filtering
         if (filteredCount === 0) {
-            statsSpan.textContent = `Showing all ${totalEvents} events`;
+            statsSpan.textContent = `Showing all ${totalEvents} ${getEventWord(totalEvents)}`;
         } else {
-            statsSpan.textContent = `${visibleCount}/${totalEvents} events (${filteredCount} filtered)`;
+            statsSpan.textContent = `${visibleCount}/${totalEvents} ${getEventWord(totalEvents)} (${filteredCount} filtered)`;
         }
     }
     
