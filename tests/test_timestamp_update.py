@@ -21,7 +21,7 @@ def test_timestamp_only_on_new_events():
     
     try:
         # Add src to path
-        repo_root = Path(__file__).parent
+        repo_root = Path(__file__).parent.parent
         sys.path.insert(0, str(repo_root / 'src'))
         
         from modules.scraper import EventScraper
