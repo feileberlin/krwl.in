@@ -226,7 +226,7 @@ krwl-hof/
 │   ├── markers/         # Event marker SVG icons
 │   ├── manifest.json    # PWA manifest
 │   └── *.svg            # App icons (favicon, PWA icons, logo)
-├── data/                # Event and translation data
+├── event-data/                # Event and translation data
 │   ├── events.json      # Published events
 │   ├── pending_events.json  # Events awaiting approval
 │   ├── rejected_events.json # Rejected events
