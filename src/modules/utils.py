@@ -43,7 +43,8 @@ def is_production():
     Detect if running in production environment.
     
     Checks for production indicators from:
-    - Explicit NODE_ENV=production
+    - Explicit ENVIRONMENT=production (preferred for Python apps)
+    - Legacy NODE_ENV=production (backward compatibility)
     - Vercel (VERCEL_ENV=production)
     - Netlify (NETLIFY=true + CONTEXT=production)
     - Heroku (DYNO environment variable presence)
@@ -56,8 +57,9 @@ def is_production():
     Returns:
         bool: True if in production, False otherwise
     """
-    # Explicit production setting
-    if os.environ.get('NODE_ENV') == 'production':
+    # Explicit production setting (check both new and legacy)
+    env = os.environ.get('ENVIRONMENT') or os.environ.get('NODE_ENV')
+    if env == 'production':
         return True
     
     # Vercel production
@@ -118,7 +120,7 @@ def load_config(base_path):
     
     The environment is detected automatically using os.environ checks:
     - CI: CI=true or GITHUB_ACTIONS=true
-    - Production: NODE_ENV=production  
+    - Production: ENVIRONMENT=production or NODE_ENV=production (legacy)
     - Development: Default when not in CI or production (typical for local dev)
     
     NO MANUAL CONFIGURATION NEEDED - Just run the code and it adapts!
