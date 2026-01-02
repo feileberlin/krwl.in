@@ -6,8 +6,8 @@ from datetime import datetime
 
 
 def load_config(base_path):
-    """Load configuration from config.json"""
-    config_path = base_path / 'config.json'
+    """Load configuration from config.prod.json"""
+    config_path = base_path / 'config.prod.json'
     with open(config_path, 'r') as f:
         return json.load(f)
 
