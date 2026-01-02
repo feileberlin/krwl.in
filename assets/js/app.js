@@ -62,6 +62,28 @@ class EventsApp {
         
         // Setup event listeners (always run, even if map fails)
         this.setupEventListeners();
+        
+        // Signal that app is ready (for screenshot tools, etc.)
+        this.markAppAsReady();
+    }
+    
+    markAppAsReady() {
+        // Set data attribute on body to signal app is ready
+        document.body.setAttribute('data-app-ready', 'true');
+        
+        // Dispatch custom event for programmatic detection
+        window.dispatchEvent(new CustomEvent('app-ready', {
+            detail: {
+                timestamp: Date.now(),
+                eventsLoaded: this.events.length,
+                mapInitialized: !!this.map
+            }
+        }));
+        
+        this.log('App ready signal sent', {
+            events: this.events.length,
+            map: !!this.map
+        });
     }
     
     displayEnvironmentWatermark() {
