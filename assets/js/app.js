@@ -558,6 +558,9 @@ class EventsApp {
         // Update count with descriptive sentence
         this.updateFilterDescription(filteredEvents.length);
         
+        // Update watermark with filter statistics
+        this.updateWatermarkFilterStats(filteredEvents.length);
+        
         // Show main content after events are loaded and filter description is updated
         const mainContent = document.getElementById('main-content');
         if (mainContent) {
@@ -672,6 +675,29 @@ class EventsApp {
                 locDescription = 'from default location';
             }
             locationText.textContent = locDescription;
+        }
+    }
+    
+    updateWatermarkFilterStats(visibleCount) {
+        const watermark = document.getElementById('env-watermark');
+        if (!watermark) return;
+        
+        const totalEvents = this.events.length;
+        const filteredCount = totalEvents - visibleCount;
+        
+        // Get or create filter stats span
+        let statsSpan = watermark.querySelector('.filter-stats');
+        if (!statsSpan) {
+            statsSpan = document.createElement('span');
+            statsSpan.className = 'filter-stats';
+            watermark.appendChild(statsSpan);
+        }
+        
+        // Create descriptive text about filtering
+        if (filteredCount === 0) {
+            statsSpan.textContent = `Showing all ${totalEvents} events`;
+        } else {
+            statsSpan.textContent = `${visibleCount}/${totalEvents} events (${filteredCount} filtered)`;
         }
     }
     
