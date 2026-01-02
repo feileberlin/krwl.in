@@ -698,6 +698,28 @@
             ],
             "test_method": "manual",
             "test_instructions": "1. Open the app and click on an event to view details\n2. Press ESC - detail popup should close\n3. Open an event detail again\n4. Press Right Arrow - should navigate to next event (sorted by time)\n5. Press Left Arrow - should navigate to previous event\n6. Navigate past the last event - should wrap to first event\n7. Press + or = key - map should zoom in\n8. Press - or _ key - map should zoom out\n9. Test that map centers on events during arrow navigation\n10. Open filter dropdown and press ESC - dropdown should close"
+        },
+        {
+            "id": "app-ready-signal",
+            "name": "App Ready Signal for Screenshots",
+            "description": "Emits a ready signal when the app is fully initialized (config loaded, map initialized, events loaded). Enables reliable screenshot generation by providing a data-app-ready attribute and custom event",
+            "category": "frontend",
+            "implemented": true,
+            "files": [
+                "assets/js/app.js",
+                "static/js/app.js",
+                "docs/SCREENSHOT_GUIDE.md",
+                "scripts/generate_screenshots.py"
+            ],
+            "code_patterns": [
+                {
+                    "file": "assets/js/app.js",
+                    "pattern": "markAppAsReady|data-app-ready|app-ready.*CustomEvent",
+                    "description": "App ready signal implementation and emission"
+                }
+            ],
+            "test_method": "automated",
+            "test_instructions": "1. Start local server: cd static && python3 -m http.server 8000\n2. Run test script: python3 scripts/generate_screenshots.py --verbose\n3. Verify body[data-app-ready='true'] attribute is set after page load\n4. Verify 'app-ready' custom event is dispatched with event.detail metadata\n5. Check that screenshots are captured with fully loaded map and events\n6. Verify both mobile (640×1136) and desktop (1280×800) screenshots are generated"
         }
     ]
 }

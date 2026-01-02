@@ -62,6 +62,28 @@ class EventsApp {
         
         // Setup event listeners (always run, even if map fails)
         this.setupEventListeners();
+        
+        // Signal that app is ready (for screenshot tools, etc.)
+        this.markAppAsReady();
+    }
+    
+    markAppAsReady() {
+        // Set data attribute on body to signal app is ready
+        document.body.setAttribute('data-app-ready', 'true');
+        
+        // Dispatch custom event for programmatic detection
+        window.dispatchEvent(new CustomEvent('app-ready', {
+            detail: {
+                timestamp: Date.now(),
+                eventsLoaded: this.events.length,
+                mapInitialized: !!this.map
+            }
+        }));
+        
+        this.log('App ready signal sent', {
+            events: this.events.length,
+            map: !!this.map
+        });
     }
     
     displayEnvironmentWatermark() {
@@ -1354,7 +1376,6 @@ class EventsApp {
             if (e.shiftKey && (e.key === 'ArrowUp' || e.key === 'ArrowDown' || e.key === 'ArrowLeft' || e.key === 'ArrowRight')) {
                 if (this.map) {
                     const panAmount = 100; // pixels to pan
-                    const center = this.map.getCenter();
                     
                     switch(e.key) {
                         case 'ArrowUp':
@@ -1373,12 +1394,10 @@ class EventsApp {
                     e.preventDefault();
                 }
             }
-            // Arrow keys: Navigate between events (when detail is open and SHIFT is not pressed)
-            else if (eventDetail && !eventDetail.classList.contains('hidden')) {
-                if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
-                    this.navigateEvents(e.key === 'ArrowRight' ? 1 : -1);
-                    e.preventDefault();
-                }
+            // Arrow LEFT/RIGHT: Navigate through listed events (always)
+            else if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+                this.navigateEvents(e.key === 'ArrowRight' ? 1 : -1);
+                e.preventDefault();
             }
             
             // Map zoom shortcuts
