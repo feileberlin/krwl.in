@@ -2,6 +2,12 @@
 
 This directory contains template files used by `src/modules/site_generator.py` to generate the static site.
 
+## Template Files
+
+- **index.html** - Main HTML structure template (clean, no developer comments - they belong here!)
+- **config-loader.js** - Runtime configuration loader script
+- **fetch-interceptor.js** - Fetch API interceptor for embedded data
+
 ## KISS Templating Approach
 
 We use **simple Python string formatting** (no templating engines like Jinja2):
@@ -9,11 +15,18 @@ We use **simple Python string formatting** (no templating engines like Jinja2):
 - Python uses `.format()` method to substitute values
 - No external dependencies - pure standard library
 
-## Template Files
+## Template Variables (index.html)
 
-- **index.html** - Main HTML structure template
-- **config-loader.js** - Runtime configuration loader script
-- **fetch-interceptor.js** - Fetch API interceptor for embedded data
+- `{generated_comment}` - Auto-generated comment for output (includes timestamp, DO NOT EDIT notice)
+- `{app_name}` - Application name from config
+- `{favicon}` - Base64 data URL for favicon
+- `{leaflet_css}`, `{app_css}`, `{time_drawer_css}` - Inlined stylesheets
+- `{noscript_html}` - Fallback HTML for no-JS users
+- `{logo_svg}` - SVG logo content
+- `{embedded_data}` - JSON data (configs, events, translations)
+- `{config_loader}` - Runtime config selection script
+- `{fetch_interceptor}` - Fetch API interceptor script
+- `{leaflet_js}`, `{i18n_js}`, `{time_drawer_js}`, `{app_js}` - Inlined scripts
 
 ## Usage
 
@@ -26,6 +39,7 @@ template = template_path.read_text(encoding='utf-8')
 
 # Simple substitution with .format()
 html = template.format(
+    generated_comment="<!-- Auto-generated -->",
     app_name="My App",
     favicon="data:image/svg+xml,...",
     leaflet_css="/* CSS content */",
@@ -48,3 +62,4 @@ Following KISS principles:
 2. Placeholders use `{name}` syntax
 3. The generator module reads and substitutes values
 4. Run `python3 src/event_manager.py generate` to test
+5. Generated output includes auto-generated comment (not template comment)
