@@ -121,7 +121,7 @@ class EventsApp {
     }
     
     updateWatermark() {
-        const watermark = document.getElementById('env-watermark');
+        const watermark = document.getElementById('environment-badge');
         if (!watermark) return;
         
         // Get environment from config
@@ -588,11 +588,19 @@ class EventsApp {
     }
     
     updateFilterDescription(count) {
+        // Filter Bar Structure:
+        // #event-filter-bar - Main container for all filter controls
+        //   .filter-bar-logo - Logo/icon for visual identity
+        //   #filter-bar-event-count - Shows "X events" with category
+        //   #filter-bar-time-range - Time filter (sunrise, 6h, 12h, etc.)
+        //   #filter-bar-distance - Distance filter (km radius)
+        //   #filter-bar-location - Location source (here/custom)
+        
         // Update individual parts of the filter sentence
-        const eventCountCategoryText = document.getElementById('event-count-category-text');
-        const timeText = document.getElementById('time-text');
-        const distanceText = document.getElementById('distance-text');
-        const locationText = document.getElementById('location-text');
+        const eventCountCategoryText = document.getElementById('filter-bar-event-count');
+        const timeText = document.getElementById('filter-bar-time-range');
+        const distanceText = document.getElementById('filter-bar-distance');
+        const locationText = document.getElementById('filter-bar-location');
         
         // Combined event count and category (KISS principle)
         if (eventCountCategoryText) {
@@ -1047,8 +1055,8 @@ class EventsApp {
                         this.close();
                     } else {
                         // Close other dropdowns first
-                        document.querySelectorAll('.custom-dropdown').forEach(d => d.remove());
-                        document.querySelectorAll('.filter-part').forEach(el => el.classList.remove('editing'));
+                        document.querySelectorAll('.filter-bar-dropdown').forEach(d => d.remove());
+                        document.querySelectorAll('.filter-bar-item').forEach(el => el.classList.remove('editing'));
                         this.open();
                     }
                 });
@@ -1060,12 +1068,12 @@ class EventsApp {
                 
                 // Create dropdown element
                 this.dropdownEl = document.createElement('div');
-                this.dropdownEl.className = 'custom-dropdown';
+                this.dropdownEl.className = 'filter-bar-dropdown';
                 
                 // Add items
                 this.items.forEach(item => {
                     const itemEl = document.createElement('div');
-                    itemEl.className = 'custom-dropdown-item';
+                    itemEl.className = 'filter-bar-dropdown-item';
                     if (item.value === this.currentValue) {
                         itemEl.classList.add('selected');
                     }
@@ -1107,10 +1115,10 @@ class EventsApp {
         }
         
         // Interactive filter sentence parts
-        const categoryTextEl = document.getElementById('category-text');
-        const timeTextEl = document.getElementById('time-text');
-        const distanceTextEl = document.getElementById('distance-text');
-        const locationTextEl = document.getElementById('location-text');
+        const categoryTextEl = document.getElementById('filter-bar-event-count');
+        const timeTextEl = document.getElementById('filter-bar-time-range');
+        const distanceTextEl = document.getElementById('filter-bar-distance');
+        const locationTextEl = document.getElementById('filter-bar-location');
         
         // Store references to active dropdowns
         this.activeDropdown = null;
@@ -1136,7 +1144,7 @@ class EventsApp {
             hideAllDropdowns();
             
             const dropdown = document.createElement('div');
-            dropdown.className = 'filter-dropdown';
+            dropdown.className = 'filter-bar-dropdown';
             dropdown.innerHTML = content;
             
             // Add to body for proper positioning
@@ -1333,7 +1341,7 @@ class EventsApp {
         
         // Click outside to close dropdowns
         document.addEventListener('click', (e) => {
-            if (!e.target.closest('#filter-sentence') && !e.target.closest('.filter-dropdown')) {
+            if (!e.target.closest('#event-filter-bar') && !e.target.closest('.filter-bar-dropdown')) {
                 hideAllDropdowns();
             }
         });
