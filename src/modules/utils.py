@@ -10,25 +10,89 @@ def is_ci():
     """
     Detect if running in CI environment.
     
-    Checks for common CI environment variables set by GitHub Actions, 
-    Travis CI, CircleCI, GitLab CI, and other CI providers.
+    Checks for common CI environment variables set by:
+    - GitHub Actions (GITHUB_ACTIONS, CI)
+    - GitLab CI (GITLAB_CI, CI)
+    - Travis CI (TRAVIS, CI)
+    - CircleCI (CIRCLECI, CI)
+    - Jenkins (JENKINS_HOME, JENKINS_URL)
+    - Bitbucket Pipelines (BITBUCKET_BUILD_NUMBER)
+    - Azure Pipelines (TF_BUILD)
+    - AWS CodeBuild (CODEBUILD_BUILD_ID)
     
     Returns:
         bool: True if running in CI, False otherwise
     """
-    return os.environ.get('CI') == 'true' or os.environ.get('GITHUB_ACTIONS') == 'true'
+    ci_indicators = [
+        'CI',                          # Generic CI flag (set by most CI systems)
+        'GITHUB_ACTIONS',              # GitHub Actions
+        'GITLAB_CI',                   # GitLab CI
+        'TRAVIS',                      # Travis CI
+        'CIRCLECI',                    # CircleCI
+        'JENKINS_HOME', 'JENKINS_URL', # Jenkins
+        'BITBUCKET_BUILD_NUMBER',      # Bitbucket Pipelines
+        'TF_BUILD',                    # Azure Pipelines
+        'CODEBUILD_BUILD_ID'           # AWS CodeBuild
+    ]
+    
+    return any(os.environ.get(var) for var in ci_indicators)
 
 
 def is_production():
     """
     Detect if running in production environment.
     
-    Checks NODE_ENV environment variable for explicit production setting.
+    Checks for production indicators from:
+    - Explicit NODE_ENV=production
+    - Vercel (VERCEL_ENV=production)
+    - Netlify (NETLIFY=true + CONTEXT=production)
+    - Heroku (DYNO environment variable presence)
+    - Railway (RAILWAY_ENVIRONMENT=production)
+    - Render (RENDER=true + IS_PULL_REQUEST!=true)
+    - Fly.io (FLY_APP_NAME presence)
+    - Google Cloud Run (K_SERVICE presence)
+    - AWS (AWS_EXECUTION_ENV presence + not in Lambda)
     
     Returns:
-        bool: True if NODE_ENV=production, False otherwise
+        bool: True if in production, False otherwise
     """
-    return os.environ.get('NODE_ENV') == 'production'
+    # Explicit production setting
+    if os.environ.get('NODE_ENV') == 'production':
+        return True
+    
+    # Vercel production
+    if os.environ.get('VERCEL_ENV') == 'production':
+        return True
+    
+    # Netlify production
+    if os.environ.get('NETLIFY') == 'true' and os.environ.get('CONTEXT') == 'production':
+        return True
+    
+    # Heroku (presence of DYNO indicates production deployment)
+    if os.environ.get('DYNO'):
+        return True
+    
+    # Railway production
+    if os.environ.get('RAILWAY_ENVIRONMENT') == 'production':
+        return True
+    
+    # Render production (RENDER=true and not a PR preview)
+    if os.environ.get('RENDER') == 'true' and os.environ.get('IS_PULL_REQUEST') != 'true':
+        return True
+    
+    # Fly.io (presence of FLY_APP_NAME indicates production)
+    if os.environ.get('FLY_APP_NAME'):
+        return True
+    
+    # Google Cloud Run
+    if os.environ.get('K_SERVICE'):
+        return True
+    
+    # AWS (but not Lambda, as Lambda might be dev/test)
+    if os.environ.get('AWS_EXECUTION_ENV') and not os.environ.get('AWS_LAMBDA_FUNCTION_NAME'):
+        return True
+    
+    return False
 
 
 def is_development():

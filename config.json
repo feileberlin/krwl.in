@@ -3,8 +3,10 @@
   "_comment_auto_behavior": "AUTOMATIC ENVIRONMENT DETECTION - This config uses smart defaults that change based on environment",
   "_comment_detection_logic": "Environment is detected automatically using Python os.environ checks:",
   "_comment_detection_1": "  • Local Development: NOT in CI and NOT in production (default for developers)",
-  "_comment_detection_2": "  • CI/Production: CI=true OR GITHUB_ACTIONS=true OR NODE_ENV=production",
+  "_comment_detection_2": "  • CI: GitHub Actions, GitLab CI, Travis, CircleCI, Jenkins, etc.",
+  "_comment_detection_3": "  • Production: Vercel, Netlify, Heroku, Railway, Render, Fly.io, Google Cloud Run, AWS, or NODE_ENV=production",
   "_comment_no_manual_config": "NO MANUAL SWITCHING NEEDED - Just run the code and it adapts automatically!",
+  "_comment_hosting_support": "WORKS WITH: GitHub Pages, Vercel, Netlify, Heroku, Railway, Render, Fly.io, Google Cloud, AWS, and more!",
   "_comment_separator": "═══════════════════════════════════════════════════════════════════════════════",
   
   "app": {
