@@ -17,6 +17,8 @@ import urllib.request
 import urllib.error
 from pathlib import Path
 from typing import Dict, List, Tuple
+from datetime import datetime
+import html
 
 
 # Third-party dependencies to fetch
@@ -232,28 +234,194 @@ class SiteGenerator:
             print()
         return True
     
-    def generate_favicon_dataurl(self) -> str:
-        """Generate base64 data URL for favicon"""
-        favicon_path = self.static_path / 'favicon.svg'
-        if not favicon_path.exists():
-            return "favicon.svg"
+    def sanitize_svg_content(self, svg_content: str) -> str:
+        """
+        Sanitize SVG content by removing potentially dangerous elements and attributes.
+        Removes script tags, event handlers, and external references for security.
+        """
+        import re
         
-        import base64
-        svg_content = self.read_text_file(favicon_path)
-        b64_data = base64.b64encode(svg_content.encode()).decode()
-        return f"data:image/svg+xml;base64,{b64_data}"
+        # Remove script tags and their content
+        svg_content = re.sub(r'<script[^>]*>.*?</script>', '', svg_content, flags=re.DOTALL | re.IGNORECASE)
+        
+        # Remove event handler attributes (onclick, onload, onerror, etc.)
+        event_handlers = ['onclick', 'onload', 'onerror', 'onmouseover', 'onmouseout', 
+                         'onmousemove', 'onmouseenter', 'onmouseleave', 'onfocus', 
+                         'onblur', 'onchange', 'onsubmit', 'onkeydown', 'onkeyup', 'onkeypress']
+        for handler in event_handlers:
+            svg_content = re.sub(f'{handler}\\s*=\\s*["\'][^"\']*["\']', '', svg_content, flags=re.IGNORECASE)
+        
+        # Remove external references (use, image with external href)
+        svg_content = re.sub(r'xlink:href\\s*=\\s*["\']https?://[^"\']*["\']', '', svg_content, flags=re.IGNORECASE)
+        svg_content = re.sub(r'href\\s*=\\s*["\']https?://[^"\']*["\']', '', svg_content, flags=re.IGNORECASE)
+        
+        return svg_content
+    
+    def inline_svg_file(self, filename: str, as_data_url: bool = False) -> str:
+        """
+        Generic function to inline any SVG file from assets or static directory.
+        Automatically finds and inlines new SVG files for the map or other uses.
+        SVG content is sanitized to remove scripts and external references.
+        
+        Args:
+            filename: Name of the SVG file (e.g., 'favicon.svg', 'logo.svg', 'marker-festivals.svg')
+            as_data_url: If True, return as base64 data URL; if False, return raw SVG content
+            
+        Returns:
+            SVG content as string or data URL, or fallback empty SVG if file not found
+        """
+        # Try assets directory first, then static, then assets/markers subdirectory
+        search_paths = [
+            self.base_path / 'assets' / filename,
+            self.static_path / filename,
+            self.base_path / 'assets' / 'markers' / filename
+        ]
+        
+        svg_path = None
+        for path in search_paths:
+            if path.exists():
+                svg_path = path
+                break
+        
+        if not svg_path:
+            # Return fallback empty SVG
+            fallback = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"></svg>'
+            if as_data_url:
+                return "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E"
+            return fallback
+        
+        svg_content = self.read_text_file(svg_path)
+        
+        # Sanitize SVG content to remove potentially dangerous elements
+        svg_content = self.sanitize_svg_content(svg_content)
+        
+        if as_data_url:
+            import base64
+            base64_data = base64.b64encode(svg_content.encode()).decode()
+            return f"data:image/svg+xml;base64,{base64_data}"
+        
+        return svg_content
+    
+    def create_favicon_data_url(self) -> str:
+        """Create base64 data URL for favicon"""
+        return self.inline_svg_file('favicon.svg', as_data_url=True)
     
     def read_logo_svg(self) -> str:
         """Read logo SVG content for inline use"""
-        # Try assets directory first, then static
-        logo_path = self.base_path / 'assets' / 'logo.svg'
-        if not logo_path.exists():
-            logo_path = self.static_path / 'logo.svg'
-        if not logo_path.exists():
-            return '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"></svg>'
+        return self.inline_svg_file('logo.svg', as_data_url=False)
+    
+    def filter_and_sort_future_events(self, events: List[Dict]) -> List[Dict]:
+        """Filter out past events and sort (running events first, then chronological)."""
+        from datetime import timezone
+        current_time = datetime.now(timezone.utc)
+        # Make current_time timezone-naive for comparison with parsed event times
+        current_time = current_time.replace(tzinfo=None)
+        future_events = []
         
-        svg_content = self.read_text_file(logo_path)
-        return svg_content
+        for event in events:
+            try:
+                # Parse times (remove timezone suffix)
+                start_time_str = event.get('start_time', '')
+                if not start_time_str:
+                    continue
+                start_time_str = start_time_str.split('+')[0].rstrip('Z')
+                start_time = datetime.fromisoformat(start_time_str)
+                
+                # Get or estimate end time (do not assume a fixed duration)
+                end_time_str = event.get('end_time', '')
+                if end_time_str:
+                    end_time_str = end_time_str.split('+')[0].rstrip('Z')
+                    end_time = datetime.fromisoformat(end_time_str)
+                    is_running = start_time <= current_time <= end_time
+                    is_past = end_time < current_time
+                else:
+                    # If no end_time is provided, treat the event as non-running
+                    # and consider it past only if its start_time is in the past.
+                    end_time = None
+                    is_running = False
+                    is_past = start_time < current_time
+                
+                # Include if not past
+                if not is_past:
+                    future_events.append({
+                        'event': event,
+                        'start_time': start_time,
+                        'is_running': is_running
+                    })
+            except (ValueError, TypeError):
+                continue
+        
+        # Sort: running first, then chronological
+        future_events.sort(key=lambda x: (not x['is_running'], x['start_time']))
+        return future_events
+    
+    def build_noscript_html(self, events: List[Dict], content_en: Dict, app_name: str) -> str:
+        """Build complete noscript HTML with event list."""
+        import locale
+        
+        future_events = self.filter_and_sort_future_events(events)
+        translations = content_en.get('noscript', {})
+        
+        # Set locale to English for consistent date formatting
+        try:
+            locale.setlocale(locale.LC_TIME, 'en_US.UTF-8')
+        except locale.Error:
+            try:
+                locale.setlocale(locale.LC_TIME, 'C')
+            except locale.Error:
+                pass  # Use system default if neither works
+        
+        # Header
+        html_parts = [
+            '<div style="max-width:1200px;margin:0 auto;padding:2rem;background:#1a1a1a;color:#fff;font-family:sans-serif">',
+            f'<h1 style="color:#FF69B4;margin-bottom:1rem">{html.escape(app_name)}</h1>',
+            '<div style="background:#401B2D;padding:1rem;border-radius:8px;margin-bottom:1.5rem;border-left:4px solid #FF69B4">',
+            f'<p style="margin:0;color:#FFB3DF"><strong>{html.escape(translations.get("warning", "⚠️ JavaScript is disabled."))}</strong></p>',
+            f'<p style="margin:0.5rem 0 0 0;color:#ccc;font-size:0.9rem">{html.escape(translations.get("info", "Enable JavaScript for interactive map."))}</p>',
+            '</div>'
+        ]
+        
+        # Events or empty message
+        if not future_events:
+            html_parts.append(f'<p style="color:#888;text-align:center;padding:2rem">{html.escape(translations.get("no_events", "No upcoming events."))}</p>')
+        else:
+            html_parts.append(f'<h2 style="color:#FF69B4;font-size:1.5rem;margin-bottom:1.5rem">{html.escape(translations.get("upcoming_events", "Upcoming Events"))} <span style="color:#888;font-size:1rem">({len(future_events)} events)</span></h2>')
+            html_parts.append('<div style="display:flex;flex-direction:column;gap:1.5rem">')
+            
+            for event_item in future_events:
+                event_data = event_item['event']
+                event_start_time = event_item['start_time']
+                event_is_running = event_item['is_running']
+                
+                # Use translations for badge and link text
+                badge_text = html.escape(translations.get("happening_now", "HAPPENING NOW"))
+                running_badge = f'<span style="background:#4CAF50;color:#fff;padding:0.25rem 0.75rem;border-radius:4px;font-size:0.85rem;font-weight:600;margin-left:0.5rem">{badge_text}</span>' if event_is_running else ''
+                
+                view_details_text = html.escape(translations.get("view_details", "View Event Details →"))
+                event_link = f'<a href="{html.escape(event_data.get("url", ""))}" target="_blank" rel="noopener noreferrer" style="display:inline-block;background:#FF69B4;color:#fff;padding:0.5rem 1rem;border-radius:5px;text-decoration:none;font-weight:600">{view_details_text}</a>' if event_data.get('url') else ''
+                
+                html_parts.append(f'''<article style="background:#2a2a2a;border-radius:8px;padding:1.5rem;border-left:4px solid #FF69B4">
+<h3 style="color:#FF69B4;margin:0 0 0.75rem 0;font-size:1.25rem">{html.escape(event_data.get('title', 'Untitled'))}{running_badge}</h3>
+<div style="color:#ccc;margin-bottom:1rem">
+<p style="margin:0.25rem 0"><strong style="color:#FFB3DF">📅 Date:</strong> {html.escape(event_start_time.strftime('%A, %B %d, %Y'))}</p>
+<p style="margin:0.25rem 0"><strong style="color:#FFB3DF">🕐 Time:</strong> {html.escape(event_start_time.strftime('%I:%M %p').lstrip('0'))}</p>
+<p style="margin:0.25rem 0"><strong style="color:#FFB3DF">📍 Location:</strong> {html.escape(event_data.get('location', {}).get('name', 'Unknown'))}</p>
+</div>
+<p style="color:#ddd;line-height:1.6;margin-bottom:1rem">{html.escape(event_data.get('description', ''))}</p>
+{event_link}
+</article>''')
+            
+            html_parts.append('</div>')
+        
+        # Footer
+        html_parts.extend([
+            '<footer style="margin-top:2rem;padding-top:2rem;border-top:1px solid #3a3a3a;color:#888;text-align:center">',
+            f'<p style="margin:0">{html.escape(translations.get("footer", "Enable JavaScript for best experience."))}</p>',
+            '</footer>',
+            '</div>'
+        ])
+        
+        return ''.join(html_parts)
     
     def build_html_structure(
         self, 
@@ -269,8 +437,11 @@ class SiteGenerator:
         # Use first config for basic info (they should be similar)
         primary_config = configs[0] if configs else {}
         app_name = primary_config.get('app', {}).get('name', 'KRWL HOF Community Events')
-        favicon = self.generate_favicon_dataurl()
+        favicon = self.create_favicon_data_url()
         logo_svg = self.read_logo_svg()
+        
+        # Build noscript HTML with sorted events
+        noscript_html = self.build_noscript_html(events, content_en, app_name)
         
         # Runtime config selection script
         config_loader = '''
@@ -318,10 +489,7 @@ class SiteGenerator:
 <body>
 <div id="app">
 <noscript>
-<div style="max-width:1200px;margin:0 auto;padding:2rem;background:#1a1a1a;color:#fff">
-<h1 style="color:#FF69B4">{app_name}</h1>
-<p>Enable JavaScript to view events</p>
-</div>
+{noscript_html}
 </noscript>
 <div id="main-content" style="display:none">
 <div id="filter-sentence">
