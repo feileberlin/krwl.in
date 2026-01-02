@@ -20,8 +20,7 @@ def cleanup_old_files(base_dir="."):
     
     # List of old files to remove if they exist
     old_files = [
-        # Old demo files with outdated timestamps
-        "static/events.demo.json",
+        # Old backup/temporary demo files (but NOT the main demo file)
         "static/events.demo.json.old",
         # Old backup files
         "static/events.backup.json",
