@@ -1,73 +1,41 @@
 # GitHub Repository About Section
 
-## Description
-Community events scraper and viewer with geolocation filtering
+## Quick Setup
 
-## Website
-https://krwl.in
+The easiest way to update the GitHub About section is to use the integrated script:
 
-## Topics (GitHub Tags)
-- pwa
-- progressive-web-app
-- events
-- community
-- geolocation
-- leaflet
-- python
-- javascript
-- mobile-first
-- accessibility
-- i18n
-- hof
-- bavaria
-- germany
+```bash
+# Set your GitHub token
+export GITHUB_TOKEN='your_token_here'
 
-## Social Preview (For GitHub Settings)
+# Generate README and update GitHub About in one command
+python3 scripts/generate_readme.py --update-github-about
+```
 
-**Title**: KRWL HOF Community Events
+Get your token at: https://github.com/settings/tokens (needs 'repo' scope)
 
-**Description**: A grassroots, mobile-first PWA for discovering local community events in Hof, Bavaria. Interactive map with geolocation filtering, bilingual support (EN/DE), and WCAG 2.1 AA accessibility. Visit krwl.in
+## What Gets Updated
 
-**Features to Highlight**:
-- 📱 PWA installable as native app
-- 🗺️ Interactive event map with Leaflet.js
-- 📍 Geolocation filtering (5km radius)
-- 🌅 Time-based filtering (until next sunrise)
-- 🌐 Bilingual (English/German)
-- ♿ WCAG 2.1 Level AA compliant
-- 📱 Mobile-first responsive design
-- 🔄 Auto-scraping from multiple sources
+- **Description**: Community events scraper and viewer with geolocation filtering. Mobile-first PWA for discovering local events in Hof, Bavaria. Live at krwl.in
+- **Website**: https://krwl.in
+- **Topics**: pwa, progressive-web-app, events, community, geolocation, leaflet, python, javascript, mobile-first, accessibility, i18n
 
-## Instructions for Setting GitHub About Section
+## Manual Setup (Alternative)
 
-1. Go to: https://github.com/feileberlin/krwl-hof
-2. Click the gear icon (⚙️) next to "About" on the right sidebar
-3. Set the following:
+If you prefer to set it up manually:
 
-   **Description**:
-   ```
-   Community events scraper and viewer with geolocation filtering. Mobile-first PWA for discovering local events in Hof, Bavaria. Live at krwl.in
-   ```
+1. Go to: https://github.com/feileberlin/krwl-hof/settings
+2. Under "General", find the "About" section
+3. Set:
+   - **Description**: Community events scraper and viewer with geolocation filtering. Mobile-first PWA for discovering local events in Hof, Bavaria. Live at krwl.in
+   - **Website**: https://krwl.in
+   - **Topics**: pwa, progressive-web-app, events, community, geolocation, leaflet, python, javascript, mobile-first, accessibility, i18n
 
-   **Website**:
-   ```
-   https://krwl.in
-   ```
+## Short Descriptions (for social media)
 
-   **Topics** (add these tags):
-   ```
-   pwa, progressive-web-app, events, community, geolocation, leaflet, python, javascript, mobile-first, accessibility, i18n
-   ```
-
-   **Check these boxes**:
-   - [x] Releases
-   - [x] Packages (if any)
-   - [x] Environments (if any)
-
-4. Click "Save changes"
-
-## Short Description (160 characters max, for social media)
+**160 characters max**:
 Community events PWA for Hof, Bavaria. Interactive map, geolocation filtering, bilingual support. Visit krwl.in 🗺️📍🌐
 
-## One-line Description (for Twitter/X, etc.)
+**One-line** (Twitter/X):
 Discover local events in Hof on an interactive map → krwl.in
+
