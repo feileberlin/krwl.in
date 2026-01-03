@@ -746,13 +746,13 @@ class SiteGenerator:
     
     def load_design_tokens(self) -> Dict:
         """
-        Load design tokens from data/config.json.
+        Load design tokens from config.json.
         
         Returns:
             Dictionary containing design tokens (colors, typography, spacing, etc.)
             Returns empty dict if design section not found.
         """
-        config_file = self.base_path / 'data/config.json'
+        config_file = self.base_path / 'config.json'
         if not config_file.exists():
             return {}
         
@@ -765,7 +765,7 @@ class SiteGenerator:
         """
         Generate CSS custom properties from design tokens.
         
-        Reads design tokens from data/config.json and generates CSS :root variables.
+        Reads design tokens from config.json and generates CSS :root variables.
         If design-tokens.css already exists, loads it directly.
         Otherwise, generates it on-the-fly.
         
@@ -773,14 +773,14 @@ class SiteGenerator:
             CSS string with custom properties
         """
         # Check if pre-generated CSS exists
-        tokens_css_path = self.base_path / 'src' / 'templates' / 'components' / 'design-tokens.css'
+        tokens_css_path = self.base_path / 'layouts' / 'components' / 'design-tokens.css'
         if tokens_css_path.exists():
             return tokens_css_path.read_text(encoding='utf-8')
         
         # Generate on-the-fly if needed
         design = self.load_design_tokens()
         if not design:
-            return "/* No design tokens found in data/config.json */"
+            return "/* No design tokens found in config.json */"
         
         # Simple inline generation (matches generate_design_tokens.py logic)
         lines = [
