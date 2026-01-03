@@ -259,24 +259,120 @@ graph LR
     F[static/] --> E
 ```
 
-### Our Implementation
+### 🚨 CRITICAL: Our Inline Architecture
+
+**Unlike traditional SSGs that copy files, we INLINE everything:**
 
 ```bash
 # 1. Read content
 content/events/*.json → Load event data
 
-# 2. Process assets
-assets/css/*.css → Combine & minify
-assets/js/*.js → Combine & minify
+# 2. Load & INLINE assets (NOT copy)
+assets/css/*.css → Read → INLINE into <style>
+assets/js/*.js → Read → INLINE into <script>
+static/leaflet/leaflet.css → Read → INLINE into <style>
+static/leaflet/leaflet.js → Read → INLINE into <script>
 
 # 3. Apply templates
-layouts/index.html → Insert data & assets
+layouts/index.html → Insert data & INLINED assets
 
-# 4. Copy static files
-static/* → public/* (as-is)
+# 4. Convert markers to base64
+static/markers/*.svg → Convert to data URLs → INLINE
 
-# 5. Generate output
-public/index.html → Single-file app
+# 5. Generate SINGLE FILE output
+public/index.html → Self-contained HTML (zero external files)
+```
+
+### Traditional SSG vs KRWL HOF
+
+| Aspect | Traditional SSG | KRWL HOF (Inline) |
+|--------|----------------|-------------------|
+| **CSS Loading** | `<link href="style.css">` | `<style>/* CSS here */</style>` |
+| **JS Loading** | `<script src="app.js">` | `<script>/* JS here */</script>` |
+| **Images** | `<img src="icon.png">` | `<img src="data:image/...">` |
+| **HTTP Requests** | Multiple files | Zero (single HTML) |
+| **Offline** | Needs service worker | Works immediately |
+| **Deployment** | Multiple files | Single file |
+
+### Build Command
+
+```bash
+# Run generator
+python3 src/event_manager.py generate
+
+# Output
+public/index.html  ← Single self-contained file
+```
+
+### What Gets Inlined
+
+1. **Leaflet CSS** → `<style>` tag (FIRST - critical for compatibility)
+2. **Design tokens CSS** → `<style>` tag
+3. **App CSS** → `<style>` tag (9 modular files combined)
+4. **Leaflet JS** → `<script>` tag
+5. **Lucide JS** → `<script>` tag
+6. **i18n JS** → `<script>` tag
+7. **App JS** → `<script>` tag
+8. **Event data** → `<script>window.ALL_EVENTS = [...]</script>`
+9. **Translations** → `<script>window.EMBEDDED_CONTENT_EN = {...}</script>`
+10. **Marker icons** → `<script>window.MARKER_ICONS = {...}</script>` (base64 data URLs)
+
+### Benefits of Inline Architecture
+
+✅ **Performance**:
+- Zero HTTP requests
+- No DNS lookups
+- No SSL handshakes
+- Instant load
+
+✅ **Offline-First**:
+- Works immediately without service worker
+- No cache management needed
+- No network dependency
+
+✅ **Deployment**:
+- Single file to deploy
+- No directory structure to maintain
+- Trivial hosting (any static server)
+
+✅ **Security**:
+- No external resource loading
+- No CDN dependency risk
+- Content Security Policy friendly
+
+✅ **Reproducibility**:
+- Build output is deterministic
+- No external resource drift
+- Version control friendly
+
+⚠️ **Trade-offs**:
+- Larger initial HTML file (~500KB)
+- No browser caching between pages (single-page app)
+- Must regenerate for updates (acceptable trade-off)
+
+### Implementation in `site_generator.py`
+
+```python
+def load_stylesheet_resources(self) -> Dict[str, str]:
+    """Load all CSS - will be INLINED, not linked"""
+    return {
+        'leaflet_css': read_file('static/leaflet/leaflet.css'),  # INLINE
+        'app_css': read_file('assets/css/style.css')             # INLINE
+    }
+
+def build_html_from_components(...):
+    """Build HTML with everything inlined"""
+    html = f'''
+    <head>
+      <style>{stylesheets['leaflet_css']}</style>  <!-- INLINED -->
+      <style>{design_tokens_css}</style>            <!-- INLINED -->
+      <style>{stylesheets['app_css']}</style>       <!-- INLINED -->
+    </head>
+    <body>
+      <script>{scripts['leaflet_js']}</script>      <!-- INLINED -->
+      <script>{scripts['app_js']}</script>          <!-- INLINED -->
+    </body>
+    '''
 ```
 
 ### Build Commands

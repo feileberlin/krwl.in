@@ -2,25 +2,64 @@
 
 **KRWL HOF follows official Leaflet.js guidelines for custom styling and integration.**
 
+## 🚨 CRITICAL: Inline Architecture
+
+**This project uses a single-file HTML architecture where ALL external resources are inlined:**
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <style>/* Leaflet CSS - INLINED (not <link>) */</style>
+  <style>/* Design tokens CSS - INLINED */</style>
+  <style>/* App CSS - INLINED */</style>
+</head>
+<body>
+  <main id="map"></main>
+  <script>/* Leaflet JS - INLINED (not <script src="">) */</script>
+  <script>/* App JS - INLINED */</script>
+</body>
+</html>
+```
+
+**Why This Matters:**
+- ✅ Zero HTTP requests (instant load)
+- ✅ Works offline immediately
+- ✅ No CDN dependencies
+- ✅ Single file deployment
+- ⚠️ Load order still matters (within inline `<style>` tags)
+- ⚠️ Box-sizing fix still applies
+- ⚠️ Marker paths handled differently (base64 data URLs)
+
 ## 📚 Official Leaflet Best Practices
 
 Source: [Leaflet Documentation](https://leafletjs.com/reference.html)
 
-### 1. ✅ CSS Loading Order (CRITICAL)
+### 1. ✅ CSS Loading Order (CRITICAL - Applies to Inline CSS)
 
 **Leaflet's Official Requirement:**
 > Leaflet CSS must be loaded BEFORE any custom CSS that styles Leaflet elements.
 
-**Our Implementation:**
+**Our Inline Implementation:**
 ```html
 <head>
-  <style>{leaflet_css}</style>        <!-- 1. Leaflet core CSS FIRST -->
-  <style>{design_tokens_css}</style>  <!-- 2. Design tokens -->
-  <style>{app_css}</style>            <!-- 3. Custom CSS LAST -->
+  <style>/* 1. Leaflet core CSS FIRST - INLINED */</style>
+  <style>/* 2. Design tokens - INLINED */</style>
+  <style>/* 3. Custom CSS LAST - INLINED */</style>
 </head>
 ```
 
-✅ **Correct order maintained**
+✅ **Correct order maintained in inline `<style>` tags**
+
+**Implementation in `site_generator.py`:**
+```python
+def build_html_from_components(...):
+    stylesheets = {
+        'leaflet_css': read_file('leaflet/leaflet.css'),    # Loaded FIRST
+        'app_css': read_file('css/style.css')                # Loaded LAST
+    }
+    # Inlined in correct order during HTML assembly
+```
 
 ### 2. ✅ Box-Sizing Compatibility (CRITICAL)
 
@@ -72,24 +111,42 @@ Applied in `assets/css/base.css`
 
 ✅ **Correct - height defined, positioned**
 
-### 4. ✅ Marker Image Paths
+### 4. ✅ Marker Image Paths (Inline Architecture)
 
 **Leaflet's Official Note:**
 > "Marker icon paths are relative to leaflet.css location."
 
-**Our Structure:**
-```
-static/
-  leaflet/
-    leaflet.css           ← CSS location
-    leaflet.js
-    images/
-      marker-icon.png     ← Relative path: ./images/marker-icon.png
-      marker-icon-2x.png
-      marker-shadow.png
+**⚠️ CRITICAL: We use inline architecture, so traditional file paths DON'T WORK**
+
+**Our Solution: Base64 Data URLs**
+```javascript
+// Custom markers embedded as base64 data URLs
+window.MARKER_ICONS = {
+  'community': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQi...',
+  'festivals': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQi...',
+  // ... all markers embedded
+};
+
+// No file paths, no HTTP requests, works offline!
+L.marker([lat, lng], {
+  icon: L.icon({
+    iconUrl: window.MARKER_ICONS['community'],  // Base64 data URL
+    iconSize: [24, 24]
+  })
+});
 ```
 
-✅ **Correct - standard structure maintained**
+**Benefits:**
+- ✅ Zero HTTP requests for markers
+- ✅ Works offline immediately
+- ✅ No path resolution issues
+- ✅ No CORS problems
+- ✅ Embedded in single HTML file
+
+**Implementation:**
+- Markers generated in `generate_marker_icon_map()` method
+- All SVG markers converted to base64 data URLs
+- Embedded in `window.MARKER_ICONS` global
 
 ### 5. ✅ Custom Styling Scope
 
