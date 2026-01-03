@@ -284,6 +284,10 @@ def is_event_rejected(rejected_events, event_title, event_source):
     instead of O(n) linear search. String normalization is done once per 
     input event rather than repeatedly for each rejected event.
     
+    NOTE: This function is designed for single-event checks (e.g., in add_rejected_event).
+    For batch checking multiple events, caller should build the set once and reuse it
+    (see scrape_all_sources for example).
+    
     Args:
         rejected_events: List of rejected event records
         event_title: Title of the event to check
@@ -297,7 +301,7 @@ def is_event_rejected(rejected_events, event_title, event_source):
     source_lower = event_source.lower().strip()
     
     # Create set of normalized (title, source) tuples for O(1) lookup
-    # Cache this in the caller if checking many events
+    # For batch operations, caller should build this set once (see scrape_all_sources)
     rejected_set = {
         (rejected.get('title', '').lower().strip(), 
          rejected.get('source', '').lower().strip())
@@ -520,6 +524,9 @@ def backup_published_event(base_path, event):
 
 
 # Cache for historical events (in-memory, per process)
+# NOTE: This is a simple cache for single-process, single-threaded execution.
+# For multi-threaded environments, use threading.Lock() for synchronization.
+# Historical events don't change during a process lifetime, so caching is safe.
 _historical_events_cache = None
 
 def load_historical_events(base_path):
@@ -530,6 +537,10 @@ def load_historical_events(base_path):
     OPTIMIZATION: Uses in-memory caching to avoid re-reading disk on every call.
     Historical events don't change during a single process execution, so we can
     safely cache them after first load.
+    
+    THREAD SAFETY: This implementation uses a global variable which is NOT thread-safe.
+    In multi-threaded environments, wrap cache access with threading.Lock().
+    Current usage (CLI/TUI) is single-threaded, so this is safe.
     
     This is used by the scraper to check against historical data
     and prevent re-scraping events that were already published.
