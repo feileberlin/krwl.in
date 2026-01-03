@@ -265,6 +265,11 @@
 <li><strong>generate_demo_events.py</strong> - Generate demo events with dynamic timestamps</li>
 <li><strong>cleanup_obsolete.py</strong> - Remove obsolete files from the project</li>
 </ul>
+<h3 id="documentation-scripts">Documentation Scripts</h3>
+<ul>
+<li><strong>build_markdown_docs.py</strong> - 📄 Markdown to HTML documentation builder with GitHub dark theme</li>
+<li><strong>cleanup_old_docs.py</strong> - 🧹 Remove obsolete documentation HTML files with old naming conventions</li>
+</ul>
 <h2 id="usage">Usage</h2>
 <p>All scripts can be run from the project root directory:</p>
 <div class="codehilite"><pre><span></span><code><span class="c1"># Wrapper scripts</span>
@@ -277,8 +282,142 @@ python3<span class="w"> </span>scripts/config_editor.py
 python3<span class="w"> </span>scripts/manage_libs.py<span class="w"> </span>download
 python3<span class="w"> </span>scripts/generate_demo_events.py<span class="w"> </span>&gt;<span class="w"> </span>events.demo.json
 python3<span class="w"> </span>scripts/cleanup_obsolete.py
+
+<span class="c1"># Documentation scripts</span>
+python3<span class="w"> </span>scripts/build_markdown_docs.py<span class="w"> </span>--organize<span class="w"> </span>--verbose
+python3<span class="w"> </span>scripts/cleanup_old_docs.py<span class="w"> </span>--dry-run
 </code></pre></div>
 
+<h2 id="documentation-build-system">Documentation Build System</h2>
+<p>The documentation build system converts all Markdown files to styled HTML with a consistent GitHub-style dark theme and Barbie Pink accents.</p>
+<h3 id="quick-start">Quick Start</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Install dependencies</span>
+pip<span class="w"> </span>install<span class="w"> </span>markdown&gt;<span class="o">=</span><span class="m">3</span>.5.0<span class="w"> </span>Pygments&gt;<span class="o">=</span><span class="m">2</span>.17.0
+
+<span class="c1"># Build all documentation</span>
+python3<span class="w"> </span>scripts/build_markdown_docs.py<span class="w"> </span>--organize<span class="w"> </span>--verbose
+
+<span class="c1"># Clean and rebuild everything</span>
+python3<span class="w"> </span>scripts/build_markdown_docs.py<span class="w"> </span>--clean<span class="w"> </span>--organize<span class="w"> </span>--verbose
+
+<span class="c1"># View documentation</span>
+open<span class="w"> </span>docs/index.html<span class="w">  </span><span class="c1"># macOS</span>
+xdg-open<span class="w"> </span>docs/index.html<span class="w">  </span><span class="c1"># Linux</span>
+start<span class="w"> </span>docs/index.html<span class="w">  </span><span class="c1"># Windows</span>
+</code></pre></div>
+
+<h3 id="build-script-options">Build Script Options</h3>
+<p><strong>build_markdown_docs.py</strong> - Convert Markdown files to HTML</p>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--verbose</code>, <code>-v</code></td>
+<td>Show detailed output with file-by-file conversion</td>
+</tr>
+<tr>
+<td><code>--organize</code></td>
+<td>Move documentation files to docs/ (keep README in root)</td>
+</tr>
+<tr>
+<td><code>--clean</code></td>
+<td>Remove all HTML files before building</td>
+</tr>
+<tr>
+<td><code>--output-dir DIR</code></td>
+<td>Change base output directory</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Examples:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Basic conversion (in place)</span>
+python3<span class="w"> </span>scripts/build_markdown_docs.py<span class="w"> </span>--verbose
+
+<span class="c1"># Build and organize into docs/ directory</span>
+python3<span class="w"> </span>scripts/build_markdown_docs.py<span class="w"> </span>--organize<span class="w"> </span>--verbose
+
+<span class="c1"># Full clean rebuild</span>
+python3<span class="w"> </span>scripts/build_markdown_docs.py<span class="w"> </span>--clean<span class="w"> </span>--organize<span class="w"> </span>--verbose
+</code></pre></div>
+
+<h3 id="cleanup-script-options">Cleanup Script Options</h3>
+<p><strong>cleanup_old_docs.py</strong> - Remove obsolete documentation HTML files</p>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--dry-run</code></td>
+<td>Preview what would be removed (safe, default)</td>
+</tr>
+<tr>
+<td><code>--verbose</code>, <code>-v</code></td>
+<td>Show detailed output with file sizes</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Examples:</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># Preview what would be removed (safe)</span>
+python3<span class="w"> </span>scripts/cleanup_old_docs.py<span class="w"> </span>--dry-run<span class="w"> </span>--verbose
+
+<span class="c1"># Actually remove obsolete files</span>
+python3<span class="w"> </span>scripts/cleanup_old_docs.py
+</code></pre></div>
+
+<h3 id="file-organization">File Organization</h3>
+<p>After running <code>--organize</code>, documentation is structured as:</p>
+<div class="codehilite"><pre><span></span><code>krwl-hof/
+├── README.md / README.html        # Stay in root (GitHub + landing page)
+├── DOCUMENTATION_BUILD.md         # Build system guide (stays in root)
+└── docs/
+    ├── index.html                 # Auto-generated navigation index
+    ├── CHANGELOG.md / .html       # All other docs in docs/
+    ├── QUICK_REFERENCE.md / .html
+    └── ...
+</code></pre></div>
+
+<h3 id="features">Features</h3>
+<ul>
+<li>✅ <strong>GitHub Dark Theme</strong>: <code>#0d1117</code> background, <code>#c9d1d9</code> text</li>
+<li>✅ <strong>Barbie Pink Accents</strong>: <code>#FF69B4</code> headings and highlights</li>
+<li>✅ <strong>Syntax Highlighting</strong>: Code blocks with Pygments</li>
+<li>✅ <strong>Automatic Links</strong>: Converts <code>.md</code> links to <code>.html</code> links</li>
+<li>✅ <strong>Navigation</strong>: Every page links to Home, Docs Index, Map App</li>
+<li>✅ <strong>Responsive Design</strong>: Mobile-first, works on all devices</li>
+<li>✅ <strong>Works Offline</strong>: Pure HTML/CSS, no server needed (file:// protocol)</li>
+<li>✅ <strong>Auto Index</strong>: Generates <code>docs/index.html</code> with categorized navigation</li>
+</ul>
+<h3 id="workflow">Workflow</h3>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 1. Edit Markdown files</span>
+vim<span class="w"> </span>docs/CHANGELOG.md
+
+<span class="c1"># 2. Build HTML</span>
+python3<span class="w"> </span>scripts/build_markdown_docs.py<span class="w"> </span>--organize<span class="w"> </span>--verbose
+
+<span class="c1"># 3. View in browser</span>
+open<span class="w"> </span>docs/index.html
+
+<span class="c1"># 4. Commit both .md and .html</span>
+git<span class="w"> </span>add<span class="w"> </span>docs/
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;📄 Update documentation&quot;</span>
+</code></pre></div>
+
+<h3 id="documentation">Documentation</h3>
+<p>See <a href="../DOCUMENTATION_BUILD.html">DOCUMENTATION_BUILD.md</a> for complete documentation including:<br />
+- Full feature list and benefits<br />
+- CI/CD integration examples<br />
+- Troubleshooting guide<br />
+- Technical details<br />
+- KISS principle compliance</p>
 <h2 id="see-also">See Also</h2>
 <ul>
 <li>Test scripts: <a href="../tests/"><code>../tests/</code></a></li>
@@ -288,7 +427,7 @@ python3<span class="w"> </span>scripts/cleanup_obsolete.py
     
     <div class="source-info">
         <strong>📄 Source:</strong> <code>/home/runner/work/krwl-hof/krwl-hof/scripts/README.md</code><br>
-        <strong>⏰ Generated:</strong> 2026-01-03 08:07:23
+        <strong>⏰ Generated:</strong> 2026-01-03 08:10:46
     </div>
     
     <div class="footer">
