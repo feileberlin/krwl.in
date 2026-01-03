@@ -777,11 +777,6 @@ body {
     position: relative;
 }
 
-/* Header is removed from UI but styles kept for backwards compatibility */
-header {
-    display: none;
-}
-
 #map {
     position: fixed;
     top: 0;
@@ -877,7 +872,7 @@ header {
     text-align: center;
 }
 
-/* Filter logo - now clickable */
+/* Filter logo button */
 #event-filter-bar .filter-bar-logo {
     display: inline-flex;
     align-items: center;
@@ -887,6 +882,9 @@ header {
     padding: 0.2rem;
     border-radius: 4px;
     transition: all 0.2s;
+    background: none;
+    border: none;
+    color: inherit;
 }
 
 #event-filter-bar .filter-bar-logo:hover {
@@ -1767,8 +1765,8 @@ header {
 </article></div><footer style="margin-top:2rem;padding-top:2rem;border-top:1px solid #3a3a3a;color:#888;text-align:center"><p style="margin:0">For the best experience, please enable JavaScript to access the interactive map.</p></footer></div>
 </noscript>
 <div id="main-content" style="display:none">
-<div id="event-filter-bar">
-<span id="filter-bar-logo" class="filter-bar-logo" role="button" tabindex="0" aria-label="Open project menu" aria-haspopup="dialog" aria-expanded="false"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
+<header id="event-filter-bar" role="banner" aria-label="Page header with project menu and event filters">
+<button id="filter-bar-logo" class="filter-bar-logo" aria-label="Project menu" aria-haspopup="dialog" aria-expanded="false"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
   <!-- Megaphone centered in viewBox -->
   <g>
     <!-- Main megaphone cone -->
@@ -1813,12 +1811,14 @@ header {
           opacity="0.8"/>
   </g>
 </svg>
-</span>
-<span id="filter-bar-event-count" class="filter-bar-item">0 events</span>
-<span id="filter-bar-time-range" class="filter-bar-item">till sunrise</span>
-<span id="filter-bar-distance" class="filter-bar-item">within 5 km</span>
-<span id="filter-bar-location" class="filter-bar-item">from here</span>
+</button>
+<div role="status" aria-live="polite" aria-atomic="true">
+<span id="filter-bar-event-count" class="filter-bar-item" aria-label="Event count">0 events</span>
 </div>
+<span id="filter-bar-time-range" class="filter-bar-item" role="button" tabindex="0" aria-label="Time filter">till sunrise</span>
+<span id="filter-bar-distance" class="filter-bar-item" role="button" tabindex="0" aria-label="Distance filter">within 5 km</span>
+<span id="filter-bar-location" class="filter-bar-item" role="button" tabindex="0" aria-label="Location filter">from here</span>
+</header>
 <div id="map"></div>
 <div id="event-detail" class="hidden">
 <div class="detail-content">
@@ -3432,13 +3432,14 @@ class EventsApp {
     }
     
     updateFilterDescription(count) {
-        // Filter Bar Structure:
-        // #event-filter-bar - Main container for all filter controls
-        //   .filter-bar-logo - Logo/icon for visual identity
-        //   #filter-bar-event-count - Shows "X events" with category
-        //   #filter-bar-time-range - Time filter (sunrise, 6h, 12h, etc.)
-        //   #filter-bar-distance - Distance filter (km radius)
-        //   #filter-bar-location - Location source (here/custom)
+        // Filter Bar Structure (Semantic Header):
+        // <header id="event-filter-bar"> - Page header/banner with filters
+        //   <button .filter-bar-logo> - Project menu button
+        //   <div role="status"> - Live region for event count updates
+        //     #filter-bar-event-count - Shows "X events" with category
+        //   #filter-bar-time-range - Time filter button (sunrise, 6h, 12h, etc.)
+        //   #filter-bar-distance - Distance filter button (km radius)
+        //   #filter-bar-location - Location filter button (here/custom)
         
         // Update individual parts of the filter sentence
         const eventCountCategoryText = document.getElementById('filter-bar-event-count');
