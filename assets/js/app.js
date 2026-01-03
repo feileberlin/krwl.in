@@ -225,6 +225,8 @@ class EventsApp {
         const debugEventCount = document.getElementById('debug-event-count');
         const debugDataSource = document.getElementById('debug-data-source');
         const debugMode = document.getElementById('debug-mode');
+        const debugDOMCache = document.getElementById('debug-dom-cache');
+        const debugHistoricalCache = document.getElementById('debug-historical-cache');
         
         if (debugEnvironment) {
             const environment = this.config?.watermark?.text || this.config?.app?.environment || 'UNKNOWN';
@@ -259,6 +261,21 @@ class EventsApp {
             } else {
                 debugMode.classList.add('debug-disabled');
             }
+        }
+        
+        // OPTIMIZATION INFO: Display cache statistics
+        if (debugDOMCache) {
+            const cacheSize = Object.keys(this.domCache).length;
+            const cacheStatus = cacheSize > 0 ? `${cacheSize} elements cached` : 'Empty';
+            debugDOMCache.textContent = cacheStatus;
+            debugDOMCache.title = `DOM elements cached: ${Object.keys(this.domCache).join(', ') || 'none'}`;
+        }
+        
+        if (debugHistoricalCache) {
+            // Note: Frontend doesn't have access to backend Python cache
+            // This shows if we implement a frontend cache in the future
+            debugHistoricalCache.textContent = 'Backend (Python)';
+            debugHistoricalCache.title = 'Historical events are cached in the backend during scraping to improve performance';
         }
     }
     
