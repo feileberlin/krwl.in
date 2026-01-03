@@ -14,12 +14,16 @@ Naming: Functions describe WHAT they do, not implementation history.
 """
 
 import json
+import logging
 import urllib.request
 import urllib.error
 from pathlib import Path
 from typing import Dict, List, Tuple
 from datetime import datetime
 import html
+
+# Configure module logger
+logger = logging.getLogger(__name__)
 
 # Import Lucide marker base64 map
 try:
@@ -101,6 +105,11 @@ class SiteGenerator:
         try:
             destination.parent.mkdir(parents=True, exist_ok=True)
             print(f"  Fetching {destination.name}...", end=" ", flush=True)
+            logger.info("Fetching dependency", extra={
+                'url': url,
+                'destination': str(destination),
+                'filename': destination.name
+            })
             
             with urllib.request.urlopen(url, timeout=30) as response:
                 content = response.read()
@@ -109,9 +118,18 @@ class SiteGenerator:
                 f.write(content)
             
             print(f"✓ ({len(content) / 1024:.1f} KB)")
+            logger.debug("Successfully fetched dependency", extra={
+                'filename': destination.name,
+                'size_bytes': len(content),
+                'size_kb': len(content) / 1024
+            })
             return True
         except Exception as e:
             print(f"✗ {e}")
+            logger.error("Failed to fetch dependency", extra={
+                'url': url,
+                'error': str(e)
+            })
             return False
     
     def fetch_dependency_files(self, name: str, config: Dict) -> Tuple[bool, bool]:
