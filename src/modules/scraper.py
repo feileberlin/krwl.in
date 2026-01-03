@@ -121,28 +121,53 @@ class EventScraper:
         rejected_data = load_rejected_events(self.base_path)
         rejected_events = rejected_data.get('rejected_events', [])
         
+        # OPTIMIZATION: Build lookup sets once for all duplicate checks
+        # This avoids rebuilding sets for every scraped event
+        pending_keys = {
+            (event.get('title'), event.get('start_time'))
+            for event in pending_data['pending_events']
+        }
+        published_keys = {
+            (event.get('title'), event.get('start_time'))
+            for event in published_events
+        }
+        historical_keys = {
+            (event.get('title'), event.get('start_time'))
+            for event in historical_events
+        }
+        rejected_keys = {
+            (rejected.get('title', '').lower().strip(), 
+             rejected.get('source', '').lower().strip())
+            for rejected in rejected_events
+        }
+        
         # Add new events to pending (check against pending, published, historical, and rejected)
         added_count = 0
         skipped_duplicate = 0
         skipped_rejected = 0
+        
         for event in new_events:
-            # Check if event was previously rejected
-            if is_event_rejected(rejected_events, event.get('title', ''), event.get('source', '')):
+            # Check if event was previously rejected (using pre-built set)
+            event_key_rejected = (
+                event.get('title', '').lower().strip(),
+                event.get('source', '').lower().strip()
+            )
+            if event_key_rejected in rejected_keys:
                 skipped_rejected += 1
                 continue
             
-            # Check if event exists in pending queue
-            if self._event_exists(pending_data['pending_events'], event):
+            # Check for duplicates using pre-built sets (O(1) lookups)
+            event_key = (event.get('title'), event.get('start_time'))
+            
+            if event_key in pending_keys:
                 skipped_duplicate += 1
                 continue
             
-            # Check if event exists in currently published events
-            if self._event_exists(published_events, event):
+            if event_key in published_keys:
                 skipped_duplicate += 1
                 continue
             
-            # Check if event exists in historical backups
-            if self._event_exists(historical_events, event):
+            if event_key in historical_keys:
                 skipped_duplicate += 1
                 continue
             
@@ -418,12 +443,20 @@ class EventScraper:
         return soup.get_text(strip=True)
         
     def _event_exists(self, events, new_event):
-        """Check if event already exists in list"""
-        for event in events:
-            if (event.get('title') == new_event.get('title') and
-                event.get('start_time') == new_event.get('start_time')):
-                return True
-        return False
+        """
+        Check if event already exists in list
+        
+        OPTIMIZATION: Uses set-based lookup for O(1) average case performance.
+        Builds a set of (title, start_time) tuples for efficient checking.
+        """
+        # Create set of (title, start_time) tuples for O(1) lookup
+        event_keys = {
+            (event.get('title'), event.get('start_time'))
+            for event in events
+        }
+        
+        # O(1) lookup instead of O(n) iteration
+        return (new_event.get('title'), new_event.get('start_time')) in event_keys
         
     def create_manual_event(self, title, description, location_name, lat, lon, 
                            start_time, end_time=None, url=None):
