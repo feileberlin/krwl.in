@@ -99,17 +99,19 @@ def test_pending_count_in_events_json():
             print(f"✗ Pending count incorrect. Expected {expected_count}, got {events_data['pending_count']}")
             return False
         
-        # Test 3: last_updated is updated
-        print("Test 3: Checking last_updated field...")
-        if 'last_updated' in events_data:
-            try:
-                datetime.fromisoformat(events_data['last_updated'])
-                print("✓ last_updated is valid ISO format")
-            except ValueError:
-                print(f"✗ last_updated invalid: {events_data['last_updated']}")
-                return False
+        # Test 3: Verify timestamp is NOT changed (metadata-only update)
+        print("Test 3: Checking last_updated timestamp remains unchanged...")
+        original_timestamp = events_data.get('last_updated')
+        
+        # Update pending count again
+        update_pending_count_in_events(test_path)
+        events_data_after = load_events(test_path)
+        new_timestamp = events_data_after.get('last_updated')
+        
+        if original_timestamp == new_timestamp:
+            print("✓ last_updated timestamp preserved (correct behavior)")
         else:
-            print("✗ last_updated field missing")
+            print(f"✗ last_updated changed from {original_timestamp} to {new_timestamp}")
             return False
         
         # Test 4: Pending count updates when count changes

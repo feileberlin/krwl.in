@@ -260,7 +260,7 @@ class EventsApp {
     startPendingEventsPolling() {
         /**
          * Set up periodic checking for pending events
-         * Checks every 5 minutes (300000ms)
+         * Checks every 5 minutes
          * 
          * Note: In practice, this will only update if the page is refreshed
          * since events data is embedded at build time. But we keep it for

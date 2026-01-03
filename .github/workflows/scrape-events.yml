@@ -2,8 +2,8 @@ name: Automated Event Scraping
 
 on:
   schedule:
-    # Schedule is configured in config.json under scraping.schedule
-    # Default: 4:00 AM and 4:00 PM Europe/Berlin time
+    # Schedule times are hardcoded based on config.json scraping.schedule settings
+    # Times: 4:00 AM and 4:00 PM Europe/Berlin (from config.json)
     # Cron uses UTC, so Berlin times are converted:
     # - 04:00 Berlin (CET/UTC+1 winter) = 03:00 UTC
     # - 04:00 Berlin (CEST/UTC+2 summer) = 02:00 UTC  
