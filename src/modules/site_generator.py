@@ -625,6 +625,265 @@ class SiteGenerator:
             raise FileNotFoundError(f"Template not found: {template_path}")
         return template_path.read_text(encoding='utf-8')
     
+    def load_component(self, component_path: str) -> str:
+        """
+        Load a component template from components directory.
+        
+        Args:
+            component_path: Component filename (e.g., 'html-head.html', 'map-main.html')
+        
+        Returns:
+            Component template content as string
+        
+        Example:
+            html_head = self.load_component('html-head.html')
+        """
+        full_path = self.base_path / 'src' / 'templates' / 'components' / component_path
+        if not full_path.exists():
+            raise FileNotFoundError(f"Component not found: {full_path}")
+        return full_path.read_text(encoding='utf-8')
+    
+    def load_design_tokens(self) -> Dict:
+        """
+        Load design tokens from config.json.
+        
+        Returns:
+            Dictionary containing design tokens (colors, typography, spacing, etc.)
+            Returns empty dict if design section not found.
+        """
+        config_file = self.base_path / 'config.json'
+        if not config_file.exists():
+            return {}
+        
+        with open(config_file, 'r', encoding='utf-8') as f:
+            config = json.load(f)
+        
+        return config.get('design', {})
+    
+    def generate_design_tokens_css(self) -> str:
+        """
+        Generate CSS custom properties from design tokens.
+        
+        Reads design tokens from config.json and generates CSS :root variables.
+        If design-tokens.css already exists, loads it directly.
+        Otherwise, generates it on-the-fly.
+        
+        Returns:
+            CSS string with custom properties
+        """
+        # Check if pre-generated CSS exists
+        tokens_css_path = self.base_path / 'src' / 'templates' / 'components' / 'design-tokens.css'
+        if tokens_css_path.exists():
+            return tokens_css_path.read_text(encoding='utf-8')
+        
+        # Generate on-the-fly if needed
+        design = self.load_design_tokens()
+        if not design:
+            return "/* No design tokens found in config.json */"
+        
+        # Simple inline generation (matches generate_design_tokens.py logic)
+        lines = [
+            "/**",
+            " * Design Tokens - Auto-generated CSS Custom Properties",
+            " * Generated from config.json design section",
+            " */",
+            "",
+            ":root {",
+        ]
+        
+        # Colors
+        if 'colors' in design:
+            lines.append("  /* Colors */")
+            for key, value in design['colors'].items():
+                css_var = key.replace('_', '-')
+                lines.append(f"  --color-{css_var}: {value};")
+            lines.append("")
+        
+        # Typography
+        if 'typography' in design:
+            lines.append("  /* Typography */")
+            for key, value in design['typography'].items():
+                css_var = key.replace('_', '-')
+                lines.append(f"  --{css_var}: {value};")
+            lines.append("")
+        
+        # Spacing
+        if 'spacing' in design:
+            lines.append("  /* Spacing */")
+            for key, value in design['spacing'].items():
+                css_var = key.replace('_', '-')
+                lines.append(f"  --spacing-{css_var}: {value};")
+            lines.append("")
+        
+        # Z-index
+        if 'z_index' in design:
+            lines.append("  /* Z-Index */")
+            for key, value in design['z_index'].items():
+                if key.startswith('_'):
+                    continue
+                css_var = key.replace('_', '-')
+                lines.append(f"  --z-{css_var}: {value};")
+            lines.append("")
+        
+        # Shadows
+        if 'shadows' in design:
+            lines.append("  /* Shadows */")
+            for key, value in design['shadows'].items():
+                css_var = key.replace('_', '-')
+                lines.append(f"  --shadow-{css_var}: {value};")
+            lines.append("")
+        
+        # Borders
+        if 'borders' in design:
+            lines.append("  /* Borders */")
+            for key, value in design['borders'].items():
+                css_var = key.replace('_', '-')
+                lines.append(f"  --border-{css_var}: {value};")
+            lines.append("")
+        
+        # Transitions
+        if 'transitions' in design:
+            lines.append("  /* Transitions */")
+            for key, value in design['transitions'].items():
+                css_var = key.replace('_', '-')
+                lines.append(f"  --transition-{css_var}: {value};")
+            lines.append("")
+        
+        lines.append("}")
+        
+        return '\n'.join(lines)
+    
+    def build_html_from_components(
+        self,
+        configs: List[Dict],
+        events: List[Dict],
+        content_en: Dict,
+        content_de: Dict,
+        stylesheets: Dict[str, str],
+        scripts: Dict[str, str],
+        marker_icons: Dict[str, str]
+    ) -> str:
+        """
+        Build complete HTML from modular components.
+        
+        Uses component-based templating for semantic HTML structure.
+        Maintains backward compatibility with existing output.
+        
+        Args:
+            configs: List of configuration objects
+            events: List of event data
+            content_en: English translations
+            content_de: German translations
+            stylesheets: Dict of CSS content (leaflet_css, app_css, etc.)
+            scripts: Dict of JavaScript content
+            marker_icons: Dict of marker icon data URLs
+        
+        Returns:
+            Complete HTML document as string
+        """
+        # Extract basic info
+        primary_config = configs[0] if configs else {}
+        app_name = primary_config.get('app', {}).get('name', 'KRWL HOF Community Events')
+        favicon = self.create_favicon_data_url()
+        logo_svg = self.read_logo_svg()
+        
+        # Build noscript HTML
+        noscript_html = self.build_noscript_html(events, content_en, app_name)
+        
+        # Load JavaScript templates
+        config_loader = self.load_template('config-loader.js')
+        fetch_interceptor = self.load_template('fetch-interceptor.js')
+        
+        # Prepare embedded data
+        embedded_data = f'''// Embed all configurations and data
+window.ALL_CONFIGS = {json.dumps(configs)};
+window.ALL_EVENTS = {json.dumps(events)};
+window.EMBEDDED_CONTENT_EN = {json.dumps(content_en)};
+window.EMBEDDED_CONTENT_DE = {json.dumps(content_de)};
+window.MARKER_ICONS = {json.dumps(marker_icons)};'''
+        
+        # Generate timestamp placeholder
+        generated_at = 'BUILD_TIMESTAMP_PLACEHOLDER'
+        
+        # Generated comment
+        generated_comment = f'''<!--
+  KRWL HOF Community Events - Auto-generated HTML
+  
+  Generated: {generated_at}
+  Generator: src/modules/site_generator.py (component-based)
+  Command: python3 src/event_manager.py generate
+  
+  DO NOT EDIT THIS FILE DIRECTLY
+  Edit source files and regenerate instead:
+  - Components: src/templates/components/
+  - Design tokens: config.json (design section)
+  - Styles: assets/css/
+  - Scripts: assets/js/
+  - Events: event-data/
+-->'''
+        
+        # Load design tokens CSS
+        design_tokens_css = self.generate_design_tokens_css()
+        
+        # Load component templates
+        try:
+            html_head = self.load_component('html-head.html')
+            html_body_open = self.load_component('html-body-open.html')
+            html_body_close = self.load_component('html-body-close.html')
+            map_main = self.load_component('map-main.html')
+            dashboard_aside = self.load_component('dashboard-aside.html')
+            filter_nav = self.load_component('filter-nav.html')
+        except FileNotFoundError:
+            # Fallback to monolithic template if components don't exist
+            return self.build_html_structure(
+                configs, events, content_en, content_de,
+                stylesheets, scripts, marker_icons
+            )
+        
+        # Assemble HTML from components
+        html_parts = [
+            generated_comment,
+            '<!DOCTYPE html>',
+            '<html lang="en">',
+            html_head.format(
+                app_name=app_name,
+                favicon=favicon,
+                design_tokens_css=design_tokens_css,
+                leaflet_css=stylesheets['leaflet_css'],
+                app_css=stylesheets['app_css'],
+                time_drawer_css=stylesheets['time_drawer_css']
+            ),
+            html_body_open.format(
+                noscript_html=noscript_html
+            ),
+            '',
+            '<!-- Layer 1: Fullscreen map -->',
+            map_main,
+            '',
+            '<!-- Layer 2: Event popups (rendered by Leaflet) -->',
+            '',
+            '<!-- Layer 3: UI overlays -->',
+            dashboard_aside.format(
+                logo_svg=logo_svg
+            ),
+            filter_nav,
+            '',
+            '<!-- Layer 4: Modals (reserved for future use) -->',
+            '',
+            html_body_close.format(
+                embedded_data=embedded_data,
+                config_loader=config_loader,
+                fetch_interceptor=fetch_interceptor,
+                leaflet_js=scripts['leaflet_js'],
+                lucide_js=scripts.get('lucide_js', '// Lucide not available'),
+                i18n_js=scripts['i18n_js'],
+                time_drawer_js=scripts['time_drawer_js'],
+                app_js=scripts['app_js']
+            )
+        ]
+        
+        return '\n'.join(html_parts)
+    
     def build_html_structure(
         self, 
         configs: List[Dict],
@@ -749,10 +1008,20 @@ window.MARKER_ICONS = {json.dumps(marker_icons)};'''
         print(f"✅ Embedded {len(marker_icons)} Lucide marker icons as base64 data URLs")
         
         print(f"Building HTML ({len(events)} total events)...")
-        html = self.build_html_structure(
-            configs, events, content_en, content_de,
-            stylesheets, scripts, marker_icons
-        )
+        
+        # Try component-based building first, fall back to monolithic template
+        try:
+            html = self.build_html_from_components(
+                configs, events, content_en, content_de,
+                stylesheets, scripts, marker_icons
+            )
+            print("✅ Using component-based templating")
+        except FileNotFoundError as e:
+            print(f"⚠️  Component not found, falling back to monolithic template: {e}")
+            html = self.build_html_structure(
+                configs, events, content_en, content_de,
+                stylesheets, scripts, marker_icons
+            )
         
         # Lint the generated content
         if not skip_lint:

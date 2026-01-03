@@ -17,27 +17,34 @@ The application uses a strict 4-layer z-index architecture:
 
 ## Directory Structure
 
+**KISS Principle Applied: Flat is better than nested!**
+
 ```
 src/templates/components/
 ├── README.md                          # This file
+├── variables-reference.md             # CSS variable documentation
 ├── generate_design_tokens.py          # Token generator script
 ├── design-tokens.css                  # Generated CSS (auto-created)
-├── _base/
-│   ├── html-head.html                 # <head> with meta, title, styles
-│   ├── html-body-open.html            # <body> opening + noscript
-│   └── html-body-close.html           # Scripts + </body></html>
-├── layout/
-│   ├── map-main.html                  # <main> map container (Layer 1)
-│   ├── dashboard-aside.html           # <aside> dashboard menu (Layer 3)
-│   ├── filter-nav.html                # <nav> filter bar (Layer 3)
-│   └── noscript-content.html          # No-JS fallback content
-└── shared/
-    └── variables-reference.md         # CSS variable documentation
+├── html-head.html                     # <head> with meta, title, styles
+├── html-body-open.html                # <body> opening + noscript
+├── html-body-close.html               # Scripts + </body></html>
+├── map-main.html                      # <main> map container (Layer 1)
+├── dashboard-aside.html               # <aside> dashboard menu (Layer 3)
+├── filter-nav.html                    # <nav> filter bar (Layer 3)
+└── noscript-content.html              # No-JS fallback content
 ```
+
+**Why flat?** 
+- Easier to find files
+- Simpler imports
+- Less mental overhead
+- Follows UNIX philosophy: do one thing well
 
 ## Component Reference
 
-### Base Components (_base/)
+### HTML Components
+
+All components are in the root components directory for simplicity (KISS principle: flat is better than nested).
 
 #### html-head.html
 Contains the HTML `<head>` section with:
@@ -78,8 +85,6 @@ Contains closing scripts and tags:
 - `{i18n_js}` - Internationalization module
 - `{time_drawer_js}` - Time drawer component
 - `{app_js}` - Main application logic
-
-### Layout Components (layout/)
 
 #### map-main.html
 **Semantic Tag:** `<main>`  
@@ -430,6 +435,35 @@ Always use `--z-layer-*` variables instead of hardcoded values.
 
 ## Best Practices
 
+### KISS Principles Applied
+
+This component system follows strict KISS (Keep It Simple, Stupid) principles:
+
+1. **Flat Structure**
+   - ✅ All components in one directory
+   - ❌ No nested subdirectories
+   - Why: Easier to find, simpler imports
+
+2. **No Templating Engine**
+   - ✅ Use Python's built-in `.format()`
+   - ❌ No Jinja2, Mako, or complex templating
+   - Why: Zero dependencies, transparent behavior
+
+3. **Single Responsibility**
+   - Each component does ONE thing
+   - Each file is small (<200 lines)
+   - Easy to understand at a glance
+
+4. **Explicit Over Implicit**
+   - Template variables clearly named: `{app_name}`
+   - No magic: what you see is what you get
+   - No hidden side effects
+
+5. **Standard Library Only**
+   - No external dependencies for components
+   - Uses Python's `str.format()` and `Path`
+   - Runs anywhere Python runs
+
 ### 1. Always Use Design Tokens
 
 ❌ **Don't:**
@@ -510,7 +544,7 @@ This component system is fully integrated with the existing KRWL HOF infrastruct
 - **Site Generator**: `src/modules/site_generator.py` loads and assembles components
 - **Linter**: `src/modules/linter.py` validates component HTML, CSS, and accessibility
 - **Testing**: `tests/test_components.py` validates component functionality
-- **Documentation**: Auto-converts to HTML via `scripts/build_markdown_docs.py`
+- **Documentation**: All docs are markdown (.md) - no HTML generation needed (KISS principle)
 
 ## Future Enhancements
 
