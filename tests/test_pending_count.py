@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Test that scraper generates pending count JSON for frontend notifications
+Test that scraper updates pending count in events.json for frontend notifications
 """
 
 import json
@@ -11,9 +11,9 @@ from datetime import datetime
 from pathlib import Path
 
 
-def test_pending_count_generation():
-    """Test that scraper creates pending-count.json with correct information"""
-    print("\n=== Testing Pending Count JSON Generation ===")
+def test_pending_count_in_events_json():
+    """Test that pending count is added to events.json"""
+    print("\n=== Testing Pending Count in events.json ===")
     
     # Setup test environment
     test_dir = tempfile.mkdtemp(prefix='krwl_pending_count_test_')
@@ -25,6 +25,7 @@ def test_pending_count_generation():
         sys.path.insert(0, str(repo_root / 'src'))
         
         from modules.scraper import EventScraper
+        from modules.utils import load_events, update_pending_count_in_events
         
         # Create event-data directory
         event_data_dir = test_path / 'event-data'
@@ -66,95 +67,114 @@ def test_pending_count_generation():
         with open(event_data_dir / 'pending_events.json', 'w') as f:
             json.dump(pending_events, f, indent=2)
         
-        # Create empty events and rejected files
+        # Create empty events file
+        events_data = {
+            'events': [],
+            'last_updated': datetime.now().isoformat()
+        }
         with open(event_data_dir / 'events.json', 'w') as f:
-            json.dump({'events': [], 'last_updated': datetime.now().isoformat()}, f)
+            json.dump(events_data, f, indent=2)
         
+        # Create rejected events file
         with open(event_data_dir / 'rejected_events.json', 'w') as f:
             json.dump({'rejected_events': [], 'last_updated': datetime.now().isoformat()}, f)
         
-        # Create test config
-        config = {
-            'scraping': {'sources': []},
-            'map': {'default_center': {'lat': 50.3167, 'lon': 11.9167}}
-        }
+        # Test 1: Update pending count in events.json
+        print("Test 1: Checking pending_count is added to events.json...")
+        update_pending_count_in_events(test_path)
         
-        # Test 1: Pending count file is created
-        print("Test 1: Checking pending-count.json creation...")
-        scraper = EventScraper(config, test_path)
-        scraper.scrape_all_sources()
-        
-        pending_count_file = test_path / 'target' / 'pending-count.json'
-        if pending_count_file.exists():
-            print("✓ Pending count file created")
+        events_data = load_events(test_path)
+        if 'pending_count' in events_data:
+            print("✓ pending_count field added to events.json")
         else:
-            print(f"✗ Pending count file not created at {pending_count_file}")
+            print("✗ pending_count field not found in events.json")
             return False
         
-        # Test 2: Pending count file has correct structure
-        print("Test 2: Checking pending count file structure...")
-        with open(pending_count_file, 'r') as f:
-            pending_count_data = json.load(f)
-        
-        required_keys = ['count', 'last_updated']
-        if all(key in pending_count_data for key in required_keys):
-            print(f"✓ Pending count file has all required keys: {required_keys}")
-        else:
-            print(f"✗ Pending count file missing keys. Found: {list(pending_count_data.keys())}")
-            return False
-        
-        # Test 3: Pending count matches actual count
-        print("Test 3: Checking pending count value...")
+        # Test 2: Pending count value is correct
+        print("Test 2: Checking pending count value...")
         expected_count = 3
-        if pending_count_data['count'] == expected_count:
+        if events_data['pending_count'] == expected_count:
             print(f"✓ Pending count is correct: {expected_count}")
         else:
-            print(f"✗ Pending count incorrect. Expected {expected_count}, got {pending_count_data['count']}")
+            print(f"✗ Pending count incorrect. Expected {expected_count}, got {events_data['pending_count']}")
             return False
         
-        # Test 4: Timestamp format is valid
-        print("Test 4: Checking timestamp format...")
-        try:
-            datetime.fromisoformat(pending_count_data['last_updated'])
-            print("✓ Timestamp is valid ISO format")
-        except ValueError:
-            print(f"✗ Timestamp invalid: {pending_count_data['last_updated']}")
+        # Test 3: last_updated is updated
+        print("Test 3: Checking last_updated field...")
+        if 'last_updated' in events_data:
+            try:
+                datetime.fromisoformat(events_data['last_updated'])
+                print("✓ last_updated is valid ISO format")
+            except ValueError:
+                print(f"✗ last_updated invalid: {events_data['last_updated']}")
+                return False
+        else:
+            print("✗ last_updated field missing")
             return False
         
-        # Test 5: File updates when count changes
-        print("Test 5: Checking file updates with count changes...")
+        # Test 4: Pending count updates when count changes
+        print("Test 4: Checking count updates...")
         # Remove one pending event
         pending_events['pending_events'] = pending_events['pending_events'][:2]
         with open(event_data_dir / 'pending_events.json', 'w') as f:
             json.dump(pending_events, f, indent=2)
         
-        # Generate again
-        scraper.scrape_all_sources()
+        # Update again
+        update_pending_count_in_events(test_path)
+        events_data = load_events(test_path)
         
-        with open(pending_count_file, 'r') as f:
-            updated_data = json.load(f)
-        
-        if updated_data['count'] == 2:
+        if events_data['pending_count'] == 2:
             print("✓ Pending count correctly updated to 2")
         else:
-            print(f"✗ Pending count not updated. Expected 2, got {updated_data['count']}")
+            print(f"✗ Pending count not updated. Expected 2, got {events_data['pending_count']}")
             return False
         
-        # Test 6: File works with zero pending events
-        print("Test 6: Checking zero pending events...")
+        # Test 5: Zero pending events
+        print("Test 5: Checking zero pending events...")
         pending_events['pending_events'] = []
         with open(event_data_dir / 'pending_events.json', 'w') as f:
             json.dump(pending_events, f, indent=2)
         
-        scraper.scrape_all_sources()
+        update_pending_count_in_events(test_path)
+        events_data = load_events(test_path)
         
-        with open(pending_count_file, 'r') as f:
-            zero_data = json.load(f)
-        
-        if zero_data['count'] == 0:
+        if events_data['pending_count'] == 0:
             print("✓ Pending count correctly shows 0")
         else:
-            print(f"✗ Pending count incorrect for empty. Expected 0, got {zero_data['count']}")
+            print(f"✗ Pending count incorrect for empty. Expected 0, got {events_data['pending_count']}")
+            return False
+        
+        # Test 6: Scraper integration test
+        print("Test 6: Checking scraper integration...")
+        # Add pending events back
+        pending_events['pending_events'] = [
+            {
+                'id': 'test_1',
+                'title': 'Test Event 1',
+                'description': 'Description 1',
+                'location': {'name': 'Test Location', 'lat': 50.3167, 'lon': 11.9167},
+                'start_time': datetime.now().isoformat(),
+                'source': 'test',
+                'status': 'pending'
+            }
+        ]
+        with open(event_data_dir / 'pending_events.json', 'w') as f:
+            json.dump(pending_events, f, indent=2)
+        
+        # Run scraper (which should update pending count)
+        config = {
+            'scraping': {'sources': []},
+            'map': {'default_center': {'lat': 50.3167, 'lon': 11.9167}}
+        }
+        scraper = EventScraper(config, test_path)
+        scraper.scrape_all_sources()
+        
+        # Check that pending count was updated by scraper
+        events_data = load_events(test_path)
+        if events_data['pending_count'] == 1:
+            print("✓ Scraper correctly updated pending count")
+        else:
+            print(f"✗ Scraper didn't update count. Expected 1, got {events_data['pending_count']}")
             return False
         
         print("\n✓ All pending count tests passed")
@@ -166,21 +186,22 @@ def test_pending_count_generation():
 
 
 def test_frontend_compatibility():
-    """Test that pending count JSON format works with frontend JavaScript"""
+    """Test that events.json format works with frontend JavaScript"""
     print("\n=== Testing Frontend Compatibility ===")
     
-    # Create sample pending count data matching frontend expectations
-    pending_count = {
-        'count': 5,
-        'last_updated': '2026-01-03T15:36:58.383588'
+    # Create sample events data matching frontend expectations
+    events_data = {
+        'events': [],
+        'pending_count': 5,
+        'last_updated': '2026-01-03T15:47:19.164009'
     }
     
     # Test JSON serialization/deserialization
     try:
-        json_str = json.dumps(pending_count)
+        json_str = json.dumps(events_data)
         parsed = json.loads(json_str)
         
-        if parsed['count'] == 5:
+        if parsed['pending_count'] == 5 and 'events' in parsed:
             print("✓ JSON format compatible with frontend")
             return True
         else:
@@ -194,13 +215,13 @@ def test_frontend_compatibility():
 
 if __name__ == '__main__':
     print("=" * 70)
-    print("KRWL HOF Pending Count JSON Test Suite")
+    print("KRWL HOF Pending Count in events.json Test Suite")
     print("=" * 70)
     
     results = []
     
     # Run tests
-    results.append(test_pending_count_generation())
+    results.append(test_pending_count_in_events_json())
     results.append(test_frontend_compatibility())
     
     # Summary

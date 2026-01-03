@@ -85,6 +85,4 @@ static/css/style.css.backup
 static/logo.svg
 
 # Build artifacts - dependencies are fetched at build time
-# Ignore target directory but keep pending-count.json
-target/*
-!target/pending-count.json
+target/

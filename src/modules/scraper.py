@@ -71,24 +71,17 @@ class EventScraper:
             json.dump(status, f, indent=2)
     
     def _write_pending_count(self):
-        """Write pending count JSON for frontend notifications"""
+        """
+        Update pending count in events.json
+        This allows frontend to read pending count from the same file it already loads
+        """
+        from .utils import update_pending_count_in_events
+        update_pending_count_in_events(self.base_path)
+        
+        # Get the count for logging
         pending_data = load_pending_events(self.base_path)
         pending_count = len(pending_data.get('pending_events', []))
-        
-        # Create target directory if it doesn't exist
-        target_dir = self.base_path / 'target'
-        target_dir.mkdir(parents=True, exist_ok=True)
-        
-        pending_count_data = {
-            'count': pending_count,
-            'last_updated': datetime.now().isoformat()
-        }
-        
-        pending_count_file = target_dir / 'pending-count.json'
-        with open(pending_count_file, 'w') as f:
-            json.dump(pending_count_data, f, indent=2)
-        
-        print(f"ℹ Pending count JSON generated: {pending_count} events")
+        print(f"ℹ Updated pending count in events.json: {pending_count} events")
     
     def scrape_all_sources(self):
         """Scrape events from all configured sources"""

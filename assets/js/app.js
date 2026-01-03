@@ -208,23 +208,24 @@ class EventsApp {
         /**
          * Check for pending events and update UI notifications
          * 
-         * Fetches pending-count.json and updates:
+         * Reads pending_count from the events data that's already loaded.
+         * Updates:
          * 1. Dashboard notification box (if count > 0)
          * 2. Browser tab title (adds ❗ emoji if count > 0)
          * 
-         * Handles missing file gracefully (backward compatibility)
-         * Runs on page load and periodically (every 5 minutes)
+         * This is lightweight and uses existing data - no extra HTTP request needed!
          */
         try {
-            const response = await fetch('pending-count.json');
-            if (!response.ok) {
-                // File doesn't exist yet - this is okay
-                this.log('Pending count file not found (backward compatibility)');
+            // Check if we have events data loaded with pending_count field
+            const eventsData = window.__EVENTS_DATA__ || null;
+            
+            if (!eventsData || typeof eventsData.pending_count === 'undefined') {
+                // No pending count data available (backward compatibility)
+                this.log('No pending count data available');
                 return;
             }
             
-            const data = await response.json();
-            const count = data.count || 0;
+            const count = eventsData.pending_count || 0;
             
             this.log('Pending events count:', count);
             
@@ -251,7 +252,7 @@ class EventsApp {
                 }
             }
         } catch (error) {
-            this.log('Could not fetch pending events count:', error.message);
+            this.log('Could not check pending events:', error.message);
             // Fail silently - this is a non-critical feature
         }
     }
@@ -260,6 +261,10 @@ class EventsApp {
         /**
          * Set up periodic checking for pending events
          * Checks every 5 minutes (300000ms)
+         * 
+         * Note: In practice, this will only update if the page is refreshed
+         * since events data is embedded at build time. But we keep it for
+         * potential future enhancements (e.g., dynamic loading).
          */
         setInterval(() => {
             this.checkPendingEvents();
@@ -378,6 +383,10 @@ class EventsApp {
                 this.log('Using inline events data');
                 const data = window.__INLINE_EVENTS_DATA__;
                 this.events = data.events || [];
+                
+                // Store globally for pending count access (backward compatible)
+                window.__EVENTS_DATA__ = data;
+                
                 this.log(`Loaded ${this.events.length} events from inline data`);
                 // Process template events with relative times
                 this.events = this.processTemplateEvents(this.events);
@@ -390,6 +399,7 @@ class EventsApp {
             const dataSources = this.config.data?.sources || {};
             
             let allEvents = [];
+            let eventsData = null;
             
             if (dataSource === 'both' && dataSources.both?.urls) {
                 // Load from multiple sources and combine
@@ -400,6 +410,10 @@ class EventsApp {
                         const data = await response.json();
                         const events = data.events || [];
                         allEvents = allEvents.concat(events);
+                        // Store the first data object for pending_count
+                        if (!eventsData && data.pending_count !== undefined) {
+                            eventsData = data;
+                        }
                         this.log(`Loaded ${events.length} events from ${url}`);
                     } catch (err) {
                         console.warn(`Failed to load events from ${url}:`, err);
@@ -412,9 +426,14 @@ class EventsApp {
                 this.log('Loading from single source:', url);
                 
                 const response = await fetch(url);
-                const data = await response.json();
-                allEvents = data.events || [];
+                eventsData = await response.json();
+                allEvents = eventsData.events || [];
                 this.log(`Loaded ${allEvents.length} events from ${url}`);
+            }
+            
+            // Store globally for pending count access
+            if (eventsData) {
+                window.__EVENTS_DATA__ = eventsData;
             }
             
             // Process template events with relative times
