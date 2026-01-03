@@ -302,8 +302,19 @@ python3<span class="w"> </span>-m<span class="w"> </span>http.server<span class=
 1. <strong>Code comments</strong> - In the source files where the logic lives<br />
 2. <strong>CLI --help</strong> - Every script has comprehensive help text<br />
 3. <strong>TUI hints</strong> - Contextual tooltips in the interactive interface<br />
-4. <strong>This README</strong> - One consolidated guide (you're reading it!)</p>
+4. <strong>This README</strong> - One consolidated guide (you're reading it!)<br />
+5. <strong>CHANGELOG</strong> - Auto-generated project history from all merged PRs</p>
 <p>No complex documentation systems. No wiki syncing. No auto-generated multi-file docs. Just code comments, CLI help, and this README.</p>
+<h3 id="auto-generated-changelog">Auto-Generated CHANGELOG</h3>
+<p>The project maintains a comprehensive <a href="docs/CHANGELOG.html">CHANGELOG.md</a> that is <strong>automatically generated</strong> from Git history:</p>
+<ul>
+<li><strong>Source</strong>: All merged pull requests in the repository</li>
+<li><strong>Format</strong>: Following <a href="https://keepachangelog.com/">Keep a Changelog</a> standards</li>
+<li><strong>Categories</strong>: Added, Changed, Fixed, Removed, Security</li>
+<li><strong>Updates</strong>: Automatically updated on each push to main via GitHub Actions</li>
+<li><strong>Manual Regeneration</strong>: Run <code>python3 scripts/generate_changelog.py</code></li>
+</ul>
+<p>The CHANGELOG is generated from merge commit messages, so every PR automatically becomes part of the project history. No manual changelog updates needed!</p>
 <h2 id="cli-usage">🛠️ CLI Usage</h2>
 <h3 id="event-manager-main-interface">Event Manager (Main Interface)</h3>
 <p>The primary tool for managing events:</p>
@@ -714,7 +725,7 @@ python3<span class="w"> </span>scripts/generate_screenshots.py
     
     <div class="source-info">
         <strong>📄 Source:</strong> <code>/home/runner/work/krwl-hof/krwl-hof/README.md</code><br>
-        <strong>⏰ Generated:</strong> 2026-01-03 08:16:00
+        <strong>⏰ Generated:</strong> 2026-01-03 15:32:50
     </div>
     
     <div class="footer">

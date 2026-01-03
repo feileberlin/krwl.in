@@ -1,277 +1,167 @@
 # Changelog
 
-All notable changes to the KRWL HOF Community Events project will be documented in this file.
+All notable changes to the KRWL HOF Community Events project are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+---
+
+## January 2026
 
 ### Added
-- **Dynamic Event Templates with Relative Times**: Demo events now use `relative_time` specifications that calculate actual timestamps on every page reload
-  - Two types supported: `offset` (relative to current time) and `sunrise_relative` (relative to next sunrise)
-  - Timezone offset support for international testing
-  - Comprehensive test suite (`tests/test_relative_times.py` and HTML test page)
-  - Full documentation in README.md section "Advanced Features > Dynamic Event Templates"
-- Demo events always show accurate relative times like "happening now" or "starting in 5 minutes"
-- `processTemplateEvents()` method in frontend to calculate timestamps dynamically
-- All 23 demo events now include `relative_time` field for automatic updating
+
+- **PR #69** (2026-01-01): Consolidate data to static/, add individual event backups, simplify workflows
+- **PR #73** (2026-01-01): Add bulk operations for event review workflow
+- **PR #74** (2026-01-01): Add wildcard pattern support to bulk approve/reject commands
+- **PR #75** (2026-01-01): [WIP] Add feature to auto-reject recurring events
+- **PR #77** (2026-01-01): [WIP] Implement Facebook Graph API integration for event scraping
+- **PR #80** (2026-01-01): feat: add modular SmartScraper system with AI providers, image analysis, and multi-interface configuration
+- **PR #85** (2026-01-01): Add scraper options configuration to all event sources
+- **PR #88** (2026-01-01): Add CHANGELOG.md with v1.0.0 release history
+- **PR #90** (2026-01-01): [WIP] Add demo events display to index.html
+- **PR #92** (2026-01-01): [WIP] Add manual library download workflow for GitHub Actions
+- **PR #93** (2026-01-02): Add workflow for committing and pushing repository changes
+- **PR #99** (2026-01-02): Mark unimplemented deployment features and update verifier to skip them
+- **PR #108** (2026-01-02): Add interactive time drawer with dynamic marker scaling for sunrise filter
+- **PR #110** (2026-01-02): Add keyboard navigation for map and event browsing
+- **PR #113** (2026-01-02): Reconfigure filter sentence: add megaphone logo and simplify structure (KISS)
+- **PR #117** (2026-01-02): Populate noscript tags with sorted event data and add automatic SVG inlining
+- **PR #118** (2026-01-02): Add simple environment override to config.json, remove .env files
+- **PR #119** (2026-01-02): Simplify watermark to single function following KISS principles with i18n support
+- **PR #120** (2026-01-02): Add comprehensive linting to HTML export process
+- **PR #121** (2026-01-02): Add dual GitHub Actions workflows and KISS templating for automated deployment
+- **PR #130** (2026-01-03): Add automated Markdown-to-HTML documentation build system
+- **PR #131** (2026-01-03): Update Lucide CDN to use @latest with proper dev/prod URLs
+
+### Changed
+
+- **PR #72** (2026-01-01): [WIP] Update features.json to reference scrape-events.yml
+- **PR #76** (2026-01-01): Replace 2185-line generator.py with 324-line CDN inliner (86% reduction)
+- **PR #87** (2026-01-01): Organize Python helper scripts into scripts/ and tests/ directories
+- **PR #91** (2026-01-01): [WIP] Move location status to watermark infos
+- **PR #94** (2026-01-02): Eliminate GitHub Pages artifacts: generate self-contained HTML with unified script
+- **PR #102** (2026-01-02): Refactor to platform-agnostic site generator with runtime configuration and setup guide
+- **PR #104** (2026-01-02): Remove redundant documentation from .github, update README
+- **PR #106** (2026-01-02): Unify config files with automatic multi-platform environment detection
+- **PR #107** (2026-01-02): KISS refactor: integrate README generation with GitHub About updates
+- **PR #109** (2026-01-02): Consolidate documentation to README.md and switch to ENVIRONMENT variable
+- **PR #111** (2026-01-02): [WIP] Update event templates to trigger on reload with relative times
+- **PR #112** (2026-01-02): Restore missing watermark HTML element
+- **PR #115** (2026-01-02): Show main-content after events load and filter description updates
+- **PR #123** (2026-01-02): [WIP] Rename filter bar elements for clarity and consistency
+- **PR #127** (2026-01-02): Raise time-drawer z-index above edge details
+- **PR #128** (2026-01-03): Switch application to development mode
 
 ### Fixed
-- Duplicate events in embedded HTML (static/events.json now contains only real events)
-- Event mutation issue in `processTemplateEvents()` (now creates copies instead of mutating)
-- Missing `relative_time` field for `demo_far_away` event
-- Unused imports in test file
 
-### Changed
-- `scripts/generate_demo_events.py` now includes `relative_time` specifications for all demo events
-- Demo event generation now loads from `event-data/events.json` instead of `static/events.json`
-- `assets/js/app.js` updated to process template events without mutation
-
-## [1.0.0] - 2026-01-01
-
-### Major Features
-
-#### 🏗️ Architecture Simplification
-- **86% Code Reduction**: Replaced 2185-line `generator.py` with streamlined 324-line `cdn_inliner.py`
-- **Single-File Output**: Generate one HTML file with all resources inlined (66KB total)
-- **CDN Fallback System**: Tries jsDelivr first, falls back to local files if offline
-- **Automatic Event Updates**: HTML updates automatically after approve/publish operations
-
-See [SIMPLIFICATION_SUMMARY.md](SIMPLIFICATION_SUMMARY.md) for complete details.
-
-#### 🤖 Smart Scraper System
-- **AI-Powered Extraction**: Modular scraper with AI provider integration (2,886 lines)
-- **Free AI Providers**: DuckDuckGo AI, Bing AI, Google Gemini support
-- **Image Analysis**: EXIF/GPS metadata extraction, OCR with Tesseract, AI-powered analysis
-- **Multi-Platform Support**: RSS/Atom, HTML, JSON API scrapers
-- **Social Media Ready**: Placeholder implementations for Facebook, Instagram, TikTok, X/Twitter, Telegram, WhatsApp
-- **Production Ready**: Comprehensive error handling, rate limiting, logging
-
-See [SMART_SCRAPER_SUMMARY.md](SMART_SCRAPER_SUMMARY.md) for complete details.
-
-### Added
-
-#### Backend Features
-- **Event Scraping**: Scrape events from RSS feeds, APIs, and HTML pages
-- **Editor Workflow**: Review, edit, approve, or reject events before publishing
-- **Python TUI**: Interactive terminal interface for managing events with menu navigation
-- **CLI Commands**: Command-line interface for automation and scripting
-- **Rejected Events Tracking**: Track rejected events with timestamps to prevent re-scraping
-- **Event Archiving**: Automatically archive past events to keep published list current
-- **Data Backup System**: Automatic backups when clearing data with `.backup` extension
-- **Distance Calculation**: Haversine formula for calculating distances between coordinates
-- **Documentation Viewer**: Built-in TUI-based documentation viewer with search and navigation
-- **Example Data Loader**: Load sample data for development and testing
-- **Data Management Tools**: CLI and TUI tools to clear, list, and manage event data
-- **GitHub Actions Workflow Launcher**: Launch and manage GitHub Actions workflows from TUI and CLI
-
-#### Frontend Features
-- **Interactive Map**: Fullscreen map interface with Leaflet.js showing events
-- **Geolocation Filtering**: Shows only events near the user's location
-- **Sunrise Filtering**: Displays events only until the next sunrise
-- **Custom Location Override**: Allow users to set custom location instead of using geolocation
-- **Event Filters**: Filter events by category, time, and distance
-- **Event Card UI**: Card-based UI for displaying event details in the sidebar
-- **Map Markers**: Interactive markers on the map for events and user location
-- **Responsive Design**: Mobile-responsive layout with CSS media queries
-- **Environment Watermark**: Visual watermark showing environment, commit SHA, and PR number (configurable)
-
-#### Configuration & Deployment
-- **Debug Mode**: Development config with console logging for troubleshooting
-- **Production Optimization**: Production config optimized for maximum speed with caching
-- **Preview Deployment**: Deploy testing/preview version with debug mode
-- **Production Deployment**: Deploy production version to main branch
-- **Promotion Workflow**: Promote preview to production via PR
-- **Multi-Data Sources**: Support for real, demo, or combined event data sources
-- **Custom Domain Support**: Support for custom domains via CNAME
-- **GitHub Environments UI Integration**: Deployments visible in GitHub UI with direct links
-
-#### Infrastructure
-- **GitHub Copilot Custom Instructions**: Comprehensive project-specific instructions including architecture, coding guidelines, and workflows
-- **VS Code Workspace Configuration**: Settings, recommended extensions, tasks, and debug configurations
-- **Development Container Configuration**: Docker-based dev container with Python 3.11 and pre-configured tools
-- **Model Context Protocol (MCP) Server**: MCP server configuration for enhanced AI assistance
-- **Development Environment Documentation**: Comprehensive setup guide for all development tools
-
-#### Testing & Quality
-- **CDN Fallback Tests**: 6 comprehensive tests for CDN fallback system
-- **Scraper Tests**: 20 tests for event scraping functionality
-- **Smart Scraper Tests**: 17 tests for AI-powered scraping
-- **Event Schema Validation**: Tests for event data structure validation
-- **Filter Tests**: Tests for event filtering logic
-- **Translation Tests**: Tests for i18n functionality
-- **Scheduler Tests**: Tests for scheduled operations
-- **KISS Principle Compliance**: Automated checker to enforce simplicity
-- **Feature Registry System**: Documents all 38+ implemented features with validation
-
-#### Documentation
-- **KISS Documentation Philosophy**: All documentation consolidated in README.md, inline code comments, and CLI help
-- **Auto-Generated README**: Built from templates by `scripts/generate_readme.py`
-- **Comprehensive Inline Comments**: Technical details live in the source code where they're relevant
-- **Configuration Guide**: Detailed configuration documentation in README.md
-- **Testing Guide**: Comprehensive testing instructions in README.md
-- **Setup Guide**: Complete setup and installation instructions in README.md
-- **Management Interfaces Guide**: Documentation for GitHub UI, CLI, and TUI interfaces
-
-### Changed
-- **Static Generation**: Moved from template-based generation to CDN inlining approach
-- **Source Files**: CSS and JS are now source files (edit directly) instead of generated files
-- **Build Process**: Faster build time (~1-2s vs ~2-3s) with single-file output
-- **HTTP Requests**: Reduced from 3 files to 1 file for better performance
+- **PR #70** (2026-01-01): Fix debug deployment: correct publish paths and add config.debug.json
+- **PR #71** (2026-01-01): Rename debug environment to preview for consistency with branch name
+- **PR #81** (2026-01-01): [WIP] Fix boolean input in configure-scraper workflow
+- **PR #82** (2026-01-01): [WIP] Fix syntax error in Add New Source step
+- **PR #83** (2026-01-01): [WIP] Fix NameError in scraper workflow due to boolean input
+- **PR #84** (2026-01-01): [WIP] Fix NameError for source_enabled in scraper configuration
+- **PR #86** (2026-01-01): Fix misleading "new events found" message when only timestamp updated
+- **PR #96** (2026-01-02): Fix JavaScript concatenation syntax error in HTML generator
+- **PR #97** (2026-01-02): Fix 404.html redirect logic for nested paths
+- **PR #98** (2026-01-02): Add missing GitHub Pages deployment workflows for feature verification
+- **PR #103** (2026-01-02): Remove GitHub Actions, consolidate documentation, restructure directories with event-data separation
+- **PR #105** (2026-01-02): Fix outdated src/main.py references in copilot-instructions.md
+- **PR #114** (2026-01-02): Add app-ready signal for reliable screenshot capture
+- **PR #116** (2026-01-02): Clean up HTML structure and enhance watermark with live filter stats
+- **PR #126** (2026-01-03): Fix logo path border color to match text and prevent timestamp merge conflicts
+- **PR #129** (2026-01-03): Inline Lucide icon markers as base64 with configurable category mapping
 
 ### Removed
-- **generator.py**: Removed 2185-line generator in favor of simpler cdn_inliner.py
-- **Python Cache**: Cleaned up 498KB of Python cache files
-- **Obsolete Files**: Removed temporary test files and outdated references
 
-### Fixed
-- **Offline Support**: CDN fallback ensures app works without internet connection
-- **Event Updates**: Automatic HTML updates after event approval/rejection
-- **Rate Limiting**: Prevents abuse of AI providers with configurable delays
-- **Error Handling**: Comprehensive try/except blocks throughout codebase
-
-### Security
-- **Input Validation**: All user input and scraped data is sanitized
-- **XSS Protection**: HTML escaping when displaying user-generated content
-- **No Secrets in Code**: API keys stored in config files (gitignored)
-- **HTTPS Enforcement**: Production uses HTTPS via GitHub Pages
-
-## Development Statistics
-
-### Code Metrics
-- **Total Python Files**: 35+
-- **Total Lines of Code**: 4,300+ (2,886 core + 1,414 infrastructure)
-- **Lines of Documentation**: 878+
-- **Lines of Tests**: 545+
-- **Test Coverage**: 37/37 tests passing (100%)
-- **KISS Compliance**: All files under 500 lines ✅
-
-### Features Implemented
-- **Backend Features**: 15
-- **Frontend Features**: 14
-- **Infrastructure Features**: 9
-- **Total Features**: 38+
-
-### Module Sizes (Lines of Code)
-| Module | Lines | Purpose |
-|--------|-------|---------|
-| cdn_inliner.py | 324 | Generate static HTML |
-| utils.py | 397 | Shared utility functions |
-| scraper.py | 383 | Event scraping |
-| workflow_launcher.py | 418 | GitHub Actions integration |
-| scraper_config_tui.py | 538 | Configuration TUI |
-| scraper_cli.py | 355 | CLI commands |
-| smart_scraper/* | 1,700+ | AI-powered scraping system |
-
-### Performance Improvements
-- **Build Time**: Reduced from ~2-3s to ~1-2s
-- **File Size**: Single 66KB file vs multiple files
-- **HTTP Requests**: 1 request vs 3 requests
-- **Code Complexity**: 86% reduction in generator code
-
-## Migration Notes
-
-### For Developers
-**Old workflow** (Template-based):
-```bash
-vim src/modules/generator.py  # Edit templates
-python3 src/main.py generate
-```
-
-**New workflow** (Direct editing):
-```bash
-vim static/css/style.css  # Edit CSS directly
-vim static/js/app.js      # Edit JS directly
-python3 src/main.py generate  # Generate HTML
-```
-
-### For Users
-No changes needed! All three management interfaces work the same:
-- **CLI**: `python3 src/main.py list`, `python3 src/main.py publish event_001`
-- **TUI**: `python3 src/main.py` (interactive menu)
-- **GitHub UI**: Actions → Review Events → Run workflow
-
-### Backwards Compatibility
-- ✅ All existing tests pass (37/37)
-- ✅ Legacy scraper preserved and working
-- ✅ SmartScraper is opt-in enhancement
-- ✅ No breaking changes to public APIs
-- ✅ Configuration format unchanged (extensions added)
-
-## Future Enhancements
-
-### Phase 1 (Easy)
-- Implement OpenAI provider
-- Implement Anthropic provider
-- Add more OCR engines
-- Add service worker for true offline PWA
-
-### Phase 2 (Medium)
-- Facebook Graph API integration
-- Instagram API integration
-- Telegram Bot API integration
-- HTTP/2 Server Push for multi-file option
-
-### Phase 3 (Complex)
-- Video frame analysis
-- Batch processing UI
-- Cost tracking dashboard
-- Auto-scaling rate limits
-
-## Contributing
-
-### Testing Requirements
-Before committing, run:
-```bash
-# Documentation validation
-python3 docs/build_docs.py --validate
-
-# Feature verification
-python3 verify_features.py --verbose
-
-# Core tests
-python3 test_scraper.py --verbose
-python3 test_smart_scraper.py --verbose
-python3 test_filters.py --verbose
-python3 test_event_schema.py --verbose
-
-# KISS compliance
-python3 check_kiss.py --verbose
-```
-
-### Code Guidelines
-- **KISS Principle**: Keep files under 500 lines
-- **Mobile First**: Design for mobile, enhance for desktop
-- **Accessibility**: WCAG 2.1 Level AA compliance required
-- **No Frameworks**: Vanilla JS only (except Leaflet.js)
-- **Python 3.x**: Standard library preferred
-
-## Acknowledgments
-
-- **Community**: Built by and for the local Hof community
-- **Open Source**: Powered by Leaflet.js, Python, and love
-- **AI Assistance**: Enhanced with GitHub Copilot and AI providers
+- **PR #100** (2026-01-02): Clean up obsolete files and reorganize project structure
+- **PR #101** (2026-01-02): Reorganize root directory - move files to appropriate subdirectories
+- **PR #122** (2026-01-02): Consolidate docs/ folder into README and inline comments per KISS philosophy
 
 ---
 
-For detailed information about specific changes, see:
-- [SIMPLIFICATION_SUMMARY.md](SIMPLIFICATION_SUMMARY.md) - Architecture simplification details
-- [SMART_SCRAPER_SUMMARY.md](SMART_SCRAPER_SUMMARY.md) - SmartScraper implementation details
-- [WIKI_INITIALIZATION.md](WIKI_INITIALIZATION.md) - GitHub Wiki setup guide
-- [docs/](docs/) - Complete project documentation
+## December 2025
 
-## License
+### Added
 
-This project is open source and available under the terms specified in the repository.
+- **PR #2** (2025-12-08): [WIP] Add GitHub Actions workflow for static directory deployment
+- **PR #4** (2025-12-08): Implement auto-zoom to fit markers, geolocation fallback, and user-selectable filters with natural language description
+- **PR #5** (2025-12-09): Add feature registry, KISS compliance monitoring, configurable linting, inline interactive filters, modular Python architecture with CLI/TUI/Daemon modes, configuration editor, and night mode map UI
+- **PR #8** (2025-12-09): [WIP] Add test for event examples and JSON event schema comparison
+- **PR #13** (2025-12-09): copilot/add-time-filter-options
+- **PR #17** (2025-12-29): Replace logo with inline megaphone SVG across all assets
+- **PR #25** (2025-12-29): Add Copilot instructions for repository
+- **PR #37** (2025-12-29): Add environment watermark with build metadata and GitHub UI deployment integration
+- **PR #40** (2025-12-29): Include category filter in map overlay sentence when set to "all"
+- **PR #46** (2025-12-30): Implement fullscreen map with pure JavaScript filter dropdowns
+- **PR #50** (2025-12-29): Inline events.json data into HTML to eliminate network request
 
-## Contact
+### Changed
 
-For questions, issues, or contributions:
-- **Repository**: https://github.com/feileberlin/krwl-hof
+- **PR #1** (2025-12-08): Community events system for Hof, Bavaria with geolocation/sunrise filtering, auto-archiving, and contextual UI
+- **PR #6** (2025-12-09): Transform event list sidebar to fullscreen terminal-styled map with burger menu actions
+- **PR #9** (2025-12-09): [WIP] Optimize text color scheme for better visibility
+- **PR #12** (2025-12-09): Move event count from separate selector into category filter text
+- **PR #14** (2025-12-28): copilot/count-events-by-category
+- **PR #27** (2025-12-29): [WIP] Refactor static changes using generator.py for UI and filters
+- **PR #28** (2025-12-29): [WIP] Configure custom instructions and development environment
+- **PR #29** (2025-12-29): [WIP] Make unified CLI entry point and update TUI accordingly
+- **PR #31** (2025-12-29): [WIP] Update documentation for GitHub Wiki compatibility
+- **PR #35** (2025-12-29): [WIP] Update workflow permissions for GitHub Actions
+- **PR #44** (2025-12-29): [WIP] Reenable CartoDB Dark No Labels layer
+- **PR #45** (2025-12-29): Merge event-count and event-list into interactive filter sentence with mobile-first design
+- **PR #52** (2025-12-30): Update watermark to white translucent, reduce logo stroke-width, re-center logo
+- **PR #54** (2025-12-30): [WIP] Update leaflet markers to barbie red
+- **PR #56** (2025-12-30): Update deprecated GitHub Actions artifact actions from v3 to v4
+- **PR #59** (2025-12-30): [WIP] Design project with monochromatic shades of barbie red
+- **PR #62** (2025-12-30): [WIP] Update watermark to improve visibility and details
+- **PR #64** (2025-12-30): [WIP] Disable borders around watermark and filter sentence
+
+### Fixed
+
+- **PR #3** (2025-12-08): Add two-step deployment workflow with debug mode and demo event generation
+- **PR #7** (2025-12-09): Fix documentation builder permissions, add local Leaflet hosting, i18n system, and comprehensive marker library
+- **PR #10** (2025-12-09): Fix i18n time labels and category filter, complete PR #9 security scan
+- **PR #11** (2025-12-09): Add i18n to popups, fix duplicate filters, implement category-specific icons
+- **PR #16** (2025-12-29): Add automated twice-daily event scraping via GitHub Actions with configurable timezone
+- **PR #22** (2025-12-29): Fix generator templates to preserve UI changes and prevent overwrites
+- **PR #23** (2025-12-29): [WIP] Fix documentation builder failures
+- **PR #26** (2025-12-29): [WIP] Fix issue with manual run of GitHub Actions in pages
+- **PR #32** (2025-12-29): Document GitHub Wiki initialization requirement
+- **PR #34** (2025-12-29): Consolidate documentation to docs/ directory for simplified wiki sync
+- **PR #36** (2025-12-29): Fix promote-preview workflow: add validation, auto-branch creation, and v7 upgrade
+- **PR #41** (2025-12-29): Implement missing debug mode and multi-data-source features, fix documentation paths
+- **PR #48** (2025-12-29): Fix filter dropdowns and implement edge-positioned event details with SVG arrows
+- **PR #49** (2025-12-29): Fix map tile loading background color mismatch
+- **PR #55** (2025-12-30): Fix YAML parsing errors in workflows with inline Python scripts
+- **PR #57** (2025-12-30): Fix feature verification regex patterns for auto-generated static files
+- **PR #58** (2025-12-30): Fix JSON decode error in KISS compliance workflow by redirecting warnings to stderr
+- **PR #60** (2025-12-30): Fix KISS compliance check workflow failure due to import-time warnings
+- **PR #61** (2025-12-30): Fix JSON validation errors: Remove JSONC comments from config files
+- **PR #63** (2025-12-30): [WIP] Fix EOF error during static site generation
+- **PR #65** (2025-12-30): Fix Leaflet CDN blocking and remove undefined method call
+
+### Removed
+
+- **PR #15** (2025-12-29): Make filter dropdowns mobile-first and remove language switcher
+- **PR #39** (2025-12-29): [WIP] Remove div with id events-list
+- **PR #47** (2025-12-29): Remove header and event list, reposition logo inline with filter sentence
+- **PR #51** (2025-12-30): UI refinements: larger barbie red megaphone logo, removed reload button, enabled production watermark
+- **PR #66** (2025-12-30): Align megaphone logo icon with filter text and remove borders
+
+---
+
+## Project Information
+
+### Repository
+- **URL**: https://github.com/feileberlin/krwl-hof
 - **Issues**: https://github.com/feileberlin/krwl-hof/issues
 - **Discussions**: https://github.com/feileberlin/krwl-hof/discussions
 
+### Contributing
+For information on how to contribute, see the [README.md](README.md) file.
+
 ---
 
-*Last Updated: 2026-01-01*
+*Last Updated: 2026-01-03*
+*This file is auto-generated from Git history. Do not edit manually.*

@@ -63,8 +63,21 @@ All documentation lives in:
 2. **CLI --help** - Every script has comprehensive help text
 3. **TUI hints** - Contextual tooltips in the interactive interface
 4. **This README** - One consolidated guide (you're reading it!)
+5. **CHANGELOG** - Auto-generated project history from all merged PRs
 
 No complex documentation systems. No wiki syncing. No auto-generated multi-file docs. Just code comments, CLI help, and this README.
+
+### Auto-Generated CHANGELOG
+
+The project maintains a comprehensive [CHANGELOG.md](docs/CHANGELOG.md) that is **automatically generated** from Git history:
+
+- **Source**: All merged pull requests in the repository
+- **Format**: Following [Keep a Changelog](https://keepachangelog.com/) standards
+- **Categories**: Added, Changed, Fixed, Removed, Security
+- **Updates**: Automatically updated on each push to main via GitHub Actions
+- **Manual Regeneration**: Run `python3 scripts/generate_changelog.py`
+
+The CHANGELOG is generated from merge commit messages, so every PR automatically becomes part of the project history. No manual changelog updates needed!
 
 ## 🛠️ CLI Usage
 
