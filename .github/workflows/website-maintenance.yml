@@ -417,19 +417,11 @@ jobs:
         run: |
           echo "📋 Listing pending events..."
           
-          # Ensure pending_events.json exists
-          if [ ! -f "assets/json/pending_events.json" ]; then
-            echo "ℹ️  pending_events.json not found, creating empty file..."
-            mkdir -p assets/json
-            echo '{"pending_events": [], "last_scraped": null}' > assets/json/pending_events.json
-          fi
-          
           # List pending events (if list-pending command exists)
           if python3 src/event_manager.py list-pending > pending_list.txt 2>&1; then
             cat pending_list.txt
           else
             echo "⚠️  Could not run list-pending command"
-            cat pending_list.txt
           fi
           
           # Count pending events with error handling
@@ -452,7 +444,7 @@ jobs:
           echo "**Pending Events:** $PENDING_COUNT" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           
-          if [ "$PENDING_COUNT" -gt "0" ]; then
+          if [ "$PENDING_COUNT" -gt 0 ]; then
             echo '```' >> $GITHUB_STEP_SUMMARY
             cat pending_list.txt >> $GITHUB_STEP_SUMMARY
             echo '```' >> $GITHUB_STEP_SUMMARY
