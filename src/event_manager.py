@@ -18,6 +18,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 from modules.scraper import EventScraper
 from modules.editor import EventEditor
 from modules.site_generator import SiteGenerator
+from modules.batch_operations import expand_wildcards, process_in_batches, find_events_by_ids, determine_batch_size
 from modules.utils import (
     load_config, load_events, save_events, 
     load_pending_events, save_pending_events, 
@@ -732,112 +733,6 @@ def cli_publish_event(base_path, event_id):
     return 0
 
 
-def expand_wildcard_patterns(patterns, pending_events):
-    """
-    Expand wildcard patterns to match event IDs.
-    
-    Args:
-        patterns: List of patterns (can include wildcards like * and ?)
-        pending_events: List of pending events with 'id' field
-        
-    Returns:
-        List of expanded event IDs (duplicates removed, order preserved)
-    """
-    expanded_ids = []
-    seen_ids = set()
-    
-    for pattern in patterns:
-        pattern = pattern.strip()
-        if not pattern:
-            continue
-            
-        # Check if pattern contains wildcards
-        if '*' in pattern or '?' in pattern or '[' in pattern:
-            # Match against all pending event IDs
-            matches_found = False
-            for event in pending_events:
-                event_id = event.get('id', '')
-                if fnmatch.fnmatch(event_id, pattern):
-                    matches_found = True
-                    if event_id not in seen_ids:
-                        expanded_ids.append(event_id)
-                        seen_ids.add(event_id)
-            
-            if not matches_found:
-                print(f"⚠ Warning: Pattern '{pattern}' matched no events")
-        else:
-            # Exact ID - add if not already seen
-            if pattern not in seen_ids:
-                expanded_ids.append(pattern)
-                seen_ids.add(pattern)
-    
-    return expanded_ids
-
-
-def process_events_in_batches(event_ids, batch_size=10, callback=None):
-    """
-    Process events in batches to avoid overwhelming the system.
-    
-    Args:
-        event_ids: List of event IDs to process
-        batch_size: Number of events to process per batch (default: 10)
-        callback: Function to call for each batch, receives (batch_ids, batch_num, total_batches)
-        
-    Returns:
-        Dict with batch processing results
-    """
-    if not event_ids:
-        return {
-            'total': 0,
-            'batches': 0,
-            'processed': 0,
-            'failed': 0
-        }
-    
-    total_events = len(event_ids)
-    batches = [event_ids[i:i + batch_size] for i in range(0, total_events, batch_size)]
-    total_batches = len(batches)
-    
-    results = {
-        'total': total_events,
-        'batches': total_batches,
-        'processed': 0,
-        'failed': 0,
-        'batch_results': []
-    }
-    
-    print(f"📦 Processing {total_events} events in {total_batches} batch(es) of {batch_size}")
-    
-    for batch_num, batch_ids in enumerate(batches, 1):
-        print(f"\n🔄 Batch {batch_num}/{total_batches} ({len(batch_ids)} events)...")
-        
-        batch_result = {
-            'batch_num': batch_num,
-            'ids': batch_ids,
-            'success': [],
-            'failed': []
-        }
-        
-        if callback:
-            try:
-                callback_result = callback(batch_ids, batch_num, total_batches)
-                batch_result.update(callback_result)
-            except Exception as e:
-                print(f"❌ Batch {batch_num} failed: {e}")
-                batch_result['failed'] = batch_ids
-        
-        results['processed'] += len(batch_result.get('success', []))
-        results['failed'] += len(batch_result.get('failed', []))
-        results['batch_results'].append(batch_result)
-    
-    print(f"\n✅ Batch processing complete:")
-    print(f"   Total: {results['total']}")
-    print(f"   Processed: {results['processed']}")
-    print(f"   Failed: {results['failed']}")
-    
-    return results
-
-
 def cli_reject_event(base_path, event_id):
     """CLI: Reject a pending event"""
     pending_data = load_pending_events(base_path)
@@ -958,8 +853,8 @@ def cli_bulk_publish_events(base_path, event_ids_str):
     pending_data = load_pending_events(base_path)
     events = pending_data.get('pending_events', [])
     
-    # Expand wildcards
-    event_ids = expand_wildcard_patterns(patterns, events)
+    # Expand wildcards using modular function
+    event_ids = expand_wildcards(patterns, events)
     
     if not event_ids:
         print("Error: No events matched the provided patterns")
@@ -970,16 +865,16 @@ def cli_bulk_publish_events(base_path, event_ids_str):
     print(f"📝 Bulk publishing {len(event_ids)} event(s)...")
     print("=" * 80)
     
-    # Determine batch size based on total count
-    batch_size = 10 if len(event_ids) > 20 else len(event_ids)
+    # Determine optimal batch size
+    batch_size = determine_batch_size(len(event_ids))
     
-    # Process in batches
+    # Process in batches using modular function
     def publish_batch(batch_ids, batch_num, total_batches):
         """Process a batch of events for publishing"""
         batch_result = {'success': [], 'failed': []}
         
         # Find events in this batch
-        events_to_publish, failed_ids = _find_events_to_process(batch_ids, events)
+        events_to_publish, failed_ids = find_events_by_ids(batch_ids, events)
         batch_result['failed'].extend(failed_ids)
         
         # Publish the batch
@@ -987,7 +882,7 @@ def cli_bulk_publish_events(base_path, event_ids_str):
             base_path, events_to_publish, events, events_data
         )
         
-        # Track successes (IDs that were not failed)
+        # Track successes
         for event_id in batch_ids:
             if event_id not in failed_ids and event_id not in pub_failed_ids:
                 batch_result['success'].append(event_id)
@@ -999,7 +894,7 @@ def cli_bulk_publish_events(base_path, event_ids_str):
         return batch_result
     
     # Process all batches
-    results = process_events_in_batches(event_ids, batch_size=batch_size, callback=publish_batch)
+    results = process_in_batches(event_ids, batch_size=batch_size, callback=publish_batch)
     
     # Save changes if any events were published
     if results['processed'] > 0:
