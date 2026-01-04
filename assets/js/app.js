@@ -1603,6 +1603,10 @@ class EventsApp {
                         if (closeDashboard && document.activeElement !== closeDashboard) {
                             closeDashboard.focus();
                         }
+                        // Leaflet Best Practice: Invalidate map size after UI changes
+                        if (this.map) {
+                            this.map.invalidateSize({ animate: false });
+                        }
                     }, this.DASHBOARD_FADE_DURATION + 100);
                     
                     // Add focus trap
@@ -1729,6 +1733,10 @@ class EventsApp {
                             filterBar.removeEventListener('transitionend', handleCollapseEnd);
                             if (this.dashboardLastFocusedElement && document.activeElement !== this.dashboardLastFocusedElement) {
                                 this.dashboardLastFocusedElement.focus();
+                            }
+                            // Leaflet Best Practice: Invalidate map size after UI changes
+                            if (this.map) {
+                                this.map.invalidateSize({ animate: false });
                             }
                         }, this.DASHBOARD_EXPANSION_DURATION + 100);
                     }
