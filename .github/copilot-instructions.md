@@ -122,6 +122,17 @@ krwl-hof/
 │   ├── js/
 │   │   ├── app.js          # ✅ Source app logic
 │   │   └── i18n.js         # ✅ Source i18n logic
+│   ├── html/               # HTML template components
+│   │   ├── html-head.html      # HTML head section with meta tags
+│   │   ├── html-body-open.html # Opening body tag
+│   │   ├── html-body-close.html # Closing body tag with scripts
+│   │   ├── map-main.html       # Map container component
+│   │   ├── dashboard-aside.html # Dashboard sidebar component
+│   │   ├── filter-nav.html     # Filter navigation component
+│   │   ├── noscript-content.html # Fallback content for JavaScript-disabled browsers
+│   │   ├── design-tokens.css   # Generated CSS custom properties
+│   │   ├── README.md           # Component system documentation
+│   │   └── variables-reference.md # CSS design token reference
 │   ├── svg-markers/        # SVG marker icons (generated)
 │   ├── favicon.svg         # App icon
 │   ├── icon-*.svg          # PWA icons
@@ -130,18 +141,6 @@ krwl-hof/
 ├── lib/                    # Third-party libraries (gitignored, fetched at build)
 │   ├── leaflet/            # Leaflet.js library
 │   └── lucide/             # Lucide icons library
-│
-├── partials/               # Template partials/components
-│   ├── html-head.html      # HTML head section with meta tags
-│   ├── html-body-open.html # Opening body tag
-│   ├── html-body-close.html # Closing body tag with scripts
-│   ├── map-main.html       # Map container component
-│   ├── dashboard-aside.html # Dashboard sidebar component
-│   ├── filter-nav.html     # Filter navigation component
-│   ├── noscript-content.html # Fallback content for JavaScript-disabled browsers
-│   ├── design-tokens.css   # Generated CSS custom properties
-│   ├── README.md           # Component system documentation
-│   └── variables-reference.md # CSS design token reference
 │
 ├── public/                 # Build output (gitignored)
 │   └── index.html          # 🚫 AUTO-GENERATED (do not edit directly)
@@ -185,12 +184,12 @@ krwl-hof/
 | `config.[prod,dev].json` | Configuration | Adding settings, sources, or options |
 | `features.json` | Feature registry | **ALWAYS** when adding new features |
 
-## File System Structure - Template Partials
+## File System Structure - HTML Template Components
 
-### Directory: `/partials/`
-Location for reusable template snippets and components that are included/assembled into the final HTML.
+### Directory: `/assets/html/`
+Location for reusable HTML template snippets and components that are included/assembled into the final HTML.
 
-**Purpose**: Store modular HTML template fragments following static site generator conventions (similar to Jekyll's `_includes/`, Hugo's `partials/`, 11ty's `_includes/`)
+**Purpose**: Store modular HTML template fragments as part of the assets directory, colocated with CSS and JavaScript
 
 **Contents**:
 - `html-head.html` - HTML head section with meta tags
@@ -208,15 +207,14 @@ Location for reusable template snippets and components that are included/assembl
 ```python
 from src.modules.site_generator import SiteGenerator
 generator = SiteGenerator(base_path)
-html_head = generator.load_component('html-head.html')  # Loads from /partials/
+html_head = generator.load_component('html-head.html')  # Loads from /assets/html/
 ```
 
-**Why "partials"?**:
-- Industry-standard naming convention
-- Clear purpose (template partial/fragment)
-- Shorter path than /layouts/components/
-- Follows KISS principles (flat, simple structure)
-- Aligns with SSG best practices (Jekyll, Hugo, 11ty)
+**Why "assets/html/"?**:
+- Colocates HTML templates with other assets (CSS, JS)
+- Clear organization of all frontend resources
+- Follows KISS principles (flat, simple structure within assets)
+- Aligns with modern web development practices
 
 ### Frontend File Edit Policy
 

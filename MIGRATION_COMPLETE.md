@@ -25,7 +25,7 @@ Successfully eliminated the `/static` directory and restructured the project wit
 - **`public/`** - Build output directory (gitignored, created during build)
 - **`src/`** - Python source code
 - **`data/`** - Data files (events, config, translations)
-- **`partials/`** - HTML component templates
+- **`assets/html/`** - HTML component templates
 
 ## Updated Commands
 
