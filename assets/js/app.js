@@ -34,6 +34,9 @@ class EventsApp {
         // OPTIMIZATION: Debounce delay constant for slider interactions (milliseconds)
         this.SLIDER_DEBOUNCE_DELAY = 100;
         
+        // VIEWPORT: Delay for orientation change to complete before updating dimensions (milliseconds)
+        this.ORIENTATION_CHANGE_DELAY = 100;
+        
         this.init();
     }
     
@@ -1913,7 +1916,7 @@ class EventsApp {
         window.addEventListener('resize', () => this.updateViewportDimensions());
         window.addEventListener('orientationchange', () => {
             // Delay update to allow orientation to complete
-            setTimeout(() => this.updateViewportDimensions(), 100);
+            setTimeout(() => this.updateViewportDimensions(), this.ORIENTATION_CHANGE_DELAY);
         });
     }
     

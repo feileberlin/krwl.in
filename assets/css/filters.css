@@ -3,6 +3,7 @@
 /* Interactive filter bar */
 #event-filter-bar {
     position: fixed;
+    /* Using 10px for optimal visual balance between compact (8px) and spacious (16px) */
     top: 10px;
     left: 10px;
     right: auto;
