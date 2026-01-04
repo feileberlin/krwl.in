@@ -602,6 +602,32 @@ class SiteGenerator:
         
         return marker_map
     
+    def inline_icon_maps_to_window(self, marker_icons: Dict[str, str]) -> str:
+        """
+        Create JavaScript code to inline icon maps to window object.
+        
+        This helper function generates the JavaScript code that embeds both
+        map marker icons and dashboard icons into the global window object,
+        making them available to the frontend JavaScript.
+        
+        Args:
+            marker_icons: Dictionary of marker icons (from generate_marker_icon_map)
+            
+        Returns:
+            JavaScript code string that defines window.MARKER_ICONS and window.DASHBOARD_ICONS
+        """
+        import json
+        
+        # Generate inline JavaScript for icon maps
+        js_code = f'''// Icon Maps - Inlined by site_generator.py
+// Map markers for event categories (base64 encoded gyro-wrapped icons)
+window.MARKER_ICONS = {json.dumps(marker_icons, ensure_ascii=False)};
+
+// Dashboard icons (filled SVG for monochrome corporate design)
+window.DASHBOARD_ICONS = {json.dumps(DASHBOARD_ICONS_MAP, ensure_ascii=False)};'''
+        
+        return js_code
+    
     def filter_and_sort_future_events(self, events: List[Dict]) -> List[Dict]:
         """Filter out past events and sort (running events first, then chronological)."""
         from datetime import timezone

@@ -1,5 +1,21 @@
 # Auto-generated Lucide icons map
 # Contains both map markers and dashboard icons as inline SVG
+# This unified module creates all icon maps for the application
+
+"""
+Lucide Icons Module - Unified Icon Management
+
+This module provides:
+1. LUCIDE_MARKER_BASE64_MAP - Map markers (base64 encoded, gyro-wrapped)
+2. DASHBOARD_ICONS_MAP - Dashboard icons (filled SVG, monochrome)
+3. Helper functions to get, validate, and manage icons
+
+Usage:
+    from lucide_markers import get_marker_icon, get_dashboard_icon
+    
+    marker = get_marker_icon('marker-music')
+    dashboard = get_dashboard_icon('alert-triangle')
+"""
 
 # Map markers - Lucide icons wrapped in gyro shape for map display
 LUCIDE_MARKER_BASE64_MAP = {
@@ -43,3 +59,152 @@ DASHBOARD_ICONS_MAP = {
     "book-text": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/><path d="M8 7h6"/><path d="M8 11h8"/></svg>',
     "heart": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>'
 }
+
+# ============================================================================
+# Helper Functions - Icon Map Management
+# ============================================================================
+
+def get_marker_icon(marker_name, fallback='marker-default'):
+    """
+    Get a map marker icon by name.
+    
+    Args:
+        marker_name: Name of the marker (e.g., 'marker-music')
+        fallback: Fallback marker if not found (default: 'marker-default')
+        
+    Returns:
+        Base64 encoded SVG data URL string
+    """
+    return LUCIDE_MARKER_BASE64_MAP.get(marker_name, LUCIDE_MARKER_BASE64_MAP.get(fallback, ''))
+
+
+def get_dashboard_icon(icon_name, fallback=None):
+    """
+    Get a dashboard icon by name.
+    
+    Args:
+        icon_name: Name of the icon (e.g., 'alert-triangle')
+        fallback: Fallback icon if not found (default: None)
+        
+    Returns:
+        Inline SVG string or empty string if not found
+    """
+    return DASHBOARD_ICONS_MAP.get(icon_name, DASHBOARD_ICONS_MAP.get(fallback, '') if fallback else '')
+
+
+def list_marker_icons():
+    """
+    List all available map marker icon names.
+    
+    Returns:
+        List of marker icon names
+    """
+    return list(LUCIDE_MARKER_BASE64_MAP.keys())
+
+
+def list_dashboard_icons():
+    """
+    List all available dashboard icon names.
+    
+    Returns:
+        List of dashboard icon names
+    """
+    return list(DASHBOARD_ICONS_MAP.keys())
+
+
+def get_all_marker_icons():
+    """
+    Get all map marker icons.
+    
+    Returns:
+        Dictionary of all marker icons {name: base64_data_url}
+    """
+    return LUCIDE_MARKER_BASE64_MAP.copy()
+
+
+def get_all_dashboard_icons():
+    """
+    Get all dashboard icons.
+    
+    Returns:
+        Dictionary of all dashboard icons {name: svg_string}
+    """
+    return DASHBOARD_ICONS_MAP.copy()
+
+
+def count_icons():
+    """
+    Count total icons available.
+    
+    Returns:
+        Dictionary with counts: {'markers': int, 'dashboard': int, 'total': int}
+    """
+    marker_count = len(LUCIDE_MARKER_BASE64_MAP)
+    dashboard_count = len(DASHBOARD_ICONS_MAP)
+    return {
+        'markers': marker_count,
+        'dashboard': dashboard_count,
+        'total': marker_count + dashboard_count
+    }
+
+
+def validate_icon(icon_name, icon_type='marker'):
+    """
+    Validate if an icon exists.
+    
+    Args:
+        icon_name: Name of the icon
+        icon_type: Type of icon ('marker' or 'dashboard')
+        
+    Returns:
+        Boolean indicating if icon exists
+    """
+    if icon_type == 'marker':
+        return icon_name in LUCIDE_MARKER_BASE64_MAP
+    elif icon_type == 'dashboard':
+        return icon_name in DASHBOARD_ICONS_MAP
+    return False
+
+
+# ============================================================================
+# Module Info
+# ============================================================================
+
+__all__ = [
+    # Data maps
+    'LUCIDE_MARKER_BASE64_MAP',
+    'DASHBOARD_ICONS_MAP',
+    # Helper functions
+    'get_marker_icon',
+    'get_dashboard_icon',
+    'list_marker_icons',
+    'list_dashboard_icons',
+    'get_all_marker_icons',
+    'get_all_dashboard_icons',
+    'count_icons',
+    'validate_icon',
+]
+
+# Module metadata
+__version__ = '1.0.0'
+__author__ = 'KRWL HOF Community Events'
+__description__ = 'Unified Lucide icons module for map markers and dashboard icons'
+
+if __name__ == '__main__':
+    # Self-test when run directly
+    print(f"Lucide Icons Module v{__version__}")
+    print(f"{__description__}\n")
+    
+    counts = count_icons()
+    print(f"📍 Map Markers: {counts['markers']}")
+    print(f"🎛️  Dashboard Icons: {counts['dashboard']}")
+    print(f"📊 Total Icons: {counts['total']}\n")
+    
+    print("Map Markers:")
+    for name in list_marker_icons()[:5]:
+        print(f"  - {name}")
+    print(f"  ... and {counts['markers'] - 5} more\n")
+    
+    print("Dashboard Icons:")
+    for name in list_dashboard_icons():
+        print(f"  - {name}")
