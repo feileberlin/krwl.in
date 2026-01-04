@@ -150,6 +150,86 @@ class TestDependencyURLConstruction(unittest.TestCase):
                     for pattern in malformed_patterns:
                         self.assertNotIn(pattern, url,
                                        f"URL '{url}' contains malformed pattern '{pattern}'")
+    
+    def test_roboto_urls_have_proper_separators(self):
+        """Test: Roboto font src paths start with '/' for proper URL construction"""
+        roboto_config = DEPENDENCIES['roboto']
+        base_url = roboto_config['base_url'].format(version=roboto_config['version'])
+        
+        # Verify base_url is correctly formatted
+        self.assertEqual(base_url, 'https://fonts.gstatic.com/s/roboto/v30',
+                        f"Roboto base_url should be 'https://fonts.gstatic.com/s/roboto/v30', got '{base_url}'")
+        
+        # Test each file
+        for file_info in roboto_config['files']:
+            src = file_info['src']
+            dest = file_info['dest']
+            
+            # Src path must start with '/'
+            self.assertTrue(src.startswith('/'), 
+                          f"Roboto file '{dest}' has src='{src}' which must start with '/'")
+            
+            # Construct URL as done in site_generator.py
+            url = f"{base_url}{src}"
+            
+            # Verify no double slashes (except in protocol)
+            url_without_protocol = url.replace('https://', '').replace('http://', '')
+            self.assertNotIn('//', url_without_protocol,
+                            f"URL '{url}' contains double slashes")
+            
+            # Verify URL points to correct font family (roboto, not robotomono)
+            self.assertIn('/s/roboto/v30/', url,
+                        f"URL '{url}' should contain '/s/roboto/v30/'")
+            self.assertNotIn('robotomono', url,
+                           f"URL '{url}' should not contain 'robotomono' (use separate entry)")
+    
+    def test_roboto_mono_urls_have_proper_separators(self):
+        """Test: Roboto Mono font src paths start with '/' for proper URL construction"""
+        roboto_mono_config = DEPENDENCIES['roboto-mono']
+        base_url = roboto_mono_config['base_url'].format(version=roboto_mono_config['version'])
+        
+        # Verify base_url is correctly formatted
+        self.assertEqual(base_url, 'https://fonts.gstatic.com/s/robotomono/v23',
+                        f"Roboto Mono base_url should be 'https://fonts.gstatic.com/s/robotomono/v23', got '{base_url}'")
+        
+        # Test each file
+        for file_info in roboto_mono_config['files']:
+            src = file_info['src']
+            dest = file_info['dest']
+            
+            # Src path must start with '/'
+            self.assertTrue(src.startswith('/'), 
+                          f"Roboto Mono file '{dest}' has src='{src}' which must start with '/'")
+            
+            # Construct URL as done in site_generator.py
+            url = f"{base_url}{src}"
+            
+            # Verify no double slashes (except in protocol)
+            url_without_protocol = url.replace('https://', '').replace('http://', '')
+            self.assertNotIn('//', url_without_protocol,
+                            f"URL '{url}' contains double slashes")
+            
+            # Verify URL points to correct font family (robotomono)
+            self.assertIn('/s/robotomono/v23/', url,
+                        f"URL '{url}' should contain '/s/robotomono/v23/'")
+    
+    def test_roboto_mono_url_correct(self):
+        """Test: Roboto Mono Regular font URL is correctly formed (regression test for 404 error)"""
+        roboto_mono_config = DEPENDENCIES['roboto-mono']
+        base_url = roboto_mono_config['base_url'].format(version=roboto_mono_config['version'])
+        
+        # Find Roboto Mono Regular file
+        mono_file = next(f for f in roboto_mono_config['files'] 
+                        if 'roboto-mono-regular' in f['dest'])
+        url = f"{base_url}{mono_file['src']}"
+        
+        expected = 'https://fonts.gstatic.com/s/robotomono/v23/L0xuDF4xlVMF-BfR8bXMIhJHg45mwgGEFl0_3vq_ROW4.woff2'
+        self.assertEqual(url, expected, 
+                        f"Roboto Mono Regular URL should be '{expected}' not '{url}'")
+        
+        # Verify no relative path components (../)
+        self.assertNotIn('/../', url,
+                        f"URL '{url}' should not contain relative path components (/../)")
 
 
 def run_tests():

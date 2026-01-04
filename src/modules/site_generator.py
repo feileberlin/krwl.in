@@ -78,17 +78,23 @@ DEPENDENCIES = {
         ]
     },
     "roboto": {
-        "version": "latest",
-        "base_url": "https://fonts.gstatic.com/s/roboto/v30",
+        "version": "v30",
+        "base_url": "https://fonts.gstatic.com/s/roboto/{version}",
         "files": [
             # Roboto Regular (400) - Latin
             {"src": "/KFOmCnqEu92Fr1Mu4mxKKTU1Kg.woff2", "dest": "roboto/roboto-regular-latin.woff2"},
             # Roboto Medium (500) - Latin
             {"src": "/KFOlCnqEu92Fr1MmEU9fBBc4AMP6lQ.woff2", "dest": "roboto/roboto-medium-latin.woff2"},
             # Roboto Bold (700) - Latin
-            {"src": "/KFOlCnqEu92Fr1MmWUlfBBc4AMP6lQ.woff2", "dest": "roboto/roboto-bold-latin.woff2"},
+            {"src": "/KFOlCnqEu92Fr1MmWUlfBBc4AMP6lQ.woff2", "dest": "roboto/roboto-bold-latin.woff2"}
+        ]
+    },
+    "roboto-mono": {
+        "version": "v23",
+        "base_url": "https://fonts.gstatic.com/s/robotomono/{version}",
+        "files": [
             # Roboto Mono Regular (400) - Latin
-            {"src": "/../robotomono/v23/L0xuDF4xlVMF-BfR8bXMIhJHg45mwgGEFl0_3vq_ROW4.woff2", "dest": "roboto/roboto-mono-regular-latin.woff2"}
+            {"src": "/L0xuDF4xlVMF-BfR8bXMIhJHg45mwgGEFl0_3vq_ROW4.woff2", "dest": "roboto/roboto-mono-regular-latin.woff2"}
         ]
     }
 }
