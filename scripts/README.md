@@ -18,6 +18,7 @@ This directory contains utility scripts and thin wrapper scripts for the KRWL HO
 ### Documentation Scripts
 - **build_markdown_docs.py** - 📄 Markdown to HTML documentation builder with GitHub dark theme
 - **cleanup_old_docs.py** - 🧹 Remove obsolete documentation HTML files with old naming conventions
+- **lint_markdown.py** - ✅ Lint markdown files for common issues (heading structure, line length, code blocks, etc.)
 
 ## Usage
 
@@ -38,6 +39,44 @@ python3 scripts/cleanup_obsolete.py
 # Documentation scripts
 python3 scripts/build_markdown_docs.py --organize --verbose
 python3 scripts/cleanup_old_docs.py --dry-run
+python3 scripts/lint_markdown.py --all
+python3 scripts/lint_markdown.py README.md --fix
+```
+
+## Markdown Linting
+
+The markdown linter checks for common issues in markdown files to maintain consistency and quality.
+
+### Features
+
+- **Heading Structure**: Checks for single H1, no skipped heading levels
+- **Line Length**: Warns about prose lines exceeding 120 characters (excludes code, tables, links)
+- **Code Blocks**: Ensures fenced code blocks have language tags
+- **Trailing Whitespace**: Detects and optionally fixes trailing whitespace
+- **Multiple Blank Lines**: Detects excessive blank lines
+- **File Ending**: Ensures files end with newline
+
+### Usage
+
+```bash
+# Lint a single file
+python3 scripts/lint_markdown.py README.md
+
+# Lint all markdown files
+python3 scripts/lint_markdown.py --all
+
+# Lint and auto-fix issues
+python3 scripts/lint_markdown.py --all --fix
+
+# Lint specific directory
+python3 scripts/lint_markdown.py .github/
+
+# Verbose output
+python3 scripts/lint_markdown.py --all --verbose
+
+# Via CLI (recommended)
+python3 src/event_manager.py docs lint-markdown --all
+python3 src/event_manager.py docs lint-markdown README.md --fix
 ```
 
 ## Documentation Build System

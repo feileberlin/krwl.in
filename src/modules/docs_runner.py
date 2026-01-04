@@ -46,6 +46,11 @@ class DocsRunner:
                 'script': 'scripts/validate_docs.py',
                 'description': 'Validate documentation content',
             },
+            'lint-markdown': {
+                'script': 'scripts/lint_markdown.py',
+                'description': 'Lint markdown files for common issues',
+                'supports_args': ['--fix', '--all', '--verbose', 'PATH'],
+            },
         },
         'maintain': {
             'cleanup-obsolete': {

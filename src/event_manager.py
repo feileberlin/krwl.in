@@ -236,6 +236,7 @@ COMMANDS:
     docs --list               List all documentation tasks
     docs readme               Generate README.md
     docs demos                Generate demo events
+    docs lint-markdown        Lint markdown files
     docs generate             Run all generation tasks
     docs validate             Run all validation tasks
     
@@ -305,6 +306,9 @@ EXAMPLES:
     # Documentation tasks
     python3 event_manager.py docs --list
     python3 event_manager.py docs readme
+    python3 event_manager.py docs lint-markdown --all
+    python3 event_manager.py docs lint-markdown README.md
+    python3 event_manager.py docs lint-markdown --fix --all
     python3 event_manager.py docs generate
     python3 event_manager.py docs validate
     
