@@ -31,8 +31,9 @@ class TestDependencyResilience(unittest.TestCase):
         self.generator = SiteGenerator(self.base_path)
         
         # Create necessary directories
-        (self.base_path / 'target' / 'leaflet' / 'images').mkdir(parents=True, exist_ok=True)
-        (self.base_path / 'target' / 'lucide').mkdir(parents=True, exist_ok=True)
+        (self.base_path / 'lib' / 'leaflet' / 'images').mkdir(parents=True, exist_ok=True)
+        (self.base_path / 'lib' / 'lucide').mkdir(parents=True, exist_ok=True)
+        (self.base_path / 'lib' / 'roboto').mkdir(parents=True, exist_ok=True)
     
     def tearDown(self):
         """Clean up temporary directory"""
@@ -60,7 +61,7 @@ class TestDependencyResilience(unittest.TestCase):
             'leaflet/images/marker-shadow.png'
         ]
         for file_path in leaflet_files:
-            self.create_dummy_file(self.base_path / 'target' / file_path)
+            self.create_dummy_file(self.base_path / 'lib' / file_path)
         
         # Create Lucide files
         lucide_files = [
@@ -68,7 +69,23 @@ class TestDependencyResilience(unittest.TestCase):
             'lucide/lucide.min.js'
         ]
         for file_path in lucide_files:
-            self.create_dummy_file(self.base_path / 'target' / file_path)
+            self.create_dummy_file(self.base_path / 'lib' / file_path)
+        
+        # Create Roboto files
+        roboto_files = [
+            'roboto/roboto-regular-latin.woff2',
+            'roboto/roboto-medium-latin.woff2',
+            'roboto/roboto-bold-latin.woff2'
+        ]
+        for file_path in roboto_files:
+            self.create_dummy_file(self.base_path / 'lib' / file_path)
+        
+        # Create Roboto Mono files
+        roboto_mono_files = [
+            'roboto/roboto-mono-regular-latin.woff2'
+        ]
+        for file_path in roboto_mono_files:
+            self.create_dummy_file(self.base_path / 'lib' / file_path)
         
         # Fetch should succeed because files exist
         result = self.generator.fetch_all_dependencies()
@@ -93,7 +110,7 @@ class TestDependencyResilience(unittest.TestCase):
         self.assertTrue(result, "Should succeed when CDN is available")
         
         # Verify files were created
-        leaflet_css = self.base_path / 'target' / 'leaflet' / 'leaflet.css'
+        leaflet_css = self.base_path / 'lib' / 'leaflet' / 'leaflet.css'
         self.assertTrue(leaflet_css.exists(), "Leaflet CSS should be created")
     
     @patch('urllib.request.urlopen')
@@ -118,13 +135,13 @@ class TestDependencyResilience(unittest.TestCase):
         )
         
         # Create only critical Leaflet files (CSS and JS)
-        self.create_dummy_file(self.base_path / 'target' / 'leaflet' / 'leaflet.css')
-        self.create_dummy_file(self.base_path / 'target' / 'leaflet' / 'leaflet.js')
+        self.create_dummy_file(self.base_path / 'lib' / 'leaflet' / 'leaflet.css')
+        self.create_dummy_file(self.base_path / 'lib' / 'leaflet' / 'leaflet.js')
         # Missing: marker images
         
         # Create all Lucide files
-        self.create_dummy_file(self.base_path / 'target' / 'lucide' / 'lucide.js')
-        self.create_dummy_file(self.base_path / 'target' / 'lucide' / 'lucide.min.js')
+        self.create_dummy_file(self.base_path / 'lib' / 'lucide' / 'lucide.js')
+        self.create_dummy_file(self.base_path / 'lib' / 'lucide' / 'lucide.min.js')
         
         # Should fail because not all Leaflet files exist
         result = self.generator.fetch_all_dependencies()
@@ -134,7 +151,7 @@ class TestDependencyResilience(unittest.TestCase):
     def test_check_dependency_files(self, mock_urlopen):
         """Test check_dependency_files method correctly identifies missing files"""
         # Create some but not all files
-        self.create_dummy_file(self.base_path / 'target' / 'leaflet' / 'leaflet.css')
+        self.create_dummy_file(self.base_path / 'lib' / 'leaflet' / 'leaflet.css')
         
         leaflet_config = DEPENDENCIES['leaflet']
         
@@ -156,7 +173,7 @@ class TestDependencyResilience(unittest.TestCase):
             'leaflet/images/marker-shadow.png'
         ]
         for file_path in leaflet_files:
-            self.create_dummy_file(self.base_path / 'target' / file_path)
+            self.create_dummy_file(self.base_path / 'lib' / file_path)
         
         leaflet_config = DEPENDENCIES['leaflet']
         
