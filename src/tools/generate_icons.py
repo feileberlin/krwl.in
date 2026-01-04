@@ -111,8 +111,8 @@ class IconGenerator:
         try:
             coords = [float(x.strip()) for x in viewbox_str.split()]
             if len(coords) != 4:
-                raise ValueError(f"Invalid viewBox format: {viewbox_str}")
-            return tuple(coords)
+                raise ValueError(f"Invalid viewBox format: expected 4 values, got {len(coords)}")
+            return tuple(coords)  # type: ignore
         except (ValueError, AttributeError) as e:
             raise ValueError(f"Failed to parse viewBox '{viewbox_str}': {e}")
     
@@ -139,7 +139,8 @@ class IconGenerator:
         
         # Match stroke-width in style attributes or as standalone attributes
         # Pattern matches: stroke-width:1.8 or stroke-width="1.8"
-        pattern = r'stroke-width[:\s]*[=]?\s*["\']?(\d+\.?\d*)["\']?'
+        # Supports negative values and scientific notation
+        pattern = r'stroke-width[:\s]*[=]?\s*["\']?(-?\d+(?:\.\d*)?(?:[eE][+-]?\d+)?)["\']?'
         
         modified_svg = re.sub(pattern, replace_stroke_width, svg_content, flags=re.IGNORECASE)
         return modified_svg
@@ -264,7 +265,7 @@ class IconGenerator:
         print("  1. Verify icons in assets/svg/ directory")
         print("  2. Test icons in browser and PWA")
         print("  3. Update manifest.json if needed")
-        print("  4. Rebuild site: python3 src/event_manager.py build production")
+        print("  4. Rebuild site: python3 src/event_manager.py generate")
 
 
 def main():
