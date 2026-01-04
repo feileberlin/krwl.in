@@ -150,6 +150,14 @@ body {{
     color: var(--color-primary);
     width: 32px;
     height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}}
+
+.docs-logo-icon svg {{
+    width: 32px;
+    height: 32px;
 }}
 
 .docs-logo-text {{
@@ -192,6 +200,14 @@ body {{
     width: 18px;
     height: 18px;
     flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}}
+
+.docs-nav-icon svg {{
+    width: 18px;
+    height: 18px;
 }}
 
 /* Main Content */
@@ -422,37 +438,62 @@ body {{
 """
         return css
     
+    def get_icon_svg(self, icon_name: str) -> str:
+        """Get inline SVG for Lucide icon"""
+        # Lucide icon SVG paths - minimal set for documentation
+        icons = {
+            'book-open': '<path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/>',
+            'git-branch': '<line x1="6" x2="6" y1="3" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/>',
+            'palette': '<circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/>',
+            'package': '<path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/>',
+            'zap': '<path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/>',
+            'check-circle': '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/>',
+            'heart': '<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>',
+            'map': '<path d="M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z"/><path d="M15 5.764v15"/><path d="M9 3.236v15"/>',
+            'smile': '<circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" x2="9.01" y1="9" y2="9"/><line x1="15" x2="15.01" y1="9" y2="9"/>',
+            'file-text': '<path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/>',
+            'shield-check': '<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/>',
+            'code': '<polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>',
+            'bookmark': '<path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/>',
+            'folder': '<path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/>',
+            'arrow-left': '<path d="m12 19-7-7 7-7"/><path d="M19 12H5"/>',
+        }
+        
+        svg_path = icons.get(icon_name, icons['file-text'])
+        return f'<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">{svg_path}</svg>'
+    
     def get_icon_for_file(self, filename: str) -> str:
-        """Get appropriate emoji icon for documentation file"""
+        """Get appropriate Lucide icon for documentation file"""
         icon_map = {
-            'CHANGELOG': '📋',
-            'COLOR_SCHEME': '🎨',
-            'DEPENDENCY': '📦',
-            'EASY': '⚡',
-            'IMPLEMENTATION': '✅',
-            'KISS': '💖',
-            'LEAFLET': '🗺️',
-            'LUCIDE': '😊',
-            'MARKDOWN': '📝',
-            'PROOF': '🛡️',
-            'PYTHON': '🐍',
-            'QUICK_REFERENCE': '🔖',
-            'SSG': '📁',
+            'CHANGELOG': 'git-branch',
+            'COLOR_SCHEME': 'palette',
+            'DEPENDENCY': 'package',
+            'EASY': 'zap',
+            'IMPLEMENTATION': 'check-circle',
+            'KISS': 'heart',
+            'LEAFLET': 'map',
+            'LUCIDE': 'smile',
+            'MARKDOWN': 'file-text',
+            'PROOF': 'shield-check',
+            'PYTHON': 'code',
+            'QUICK_REFERENCE': 'bookmark',
+            'SSG': 'folder',
         }
         
         for key, icon in icon_map.items():
             if key in filename.upper():
                 return icon
         
-        return '📄'  # Default icon
+        return 'file-text'  # Default icon
     
     def generate_navigation(self, doc_files: List[Path], current_file: Path = None) -> str:
-        """Generate navigation HTML with emoji icons"""
+        """Generate navigation HTML with inline Lucide SVG icons"""
         nav_items = []
         
         for doc_file in doc_files:
             filename = doc_file.stem
-            icon = self.get_icon_for_file(filename)
+            icon_name = self.get_icon_for_file(filename)
+            icon_svg = self.get_icon_svg(icon_name)
             # Convert filename to title (e.g., CHANGELOG -> Changelog)
             title = filename.replace('_', ' ').title()
             output_filename = f"{filename}.html"
@@ -462,7 +503,7 @@ body {{
             nav_items.append(f'''
             <li class="docs-nav-item">
                 <a href="{output_filename}" class="docs-nav-link{active_class}">
-                    <span class="docs-nav-icon">{icon}</span>
+                    <span class="docs-nav-icon">{icon_svg}</span>
                     <span>{title}</span>
                 </a>
             </li>
@@ -475,6 +516,10 @@ body {{
         filename = doc_file.stem
         title = filename.replace('_', ' ').title()
         css = self.generate_docs_css()
+        
+        # Get inline SVG for logo icon
+        logo_svg = self.get_icon_svg('book-open')
+        arrow_svg = self.get_icon_svg('arrow-left')
         
         html = f"""<!DOCTYPE html>
 <html lang="en">
@@ -492,7 +537,7 @@ body {{
         <!-- Sidebar Navigation -->
         <nav class="docs-sidebar">
             <div class="docs-logo">
-                <span class="docs-logo-icon">📚</span>
+                <span class="docs-logo-icon">{logo_svg}</span>
                 <span class="docs-logo-text">Docs</span>
             </div>
             <ul class="docs-nav">
@@ -503,7 +548,7 @@ body {{
         <!-- Main Content -->
         <main class="docs-main">
             <a href="../index.html" class="back-to-app">
-                <span>←</span>
+                <span style="display: inline-flex; align-items: center; width: 18px; height: 18px;">{arrow_svg}</span>
                 Back to App
             </a>
             <article class="docs-content">
@@ -522,7 +567,8 @@ body {{
         content_items = []
         for doc_file in doc_files:
             filename = doc_file.stem
-            icon = self.get_icon_for_file(filename)
+            icon_name = self.get_icon_for_file(filename)
+            icon_svg = self.get_icon_svg(icon_name)
             title = filename.replace('_', ' ').title()
             output_filename = f"{filename}.html"
             
@@ -538,7 +584,7 @@ body {{
             content_items.append(f'''
             <div style="background: var(--color-bg-tertiary); padding: var(--spacing-lg); border-radius: var(--border-radius-medium); margin-bottom: var(--spacing-md);">
                 <h3 style="margin-top: 0; display: flex; align-items: center; gap: var(--spacing-sm);">
-                    <span style="font-size: 24px;">{icon}</span>
+                    <span style="color: var(--color-primary); width: 24px; height: 24px; display: inline-flex; flex-shrink: 0;">{icon_svg}</span>
                     <a href="{output_filename}" style="color: var(--color-text-primary); text-decoration: none;">{title}</a>
                 </h3>
                 <p style="color: var(--color-text-secondary); margin-bottom: 0;">{description}</p>
