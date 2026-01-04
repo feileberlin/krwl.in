@@ -19,6 +19,11 @@ permissions:
   pages: write
   id-token: write
 
+# Prevent concurrent scraping runs to avoid git push conflicts
+concurrency:
+  group: "scrape-events"
+  cancel-in-progress: false
+
 jobs:
   scrape:
     runs-on: ubuntu-latest
@@ -79,6 +84,13 @@ jobs:
           TIMESTAMP=$(date -u '+%Y-%m-%d %H:%M UTC')
           git add assets/json/
           git commit -m "chore: automated event scraping - $TIMESTAMP"
+          if ! git pull --rebase origin main; then
+            echo "❌ git pull --rebase failed due to merge conflicts or another error."
+            echo "ℹ The repository may require manual conflict resolution before automated scraping can continue."
+            # Attempt to abort the rebase to leave the repo in a clean state (ignore errors if no rebase in progress)
+            git rebase --abort || true
+            exit 1
+          fi
           git push
           echo "✓ Changes committed and pushed"
           echo "ℹ Note: Events are in pending queue awaiting editorial review"
