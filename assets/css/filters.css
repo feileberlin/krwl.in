@@ -2,11 +2,11 @@
 
 /* Interactive filter bar */
 #event-filter-bar {
-    position: absolute;
-    top: 0;
-    left: 0;
+    position: fixed;
+    top: 10px;
+    left: 10px;
     right: auto;
-    max-width: calc(100vw - 80px); /* Mobile first: adapt to screen width */
+    max-width: calc(var(--app-width) - 80px); /* Mobile first: adapt to screen width */
     font-size: 0.95rem;
     font-weight: 500;
     color: var(--color-primary);

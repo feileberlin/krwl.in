@@ -1904,6 +1904,47 @@ class EventsApp {
                 e.preventDefault();
             }
         });
+        
+        // Viewport resize handler for responsive layer scaling
+        // Updates CSS custom properties so all layers follow layer 1 (map) behavior
+        this.updateViewportDimensions();
+        
+        // Listen for resize and orientation changes
+        window.addEventListener('resize', () => this.updateViewportDimensions());
+        window.addEventListener('orientationchange', () => {
+            // Delay update to allow orientation to complete
+            setTimeout(() => this.updateViewportDimensions(), 100);
+        });
+    }
+    
+    /**
+     * Update viewport dimensions in CSS custom properties
+     * This ensures all fixed-position layers scale consistently with layer 1 (map)
+     * 
+     * PROGRESSIVE ENHANCEMENT:
+     * - Without this function: Falls back to dvh/dvw (modern) or vh/vw (legacy)
+     * - With this function: Uses exact pixel dimensions for perfect accuracy
+     * 
+     * Handles:
+     * - Window resize
+     * - Mobile browser address bar show/hide
+     * - Orientation changes
+     * - Keyboard appearance on mobile
+     */
+    updateViewportDimensions() {
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+        
+        // Update CSS custom properties
+        document.documentElement.style.setProperty('--app-width', `${width}px`);
+        document.documentElement.style.setProperty('--app-height', `${height}px`);
+        
+        this.log(`Viewport updated: ${width}x${height}`);
+        
+        // Invalidate map size if it exists (Leaflet needs to recalculate)
+        if (this.map) {
+            this.map.invalidateSize();
+        }
     }
 }
 
