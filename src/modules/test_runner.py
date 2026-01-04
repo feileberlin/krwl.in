@@ -9,7 +9,7 @@ Provides category-based test organization and flexible execution options.
 import sys
 import subprocess
 from pathlib import Path
-from typing import List, Dict, Optional
+from typing import List, Dict
 
 
 class TestRunner:

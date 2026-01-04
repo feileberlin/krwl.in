@@ -6,12 +6,9 @@ Centralized utility execution system following KISS principles.
 Provides a clean interface to run project utilities without cluttering main CLI.
 """
 
-import json
-import os
 import subprocess
 import sys
 from pathlib import Path
-from typing import Optional
 
 
 class UtilityRunner:

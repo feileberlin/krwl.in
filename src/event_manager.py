@@ -1128,13 +1128,12 @@ def cli_archive_old_events(base_path):
     return 0
 
 
-def cli_test(base_path, category=None, test_name=None, verbose=False, list_tests=False):
+def cli_test(base_path, test_name=None, verbose=False, list_tests=False):
     """CLI: Run tests
     
     Args:
         base_path: Repository root path
-        category: Test category to run (core, features, infrastructure) or None for all
-        test_name: Specific test name to run
+        test_name: Test category name (core, features, infrastructure) or specific test name to run
         verbose: Enable verbose output
         list_tests: List available tests
         
@@ -1158,12 +1157,7 @@ def cli_test(base_path, category=None, test_name=None, verbose=False, list_tests
         # Otherwise treat as individual test
         return 0 if runner.run_single(test_name) else 1
     
-    # If category specified, run that category
-    if category:
-        result = runner.run_category(category)
-        return 0 if result['success'] else 1
-    
-    # Otherwise run all tests
+    # No specific test name provided: run all tests
     return 0 if runner.run_all() else 1
 
 

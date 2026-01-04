@@ -9,7 +9,6 @@ Handles all documentation generation, validation, and synchronization tasks.
 import subprocess
 import sys
 from pathlib import Path
-from typing import Optional
 
 
 class DocsRunner:
