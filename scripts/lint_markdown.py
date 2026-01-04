@@ -78,8 +78,18 @@ class MarkdownLinter:
         """Check heading structure"""
         h1_count = 0
         last_level = 0
+        in_code_block = False
         
         for i, line in enumerate(lines, 1):
+            # Track code blocks
+            if line.strip().startswith('```'):
+                in_code_block = not in_code_block
+                continue
+            
+            # Skip code blocks
+            if in_code_block:
+                continue
+            
             # Check for ATX-style headings
             if line.startswith('#'):
                 match = re.match(r'^(#{1,6})\s+(.+)$', line)
@@ -139,13 +149,20 @@ class MarkdownLinter:
     
     def _check_code_blocks(self, lines: List[str]):
         """Check that fenced code blocks have language tags"""
+        in_code_block = False
+        
         for i, line in enumerate(lines, 1):
             if line.strip().startswith('```'):
-                # Check if it has a language tag
-                if line.strip() == '```':
-                    self.warnings.append(
-                        f"Line {i}: Code block without language tag (e.g., ```python)"
-                    )
+                if not in_code_block:
+                    # Opening fence - check for language tag
+                    if line.strip() == '```':
+                        self.warnings.append(
+                            f"Line {i}: Code block without language tag (e.g., ```python)"
+                        )
+                    in_code_block = True
+                else:
+                    # Closing fence
+                    in_code_block = False
     
     def _check_trailing_whitespace(self, lines: List[str]):
         """Check for trailing whitespace"""
