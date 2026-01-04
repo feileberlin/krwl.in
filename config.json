@@ -2,7 +2,7 @@
   "_comment_design_system": "═══════════════════════════════════════════════════════════════════════════════",
   "_comment_design_intro": "🎨 DESIGN SYSTEM - Centralized design tokens for instant rebranding",
   "_comment_design_usage": "Edit colors, fonts, spacing here and regenerate to rebrand the entire app!",
-  "_comment_design_command": "Run: python3 src/templates/components/generate_design_tokens.py",
+  "_comment_design_command": "Run: python3 src/tools/generate_design_tokens.py",
   "_comment_design_separator": "═══════════════════════════════════════════════════════════════════════════════",
   
   "design": {

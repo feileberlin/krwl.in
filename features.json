@@ -40,11 +40,11 @@
       "category": "backend",
       "implemented": true,
       "files": [
-        "src/main.py"
+        "src/event_manager.py"
       ],
       "code_patterns": [
         {
-          "file": "src/main.py",
+          "file": "src/event_manager.py",
           "pattern": "class EventManagerTUI|def show_menu|input.*Enter your choice",
           "description": "TUI class and menu system"
         }
@@ -58,16 +58,16 @@
       "category": "backend",
       "implemented": true,
       "files": [
-        "src/main.py"
+        "src/event_manager.py"
       ],
       "code_patterns": [
         {
-          "file": "src/main.py",
+          "file": "src/event_manager.py",
           "pattern": "argparse|ArgumentParser|def cli_",
           "description": "CLI argument parsing and command functions"
         },
         {
-          "file": "src/main.py",
+          "file": "src/event_manager.py",
           "pattern": "def print_help",
           "description": "CLI help documentation"
         }
@@ -81,18 +81,18 @@
       "category": "frontend",
       "implemented": true,
       "files": [
-        "static/index.html",
-        "static/js/app.js"
+        "assets/html/map-main.html",
+        "assets/js/app.js"
       ],
       "code_patterns": [
         {
-          "file": "static/js/app.js",
+          "file": "assets/js/app.js",
           "pattern": "L\\.map\\('map'",
           "description": "Leaflet map initialization"
         },
         {
-          "file": "static/index.html",
-          "pattern": "<div id=\"map\">",
+          "file": "assets/html/map-main.html",
+          "pattern": "id=\"map\"",
           "description": "Map container element"
         }
       ],
@@ -105,19 +105,19 @@
       "category": "frontend",
       "implemented": true,
       "files": [
-        "static/js/app.js"
+        "assets/js/app.js"
       ],
       "config_keys": [
         "filtering.max_distance_km"
       ],
       "code_patterns": [
         {
-          "file": "static/js/app.js",
+          "file": "assets/js/app.js",
           "pattern": "navigator.geolocation.getCurrentPosition",
           "description": "Geolocation API usage"
         },
         {
-          "file": "static/js/app.js",
+          "file": "assets/js/app.js",
           "pattern": "calculateDistance",
           "description": "Distance calculation function"
         }
@@ -131,14 +131,14 @@
       "category": "frontend",
       "implemented": true,
       "files": [
-        "static/js/app.js"
+        "assets/js/app.js"
       ],
       "config_keys": [
         "filtering.show_until"
       ],
       "code_patterns": [
         {
-          "file": "static/js/app.js",
+          "file": "assets/js/app.js",
           "pattern": "getNextSunrise|sunrise",
           "description": "Sunrise calculation or filtering"
         }
@@ -152,7 +152,7 @@
       "category": "backend",
       "implemented": true,
       "files": [
-        "src/modules/cdn_inliner.py"
+        "src/modules/site_generator.py"
       ],
       "test_method": "check_files_exist"
     },
@@ -163,22 +163,26 @@
       "category": "frontend",
       "implemented": true,
       "files": [
-        "static/js/app.js",
-        "config.json"
+        "assets/js/app.js",
+        "config.json",
+        "src/modules/utils.py"
       ],
-      "config_keys": [
-        "debug"
-      ],
+      "config_keys": [],
       "code_patterns": [
         {
-          "file": "static/js/app.js",
+          "file": "assets/js/app.js",
           "pattern": "this.log|\\[KRWL Debug\\]",
           "description": "Debug logging implementation"
         },
         {
           "file": "config.json",
-          "pattern": "\"debug\":|_comment_debug",
-          "description": "Debug mode auto-detected based on environment"
+          "pattern": "_comment_hardcoded.*debug",
+          "description": "Debug mode auto-detected (documented in config)"
+        },
+        {
+          "file": "src/modules/utils.py",
+          "pattern": "config\\['debug'\\]|debug.*=.*True|debug.*=.*False",
+          "description": "Debug flag set in utils.py based on environment"
         }
       ],
       "test_method": "check_code_patterns"
@@ -190,18 +194,21 @@
       "category": "frontend",
       "implemented": true,
       "files": [
-        "static/js/app.js",
-        "config.json"
+        "assets/js/app.js",
+        "config.json",
+        "src/modules/utils.py"
       ],
-      "config_keys": [
-        "performance.cache_enabled",
-        "performance.prefetch_events"
-      ],
+      "config_keys": [],
       "code_patterns": [
         {
           "file": "config.json",
-          "pattern": "\"cache_enabled\":|_comment_cache_enabled",
-          "description": "Caching auto-detected based on environment"
+          "pattern": "_comment_hardcoded.*cache|_comment_hardcoded.*prefetch",
+          "description": "Caching auto-detected (documented in config)"
+        },
+        {
+          "file": "src/modules/utils.py",
+          "pattern": "cache_enabled|prefetch_events",
+          "description": "Performance flags set in utils.py based on environment"
         }
       ],
       "test_method": "check_code_patterns"
@@ -233,7 +240,7 @@
       "name": "Promotion Workflow",
       "description": "Promote preview to production via PR",
       "category": "deployment",
-      "implemented": true,
+      "implemented": false,
       "files": [
         ".github/workflows/promote-preview.yml"
       ],
@@ -246,7 +253,7 @@
       "category": "backend",
       "implemented": true,
       "files": [
-        "scripts/generate_demo_events.py"
+        "src/tools/generate_demo_events.py"
       ],
       "test_method": "check_files_exist"
     },
@@ -257,17 +264,23 @@
       "category": "frontend",
       "implemented": true,
       "files": [
-        "static/js/app.js"
+        "assets/js/app.js",
+        "config.json",
+        "src/modules/utils.py"
       ],
       "config_keys": [
-        "data.source",
         "data.sources"
       ],
       "code_patterns": [
         {
-          "file": "static/js/app.js",
+          "file": "assets/js/app.js",
           "pattern": "loadEvents.*source|data.source",
           "description": "Data source selection logic"
+        },
+        {
+          "file": "config.json",
+          "pattern": "_comment_hardcoded.*data.source",
+          "description": "Data source auto-detected (documented in config)"
         }
       ],
       "test_method": "check_code_patterns"
@@ -291,18 +304,18 @@
       "category": "frontend",
       "implemented": true,
       "files": [
-        "static/js/app.js",
-        "static/index.html"
+        "assets/js/app.js",
+        "assets/html/filter-nav.html"
       ],
       "code_patterns": [
         {
-          "file": "static/js/app.js",
+          "file": "assets/js/app.js",
           "pattern": "filterEvents|applyFilters",
           "description": "Event filtering logic"
         },
         {
-          "file": "static/index.html",
-          "pattern": "class=\"filter-part\"|id=\"filter-sentence\"",
+          "file": "assets/html/filter-nav.html",
+          "pattern": "event-filter-bar|filter-bar-time-range|filter-bar-distance|filter-bar-location",
           "description": "Filter UI elements"
         }
       ],
@@ -315,11 +328,11 @@
       "category": "backend",
       "implemented": true,
       "files": [
-        "src/main.py"
+        "src/event_manager.py"
       ],
       "code_patterns": [
         {
-          "file": "src/main.py",
+          "file": "src/event_manager.py",
           "pattern": "\\.backup|shutil.copy.*backup",
           "description": "Backup file creation"
         }
@@ -333,18 +346,18 @@
       "category": "frontend",
       "implemented": true,
       "files": [
-        "static/js/app.js",
-        "static/index.html"
+        "assets/js/app.js",
+        "assets/html/filter-nav.html"
       ],
       "code_patterns": [
         {
-          "file": "static/js/app.js",
+          "file": "assets/js/app.js",
           "pattern": "useCustomLocation|custom-location|customLat|customLon",
           "description": "Custom location functionality"
         },
         {
-          "file": "static/index.html",
-          "pattern": "id=\"location-text\"",
+          "file": "assets/html/filter-nav.html",
+          "pattern": "filter-bar-location",
           "description": "Custom location UI elements"
         }
       ],
@@ -353,17 +366,23 @@
     {
       "id": "documentation-viewer",
       "name": "Built-in Documentation Viewer",
-      "description": "TUI-based documentation viewer with search and navigation",
+      "description": "CLI-based documentation viewer with task runner",
       "category": "backend",
       "implemented": true,
       "files": [
-        "src/main.py"
+        "src/event_manager.py",
+        "src/modules/docs_runner.py"
       ],
       "code_patterns": [
         {
-          "file": "src/main.py",
-          "pattern": "def view_documentation|_search_docs|_show_toc",
-          "description": "Documentation viewer functions"
+          "file": "src/event_manager.py",
+          "pattern": "command == 'docs'|DocsRunner",
+          "description": "Documentation CLI command"
+        },
+        {
+          "file": "src/modules/docs_runner.py",
+          "pattern": "class DocsRunner|list_tasks|run_task",
+          "description": "Documentation runner implementation"
         }
       ],
       "test_method": "check_code_patterns"
@@ -375,11 +394,11 @@
       "category": "backend",
       "implemented": true,
       "files": [
-        "src/main.py"
+        "src/event_manager.py"
       ],
       "code_patterns": [
         {
-          "file": "src/main.py",
+          "file": "src/event_manager.py",
           "pattern": "def load_example_data|cli_load_examples|events_example",
           "description": "Example data loading functionality"
         }
@@ -393,11 +412,11 @@
       "category": "backend",
       "implemented": true,
       "files": [
-        "src/main.py"
+        "src/event_manager.py"
       ],
       "code_patterns": [
         {
-          "file": "src/main.py",
+          "file": "src/event_manager.py",
           "pattern": "def clear_all_data|cli_clear_data|cli_list",
           "description": "Data management commands"
         }
@@ -411,13 +430,13 @@
       "category": "frontend",
       "implemented": true,
       "files": [
-        "static/js/app.js",
-        "static/css/style.css",
-        "static/index.html"
+        "assets/js/app.js",
+        "assets/css/style.css",
+        "public/index.html"
       ],
       "code_patterns": [
         {
-          "file": "static/js/app.js",
+          "file": "assets/js/app.js",
           "pattern": "event-card|renderEvents|event-list",
           "description": "Event card rendering"
         }
@@ -431,11 +450,11 @@
       "category": "frontend",
       "implemented": true,
       "files": [
-        "static/js/app.js"
+        "assets/js/app.js"
       ],
       "code_patterns": [
         {
-          "file": "static/js/app.js",
+          "file": "assets/js/app.js",
           "pattern": "L\\.marker|this\\.markers|addEventMarkers",
           "description": "Leaflet marker management"
         }
@@ -450,7 +469,7 @@
       "implemented": true,
       "files": [
         "src/modules/utils.py",
-        "static/js/app.js"
+        "assets/js/app.js"
       ],
       "code_patterns": [
         {
@@ -459,7 +478,7 @@
           "description": "Distance calculation in Python"
         },
         {
-          "file": "static/js/app.js",
+          "file": "assets/js/app.js",
           "pattern": "calculateDistance",
           "description": "Distance calculation in JavaScript"
         }
@@ -473,17 +492,17 @@
       "category": "frontend",
       "implemented": true,
       "files": [
-        "static/css/style.css",
-        "static/index.html"
+        "assets/css/style.css",
+        "public/index.html"
       ],
       "code_patterns": [
         {
-          "file": "static/css/style.css",
+          "file": "assets/css/style.css",
           "pattern": "@media.*max-width|viewport",
           "description": "Responsive CSS media queries"
         },
         {
-          "file": "static/index.html",
+          "file": "public/index.html",
           "pattern": "viewport.*width=device-width",
           "description": "Viewport meta tag"
         }
@@ -493,23 +512,17 @@
     {
       "id": "workflow-launcher",
       "name": "GitHub Actions Workflow Launcher",
-      "description": "Launch and manage GitHub Actions workflows from TUI and CLI using GitHub CLI",
+      "description": "Launch and manage GitHub Actions workflows using GitHub CLI (module exists but not integrated in TUI/CLI yet)",
       "category": "backend",
       "implemented": true,
       "files": [
-        "src/modules/workflow_launcher.py",
-        "src/main.py"
+        "src/modules/workflow_launcher.py"
       ],
       "code_patterns": [
         {
           "file": "src/modules/workflow_launcher.py",
           "pattern": "class WorkflowLauncher|def trigger_workflow|gh workflow run",
           "description": "Workflow launcher class and GitHub CLI integration"
-        },
-        {
-          "file": "src/main.py",
-          "pattern": "def launch_workflows|def cli_workflow|workflow list",
-          "description": "TUI and CLI integration for workflow launching"
         }
       ],
       "test_method": "check_code_patterns"
@@ -585,16 +598,14 @@
       "category": "frontend",
       "implemented": true,
       "files": [
-        "src/templates/index.html",
+        "assets/html/dashboard-aside.html",
         "assets/css/style.css",
         "assets/js/app.js",
-        "config.json"
+        "config.json",
+        "src/modules/utils.py"
       ],
       "config_keys": [
-        "app.environment",
-        "watermark.text",
-        "debug",
-        "data.source"
+        "app.environment"
       ],
       "code_patterns": [
         {
@@ -608,9 +619,14 @@
           "description": "Dashboard CSS styles"
         },
         {
-          "file": "src/templates/index.html",
+          "file": "assets/html/dashboard-aside.html",
           "pattern": "dashboard-menu|dashboard-content|close-dashboard",
           "description": "Dashboard HTML structure"
+        },
+        {
+          "file": "config.json",
+          "pattern": "_comment_hardcoded.*watermark|_comment_hardcoded.*debug|_comment_hardcoded.*data.source",
+          "description": "Environment-dependent values documented in config"
         }
       ],
       "test_method": "automated",
@@ -718,8 +734,7 @@
       "implemented": true,
       "files": [
         "assets/js/app.js",
-        "static/js/app.js",
-        "scripts/generate_screenshots.py",
+        "src/tools/generate_screenshots.py",
         "README.md"
       ],
       "code_patterns": [
@@ -730,7 +745,7 @@
         }
       ],
       "test_method": "automated",
-      "test_instructions": "1. Start local server: cd static && python3 -m http.server 8000\n2. Run test script: python3 scripts/generate_screenshots.py --verbose\n3. Verify body[data-app-ready='true'] attribute is set after page load\n4. Verify 'app-ready' custom event is dispatched with event.detail metadata\n5. Check that screenshots are captured with fully loaded map and events\n6. Verify both mobile (640×1136) and desktop (1280×800) screenshots are generated"
+      "test_instructions": "1. Start local server: cd static && python3 -m http.server 8000\n2. Run test script: python3 src/tools/generate_screenshots.py --verbose\n3. Verify body[data-app-ready='true'] attribute is set after page load\n4. Verify 'app-ready' custom event is dispatched with event.detail metadata\n5. Check that screenshots are captured with fully loaded map and events\n6. Verify both mobile (640×1136) and desktop (1280×800) screenshots are generated"
     },
     {
       "id": "html-export-linting",
@@ -761,33 +776,30 @@
     {
       "id": "markdown-html-builder",
       "name": "Markdown to HTML Documentation Builder",
-      "description": "Automated build system that converts all Markdown documentation to styled HTML with GitHub-style dark theme and Barbie Pink accents. Organizes files into docs/ directory, generates navigation index, converts links, and adds syntax highlighting. Works offline with pure HTML/CSS.",
+      "description": "Automated build system that converts all Markdown documentation to styled HTML with GitHub-style dark theme and Barbie Pink accents. Part of htmldocs_generator module.",
       "category": "infrastructure",
       "implemented": true,
       "files": [
-        "scripts/build_markdown_docs.py",
-        "scripts/cleanup_old_docs.py",
-        "DOCUMENTATION_BUILD.md",
-        "DOCUMENTATION_BUILD.html",
+        "src/modules/htmldocs_generator.py",
+        "src/tools/cleanup_old_docs.py",
         "scripts/README.md",
-        "README.html",
         "requirements.txt"
       ],
       "code_patterns": [
         {
-          "file": "scripts/build_markdown_docs.py",
+          "file": "src/modules/htmldocs_generator.py",
           "pattern": "def convert_markdown_to_html|def generate_docs_index|def organize_files|markdown.Markdown",
           "description": "Core conversion and organization functions"
         },
         {
-          "file": "scripts/build_markdown_docs.py",
-          "pattern": "#FF69B4|#0d1117|#c9d1d9|GitHub Dark Theme",
-          "description": "GitHub dark theme with Barbie Pink accents"
+          "file": "src/modules/htmldocs_generator.py",
+          "pattern": "Barbie Pink|color-primary|bg-primary|text-primary",
+          "description": "Uses design tokens from config.json for theming"
         }
       ],
       "config_keys": [],
       "test_method": "manual",
-      "test_instructions": "1. Install dependencies: pip install markdown>=3.5.0 Pygments>=2.17.0\n2. Build documentation: python3 scripts/build_markdown_docs.py --organize --verbose\n3. Verify all .md files converted to .html with:\n   - GitHub dark theme (#0d1117 background, #c9d1d9 text)\n   - Barbie Pink (#FF69B4) headings and accents\n   - Syntax highlighting in code blocks\n   - Navigation bar on every page\n4. Verify file organization:\n   - README.md/README.html stay in root\n   - DOCUMENTATION_BUILD.md/DOCUMENTATION_BUILD.html stay in root\n   - All other docs moved to docs/\n5. Verify docs/index.html generated with categorized navigation\n6. Test cleanup script: python3 scripts/cleanup_old_docs.py --dry-run\n7. Open docs/index.html in browser and verify:\n   - Works with file:// protocol (no server needed)\n   - Navigation links work\n   - All .md links converted to .html\n   - Mobile responsive design\n   - Syntax highlighting displays correctly"
+      "test_instructions": "1. Install dependencies: pip install markdown>=3.5.0 Pygments>=2.17.0\n2. Build documentation: python3 src/event_manager.py docs build\n3. Verify all .md files converted to .html with:\n   - GitHub dark theme (#0d1117 background, #c9d1d9 text)\n   - Barbie Pink (#FF69B4) headings and accents\n   - Syntax highlighting in code blocks\n   - Navigation bar on every page\n4. Verify file organization in docs/\n5. Verify docs/index.html generated with categorized navigation\n6. Test cleanup script: python3 src/tools/cleanup_old_docs.py --dry-run\n7. Open docs/index.html in browser and verify it works with file:// protocol"
     },
     {
       "id": "pydantic-validation",
@@ -890,7 +902,7 @@
       "category": "infrastructure",
       "implemented": true,
       "files": [
-        "src/modules/docs_generator.py",
+        "src/modules/htmldocs_generator.py",
         "src/modules/docs_runner.py",
         "public/docs/"
       ],
@@ -942,13 +954,13 @@
     {
       "id": "event-archiving",
       "name": "Configurable Monthly Event Archiving",
-      "description": "Automatically archive old events based on configurable retention window (default: 60 days). Events are organized by month into archive files (e.g., 202601.json) to keep the active events list manageable and improve performance. Configuration is entirely in config.json with GitHub Actions integration for automated monthly runs.",
+      "description": "Automatically archive old events based on configurable retention window (default: 60 days). Events are organized by month into archive files (e.g., 202601.json) to keep the active events list manageable and improve performance. Configuration is entirely in config.json with GitHub Actions integration via unified website-maintenance workflow.",
       "category": "backend",
       "implemented": true,
       "files": [
         "src/modules/archive_events.py",
         "src/event_manager.py",
-        ".github/workflows/archive-monthly.yml",
+        ".github/workflows/website-maintenance.yml",
         "tests/test_archive_events.py"
       ],
       "config_keys": [
@@ -972,14 +984,14 @@
           "description": "CLI commands for archiving and configuration display"
         },
         {
-          "file": ".github/workflows/archive-monthly.yml",
-          "pattern": "schedule.*cron.*1 \\* \\*|archive-monthly|retention_days",
-          "description": "Monthly archiving workflow with dynamic config reading"
+          "file": ".github/workflows/website-maintenance.yml",
+          "pattern": "archive-monthly|retention_days",
+          "description": "Monthly archiving job in unified workflow"
         }
       ],
       "test_method": "automated",
       "test_file": "tests/test_archive_events.py",
-      "test_instructions": "1. Run archiving tests: python3 tests/test_archive_events.py\n2. Test dry-run: python3 src/event_manager.py archive-monthly --dry-run\n3. View configuration: python3 src/event_manager.py archive-info\n4. Test with different retention: Edit config.json → archiving.retention.active_window_days\n5. Verify archives created: Check assets/json/events/archived/ directory\n6. Test GitHub Actions: Trigger archive-monthly workflow manually with dry-run option",
+      "test_instructions": "1. Run archiving tests: python3 tests/test_archive_events.py\n2. Test dry-run: python3 src/event_manager.py archive-monthly --dry-run\n3. View configuration: python3 src/event_manager.py archive-info\n4. Test with different retention: Edit config.json → archiving.retention.active_window_days\n5. Verify archives created: Check assets/json/events/archived/ directory\n6. Test GitHub Actions: Trigger website-maintenance workflow with archive mode",
       "cli_command": "python3 src/event_manager.py archive-monthly --dry-run"
     }
   ]

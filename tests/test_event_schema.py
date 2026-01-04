@@ -92,7 +92,7 @@ EVENT_SCHEMA = {
         "source": {
             "type": "string",
             "description": "Source of the event data",
-            "enum": ["manual", "rss", "api", "html", "facebook"]
+            "enum": ["manual", "rss", "api", "html", "facebook", "demo"]
         },
         "status": {
             "type": "string",
@@ -363,12 +363,14 @@ class EventSchemaTester:
         Load events from a file with flexible path handling.
         
         Checks in multiple locations:
-        1. data/ directory (production events)
+        1. assets/json/ directory (current location)
+        2. data/ directory (legacy location)
         
         Returns tuple of (events_list, error_message)
         """
         # Try multiple locations
         possible_paths = [
+            self.repo_root / "assets" / "json" / filename,
             self.repo_root / "data" / filename,
         ]
         
@@ -383,7 +385,7 @@ class EventSchemaTester:
                 except Exception as e:
                     return [], f"Error loading {filename}: {e}"
         
-        return [], f"File not found: {filename} (checked: data/)"
+        return [], f"File not found: {filename} (checked: assets/json/, data/)"
     
     def test_schema_definition(self):
         """Test that the schema is properly defined"""
@@ -417,13 +419,13 @@ class EventSchemaTester:
         )
     
     def test_events_example_file(self):
-        """Test events_example.json against schema"""
+        """Test events.demo.json against schema"""
         print("\n=== Events Example File Validation ===")
         
-        events, error = self.load_events_file("events_example.json")
+        events, error = self.load_events_file("events.demo.json")
         
         if error:
-            self.assert_test(False, "Load events_example.json", error)
+            self.assert_test(False, "Load events.demo.json", error)
             return
         
         self.assert_test(
@@ -505,7 +507,7 @@ class EventSchemaTester:
         """Test that example events demonstrate all schema features"""
         print("\n=== Example vs Schema Consistency ===")
         
-        events, error = self.load_events_file("events_example.json")
+        events, error = self.load_events_file("events.demo.json")
         
         if error:
             self.add_warning(f"Could not load example events: {error}")
@@ -546,7 +548,7 @@ class EventSchemaTester:
         
         events, error = self.load_events_file("events.json")
         if error or len(events) == 0:
-            events, error = self.load_events_file("events_example.json")
+            events, error = self.load_events_file("events.demo.json")
         
         if error:
             self.add_warning(f"Could not load events for filter testing: {error}")
@@ -599,7 +601,7 @@ class EventSchemaTester:
         
         events, error = self.load_events_file("events.json")
         if error or len(events) == 0:
-            events, error = self.load_events_file("events_example.json")
+            events, error = self.load_events_file("events.demo.json")
         
         if error:
             self.add_warning(f"Could not load events for filter testing: {error}")
@@ -663,7 +665,7 @@ class EventSchemaTester:
         
         events, error = self.load_events_file("events.json")
         if error or len(events) == 0:
-            events, error = self.load_events_file("events_example.json")
+            events, error = self.load_events_file("events.demo.json")
         
         if error:
             self.add_warning(f"Could not load events for filter testing: {error}")
