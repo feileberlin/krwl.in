@@ -14,7 +14,6 @@ class EventsApp {
         this.markers = [];
         this.config = null;
         this.currentEdgeDetail = null;
-        this.timeDrawer = null; // Time drawer for dynamic marker sizing
         this.currentEventIndex = null; // Track which event is currently displayed
         this.filters = {
             maxDistance: 5,
@@ -116,16 +115,6 @@ class EventsApp {
             console.warn('Map initialization failed:', error.message);
             // Ensure content is visible even if map fails
             this.showMainContent();
-        }
-        
-        // Initialize TimeDrawer if map is available
-        if (this.map && typeof TimeDrawer !== 'undefined') {
-            this.timeDrawer = new TimeDrawer(
-                this.map,
-                this.events,
-                () => this.getNextSunrise()
-            );
-            this.log('TimeDrawer initialized');
         }
         
         // Get user location
@@ -237,14 +226,20 @@ class EventsApp {
         // Update dashboard debug info with current state
         const debugSection = document.getElementById('dashboard-debug-section');
         const debugEnvironment = document.getElementById('debug-environment');
-        const debugEventCount = document.getElementById('debug-event-count');
+        const debugEventCounts = document.getElementById('debug-event-counts');
         const debugDataSource = document.getElementById('debug-data-source');
         const debugMode = document.getElementById('debug-mode');
+        const debugCaching = document.getElementById('debug-caching');
+        const debugFileSize = document.getElementById('debug-file-size');
+        const debugSizeBreakdown = document.getElementById('debug-size-breakdown');
         const debugDOMCache = document.getElementById('debug-dom-cache');
         const debugHistoricalCache = document.getElementById('debug-historical-cache');
         
+        // Use DEBUG_INFO from backend if available
+        const debugInfo = window.DEBUG_INFO || {};
+        
         if (debugEnvironment) {
-            const environment = this.config?.watermark?.text || this.config?.app?.environment || 'UNKNOWN';
+            const environment = debugInfo.environment || this.config?.watermark?.text || this.config?.app?.environment || 'UNKNOWN';
             debugEnvironment.textContent = environment.toUpperCase();
             // Add color coding based on environment using CSS classes
             debugEnvironment.className = ''; // Clear existing classes
@@ -255,10 +250,16 @@ class EventsApp {
             }
         }
         
-        if (debugEventCount) {
+        if (debugEventCounts && debugInfo.event_counts) {
+            const counts = debugInfo.event_counts;
+            const countsText = `Published: ${counts.published} | Pending: ${counts.pending} | Archived: ${counts.archived}`;
+            debugEventCounts.textContent = countsText;
+            debugEventCounts.title = `Total events across all categories: ${counts.total}`;
+        } else if (debugEventCounts) {
+            // Fallback to old behavior if DEBUG_INFO not available
             const totalEvents = this.events.length;
             const visibleEvents = this.filterEvents().length;
-            debugEventCount.textContent = `${visibleEvents}/${totalEvents}`;
+            debugEventCounts.textContent = `Visible: ${visibleEvents}/${totalEvents}`;
         }
         
         if (debugDataSource) {
@@ -276,6 +277,69 @@ class EventsApp {
             } else {
                 debugMode.classList.add('debug-disabled');
             }
+        }
+        
+        // Caching status
+        if (debugCaching) {
+            const cacheEnabled = debugInfo.cache_enabled;
+            if (cacheEnabled !== undefined) {
+                debugCaching.textContent = cacheEnabled ? 'Enabled' : 'Disabled';
+                debugCaching.className = cacheEnabled ? 'cache-enabled' : 'cache-disabled';
+            } else {
+                debugCaching.textContent = 'Unknown';
+            }
+        }
+        
+        // File size information
+        if (debugFileSize && debugInfo.html_sizes) {
+            const sizes = debugInfo.html_sizes;
+            const totalKB = (sizes.total / 1024).toFixed(1);
+            
+            if (debugInfo.cache_enabled && debugInfo.cache_file_size) {
+                // Show cache file size if caching is enabled
+                const cacheKB = (debugInfo.cache_file_size / 1024).toFixed(1);
+                debugFileSize.textContent = `HTML: ${totalKB} KB | Cache: ${cacheKB} KB`;
+                debugFileSize.title = `Cache file: ${debugInfo.cache_file_path || 'unknown'}`;
+            } else {
+                // Show HTML size only
+                debugFileSize.textContent = `HTML: ${totalKB} KB`;
+                if (!debugInfo.cache_enabled) {
+                    debugFileSize.title = 'Caching disabled - showing HTML size';
+                }
+            }
+        }
+        
+        // Size breakdown
+        if (debugSizeBreakdown && debugInfo.html_sizes) {
+            const sizes = debugInfo.html_sizes;
+            const parts = [];
+            
+            // Show top 3 largest components
+            const components = [
+                { name: 'Events', size: sizes.events_data },
+                { name: 'Scripts', size: sizes.scripts },
+                { name: 'Styles', size: sizes.stylesheets },
+                { name: 'Translations', size: sizes.translations },
+                { name: 'Markers', size: sizes.marker_icons },
+                { name: 'Other', size: sizes.other }
+            ];
+            
+            components.sort((a, b) => b.size - a.size);
+            
+            for (let i = 0; i < 3 && i < components.length; i++) {
+                const comp = components[i];
+                const kb = (comp.size / 1024).toFixed(1);
+                const percent = ((comp.size / sizes.total) * 100).toFixed(1);
+                parts.push(`${comp.name}: ${kb} KB (${percent}%)`);
+            }
+            
+            debugSizeBreakdown.textContent = parts.join(' | ');
+            
+            // Full breakdown in title
+            const fullBreakdown = components.map(c => 
+                `${c.name}: ${(c.size / 1024).toFixed(1)} KB (${((c.size / sizes.total) * 100).toFixed(1)}%)`
+            ).join('\n');
+            debugSizeBreakdown.title = `Full breakdown:\n${fullBreakdown}`;
         }
         
         // OPTIMIZATION INFO: Display cache statistics
@@ -860,17 +924,7 @@ class EventsApp {
             this.markers = [];
         }
         
-        // Clear TimeDrawer markers if available
-        if (this.timeDrawer) {
-            this.timeDrawer.clearMarkers();
-        }
-        
         if (filteredEvents.length === 0) {
-            // No events to display on map
-            // Disable TimeDrawer when no events
-            if (this.timeDrawer) {
-                this.timeDrawer.disable();
-            }
             return;
         }
         
@@ -884,11 +938,6 @@ class EventsApp {
         
         // Fit map to show all markers
         this.fitMapToMarkers();
-        
-        // Enable/disable TimeDrawer based on filter and event count
-        if (this.timeDrawer) {
-            this.timeDrawer.enable(this.filters.timeFilter, filteredEvents.length);
-        }
     }
     
     updateFilterDescription(count) {
@@ -1174,13 +1223,6 @@ class EventsApp {
         marker.on('click', () => this.showEventDetail(event));
         
         this.markers.push(marker);
-        
-        // Register marker with TimeDrawer if available
-        if (this.timeDrawer) {
-            // Generate a unique ID if event doesn't have one
-            const eventId = event.id || `event_${event.title}_${event.start_time}`;
-            this.timeDrawer.registerMarker(eventId, marker, event);
-        }
     }
     
     navigateEvents(direction) {
@@ -1510,13 +1552,7 @@ class EventsApp {
                 
                 // Step 3: Show dashboard and remove hidden class
                 dashboardMenu.classList.remove('hidden');
-                
-                // Force reflow to ensure CSS transition is applied
-                dashboardMenu.offsetHeight;
-                
-                // Step 4: Trigger fade-in animation
                 dashboardMenu.classList.add('visible');
-                
                 dashboardLogo.setAttribute('aria-expanded', 'true');
                 this.updateDashboard(); // Refresh data when opening
                 
@@ -1580,9 +1616,7 @@ class EventsApp {
                     
                     // Step 3: Show dashboard
                     dashboardMenu.classList.remove('hidden');
-                    dashboardMenu.offsetHeight; // Force reflow to ensure CSS transition is applied
                     dashboardMenu.classList.add('visible');
-                    
                     dashboardLogo.setAttribute('aria-expanded', 'true');
                     this.updateDashboard();
                     
@@ -1616,28 +1650,9 @@ class EventsApp {
         }
         
         if (closeDashboard && dashboardMenu) {
-            // Close dashboard on close button with animation
-            closeDashboard.addEventListener('click', async () => {
-                const filterBar = document.getElementById('event-filter-bar');
-                
-                // Step 1: Fade out dashboard
+            // Close dashboard on close button
+            closeDashboard.addEventListener('click', () => {
                 dashboardMenu.classList.remove('visible');
-                
-                // Step 2: Wait for fade to complete using transitionend
-                await new Promise(resolve => {
-                    const handleTransitionEnd = (e) => {
-                        if (e.target === dashboardMenu || e.target.classList.contains('dashboard-content')) {
-                            dashboardMenu.removeEventListener('transitionend', handleTransitionEnd);
-                            resolve();
-                        }
-                    };
-                    dashboardMenu.addEventListener('transitionend', handleTransitionEnd);
-                    
-                    // Fallback timeout
-                    setTimeout(resolve, this.DASHBOARD_FADE_DURATION + 100);
-                });
-                
-                // Step 3: Hide dashboard
                 dashboardMenu.classList.add('hidden');
                 
                 // Step 4: Collapse filter bar
@@ -1683,26 +1698,13 @@ class EventsApp {
         }
         
         if (dashboardMenu) {
-            // Close dashboard on background click with animation
-            dashboardMenu.addEventListener('click', async (e) => {
-                if (e.target === e.currentTarget) {
-                    const filterBar = document.getElementById('event-filter-bar');
-                    
-                    // Fade out dashboard
+            // Close dashboard on background click (backdrop)
+            dashboardMenu.addEventListener('click', (e) => {
+                // Check if click is on the backdrop (::before pseudo-element area)
+                // This works by checking if the click is outside the dashboard-content
+                const dashboardContent = dashboardMenu.querySelector('.dashboard-content');
+                if (dashboardContent && !dashboardContent.contains(e.target)) {
                     dashboardMenu.classList.remove('visible');
-                    
-                    await new Promise(resolve => {
-                        const handleTransitionEnd = (e) => {
-                            if (e.target === dashboardMenu || e.target.classList.contains('dashboard-content')) {
-                                dashboardMenu.removeEventListener('transitionend', handleTransitionEnd);
-                                resolve();
-                            }
-                        };
-                        dashboardMenu.addEventListener('transitionend', handleTransitionEnd);
-                        setTimeout(resolve, this.DASHBOARD_FADE_DURATION + 100);
-                    });
-                    
-                    // Hide dashboard
                     dashboardMenu.classList.add('hidden');
                     
                     // Collapse filter bar
@@ -2083,36 +2085,9 @@ class EventsApp {
                 if (eventDetail && !eventDetail.classList.contains('hidden')) {
                     eventDetail.classList.add('hidden');
                     e.preventDefault();
-                } else if (dashboardMenu && !dashboardMenu.classList.contains('hidden')) {
-                    // Close dashboard with animation using transitionend
-                    const filterBar = document.getElementById('event-filter-bar');
-                    
+                } else if (dashboardMenu && dashboardMenu.classList.contains('visible')) {
                     dashboardMenu.classList.remove('visible');
-                    
-                    // Wait for dashboard fade using transitionend
-                    const handleDashboardFade = (event) => {
-                        if (event.target === dashboardMenu || event.target.classList.contains('dashboard-content')) {
-                            dashboardMenu.removeEventListener('transitionend', handleDashboardFade);
-                            
-                            dashboardMenu.classList.add('hidden');
-                            if (filterBar) {
-                                filterBar.classList.remove('dashboard-opening');
-                            }
-                        }
-                    };
-                    dashboardMenu.addEventListener('transitionend', handleDashboardFade);
-                    
-                    // Fallback timeout
-                    setTimeout(() => {
-                        dashboardMenu.removeEventListener('transitionend', handleDashboardFade);
-                        if (!dashboardMenu.classList.contains('hidden')) {
-                            dashboardMenu.classList.add('hidden');
-                            if (filterBar) {
-                                filterBar.classList.remove('dashboard-opening');
-                            }
-                        }
-                    }, this.DASHBOARD_FADE_DURATION + 100);
-                    
+                    dashboardMenu.classList.add('hidden');
                     if (dashboardLogo) {
                         dashboardLogo.setAttribute('aria-expanded', 'false');
                     }
