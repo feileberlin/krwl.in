@@ -300,7 +300,7 @@ class TestEventArchiver(unittest.TestCase):
             json.dump(self.test_events, f)
         
         archiver = EventArchiver(self.test_config, self.base_path)
-        results = archiver.archive_events(dry_run=False)
+        archiver.archive_events(dry_run=False)
         
         # Event without date should remain active
         events_file = self.base_path / 'assets' / 'json' / 'events.json'

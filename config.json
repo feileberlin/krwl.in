@@ -677,7 +677,7 @@
     },
     "organization": {
       "group_by": "month",
-      "_comment_group": "How to organize archives: 'month', 'year', or 'quarter'",
+      "_comment_group": "How to organize archives (currently supports 'month' only)",
       "format": "YYYYMM",
       "_comment_format": "Filename format for archives (e.g., YYYYMM = 202601, YYYY-MM = 2026-01)",
       "path": "assets/json/events/archived",

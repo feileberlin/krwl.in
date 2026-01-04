@@ -3,7 +3,19 @@
 Event Archiving Module - KISS Implementation
 
 Simple monthly event archiving based on config.json settings.
-Archives old events to keep active list manageable.
+Archives old events to keep the active list manageable.
+
+KISS simplifications (what this module *does not* handle on purpose):
+- Uses month-based grouping only (per-file buckets like ``YYYYMM.json`` or ``YYYY-MM.json``),
+  no quarter/year/week archive structures or nested directory layouts.
+- Relies on smart defaults from ``config.json`` when archiving keys/sections are missing
+  instead of strict schema validation or failing hard on partial configuration.
+- Stores archives as flat JSON files on disk (no database, indexing, or search layer).
+- Treats dates with straightforward ``datetime`` parsing and basic ISO/date formats only,
+  without advanced timezone, locale, or calendar edge-case handling.
+
+This keeps the implementation small and predictable while being "good enough" for the
+KRWL HOF event history use case.
 """
 
 import json
