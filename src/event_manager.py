@@ -27,6 +27,28 @@ from modules.utils import (
     add_rejected_event
 )
 
+# Import new optimization modules
+try:
+    from modules.event_schema import EventSchema, validate_events_file, migrate_events_file
+    from modules.cache_manager import CacheManager
+    from modules.minifier import Minifier
+    from modules.compressor import Compressor
+    from modules.build_optimizer import BuildOptimizer
+    from modules.template_processor import TemplateProcessor
+    from modules.config_validator import ConfigValidator
+    from modules.icon_mode_tui import IconModeTUI, switch_icon_mode_cli, compare_icon_modes
+except ImportError as e:
+    print(f"Warning: Failed to import optimization modules: {e}")
+    # Graceful degradation - these are optional features
+    EventSchema = None
+    CacheManager = None
+    Minifier = None
+    Compressor = None
+    BuildOptimizer = None
+    TemplateProcessor = None
+    ConfigValidator = None
+    IconModeTUI = None
+
 
 class EventManagerTUI:
     """Main TUI class for event management"""
@@ -1277,6 +1299,201 @@ def cli_test(base_path, test_name=None, verbose=False, list_tests=False):
     
     # No specific test name provided: run all tests
     return 0 if runner.run_all() else 1
+
+
+# ==================== Production Optimization CLI Commands ====================
+
+def cli_schema_validate(base_path):
+    """Validate events against schema"""
+    if not EventSchema:
+        print("❌ Event schema module not available")
+        return 1
+    
+    events_file = base_path / 'assets' / 'json' / 'events.json'
+    
+    if not events_file.exists():
+        print(f"❌ Events file not found: {events_file}")
+        return 1
+    
+    is_valid, errors, invalid = validate_events_file(events_file)
+    
+    if is_valid:
+        print(f"✅ All events in {events_file.name} are valid!")
+        return 0
+    else:
+        print(f"❌ Found {len(errors)} validation error(s):")
+        for error in errors:
+            print(f"  • {error}")
+        return 1
+
+
+def cli_schema_migrate(base_path):
+    """Migrate events to new schema"""
+    if not EventSchema:
+        print("❌ Event schema module not available")
+        return 1
+    
+    events_file = base_path / 'assets' / 'json' / 'events.json'
+    
+    if not events_file.exists():
+        print(f"❌ Events file not found: {events_file}")
+        return 1
+    
+    count = migrate_events_file(events_file)
+    
+    if count > 0:
+        print(f"✅ Migrated {count} events to new schema")
+        print(f"   Backup created: {events_file}.backup")
+        return 0
+    else:
+        print("❌ Migration failed")
+        return 1
+
+
+def cli_schema_categories(base_path):
+    """List valid event categories"""
+    if not EventSchema:
+        print("❌ Event schema module not available")
+        return 1
+    
+    schema = EventSchema()
+    
+    print(f"\n📋 Valid Event Categories ({len(schema.categories)} total)")
+    print("=" * 60)
+    
+    for i, category in enumerate(schema.categories, 1):
+        icon = schema.get_icon_for_category(category)
+        print(f"  {i:2d}. {category:30s} → {icon}")
+    
+    print("=" * 60)
+    return 0
+
+
+def cli_cache_stats(base_path):
+    """Show cache statistics"""
+    if not CacheManager:
+        print("❌ Cache manager module not available")
+        return 1
+    
+    cache = CacheManager(base_path)
+    cache.print_stats()
+    return 0
+
+
+def cli_cache_clear(base_path):
+    """Clear cache"""
+    if not CacheManager:
+        print("❌ Cache manager module not available")
+        return 1
+    
+    cache = CacheManager(base_path)
+    count = cache.clear()
+    
+    print(f"✅ Cleared {count} cache entries")
+    return 0
+
+
+def cli_cache_inspect(base_path, key):
+    """Inspect cache entry"""
+    if not CacheManager:
+        print("❌ Cache manager module not available")
+        return 1
+    
+    cache = CacheManager(base_path)
+    entry = cache.inspect(key)
+    
+    if entry:
+        print(f"\n📦 Cache Entry: {key}")
+        print("=" * 60)
+        for k, v in entry.items():
+            print(f"  {k:20s}: {v}")
+        print("=" * 60)
+        return 0
+    else:
+        print(f"❌ Key not found: {key}")
+        return 1
+
+
+def cli_icons_mode(base_path, mode=None):
+    """Set or show icon mode"""
+    if not IconModeTUI:
+        print("❌ Icon mode TUI module not available")
+        return 1
+    
+    config_path = base_path / 'config.json'
+    
+    if mode:
+        # Set mode
+        success = switch_icon_mode_cli(base_path, mode, config_path)
+        return 0 if success else 1
+    else:
+        # Show current mode
+        try:
+            with open(config_path, 'r', encoding='utf-8') as f:
+                config = json.load(f)
+            
+            current_mode = config.get('icons', {}).get('mode', 'svg-paths')
+            
+            print(f"\n🎨 Current Icon Mode: {current_mode}")
+            print("=" * 60)
+            
+            mode_info = IconModeTUI.MODE_INFO.get(current_mode, {})
+            for key, value in mode_info.items():
+                print(f"  {key:20s}: {value}")
+            
+            print("=" * 60)
+            print()
+            print("💡 To change mode:")
+            print("   python3 src/event_manager.py icons mode <svg-paths|base64>")
+            print("   python3 src/event_manager.py icons switch (interactive)")
+            
+            return 0
+        except Exception as e:
+            print(f"❌ Failed to read config: {e}")
+            return 1
+
+
+def cli_icons_switch(base_path):
+    """Interactive icon mode switcher"""
+    if not IconModeTUI:
+        print("❌ Icon mode TUI module not available")
+        return 1
+    
+    tui = IconModeTUI(base_path)
+    result = tui.run()
+    
+    return 0 if result else 1
+
+
+def cli_icons_compare(base_path):
+    """Compare icon modes"""
+    if not IconModeTUI:
+        print("❌ Icon mode TUI module not available")
+        return 1
+    
+    compare_icon_modes()
+    return 0
+
+
+def cli_config_validate(base_path):
+    """Validate configuration"""
+    if not ConfigValidator:
+        print("❌ Config validator module not available")
+        return 1
+    
+    config_path = base_path / 'config.json'
+    
+    try:
+        with open(config_path, 'r', encoding='utf-8') as f:
+            config = json.load(f)
+    except Exception as e:
+        print(f"❌ Failed to load config: {e}")
+        return 1
+    
+    validator = ConfigValidator()
+    is_valid = validator.print_validation_results(config)
+    
+    return 0 if is_valid else 1
 
 
 def _execute_command(args, base_path, config):
