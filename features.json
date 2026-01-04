@@ -81,7 +81,7 @@
       "category": "frontend",
       "implemented": true,
       "files": [
-        "public/index.html",
+        "assets/html/map-main.html",
         "assets/js/app.js"
       ],
       "code_patterns": [
@@ -91,8 +91,8 @@
           "description": "Leaflet map initialization"
         },
         {
-          "file": "public/index.html",
-          "pattern": "<div id=\"map\">",
+          "file": "assets/html/map-main.html",
+          "pattern": "id=\"map\"",
           "description": "Map container element"
         }
       ],
@@ -240,7 +240,7 @@
       "name": "Promotion Workflow",
       "description": "Promote preview to production via PR",
       "category": "deployment",
-      "implemented": true,
+      "implemented": false,
       "files": [
         ".github/workflows/promote-preview.yml"
       ],
@@ -305,7 +305,7 @@
       "implemented": true,
       "files": [
         "assets/js/app.js",
-        "public/index.html"
+        "assets/html/filter-nav.html"
       ],
       "code_patterns": [
         {
@@ -314,8 +314,8 @@
           "description": "Event filtering logic"
         },
         {
-          "file": "public/index.html",
-          "pattern": "class=\"filter-part\"|id=\"filter-sentence\"",
+          "file": "assets/html/filter-nav.html",
+          "pattern": "event-filter-bar|filter-bar-time-range|filter-bar-distance|filter-bar-location",
           "description": "Filter UI elements"
         }
       ],
@@ -347,7 +347,7 @@
       "implemented": true,
       "files": [
         "assets/js/app.js",
-        "public/index.html"
+        "assets/html/filter-nav.html"
       ],
       "code_patterns": [
         {
@@ -356,8 +356,8 @@
           "description": "Custom location functionality"
         },
         {
-          "file": "public/index.html",
-          "pattern": "id=\"location-text\"",
+          "file": "assets/html/filter-nav.html",
+          "pattern": "filter-bar-location",
           "description": "Custom location UI elements"
         }
       ],
@@ -366,17 +366,23 @@
     {
       "id": "documentation-viewer",
       "name": "Built-in Documentation Viewer",
-      "description": "TUI-based documentation viewer with search and navigation",
+      "description": "CLI-based documentation viewer with task runner",
       "category": "backend",
       "implemented": true,
       "files": [
-        "src/event_manager.py"
+        "src/event_manager.py",
+        "src/modules/docs_runner.py"
       ],
       "code_patterns": [
         {
           "file": "src/event_manager.py",
-          "pattern": "def view_documentation|_search_docs|_show_toc",
-          "description": "Documentation viewer functions"
+          "pattern": "command == 'docs'|DocsRunner",
+          "description": "Documentation CLI command"
+        },
+        {
+          "file": "src/modules/docs_runner.py",
+          "pattern": "class DocsRunner|list_tasks|run_task",
+          "description": "Documentation runner implementation"
         }
       ],
       "test_method": "check_code_patterns"
@@ -506,23 +512,17 @@
     {
       "id": "workflow-launcher",
       "name": "GitHub Actions Workflow Launcher",
-      "description": "Launch and manage GitHub Actions workflows from TUI and CLI using GitHub CLI",
+      "description": "Launch and manage GitHub Actions workflows using GitHub CLI (module exists but not integrated in TUI/CLI yet)",
       "category": "backend",
       "implemented": true,
       "files": [
-        "src/modules/workflow_launcher.py",
-        "src/event_manager.py"
+        "src/modules/workflow_launcher.py"
       ],
       "code_patterns": [
         {
           "file": "src/modules/workflow_launcher.py",
           "pattern": "class WorkflowLauncher|def trigger_workflow|gh workflow run",
           "description": "Workflow launcher class and GitHub CLI integration"
-        },
-        {
-          "file": "src/event_manager.py",
-          "pattern": "def launch_workflows|def cli_workflow|workflow list",
-          "description": "TUI and CLI integration for workflow launching"
         }
       ],
       "test_method": "check_code_patterns"
@@ -793,8 +793,8 @@
         },
         {
           "file": "src/modules/htmldocs_generator.py",
-          "pattern": "#FF69B4|#0d1117|#c9d1d9|GitHub Dark Theme",
-          "description": "GitHub dark theme with Barbie Pink accents"
+          "pattern": "Barbie Pink|color-primary|bg-primary|text-primary",
+          "description": "Uses design tokens from config.json for theming"
         }
       ],
       "config_keys": [],
