@@ -599,52 +599,42 @@ strong, b {
     color: #888;
 }
 
-/* Git commit stamp - Prominent display (normal size, stamp-like) */
+/* Git commit stamp - Clean display without header */
 .debug-git-stamp {
-    background: linear-gradient(135deg, rgba(255, 105, 180, 0.2), rgba(255, 105, 180, 0.1));
-    border: 2px dashed #FF69B4;
-    border-radius: 8px;
-    padding: 1rem;
+    background: rgba(191, 80, 135, 0.08); /* Light shade tint - ecological */
+    border: 1px solid #BF5087; /* Light shade - muted pink */
+    border-radius: 4px;
+    padding: 0.75rem;
     margin-bottom: 1rem;
     font-family: 'Roboto Mono', 'Monaco', 'Courier New', monospace;
-    position: relative;
 }
 
-/* Stamp-like appearance */
-.debug-git-stamp::before {
-    content: '★ COMMIT STAMP ★';
-    position: absolute;
-    top: -10px;
-    left: 50%;
-    transform: translateX(-50%) rotate(-2deg);
-    background: #FF69B4;
-    color: #0d1117;
-    padding: 2px 12px;
-    border-radius: 12px;
-    font-size: 0.7em;
-    font-weight: bold;
+.debug-git-title {
+    font-size: 0.75em;
+    font-weight: 700;
+    color: #B05F8E; /* Medium tone */
+    text-transform: uppercase;
     letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
 }
 
 .debug-git-hash {
-    font-size: 1.2em;
+    font-size: 1em;
     font-weight: 700; /* Roboto Bold */
-    color: #FF69B4;
+    color: #BF5087; /* Light shade - muted, no neon */
     margin-bottom: 0.5rem;
-    margin-top: 0.5rem;
     display: flex;
     align-items: center;
     gap: 0.5rem;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
-    text-shadow: 0 0 10px rgba(255, 105, 180, 0.5);
+    letter-spacing: 0.05em;
 }
 
 .debug-git-icon {
     display: inline-block;
     width: 1em;
     height: 1em;
-    color: #FF69B4;
+    color: #BF5087; /* Light shade - muted */
 }
 
 .debug-git-icon svg {
@@ -654,12 +644,12 @@ strong, b {
 
 .debug-git-details {
     font-size: 0.85em;
-    color: #FFB3DF;
+    color: #D689B8; /* Light tone - natural, earthy */
     line-height: 1.6;
 }
 
 .debug-git-details strong {
-    color: #FF69B4;
+    color: #B05F8E; /* Medium tone - ecological */
     text-transform: uppercase;
     font-size: 0.9em;
     font-weight: 700; /* Roboto Bold */
@@ -667,37 +657,35 @@ strong, b {
 
 .debug-commit-message {
     font-style: italic;
-    color: #FFB3DF;
+    color: #D689B8; /* Light tone - soft */
     margin-top: 0.25rem;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    border-left: 3px solid #FF69B4;
+    border-left: 2px solid #B05F8E; /* Medium tone */
     padding-left: 0.5rem;
 }
 
-/* Unix top-style debug output - Barbie Edition */
+/* Unix top-style debug output - Natural Barbie Edition */
 .debug-top-style {
     font-family: 'Roboto Mono', 'Monaco', 'Courier New', monospace;
     font-size: 0.85em;
-    background: linear-gradient(180deg, #1a0a12 0%, #0d1117 100%);
-    border: 2px solid #FF69B4;
+    background: #0d1117; /* Solid dark background - no gradients */
+    border: 1px solid #8A4A70; /* Dark tone - ecological */
     border-radius: 4px;
     padding: 0.75rem;
-    color: #FFB3DF;
-    box-shadow: 0 0 20px rgba(255, 105, 180, 0.3), inset 0 0 30px rgba(255, 105, 180, 0.1);
+    color: #D689B8; /* Light tone - natural */
 }
 
 .debug-top-header {
-    color: #FF69B4;
+    color: #BF5087; /* Light shade - muted pink */
     font-weight: 700; /* Roboto Bold */
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    border-bottom: 2px solid #FF69B4;
+    border-bottom: 1px solid #8A4A70; /* Dark tone */
     padding-bottom: 0.5rem;
     margin-bottom: 0.75rem;
-    text-shadow: 0 0 10px rgba(255, 105, 180, 0.5);
-    background: linear-gradient(90deg, rgba(255, 105, 180, 0.1), transparent);
+    background: rgba(138, 74, 112, 0.1); /* Dark tone tint - subtle */
     padding: 0.5rem;
     margin: -0.75rem -0.75rem 0.75rem -0.75rem;
 }
@@ -710,14 +698,14 @@ strong, b {
 }
 
 .debug-top-section:hover {
-    background: rgba(255, 105, 180, 0.1);
-    border-left: 3px solid #FF69B4;
+    background: rgba(138, 74, 112, 0.1); /* Dark tone tint - subtle */
+    border-left: 2px solid #8A4A70; /* Dark tone */
     margin-left: -0.5rem;
-    padding-left: calc(0.5rem - 3px);
+    padding-left: calc(0.5rem - 2px);
 }
 
 .debug-top-section strong {
-    color: #FF69B4;
+    color: #BF5087; /* Light shade - muted */
     display: inline-block;
     min-width: 150px;
     text-transform: uppercase;
@@ -733,86 +721,70 @@ strong, b {
 
 .debug-env-badge {
     display: inline-block;
-    padding: 3px 10px;
-    border-radius: 3px;
+    padding: 2px 6px;
+    border-radius: 2px;
     font-weight: 700; /* Roboto Bold */
-    font-size: 0.95em;
+    font-size: 0.85em;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     border: 1px solid;
-    animation: badge-pulse 2s ease-in-out infinite;
-}
-
-@keyframes badge-pulse {
-    0%, 100% {
-        opacity: 1;
-        transform: scale(1);
-    }
-    50% {
-        opacity: 0.9;
-        transform: scale(1.02);
-    }
 }
 
 .debug-env-badge.env-dev {
-    background: linear-gradient(135deg, rgba(255, 179, 223, 0.3), rgba(255, 105, 180, 0.2));
-    border-color: #FFB3DF;
-    color: #FFB3DF;
-    box-shadow: 0 0 10px rgba(255, 179, 223, 0.3);
+    background: rgba(255, 179, 223, 0.15); /* Medium tint - soft */
+    border-color: #D689B8; /* Light tone */
+    color: #FFB3DF; /* Medium tint */
 }
 
 .debug-env-badge.env-production {
-    background: linear-gradient(135deg, rgba(76, 175, 80, 0.3), rgba(56, 142, 60, 0.2));
-    border-color: #4CAF50;
-    color: #4CAF50;
-    box-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
+    background: rgba(76, 175, 80, 0.15); /* Subtle green */
+    border-color: #5a9e5d; /* Muted green */
+    color: #6db16f; /* Natural green */
 }
 
 .debug-env-badge.env-ci {
-    background: linear-gradient(135deg, rgba(88, 166, 255, 0.3), rgba(68, 138, 204, 0.2));
-    border-color: #58a6ff;
-    color: #58a6ff;
-    box-shadow: 0 0 10px rgba(88, 166, 255, 0.3);
+    background: rgba(88, 166, 255, 0.15); /* Subtle blue */
+    border-color: #6a8caf; /* Muted blue */
+    color: #7ba3d1; /* Natural blue */
 }
 
 .debug-size-list {
     list-style: none;
-    margin: 0.25rem 0 0 0;
+    margin: 0;
     padding: 0;
-    font-size: 0.95em;
+    font-size: 0.9em;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
 }
 
 .debug-size-list li {
-    margin-bottom: 0.25rem;
-    color: #D689B8;
-    padding-left: 1.5rem;
-    position: relative;
+    color: #D689B8; /* Light tone - natural */
+    white-space: nowrap;
 }
 
 .debug-size-list li::before {
     content: '▸';
-    position: absolute;
-    left: 0;
-    color: #FF69B4;
+    margin-right: 0.25rem;
+    color: #B05F8E; /* Medium tone - muted */
 }
 
 .debug-size-details {
     margin-top: 0.25rem;
 }
 
-/* Barbie-themed value highlights */
+/* Natural Barbie-themed value highlights - no glow */
 #debug-event-counts-published,
 #debug-event-counts-pending,
 #debug-event-counts-archived,
 #debug-event-counts-total {
-    color: #FF69B4;
+    color: #BF5087; /* Light shade - muted */
     font-weight: 700; /* Roboto Bold */
 }
 
 #debug-caching.cache-enabled {
-    color: #4CAF50;
+    color: #6db16f; /* Natural green - ecological */
     font-weight: 700; /* Roboto Bold */
-    text-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
 }
 
 #debug-caching.cache-disabled {

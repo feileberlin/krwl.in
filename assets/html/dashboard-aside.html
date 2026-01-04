@@ -34,8 +34,9 @@ multiple sources.</p>
     <div id="dashboard-debug-section" class="dashboard-section" style="display: none;">
       <h3><i class="dashboard-section-icon" data-lucide="bug" aria-hidden="true"></i> Debug Info</h3>
       
-      <!-- Git Commit Stamp - Prominent Display (2x size) -->
+      <!-- Git Commit - Last Commit -->
       <div id="debug-git-stamp" class="debug-git-stamp">
+        <div class="debug-git-title">Last commit</div>
         <div class="debug-git-hash">
           <i class="debug-git-icon" data-lucide="git-commit" aria-hidden="true"></i>
           <span id="debug-commit-hash">unknown</span>
@@ -50,40 +51,43 @@ multiple sources.</p>
       <!-- Unix top-style output -->
       <div class="debug-top-style">
         <div class="debug-top-header">
-          KRWL HOF System Status - <span id="debug-deployment-time">unknown</span>
+          KRWL HOF - <span id="debug-deployment-time">unknown</span>
         </div>
         
-        <div class="debug-top-section">
-          <strong>EVENTS:</strong> 
-          <span id="debug-event-counts-published">0</span> published, 
-          <span id="debug-event-counts-pending">0</span> pending, 
-          <span id="debug-event-counts-archived">0</span> archived
-          <span class="debug-top-total">(<span id="debug-event-counts-total">0</span> total)</span>
+        <!-- Compact two-column layout -->
+        <div class="debug-top-grid">
+          <div class="debug-top-row">
+            <div class="debug-top-cell">
+              <strong>Events:</strong> <span id="debug-event-counts-published">0</span>/<span id="debug-event-counts-pending">0</span>/<span id="debug-event-counts-archived">0</span>
+            </div>
+            <div class="debug-top-cell">
+              <strong>Env:</strong> <span id="debug-environment" class="debug-env-badge">UNKNOWN</span>
+            </div>
+          </div>
+          
+          <div class="debug-top-row">
+            <div class="debug-top-cell">
+              <strong>Cache:</strong> <span id="debug-caching">unknown</span>
+            </div>
+            <div class="debug-top-cell">
+              <strong>Size:</strong> <span id="debug-file-size">unknown</span>
+            </div>
+          </div>
+          
+          <div class="debug-top-row">
+            <div class="debug-top-cell">
+              <strong>DOM:</strong> <span id="debug-dom-cache">0</span>
+            </div>
+            <div class="debug-top-cell">
+              <strong>Hist:</strong> <span id="debug-historical-cache">none</span>
+            </div>
+          </div>
         </div>
         
-        <div class="debug-top-section">
-          <strong>ENVIRONMENT:</strong> <span id="debug-environment" class="debug-env-badge">UNKNOWN</span>
-        </div>
-        
-        <div class="debug-top-section">
-          <strong>CACHING:</strong> <span id="debug-caching">unknown</span>
-        </div>
-        
-        <div class="debug-top-section">
-          <strong>HTML SIZE:</strong> <span id="debug-file-size">unknown</span>
-        </div>
-        
-        <div class="debug-top-section">
-          <strong>SIZE BREAKDOWN (top 3):</strong>
+        <!-- Size breakdown - collapsible -->
+        <div class="debug-top-breakdown">
+          <strong>Top 3:</strong>
           <div id="debug-size-breakdown" class="debug-size-details">Loading...</div>
-        </div>
-        
-        <div class="debug-top-section">
-          <strong>DOM CACHE:</strong> <span id="debug-dom-cache">0 elements</span>
-        </div>
-        
-        <div class="debug-top-section">
-          <strong>HISTORICAL CACHE:</strong> <span id="debug-historical-cache">none</span>
         </div>
       </div>
     </div>
