@@ -18,6 +18,8 @@ sys.path.insert(0, str(Path(__file__).parent))
 from modules.scraper import EventScraper
 from modules.editor import EventEditor
 from modules.site_generator import SiteGenerator
+from modules.archive_events import EventArchiver, print_config_info
+from modules.batch_operations import expand_wildcards, process_in_batches, find_events_by_ids, determine_batch_size
 from modules.utils import (
     load_config, load_events, save_events, 
     load_pending_events, save_pending_events, 
@@ -218,9 +220,35 @@ COMMANDS:
     dependencies fetch        Fetch third-party dependencies
     dependencies check        Check if dependencies are present
     
-    archive                   Archive past events to archived_events.json
+    test                      Run all tests
+    test --list               List available test categories and tests
+    test core                 Run core functionality tests
+    test features             Run feature tests
+    test infrastructure       Run infrastructure tests
+    test scraper              Run specific test (e.g., test_scraper)
+    test --verbose            Run tests with verbose output
+    
+    utils                     List all utility commands
+    utils --list              List all utility commands
+    utils kiss-check          Check KISS compliance
+    utils verify-features     Verify features are present
+    utils config-edit         Launch config editor
+    
+    docs                      List all documentation tasks
+    docs --list               List all documentation tasks
+    docs readme               Generate README.md
+    docs demos                Generate demo events
+    docs lint-markdown        Lint markdown files
+    docs generate             Run all generation tasks
+    docs validate             Run all validation tasks
+    
+    archive-monthly           Archive old events based on retention window
+    archive-monthly --dry-run Preview archiving without making changes
+    archive-info              Show archiving configuration and existing archives
+    archive                   Archive past events to archived_events.json (legacy)
     load-examples             Load example data for development
     clear-data                Clear all event data
+    scraper-info              Show scraper capabilities (JSON output for workflows)
     
 OPTIONS:
     -h, --help               Show this help message
@@ -246,6 +274,9 @@ EXAMPLES:
     # Scrape events from sources
     python3 event_manager.py scrape
     
+    # Show scraper capabilities (for workflow introspection)
+    python3 event_manager.py scraper-info
+    
     # List all published events
     python3 event_manager.py list
     
@@ -257,6 +288,38 @@ EXAMPLES:
     
     # Load example data for testing
     python3 event_manager.py load-examples
+    
+    # Run all tests
+    python3 event_manager.py test
+    
+    # Run specific test category
+    python3 event_manager.py test core
+    python3 event_manager.py test features
+    
+    # Run individual test
+    python3 event_manager.py test scraper
+    python3 event_manager.py test translations
+    
+    # List available tests
+    python3 event_manager.py test --list
+    
+    # Run tests with verbose output
+    python3 event_manager.py test --verbose
+    python3 event_manager.py test core --verbose
+    
+    # Run utilities
+    python3 event_manager.py utils --list
+    python3 event_manager.py utils kiss-check
+    python3 event_manager.py utils verify-features --verbose
+    
+    # Documentation tasks
+    python3 event_manager.py docs --list
+    python3 event_manager.py docs readme
+    python3 event_manager.py docs lint-markdown --all
+    python3 event_manager.py docs lint-markdown README.md
+    python3 event_manager.py docs lint-markdown --fix --all
+    python3 event_manager.py docs generate
+    python3 event_manager.py docs validate
     
     # Get help
     python3 event_manager.py --help
@@ -674,48 +737,6 @@ def cli_publish_event(base_path, event_id):
     return 0
 
 
-def expand_wildcard_patterns(patterns, pending_events):
-    """
-    Expand wildcard patterns to match event IDs.
-    
-    Args:
-        patterns: List of patterns (can include wildcards like * and ?)
-        pending_events: List of pending events with 'id' field
-        
-    Returns:
-        List of expanded event IDs (duplicates removed, order preserved)
-    """
-    expanded_ids = []
-    seen_ids = set()
-    
-    for pattern in patterns:
-        pattern = pattern.strip()
-        if not pattern:
-            continue
-            
-        # Check if pattern contains wildcards
-        if '*' in pattern or '?' in pattern or '[' in pattern:
-            # Match against all pending event IDs
-            matches_found = False
-            for event in pending_events:
-                event_id = event.get('id', '')
-                if fnmatch.fnmatch(event_id, pattern):
-                    matches_found = True
-                    if event_id not in seen_ids:
-                        expanded_ids.append(event_id)
-                        seen_ids.add(event_id)
-            
-            if not matches_found:
-                print(f"⚠ Warning: Pattern '{pattern}' matched no events")
-        else:
-            # Exact ID - add if not already seen
-            if pattern not in seen_ids:
-                expanded_ids.append(pattern)
-                seen_ids.add(pattern)
-    
-    return expanded_ids
-
-
 def cli_reject_event(base_path, event_id):
     """CLI: Reject a pending event"""
     pending_data = load_pending_events(base_path)
@@ -825,7 +846,7 @@ def _publish_events_batch(base_path, events_to_publish, events, events_data):
 
 
 def cli_bulk_publish_events(base_path, event_ids_str):
-    """CLI: Bulk publish pending events (supports wildcards)"""
+    """CLI: Bulk publish pending events (supports wildcards and batching)"""
     # Parse comma-separated event IDs/patterns
     patterns = [p.strip() for p in event_ids_str.split(',')]
     
@@ -836,8 +857,8 @@ def cli_bulk_publish_events(base_path, event_ids_str):
     pending_data = load_pending_events(base_path)
     events = pending_data.get('pending_events', [])
     
-    # Expand wildcards
-    event_ids = expand_wildcard_patterns(patterns, events)
+    # Expand wildcards using modular function
+    event_ids = expand_wildcards(patterns, events)
     
     if not event_ids:
         print("Error: No events matched the provided patterns")
@@ -845,35 +866,54 @@ def cli_bulk_publish_events(base_path, event_ids_str):
     
     events_data = load_events(base_path)
     
-    print(f"Bulk publishing {len(event_ids)} event(s)...")
-    print("-" * 80)
+    print(f"📝 Bulk publishing {len(event_ids)} event(s)...")
+    print("=" * 80)
     
-    # Find events to publish
-    events_to_publish, initial_failed_ids = _find_events_to_process(event_ids, events)
-    failed_count = len(initial_failed_ids)
+    # Determine optimal batch size
+    batch_size = determine_batch_size(len(event_ids))
     
-    # Publish events
-    published_count, pub_failed_count, pub_failed_ids = _publish_events_batch(
-        base_path, events_to_publish, events, events_data
-    )
-    failed_count += pub_failed_count
-    failed_ids = initial_failed_ids + pub_failed_ids
+    # Process in batches using modular function
+    def publish_batch(batch_ids, batch_num, total_batches):
+        """Process a batch of events for publishing"""
+        batch_result = {'success': [], 'failed': []}
+        
+        # Find events in this batch
+        events_to_publish, failed_ids = find_events_by_ids(batch_ids, events)
+        batch_result['failed'].extend(failed_ids)
+        
+        # Publish the batch
+        published_count, pub_failed_count, pub_failed_ids = _publish_events_batch(
+            base_path, events_to_publish, events, events_data
+        )
+        
+        # Track successes
+        for event_id in batch_ids:
+            if event_id not in failed_ids and event_id not in pub_failed_ids:
+                batch_result['success'].append(event_id)
+        
+        batch_result['failed'].extend(pub_failed_ids)
+        
+        print(f"   ✓ Batch {batch_num}: {len(batch_result['success'])} published, {len(batch_result['failed'])} failed")
+        
+        return batch_result
     
-    # Save changes
-    if published_count > 0:
+    # Process all batches
+    results = process_in_batches(event_ids, batch_size=batch_size, callback=publish_batch)
+    
+    # Save changes if any events were published
+    if results['processed'] > 0:
+        print("\n💾 Saving changes...")
         save_events(base_path, events_data)
         save_pending_events(base_path, pending_data)
         
-        # Update events in HTML
-        print("\nUpdating events in HTML...")
+        print("🔄 Updating events in HTML...")
         update_events_in_html(base_path)
     
     # Summary
-    print("-" * 80)
-    print(f"✓ Successfully published: {published_count} event(s)")
-    if failed_count > 0:
-        print(f"✗ Failed: {failed_count} event(s)")
-        print(f"  Failed IDs: {', '.join(failed_ids)}")
+    print("=" * 80)
+    print(f"✅ Successfully published: {results['processed']} event(s)")
+    if results['failed'] > 0:
+        print(f"❌ Failed: {results['failed']} event(s)")
         return 1
     
     return 0
@@ -1078,6 +1118,167 @@ def cli_archive_old_events(base_path):
     return 0
 
 
+def cli_archive_monthly(base_path, config, dry_run=False):
+    """
+    Archive old events based on configurable retention window.
+    
+    This command moves events older than the configured retention window
+    (default: 60 days) to monthly archive files. This keeps the active
+    events list manageable and improves site performance.
+    
+    Configuration: config.json → archiving section
+    - retention.active_window_days: How many days to keep active
+    - organization.path: Where to save archives
+    - organization.format: Archive filename format (YYYYMM or YYYY-MM)
+    
+    Usage:
+        python3 src/event_manager.py archive-monthly           # Run archiving
+        python3 src/event_manager.py archive-monthly --dry-run # Preview changes
+    
+    Archives are organized by month (e.g., 202601.json for January 2026)
+    and stored in assets/json/events/archived/
+    
+    Args:
+        base_path: Repository root path
+        config: Loaded configuration
+        dry_run: If True, show what would be archived without making changes
+        
+    Returns:
+        Exit code (0 for success, 1 for error)
+    """
+    try:
+        archiver = EventArchiver(config, base_path)
+        
+        if dry_run:
+            print("🔍 DRY RUN MODE - No changes will be made")
+            print("-" * 60)
+        
+        results = archiver.archive_events(dry_run=dry_run)
+        
+        if not results.get('enabled'):
+            print("ℹ️  Archiving is disabled in config.json")
+            print("   To enable: Set archiving.enabled = true")
+            return 0
+        
+        # Print results
+        print(f"\n{'DRY RUN ' if dry_run else ''}ARCHIVING RESULTS")
+        print("=" * 60)
+        print(f"Total events: {results['total_events']}")
+        print(f"{'Would archive' if dry_run else 'Archived'}: {results['archived_count']}")
+        print(f"Remaining active: {results['active_count']}")
+        print(f"Retention window: {results['retention_days']} days")
+        print(f"Cutoff date: {results['cutoff_date'][:10]}")
+        
+        if results['archived_count'] > 0:
+            if not dry_run:
+                print(f"\n✓ Successfully archived {results['archived_count']} event(s)")
+                print(f"  Archives saved to: {archiver.archive_path}")
+                
+                # List archives
+                archives = archiver.list_archives()
+                if archives:
+                    print(f"\n  Archive files:")
+                    for arch in archives[-5:]:  # Show last 5 archives
+                        print(f"    • {arch['filename']}: {arch['event_count']} events")
+            else:
+                print(f"\n💡 Run without --dry-run to archive these events")
+        else:
+            print("\n✓ No events to archive (all within retention window)")
+        
+        print("=" * 60)
+        return 0
+        
+    except Exception as e:
+        print(f"✗ Error during archiving: {e}")
+        import traceback
+        traceback.print_exc()
+        return 1
+
+
+def cli_archive_info(base_path, config):
+    """
+    Display current event archiving configuration.
+    
+    Shows the archiving settings from config.json including:
+    - Whether archiving is enabled
+    - Retention window (how many days of events stay active)
+    - Schedule (when archiving runs automatically)
+    - Archive organization (path, format, grouping)
+    
+    Usage:
+        python3 src/event_manager.py archive-info
+    
+    This is useful for understanding how archiving works and
+    verifying your configuration before running archiving.
+    
+    Args:
+        base_path: Repository root path
+        config: Loaded configuration
+        
+    Returns:
+        Exit code (0 for success, 1 for error)
+    """
+    try:
+        archiver = EventArchiver(config, base_path)
+        
+        # Use the shared print function from archive_events module
+        print_config_info(archiver)
+        
+        # List existing archives
+        archives = archiver.list_archives()
+        if archives:
+            print("EXISTING ARCHIVES")
+            print("=" * 60)
+            print(f"Total archive files: {len(archives)}")
+            print("\nRecent archives:")
+            for arch in archives[-10:]:  # Show last 10
+                print(f"  • {arch['filename']}: {arch['event_count']} events "
+                      f"(updated: {arch['last_updated'][:10]})")
+            print("=" * 60)
+        else:
+            print("No archive files yet.")
+            print("Run 'archive-monthly' to create archives.")
+        
+        return 0
+        
+    except Exception as e:
+        print(f"✗ Error reading archive configuration: {e}")
+        return 1
+
+
+def cli_test(base_path, test_name=None, verbose=False, list_tests=False):
+    """CLI: Run tests
+    
+    Args:
+        base_path: Repository root path
+        test_name: Test category name (core, features, infrastructure) or specific test name to run
+        verbose: Enable verbose output
+        list_tests: List available tests
+        
+    Returns:
+        Exit code (0 for success, 1 for error)
+    """
+    from modules.test_runner import TestRunner
+    
+    runner = TestRunner(base_path, verbose=verbose)
+    
+    if list_tests:
+        runner.list_tests()
+        return 0
+    
+    # If a specific name is provided, check if it's a category or individual test
+    if test_name:
+        # Check if it's a category
+        if test_name in runner.TEST_CATEGORIES:
+            result = runner.run_category(test_name)
+            return 0 if result['success'] else 1
+        # Otherwise treat as individual test
+        return 0 if runner.run_single(test_name) else 1
+    
+    # No specific test name provided: run all tests
+    return 0 if runner.run_all() else 1
+
+
 def _execute_command(args, base_path, config):
     """Execute the specified CLI command.
     
@@ -1151,9 +1352,73 @@ def _execute_command(args, base_path, config):
     if command == 'clear-data':
         return cli_clear_data(base_path)
     
+    if command == 'test':
+        # Parse test arguments
+        verbose = '--verbose' in args.args if args.args else False
+        list_tests = '--list' in args.args if args.args else False
+        
+        # Filter out flags to get the actual test/category name
+        test_args = [arg for arg in (args.args or []) if not arg.startswith('--')]
+        test_name = test_args[0] if test_args else None
+        
+        return cli_test(base_path, test_name=test_name, verbose=verbose, list_tests=list_tests)
+    
+    if command == 'utils':
+        # Delegate to utility runner module (KISS: keep main CLI simple)
+        from modules.utility_runner import UtilityRunner
+        
+        runner = UtilityRunner(base_path)
+        
+        # Check for --list flag
+        if not args.args or '--list' in args.args:
+            runner.list_utilities()
+            return 0
+        
+        # Run specific utility with remaining args
+        utility_name = args.args[0]
+        utility_args = args.args[1:]
+        return 0 if runner.run_utility(utility_name, utility_args) else 1
+    
+    if command == 'docs':
+        # Delegate to documentation runner module (KISS: keep main CLI simple)
+        from modules.docs_runner import DocsRunner
+        
+        runner = DocsRunner(base_path)
+        
+        # Check for --list flag
+        if not args.args or '--list' in args.args:
+            runner.list_tasks()
+            return 0
+        
+        # Run specific task or category with remaining args
+        task_name = args.args[0]
+        task_args = args.args[1:]
+        
+        # Check if it's a category
+        if task_name in runner.DOCS_TASKS:
+            return 0 if runner.run_category(task_name) else 1
+        
+        # Otherwise run as individual task
+        return 0 if runner.run_task(task_name, task_args) else 1
+    
+    if command == 'archive-monthly':
+        # Archive old events based on config retention window
+        return cli_archive_monthly(base_path, config, dry_run='--dry-run' in (args.args or []))
+    
+    if command == 'archive-info':
+        # Show archiving configuration
+        return cli_archive_info(base_path, config)
+    
     if command == 'review':
         app = EventManagerTUI()
         app.review_pending_events()
+        return 0
+    
+    if command == 'scraper-info':
+        # Output scraper capabilities as JSON for workflow consumption
+        scraper = EventScraper(config, base_path)
+        capabilities = scraper.get_scraper_capabilities()
+        print(json.dumps(capabilities, indent=2))
         return 0
     
     if command is None:
@@ -1198,13 +1463,13 @@ def _execute_dependencies_command(args, base_path):
 
 def main():
     """Main entry point"""
+    # Use parse_known_args to allow command-specific flags
     parser = argparse.ArgumentParser(
         description='KRWL HOF Community Events Manager',
         add_help=False
     )
     parser.add_argument('command', nargs='?', default=None,
                        help='Command to execute')
-    parser.add_argument('args', nargs='*', help='Command arguments')
     parser.add_argument('-h', '--help', action='store_true',
                        help='Show help message')
     parser.add_argument('-v', '--version', action='store_true',
@@ -1214,7 +1479,9 @@ def main():
     parser.add_argument('--debug', action='store_true',
                        help='Enable debug logging')
     
-    args = parser.parse_args()
+    # Parse known args first, then capture remaining args
+    args, remaining = parser.parse_known_args()
+    args.args = remaining  # Store remaining args for command processing
     
     # Show help
     if args.help:
