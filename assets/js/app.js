@@ -23,6 +23,9 @@ class EventsApp {
         // Speech bubbles: Array of active speech bubble elements
         this.speechBubbles = [];
         
+        // Duplicate event statistics for dashboard warnings
+        this.duplicateStats = null;
+        
         // Load saved filter settings from cookie or use defaults
         this.filters = this.loadFiltersFromCookie() || {
             maxDistance: 2, // Default to 30 min walk (2 km)
@@ -541,96 +544,44 @@ class EventsApp {
     }
     
     /**
-     * Detect duplicate events and update dashboard warnings
-     * 
-     * Duplicates are identified by:
-     * 1. Same event ID
-     * 2. Same title AND start time AND location
+     * Update dashboard debug section with duplicate event warnings
      */
     updateDuplicateWarnings() {
-        const debugDuplicates = document.getElementById('debug-duplicates');
-        if (!debugDuplicates) return;
+        const warningElement = document.getElementById('debug-duplicate-warnings');
         
-        // Detect duplicates
-        const duplicates = this.detectDuplicateEvents();
-        
-        if (duplicates.length > 0) {
-            // Show warning with count and details
-            const duplicateCount = duplicates.reduce((sum, dup) => sum + dup.count - 1, 0);
-            debugDuplicates.innerHTML = `
-                <strong class="duplicate-warning">⚠️ ${duplicateCount} duplicate${duplicateCount !== 1 ? 's' : ''} detected</strong>
-                <div class="duplicate-details">
-                    ${duplicates.map(dup => `
-                        <div class="duplicate-item">
-                            <strong>${dup.title}</strong> (${dup.count}x)
-                            <div class="duplicate-hint">${dup.start_time} at ${dup.location}</div>
-                        </div>
-                    `).join('')}
-                </div>
-            `;
-            debugDuplicates.style.display = 'block';
-            debugDuplicates.className = 'debug-duplicates warning';
-        } else {
-            // No duplicates - show success message or hide
-            debugDuplicates.innerHTML = '<strong class="duplicate-ok">✓ No duplicates</strong>';
-            debugDuplicates.className = 'debug-duplicates ok';
-            debugDuplicates.style.display = 'block';
-        }
-    }
-    
-    /**
-     * Detect duplicate events in the events array
-     * 
-     * @returns {Array} Array of duplicate event info with count
-     */
-    detectDuplicateEvents() {
-        if (!this.events || this.events.length === 0) {
-            return [];
+        if (!warningElement) {
+            this.log('Debug duplicate warnings element not found');
+            return;
         }
         
-        // Track events by unique key
-        const eventMap = new Map();
+        if (!this.duplicateStats || this.duplicateStats.total === 0) {
+            // No duplicates - hide warning
+            warningElement.style.display = 'none';
+            return;
+        }
         
-        this.events.forEach(event => {
-            // Create unique key based on:
-            // 1. Event ID (if available)
-            // 2. Title + start_time + location (for events without ID)
-            let key;
-            if (event.id) {
-                key = `id:${event.id}`;
-            } else {
-                const locationKey = event.location ? 
-                    `${event.location.lat},${event.location.lon}` : 
-                    'no-location';
-                key = `${event.title}|${event.start_time}|${locationKey}`;
-            }
-            
-            if (!eventMap.has(key)) {
-                eventMap.set(key, {
-                    title: event.title,
-                    start_time: event.start_time ? new Date(event.start_time).toLocaleString('en-US', { 
-                        month: 'short', 
-                        day: 'numeric', 
-                        hour: '2-digit', 
-                        minute: '2-digit' 
-                    }) : 'unknown',
-                    location: event.location?.name || 'unknown location',
-                    count: 1,
-                    events: [event]
-                });
-            } else {
-                const existing = eventMap.get(key);
-                existing.count++;
-                existing.events.push(event);
-            }
-        });
+        // Show duplicate warning
+        const stats = this.duplicateStats;
+        const warningIcon = '⚠️';
+        const warningMessage = `${warningIcon} ${stats.total} duplicate event${stats.total > 1 ? 's' : ''} detected (${stats.eventsWithDuplicates} unique event${stats.eventsWithDuplicates > 1 ? 's' : ''} with duplicates)`;
         
-        // Filter to only duplicates (count > 1)
-        const duplicates = Array.from(eventMap.values())
-            .filter(item => item.count > 1)
-            .sort((a, b) => b.count - a.count); // Sort by count descending
+        // Build detail list (limit to top 5)
+        const detailsHTML = stats.details.slice(0, 5).map(d => 
+            `<li>${d.title.substring(0, 40)}${d.title.length > 40 ? '...' : ''} (×${d.count})</li>`
+        ).join('');
         
-        return duplicates;
+        const moreText = stats.details.length > 5 ? `<li>...and ${stats.details.length - 5} more</li>` : '';
+        
+        warningElement.innerHTML = `
+            <div class="debug-duplicate-warning-header">${warningMessage}</div>
+            <ul class="debug-duplicate-list">
+                ${detailsHTML}
+                ${moreText}
+            </ul>
+        `;
+        warningElement.style.display = 'block';
+        
+        this.log('Duplicate warnings updated:', stats);
     }
     
     async checkPendingEvents() {
@@ -1177,6 +1128,74 @@ class EventsApp {
         return dayAfterFullMoon;
     }
     
+    /**
+     * Count category occurrences under current filter conditions (excluding category filter).
+     * Used to show dynamic counts in category dropdown.
+     * 
+     * @returns {Object} Map of category names to their occurrence counts
+     */
+    countCategoriesUnderFilters() {
+        const maxEventTime = this.getMaxEventTime();
+        const maxDistance = this.filters.maxDistance;
+        
+        // Determine which location to use for distance calculation
+        let referenceLocation = this.userLocation;
+        
+        if (this.filters.locationType === 'predefined' && this.filters.selectedPredefinedLocation !== null) {
+            const predefinedLocs = this.config?.map?.predefined_locations || [];
+            const selectedLoc = predefinedLocs[this.filters.selectedPredefinedLocation];
+            if (selectedLoc) {
+                referenceLocation = {
+                    lat: selectedLoc.lat,
+                    lon: selectedLoc.lon
+                };
+            }
+        } else if (this.filters.locationType === 'custom' && this.filters.customLat && this.filters.customLon) {
+            referenceLocation = {
+                lat: this.filters.customLat,
+                lon: this.filters.customLon
+            };
+        }
+        
+        // Count categories for events that pass time/distance/location filters
+        const categoryCounts = {};
+        
+        this.events.forEach(event => {
+            // BOOKMARKS: Count bookmarked events regardless of other filters
+            if (this.isBookmarked(event.id)) {
+                const cat = event.category || 'uncategorized';
+                categoryCounts[cat] = (categoryCounts[cat] || 0) + 1;
+                return;
+            }
+            
+            // Filter by time
+            const eventTime = new Date(event.start_time);
+            if (eventTime > maxEventTime) {
+                return;
+            }
+            
+            // Filter by distance if location is available
+            if (referenceLocation && event.location) {
+                const distance = this.calculateDistance(
+                    referenceLocation.lat,
+                    referenceLocation.lon,
+                    event.location.lat,
+                    event.location.lon
+                );
+                
+                if (distance > maxDistance) {
+                    return;
+                }
+            }
+            
+            // Count this event's category
+            const cat = event.category || 'uncategorized';
+            categoryCounts[cat] = (categoryCounts[cat] || 0) + 1;
+        });
+        
+        return categoryCounts;
+    }
+    
     filterEvents() {
         const maxEventTime = this.getMaxEventTime();
         const maxDistance = this.filters.maxDistance;
@@ -1690,6 +1709,9 @@ class EventsApp {
         const maxBubbles = 20;
         const eventsToShow = events.slice(0, maxBubbles);
         
+        // Group events by their coordinates to detect co-location
+        const locationGroups = new Map();
+        
         eventsToShow.forEach((event, index) => {
             // Find the marker for this event
             const marker = this.markers.find(m => 
@@ -1700,21 +1722,120 @@ class EventsApp {
             );
             
             if (marker) {
-                // Delay each bubble slightly for a nice cascading effect
-                setTimeout(() => {
-                    this.createSpeechBubble(event, marker, index);
-                }, index * 50);
+                // Create location key with 4 decimal places (about 11m precision)
+                const latLng = marker.getLatLng();
+                const locationKey = `${latLng.lat.toFixed(4)},${latLng.lng.toFixed(4)}`;
+                
+                if (!locationGroups.has(locationKey)) {
+                    locationGroups.set(locationKey, []);
+                }
+                
+                locationGroups.get(locationKey).push({
+                    event,
+                    marker,
+                    originalIndex: index
+                });
             }
         });
+        
+        // Track duplicate statistics for dashboard warnings
+        let totalDuplicates = 0;
+        let eventsWithDuplicates = 0;
+        const duplicateDetails = [];
+        
+        // Now create speech bubbles with intelligent positioning
+        // For each location group, detect and remove duplicates
+        let bubbleIndex = 0;
+        locationGroups.forEach((group, locationKey) => {
+            // Detect duplicates within this location group
+            const uniqueEvents = this.deduplicateEvents(group);
+            
+            // Track duplicates for debug warnings
+            uniqueEvents.forEach(item => {
+                if (item.duplicateCount > 1) {
+                    totalDuplicates += (item.duplicateCount - 1); // Don't count the original
+                    eventsWithDuplicates++;
+                    duplicateDetails.push({
+                        title: item.event.title,
+                        count: item.duplicateCount,
+                        location: item.event.location.name
+                    });
+                }
+            });
+            
+            uniqueEvents.forEach((item, groupIndex) => {
+                // Delay each bubble slightly for a nice cascading effect
+                setTimeout(() => {
+                    // Pass both the group size and position within group for intelligent spacing
+                    // Also pass duplicate count if > 1
+                    this.createSpeechBubble(
+                        item.event, 
+                        item.marker, 
+                        bubbleIndex,
+                        uniqueEvents.length,
+                        groupIndex,
+                        item.duplicateCount
+                    );
+                }, bubbleIndex * 50);
+                bubbleIndex++;
+            });
+        });
+        
+        // Store duplicate statistics for dashboard display
+        this.duplicateStats = {
+            total: totalDuplicates,
+            eventsWithDuplicates: eventsWithDuplicates,
+            details: duplicateDetails
+        };
+        
+        // Update dashboard with duplicate warnings
+        this.updateDuplicateWarnings();
+    }
+    
+    /**
+     * Deduplicate events based on title and start time
+     * Returns array of unique events with duplicate count
+     * @param {Array} eventItems - Array of {event, marker, originalIndex}
+     * @returns {Array} Array of unique items with duplicateCount property
+     */
+    deduplicateEvents(eventItems) {
+        const uniqueMap = new Map();
+        
+        eventItems.forEach(item => {
+            // Create a key based on title and start time (case-insensitive)
+            const title = item.event.title.toLowerCase().trim();
+            const startTime = item.event.start_time;
+            const key = `${title}|${startTime}`;
+            
+            if (uniqueMap.has(key)) {
+                // Increment duplicate count
+                const existing = uniqueMap.get(key);
+                existing.duplicateCount++;
+                // Keep the array of all duplicate events for potential future use
+                existing.duplicates.push(item.event);
+            } else {
+                // First occurrence - add to map
+                uniqueMap.set(key, {
+                    ...item,
+                    duplicateCount: 1,
+                    duplicates: [item.event]
+                });
+            }
+        });
+        
+        return Array.from(uniqueMap.values());
     }
     
     /**
      * Create and position a speech bubble for an event
      * @param {Object} event - Event data
      * @param {Object} marker - Leaflet marker
-     * @param {number} index - Display order index
+     * @param {number} index - Display order index (global across all bubbles)
+     * @param {number} groupSize - Number of events at this location (default: 1)
+     * @param {number} groupIndex - Index within the co-located group (default: 0)
+     * @param {number} duplicateCount - Number of duplicate events (default: 1)
      */
-    createSpeechBubble(event, marker, index) {
+    createSpeechBubble(event, marker, index, groupSize = 1, groupIndex = 0, duplicateCount = 1) {
         // Get marker position in screen coordinates
         const markerPos = this.map.latLngToContainerPoint(marker.getLatLng());
         
@@ -1742,7 +1863,12 @@ class EventsApp {
         const bookmarkingSupported = this.isBookmarkingSupported();
         
         // Build bubble HTML with start time as headline
+        // Add duplicate count badge if there are duplicates
+        const duplicateBadge = duplicateCount > 1 ? 
+            `<div class="bubble-duplicate-badge" title="${duplicateCount} duplicate events">×${duplicateCount}</div>` : '';
+        
         bubble.innerHTML = `
+            ${duplicateBadge}
             <div class="bubble-time-headline">${timeStr}</div>
             <div class="bubble-date">${dateStr}</div>
             <div class="bubble-title">${this.truncateText(event.title, 50)}</div>
@@ -1762,7 +1888,7 @@ class EventsApp {
         }
         
         // Position bubble intelligently around marker
-        const position = this.calculateBubblePosition(markerPos, index);
+        const position = this.calculateBubblePosition(markerPos, index, groupSize, groupIndex);
         bubble.style.left = position.x + 'px';
         bubble.style.top = position.y + 'px';
         
@@ -1807,13 +1933,71 @@ class EventsApp {
     /**
      * Calculate intelligent position for speech bubble around marker
      * @param {Object} markerPos - {x, y} marker screen position
-     * @param {number} index - Bubble index for variation
+     * @param {number} index - Bubble index for variation (global)
+     * @param {number} groupSize - Number of events at this location (default: 1)
+     * @param {number} groupIndex - Index within the co-located group (default: 0)
      * @returns {Object} {x, y} position for bubble
      */
-    calculateBubblePosition(markerPos, index) {
+    calculateBubblePosition(markerPos, index, groupSize = 1, groupIndex = 0) {
         const bubbleWidth = 220;
         const bubbleHeight = 140;
-        const offset = 60; // Distance from marker
+        
+        // Base offset distance from marker
+        let baseOffset = 60;
+        
+        // For co-located events (multiple events at same location),
+        // use wider spacing to distribute them more effectively
+        if (groupSize > 1) {
+            // Increase spacing based on how many events share this location
+            // More events = wider spread to avoid overlap
+            baseOffset = 80 + (Math.min(groupSize - 1, 5) * 20);
+            
+            // Use a circular distribution pattern for co-located events
+            const angle = (groupIndex / groupSize) * 2 * Math.PI;
+            
+            // Add variation based on group size to create layered circles
+            const radiusMultiplier = 1 + Math.floor(groupIndex / 8) * 0.5;
+            const radius = baseOffset * radiusMultiplier;
+            
+            // Calculate position on circle
+            const relPos = {
+                x: Math.cos(angle) * radius,
+                y: Math.sin(angle) * radius
+            };
+            
+            let x = markerPos.x + relPos.x;
+            let y = markerPos.y + relPos.y;
+            
+            // Keep bubble within viewport bounds
+            const mapContainer = document.getElementById('map');
+            const viewportWidth = mapContainer.clientWidth;
+            const viewportHeight = mapContainer.clientHeight;
+            
+            // Adjust if too far right
+            if (x + bubbleWidth > viewportWidth - 10) {
+                x = viewportWidth - bubbleWidth - 10;
+            }
+            
+            // Adjust if too far left
+            if (x < 10) {
+                x = 10;
+            }
+            
+            // Adjust if too far down
+            if (y + bubbleHeight > viewportHeight - 10) {
+                y = viewportHeight - bubbleHeight - 10;
+            }
+            
+            // Adjust if too far up
+            if (y < 10) {
+                y = 10;
+            }
+            
+            return { x, y };
+        }
+        
+        // For single events (not co-located), use the original spiral pattern
+        const offset = baseOffset;
         
         // Use a spiral pattern to position bubbles
         // Vary position based on index to create natural spread
@@ -2562,15 +2746,22 @@ class EventsApp {
                     return;
                 }
                 
-                // Build category options from events
-                let optionsHTML = '<option value="all">All Categories</option>';
-                const categories = new Set();
-                this.events.forEach(event => {
-                    if (event.category) categories.add(event.category);
-                });
-                categories.forEach(cat => {
+                // Build category options with dynamic counts under current filter conditions
+                const categoryCounts = this.countCategoriesUnderFilters();
+                
+                // Calculate total count for "All Categories"
+                const totalCount = Object.values(categoryCounts).reduce((sum, count) => sum + count, 0);
+                
+                // Build options HTML with counts
+                let optionsHTML = `<option value="all">All Categories (${totalCount})</option>`;
+                
+                // Sort categories alphabetically for consistent display
+                const sortedCategories = Object.keys(categoryCounts).sort();
+                
+                sortedCategories.forEach(cat => {
+                    const count = categoryCounts[cat];
                     const selected = cat === this.filters.category ? ' selected' : '';
-                    optionsHTML += `<option value="${cat}"${selected}>${cat}</option>`;
+                    optionsHTML += `<option value="${cat}"${selected}>${cat} (${count})</option>`;
                 });
                 
                 const content = `<select id="category-filter">${optionsHTML}</select>`;
