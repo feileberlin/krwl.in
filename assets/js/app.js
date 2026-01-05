@@ -1461,38 +1461,31 @@ class EventsApp {
         const categorySelect = document.getElementById('category-filter');
         if (!categorySelect) return;
         
-        // Get current category counts under active filters
+        // Get current category counts under active filters (excluding category filter itself)
         const categoryCounts = this.countCategoriesUnderFilters();
         
-        // Calculate total count for "All Categories"
+        // Calculate total count for "All events"
         const totalCount = Object.values(categoryCounts).reduce((sum, count) => sum + count, 0);
         
         // Update each option with live counts
         Array.from(categorySelect.options).forEach(option => {
             const value = option.value;
             
-            // Skip the placeholder option
-            if (value === '') {
-                return;
-            }
-            
             // Store original label on first run
             if (!option.hasAttribute('data-original-label')) {
                 let cleanLabel = option.textContent.trim();
-                // Remove leading numbers and emojis with robust regex
-                cleanLabel = cleanLabel.replace(/^(\d+\s*)?([\u{1F000}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]\s*)*(.*)$/u, '$3');
+                // Remove leading numbers with robust regex
+                cleanLabel = cleanLabel.replace(/^(\d+\s*)?(.*)$/u, '$2');
                 option.setAttribute('data-original-label', cleanLabel.trim());
             }
             
             const originalLabel = option.getAttribute('data-original-label');
             
-            // Update label with count
+            // Update label with count - format as "{count} {label}"
             if (value === 'all') {
                 option.textContent = `${totalCount} ${originalLabel}`;
             } else {
                 const count = categoryCounts[value] || 0;
-                // Format: "{count} {icon} {label}" or just "{count} {label}" if no icon
-                // For now, keep it simple: "{count} {label}"
                 option.textContent = `${count} ${originalLabel}`;
             }
         });
@@ -1506,12 +1499,12 @@ class EventsApp {
         const categorySelect = document.getElementById('category-filter');
         if (!categorySelect) return;
         
-        // Clear existing options except placeholder
-        while (categorySelect.options.length > 1) {
-            categorySelect.remove(1);
+        // Clear existing options including placeholder
+        while (categorySelect.options.length > 0) {
+            categorySelect.remove(0);
         }
         
-        // Add "All Categories" option
+        // Add "All events" option (no placeholder)
         const allOption = document.createElement('option');
         allOption.value = 'all';
         allOption.setAttribute('data-original-label', 'events');
@@ -1537,7 +1530,10 @@ class EventsApp {
             categorySelect.appendChild(option);
         });
         
-        // Set up change event listener with reset-after-selection pattern
+        // Set initial value to current filter (no placeholder, show current selection)
+        categorySelect.value = this.filters.category || 'all';
+        
+        // Set up change event listener - no reset, keep current selection visible
         categorySelect.addEventListener('change', () => {
             const selected = categorySelect.value;
             if (selected) {
@@ -1545,12 +1541,7 @@ class EventsApp {
                 this.filters.category = selected;
                 this.saveFiltersToCookie();
                 this.displayEvents();
-                
-                // CRITICAL: Reset to placeholder (krawlist_revisited pattern)
-                // Use setTimeout to ensure reset happens after display completes
-                setTimeout(() => {
-                    categorySelect.value = '';
-                }, 0);
+                // Keep selection visible (no reset to placeholder)
             }
         });
         
