@@ -248,7 +248,58 @@
       "url": "https://event.frankenpost.de/detail.php?event_id=3214209",
       "category": null,
       "tags": []
+    },
+    {
+      "id": "html_frankenpost_4178476796564011639",
+      "title": "Treffpunkt f\u00fcr Senioren:",
+      "description": "07.Januar",
+      "location": {
+        "name": "Hof",
+        "lat": 50.3167,
+        "lon": 11.9167
+      },
+      "start_time": "2026-01-07T18:00:00",
+      "end_time": null,
+      "status": "pending",
+      "source": "Frankenpost",
+      "url": "https://event.frankenpost.de/detail.php?event_id=3234271",
+      "category": null,
+      "tags": []
+    },
+    {
+      "id": "html_frankenpost_3975465351931846877",
+      "title": "Die Anmeldungen laufen zur 34. Jugendferienfreizeit (JUBI)  Hallerstein  2026 der Turnerjugend",
+      "description": "Mittwoch,07.01.2026,08:00 Uhr",
+      "location": {
+        "name": "Hof",
+        "lat": 50.3167,
+        "lon": 11.9167
+      },
+      "start_time": "2026-01-07T18:00:00",
+      "end_time": null,
+      "status": "pending",
+      "source": "Frankenpost",
+      "url": "https://event.frankenpost.de/detail.php?event_id=3227027",
+      "category": null,
+      "tags": []
+    },
+    {
+      "id": "html_frankenpost_-5822799044200726321",
+      "title": "Bi 013_3 Englisch B2 f\u00fcr Fortgeschrittene B2",
+      "description": "Mittwoch,07.01.2026,10:00 Uhr",
+      "location": {
+        "name": "Hof",
+        "lat": 50.3167,
+        "lon": 11.9167
+      },
+      "start_time": "2026-01-07T18:00:00",
+      "end_time": null,
+      "status": "pending",
+      "source": "Frankenpost",
+      "url": "https://event.frankenpost.de/detail.php?event_id=2582992",
+      "category": null,
+      "tags": []
     }
   ],
-  "last_scraped": "2026-01-06T03:57:11.876929"
+  "last_scraped": "2026-01-07T03:57:39.149378"
 }
