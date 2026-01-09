@@ -350,7 +350,58 @@
       "url": "https://event.frankenpost.de/detail.php?event_id=3236166",
       "category": null,
       "tags": []
+    },
+    {
+      "id": "html_frankenpost_-4935177416888686473",
+      "title": "Offene Kreativwerkstatt f\u00fcr Krebsbetroffene und Angeh\u00f6rige - Leitung: Petra Siebert",
+      "description": "09.Januar09:30",
+      "location": {
+        "name": "Hof",
+        "lat": 50.3167,
+        "lon": 11.9167
+      },
+      "start_time": "2026-01-09T18:00:00",
+      "end_time": null,
+      "status": "pending",
+      "source": "Frankenpost",
+      "url": "https://event.frankenpost.de/detail.php?event_id=3194519",
+      "category": null,
+      "tags": []
+    },
+    {
+      "id": "html_frankenpost_-2226193557103485112",
+      "title": "Madame Butterfly in Walhall \u201eFest\u2013Spiele\" 1945\u20131950",
+      "description": "Freitag,09.01.2026,10:00 Uhr",
+      "location": {
+        "name": "Hof",
+        "lat": 50.3167,
+        "lon": 11.9167
+      },
+      "start_time": "2026-01-09T18:00:00",
+      "end_time": null,
+      "status": "pending",
+      "source": "Frankenpost",
+      "url": "https://event.frankenpost.de/detail.php?event_id=3153008",
+      "category": null,
+      "tags": []
+    },
+    {
+      "id": "html_frankenpost_-6114200832501799797",
+      "title": "Spot(t)-Light. Richard Wagner in der zeitgen\u00f6ssischen Karikatur",
+      "description": "Freitag,09.01.2026,10:00 Uhr",
+      "location": {
+        "name": "Hof",
+        "lat": 50.3167,
+        "lon": 11.9167
+      },
+      "start_time": "2026-01-09T18:00:00",
+      "end_time": null,
+      "status": "pending",
+      "source": "Frankenpost",
+      "url": "https://event.frankenpost.de/detail.php?event_id=3152961",
+      "category": null,
+      "tags": []
     }
   ],
-  "last_scraped": "2026-01-08T03:57:21.532660"
+  "last_scraped": "2026-01-09T03:57:45.495986"
 }
