@@ -705,16 +705,34 @@ def cli_scrape_weather(base_path, config, force_refresh=False):
     
     scraper = WeatherScraper(base_path, config)
     
-    # Get all configured locations
-    locations = config.get('weather', {}).get('locations', [])
-    if not locations:
+    # Collect all locations to scrape: weather.locations + map.predefined_locations
+    locations_to_scrape = []
+    
+    # Add explicitly configured weather locations
+    weather_locations = config.get('weather', {}).get('locations', [])
+    locations_to_scrape.extend(weather_locations)
+    
+    # Add predefined map locations (so weather is available when user switches locations)
+    predefined_locations = config.get('map', {}).get('predefined_locations', [])
+    for loc in predefined_locations:
+        # Add if not already in list (avoid duplicates)
+        if not any(l.get('name') == loc.get('display_name') or 
+                   (l.get('lat') == loc.get('lat') and l.get('lon') == loc.get('lon'))
+                   for l in locations_to_scrape):
+            locations_to_scrape.append({
+                'name': loc.get('display_name', loc.get('name')),
+                'lat': loc.get('lat'),
+                'lon': loc.get('lon')
+            })
+    
+    if not locations_to_scrape:
         print("⚠ No weather locations configured")
         return 1
     
-    print(f"Scraping weather for {len(locations)} location(s)...")
+    print(f"Scraping weather for {len(locations_to_scrape)} location(s)...")
     
     success_count = 0
-    for location in locations:
+    for location in locations_to_scrape:
         location_name = location.get('name')
         lat = location.get('lat')
         lon = location.get('lon')
@@ -742,7 +760,7 @@ def cli_scrape_weather(base_path, config, force_refresh=False):
         else:
             print(f"✗ Failed to fetch weather for {location_name}")
     
-    print(f"\n✓ Successfully scraped weather for {success_count}/{len(locations)} location(s)")
+    print(f"\n✓ Successfully scraped weather for {success_count}/{len(locations_to_scrape)} location(s)")
     return 0 if success_count > 0 else 1
 
 

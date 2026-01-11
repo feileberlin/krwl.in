@@ -869,9 +869,10 @@ class EventsApp {
     
     async loadWeather() {
         /**
-         * Load current weather dresscode from cache.
+         * Load current weather dresscode from cache based on selected location filter.
          * Weather is scraped hourly by backend and cached in weather_cache.json.
          * Only displays dresscode if it's in the accepted list (validated by backend).
+         * Uses the current location filter state to determine which location's weather to show.
          */
         try {
             // Check if weather feature is enabled in config
@@ -894,19 +895,12 @@ class EventsApp {
             
             const weatherCache = await response.json();
             
-            // Get weather for default location (first location in cache)
-            const cacheKeys = Object.keys(weatherCache);
-            if (cacheKeys.length === 0) {
-                this.log('Weather cache is empty');
-                return;
-            }
-            
-            // Get the first (or default) location's weather
-            const defaultKey = cacheKeys.find(key => key.includes('Hof')) || cacheKeys[0];
-            const weatherEntry = weatherCache[defaultKey];
+            // Get weather based on current location filter state
+            const locationInfo = this.getCurrentLocationInfo();
+            const weatherEntry = this.getWeatherForLocation(weatherCache, locationInfo);
             
             if (!weatherEntry || !weatherEntry.data) {
-                this.log('No weather data in cache entry');
+                this.log('No weather data for current location');
                 return;
             }
             
@@ -926,10 +920,111 @@ class EventsApp {
         }
     }
     
+    getCurrentLocationInfo() {
+        /**
+         * Get current location information based on active filter state.
+         * Returns object with location name, lat, lon based on filter type.
+         */
+        const predefinedLocs = this.config.map?.predefined_locations || [];
+        
+        // Check location filter type
+        if (this.filters.locationType === 'predefined' && this.filters.selectedPredefinedLocation !== null) {
+            // User selected a predefined location
+            const selectedLoc = predefinedLocs[this.filters.selectedPredefinedLocation];
+            if (selectedLoc) {
+                return {
+                    name: selectedLoc.display_name || selectedLoc.name,
+                    lat: selectedLoc.lat,
+                    lon: selectedLoc.lon,
+                    type: 'predefined'
+                };
+            }
+        } else if (this.filters.locationType === 'custom' && this.filters.customLat && this.filters.customLon) {
+            // User entered custom coordinates
+            return {
+                name: 'Custom Location',
+                lat: this.filters.customLat,
+                lon: this.filters.customLon,
+                type: 'custom'
+            };
+        } else if (this.filters.locationType === 'geolocation' && this.userLocation) {
+            // Using user's geolocation
+            return {
+                name: 'Current Location',
+                lat: this.userLocation.lat,
+                lon: this.userLocation.lon,
+                type: 'geolocation'
+            };
+        }
+        
+        // Fallback to default location (Hof)
+        return {
+            name: 'Hof',
+            lat: 50.3167,
+            lon: 11.9167,
+            type: 'default'
+        };
+    }
+    
+    getWeatherForLocation(weatherCache, locationInfo) {
+        /**
+         * Find weather data in cache for the given location.
+         * Matches by location name or coordinates (with tolerance).
+         */
+        const cacheKeys = Object.keys(weatherCache);
+        
+        if (cacheKeys.length === 0) {
+            this.log('Weather cache is empty');
+            return null;
+        }
+        
+        // Try to match by location name first
+        if (locationInfo.name) {
+            const nameKey = cacheKeys.find(key => 
+                key.toLowerCase().includes(locationInfo.name.toLowerCase()) ||
+                locationInfo.name.toLowerCase().includes(key.toLowerCase().replace('location_', ''))
+            );
+            
+            if (nameKey) {
+                this.log('Weather found by name:', nameKey);
+                return weatherCache[nameKey];
+            }
+        }
+        
+        // Try to match by coordinates (with small tolerance for rounding)
+        if (locationInfo.lat && locationInfo.lon) {
+            const coordKey = cacheKeys.find(key => {
+                if (key.startsWith('coords_')) {
+                    const parts = key.replace('coords_', '').split('_');
+                    if (parts.length >= 2) {
+                        const cacheLat = parseFloat(parts[0]);
+                        const cacheLon = parseFloat(parts[1]);
+                        // Match with 0.01 degree tolerance (~1km)
+                        return Math.abs(cacheLat - locationInfo.lat) < 0.01 &&
+                               Math.abs(cacheLon - locationInfo.lon) < 0.01;
+                    }
+                }
+                return false;
+            });
+            
+            if (coordKey) {
+                this.log('Weather found by coords:', coordKey);
+                return weatherCache[coordKey];
+            }
+        }
+        
+        // Fallback to first available (or Hof if available)
+        const defaultKey = cacheKeys.find(key => key.includes('Hof')) || cacheKeys[0];
+        this.log('Weather fallback to:', defaultKey);
+        return weatherCache[defaultKey];
+    }
+    
     displayWeatherDresscode(dresscode, temperature) {
         /**
          * Display weather dresscode in filter bar.
          * Shows at the end of the filter bar after location.
+         * Displays only dresscode by default, temperature shown on hover.
+         * Weather chip is informational only (not a filter).
          */
         const weatherChip = this.getCachedElement('#filter-bar-weather');
         if (!weatherChip) {
@@ -937,18 +1032,22 @@ class EventsApp {
             return;
         }
         
-        // Format display text
-        let displayText = dresscode;
+        // Display only dresscode text (temperature shown on hover via title)
+        weatherChip.textContent = dresscode;
+        
+        // Store temperature in data attribute for potential future use
         if (temperature) {
-            displayText = `${temperature} • ${dresscode}`;
+            weatherChip.setAttribute('data-temperature', temperature);
+            // Show temperature on hover via title attribute
+            weatherChip.setAttribute('title', `${temperature} • ${dresscode}`);
+        } else {
+            weatherChip.setAttribute('title', dresscode);
         }
         
-        // Update chip content and show it
-        weatherChip.textContent = displayText;
+        // Show the chip
         weatherChip.style.display = '';  // Remove display:none
-        weatherChip.setAttribute('title', `Current weather: ${dresscode}`);
         
-        this.log('Weather dresscode displayed:', displayText);
+        this.log('Weather dresscode displayed:', dresscode, temperature ? `(${temperature})` : '');
     }
     
     processTemplateEvents(events) {
@@ -3117,6 +3216,7 @@ class EventsApp {
                             }
                             
                             this.displayEvents();
+                            this.loadWeather(); // Update weather for new location
                             hideAllDropdowns();
                             
                         } else if (value.startsWith('predefined-')) {
@@ -3135,6 +3235,7 @@ class EventsApp {
                             }
                             
                             this.displayEvents();
+                            this.loadWeather(); // Update weather for new location
                             hideAllDropdowns();
                             
                         } else if (value === 'custom') {
@@ -3175,6 +3276,7 @@ class EventsApp {
                             }
                             
                             this.displayEvents();
+                            this.loadWeather(); // Update weather for new location
                             hideAllDropdowns();
                         } else {
                             alert('Please enter valid latitude (-90 to 90) and longitude (-180 to 180) values.');

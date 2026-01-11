@@ -205,19 +205,21 @@ strong, b {
     text-shadow: 0 0 15px rgba(255, 105, 180, 0.8);
 }
 
-/* Weather chip - non-interactive display */
+/* Weather chip - informational display (not a filter) */
 #event-filter-bar .weather-chip {
-    cursor: default;
+    cursor: help;  /* Help cursor indicates hovering shows more info */
     opacity: 0.8;
     font-size: 0.85rem;
     color: var(--color-text-secondary);
     text-shadow: none;
+    font-style: italic;  /* Italic to differentiate from filter buttons */
 }
 
 #event-filter-bar .weather-chip:hover {
     opacity: 1;
     color: var(--color-text-primary);
     text-shadow: 0 0 10px rgba(255, 105, 180, 0.3);
+    /* Temperature shown in browser's native tooltip via title attribute */
 }
 
 #event-filter-bar .filter-bar-logo:hover {
