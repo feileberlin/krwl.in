@@ -452,7 +452,58 @@
       "url": "https://event.frankenpost.de/detail.php?event_id=3214213",
       "category": null,
       "tags": []
+    },
+    {
+      "id": "html_frankenpost_2860463867127539021",
+      "title": "F\u00fchrung durch die Wohnr\u00e4ume der Sommerresidenz der Markgr\u00e4fin Caroline",
+      "description": "11.Januar",
+      "location": {
+        "name": "Hof",
+        "lat": 50.3167,
+        "lon": 11.9167
+      },
+      "start_time": "2026-01-11T18:00:00",
+      "end_time": null,
+      "status": "pending",
+      "source": "Frankenpost",
+      "url": "https://event.frankenpost.de/detail.php?event_id=3185852",
+      "category": null,
+      "tags": []
+    },
+    {
+      "id": "html_frankenpost_-3343851027498800834",
+      "title": "Treffpunkt f\u00fcr Senioren:",
+      "description": "Sonntag,11.01.2026,",
+      "location": {
+        "name": "Hof",
+        "lat": 50.3167,
+        "lon": 11.9167
+      },
+      "start_time": "2026-01-11T18:00:00",
+      "end_time": null,
+      "status": "pending",
+      "source": "Frankenpost",
+      "url": "https://event.frankenpost.de/detail.php?event_id=3234276",
+      "category": null,
+      "tags": []
+    },
+    {
+      "id": "html_frankenpost_3585673021840887885",
+      "title": "WF Schwarzenbach/S.e.V. - Gef\u00fchrte IVV Wanderung - \"Neujahrswanderung\"",
+      "description": "Sonntag,11.01.2026,09:30 Uhr",
+      "location": {
+        "name": "Hof",
+        "lat": 50.3167,
+        "lon": 11.9167
+      },
+      "start_time": "2026-01-11T18:00:00",
+      "end_time": null,
+      "status": "pending",
+      "source": "Frankenpost",
+      "url": "https://event.frankenpost.de/detail.php?event_id=3226272",
+      "category": null,
+      "tags": []
     }
   ],
-  "last_scraped": "2026-01-10T03:51:33.965069"
+  "last_scraped": "2026-01-11T04:05:49.899040"
 }
