@@ -882,8 +882,11 @@ class EventsApp {
             
             this.log('Loading weather data...');
             
+            // Weather cache filename (should match backend cache location)
+            const weatherCacheFile = 'weather_cache.json';
+            
             // Fetch weather cache
-            const response = await fetch('weather_cache.json');
+            const response = await fetch(weatherCacheFile);
             if (!response.ok) {
                 this.log('Weather cache not found, skipping');
                 return;

@@ -695,6 +695,8 @@
     "_comment_cache": "Cache weather data for this many hours (default: 1 hour)",
     "timeout": 10,
     "_comment_timeout": "Request timeout in seconds",
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "_comment_user_agent": "User-Agent string for HTTP requests (update periodically to match current browsers)",
     "locations": [
       {
         "name": "Hof",

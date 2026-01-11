@@ -48,6 +48,8 @@ class WeatherScraper:
         self.locations = weather_config.get('locations', [])
         self.cache_hours = weather_config.get('cache_hours', 1)
         self.timeout = weather_config.get('timeout', 10)
+        self.user_agent = weather_config.get('user_agent', 
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36')
         
         # MSN Weather URL template
         self.msn_weather_url = "https://www.msn.com/en-us/weather/forecast/in-{city},{region},{country}"
@@ -105,8 +107,8 @@ class WeatherScraper:
                 # Use location name (e.g., "Hof, Bavaria, Germany")
                 url = self._build_msn_url(location_name)
             elif lat and lon:
-                # Use coordinates (convert to location name via reverse geocoding or default)
-                location_name = "Hof"  # Default for this project
+                # Use coordinates (use first configured location as fallback)
+                location_name = self.locations[0]['name'] if self.locations else "Hof"
                 url = self._build_msn_url(location_name)
             else:
                 logger.error("No location specified for weather scraping")
@@ -116,7 +118,7 @@ class WeatherScraper:
             
             # Fetch page with headers to avoid bot detection
             headers = {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+                'User-Agent': self.user_agent
             }
             response = requests.get(url, headers=headers, timeout=self.timeout)
             response.raise_for_status()
@@ -259,7 +261,8 @@ class WeatherScraper:
                 elements = soup.select(selector)
                 for element in elements:
                     temp_text = element.get_text().strip()
-                    if temp_text and ('°' in temp_text or temp_text.replace('-', '').isdigit()):
+                    # Check if text contains degree symbol or has numeric content
+                    if temp_text and ('°' in temp_text or any(c.isdigit() for c in temp_text)):
                         return temp_text
             
             return None
@@ -370,7 +373,7 @@ class WeatherScraper:
         region_encoded = region.replace(" ", "%20")
         country_encoded = country.replace(" ", "%20")
         
-        return f"https://www.msn.com/en-us/weather/forecast/in-{city_encoded},{region_encoded},{country_encoded},{country_encoded}"
+        return f"https://www.msn.com/en-us/weather/forecast/in-{city_encoded},{region_encoded},{country_encoded}"
     
     def _get_cache_key(self, location_name, lat, lon):
         """
