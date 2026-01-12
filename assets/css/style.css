@@ -39,6 +39,12 @@ BLACKS & GREYS:
 /* Import design tokens - these are inlined during site generation */
 /* Design tokens provide: colors, typography, spacing, z-index, shadows, borders, transitions */
 
+:root {
+    /* App dimensions - full viewport */
+    --app-width: 100vw;
+    --app-height: 100vh;
+}
+
 * {
     margin: 0;
     padding: 0;
