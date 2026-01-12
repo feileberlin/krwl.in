@@ -2062,12 +2062,20 @@ class EventsApp {
     
     /**
      * Calculate position for speech bubble with collision detection
-     * KISS approach: Random placement with overlap prevention
+     * KISS approach: Blended randomness + predictable patterns
+     * 
+     * Uses a blend of random and index-based positioning:
+     * - Random component: Different arrangement each page load
+     * - Index bias: Creates natural organic patterns
+     * - Collision detection: Prevents overlaps
+     * 
+     * This gives the best of both worlds: organic variety that still has
+     * a subtle structure, like nature itself (trees in a forest, stars in sky).
      * 
      * @param {Object} markerPos - {x, y} marker screen position
-     * @param {number} index - Bubble index (used for fallback seed)
-     * @param {number} groupSize - Number of events at this location (unused, kept for API compatibility)
-     * @param {number} groupIndex - Index within group (unused, kept for API compatibility)
+     * @param {number} index - Bubble index (used for predictable bias)
+     * @param {number} groupSize - DEPRECATED: Kept for backward compatibility, not used
+     * @param {number} groupIndex - DEPRECATED: Kept for backward compatibility, not used
      * @returns {Object} {x, y} position for bubble
      */
     calculateBubblePosition(markerPos, index, groupSize = 1, groupIndex = 0) {
@@ -2097,12 +2105,15 @@ class EventsApp {
         let attempt = 0;
         
         while (attempt < maxAttempts) {
-            // Generate completely random offset from marker (chaotic distribution)
+            // Generate semi-random offset with index-based bias for natural variety
             // Distance: 60-200px from marker for wide natural spread
             const distance = 60 + Math.random() * 140;
-            // Angle: Fully random 0-360 degrees for unpredictable placement
-            // No index bias - ensures different arrangement on every page load
-            const angle = Math.random() * 2 * Math.PI;
+            
+            // Angle: Blend of randomness + predictable index bias
+            // This creates organic patterns that vary slightly each time
+            const randomAngle = Math.random() * 2 * Math.PI;  // Random component
+            const indexBias = (index * 0.5) % (2 * Math.PI);   // Predictable component
+            const angle = randomAngle + indexBias;              // Blend both
             
             // Calculate position
             let x = markerPos.x + Math.cos(angle) * distance;
@@ -2130,13 +2141,15 @@ class EventsApp {
             attempt++;
         }
         
-        // Fallback: Try random positions at increasing distances from marker
-        // This ensures bubbles always appear even if map is very crowded
+        // Fallback: Create a spiral pattern outward from marker with slight randomness
+        // Uses golden angle for natural distribution + random offset for variety
         const spiralAttempts = 30;
         for (let i = 0; i < spiralAttempts; i++) {
             const spiralRadius = 80 + (i * 30); // Wider spacing in spiral
-            // Use random angle instead of golden angle for truly random placement each time
-            const spiralAngle = Math.random() * 2 * Math.PI;
+            // Golden angle creates natural spiral + random offset adds variety
+            const goldenAngle = (index + i) * 0.618 * 2 * Math.PI;
+            const randomOffset = (Math.random() - 0.5) * 0.5; // ±14° variation
+            const spiralAngle = goldenAngle + randomOffset;
             
             let x = markerPos.x + Math.cos(spiralAngle) * spiralRadius;
             let y = markerPos.y + Math.sin(spiralAngle) * spiralRadius;
@@ -2162,9 +2175,13 @@ class EventsApp {
         
         // Last resort: Force placement with offset grid to minimize overlaps
         // This should rarely be reached but ensures bubbles always render
-        const gridSize = 250; // Grid cell size (bubbleWidth + padding)
-        const gridX = (index % 6) * gridSize + margin; // 6 columns
-        const gridY = Math.floor(index / 6) * 160 + margin; // Stacked rows
+        // Grid layout: bubbleWidth + padding + spacing
+        const gridCellWidth = bubbleWidth + padding + 15;  // ~250px
+        const gridCellHeight = bubbleHeight + padding + 5; // ~160px
+        const gridColumns = Math.floor(viewportWidth / gridCellWidth);
+        
+        const gridX = (index % gridColumns) * gridCellWidth + margin;
+        const gridY = Math.floor(index / gridColumns) * gridCellHeight + margin;
         
         const forceX = Math.min(gridX, viewportWidth - bubbleWidth - margin);
         const forceY = Math.min(gridY, viewportHeight - bubbleHeight - margin);
