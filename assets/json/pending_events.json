@@ -503,7 +503,58 @@
       "url": "https://event.frankenpost.de/detail.php?event_id=3226272",
       "category": null,
       "tags": []
+    },
+    {
+      "id": "html_frankenpost_8802242520196956261",
+      "title": "Blutspende in Hof",
+      "description": "12.Januar14:00",
+      "location": {
+        "name": "Hof",
+        "lat": 50.3167,
+        "lon": 11.9167
+      },
+      "start_time": "2026-01-12T18:00:00",
+      "end_time": null,
+      "status": "pending",
+      "source": "Frankenpost",
+      "url": "https://event.frankenpost.de/detail.php?event_id=3225565",
+      "category": null,
+      "tags": []
+    },
+    {
+      "id": "html_frankenpost_2873443594767127465",
+      "title": "Wundersame Hausaufgaben Betreuung und kreative Frei-Zeit",
+      "description": "Montag,12.01.2026,14:30 Uhr",
+      "location": {
+        "name": "Hof",
+        "lat": 50.3167,
+        "lon": 11.9167
+      },
+      "start_time": "2026-01-12T18:00:00",
+      "end_time": null,
+      "status": "pending",
+      "source": "Frankenpost",
+      "url": "https://event.frankenpost.de/detail.php?event_id=3236554",
+      "category": null,
+      "tags": []
+    },
+    {
+      "id": "html_frankenpost_-5715239139764841818",
+      "title": "Churmusik am Nachmittag",
+      "description": "Montag,12.01.2026,15:00 Uhr",
+      "location": {
+        "name": "Hof",
+        "lat": 50.3167,
+        "lon": 11.9167
+      },
+      "start_time": "2026-01-12T18:00:00",
+      "end_time": null,
+      "status": "pending",
+      "source": "Frankenpost",
+      "url": "https://event.frankenpost.de/detail.php?event_id=3028886",
+      "category": null,
+      "tags": []
     }
   ],
-  "last_scraped": "2026-01-11T04:05:49.899040"
+  "last_scraped": "2026-01-12T04:06:03.651886"
 }
