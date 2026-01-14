@@ -984,6 +984,19 @@ When adding features:
 - Verify PWA functionality (installability, offline mode)
 - Check accessibility (keyboard navigation, screen readers)
 
+### For UI Screenshots
+When taking screenshots of the application for PR documentation:
+- **ALWAYS wait for the map to fully load** before taking screenshots
+- The map uses Leaflet.js which loads asynchronously from CDN
+- Wait for markers to appear on the map (not just the "Map Loading..." fallback)
+- If using Playwright or similar tools, wait for the map container to be ready:
+  - Wait for Leaflet tiles to load
+  - Wait for event markers to render
+  - Ensure speech bubbles/popups are visible if demonstrating those features
+- Screenshots showing "Map Loading..." or fallback content are not acceptable for PR documentation
+
+**CI Environment Limitation**: In CI environments, external CDN resources (Leaflet.js, fonts) may be blocked. If the map cannot load due to network restrictions, document this limitation in the PR and skip the screenshot rather than including a "Map Loading..." screenshot.
+
 ### For Configuration Changes
 - Test with both `config.dev.json` and `config.prod.json`
 - Validate JSON syntax
