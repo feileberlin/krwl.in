@@ -998,7 +998,8 @@ When taking screenshots of the application for PR documentation:
 **CI Environment Limitation**: In CI environments, external CDN resources (Leaflet.js, fonts) may be blocked. If the map cannot load due to network restrictions, document this limitation in the PR and skip the screenshot rather than including a "Map Loading..." screenshot.
 
 ### For Configuration Changes
-- Test with both `config.dev.json` and `config.prod.json`
+- Test with unified `config.json` (automatic environment detection)
+- Verify environment detection works correctly for your changes
 - Validate JSON syntax
 - Run full test suite
 
@@ -1007,7 +1008,7 @@ When taking screenshots of the application for PR documentation:
 Simplified workflow with two modes:
 
 1. **Feature branch** → PR to `main` branch
-2. **Main branch** → Auto-deploys to production (uses `config.prod.json`)
+2. **Main branch** → Auto-deploys to production (environment auto-detected)
 
 GitHub Pages serves the `public/` directory directly.
 
