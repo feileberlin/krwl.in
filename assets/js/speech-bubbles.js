@@ -1,24 +1,27 @@
 /**
- * SpeechBubbles Module (Simplified)
+ * SpeechBubbles Module
  * 
  * Handles speech bubble UI components for events on the map.
- * Simplified positioning using CSS Grid instead of complex collision detection.
+ * Collision-aware positioning with organic spread around markers.
  * Bubbles follow their markers when map is panned/zoomed.
  * Users can drag bubbles to resolve positioning conflicts manually.
- * 
- * KISS: Replaced 100-line calculateBubblePosition() with simple grid layout
  */
 
 // Bubble dimension constants
 const BUBBLE_WIDTH = 220;
 const BUBBLE_HEIGHT = 140;
 const BUBBLE_MARGIN = 15;
+const BUBBLE_GUTTER = 12;
 
 // Positioning constants
 const MARKER_VERTICAL_OFFSET = 50;     // Pixels above marker
 const BASE_SPREAD_OFFSET = 60;         // Minimum distance from marker
 const SPREAD_FACTOR = 40;              // Additional spread per bubble
 const HORIZONTAL_SPREAD_MULTIPLIER = 1.2; // Wider horizontal spread
+const MARKER_CLEARANCE = 18;
+const MAX_POSITION_ATTEMPTS = 30;
+const GOLDEN_ANGLE = 2.399963229728653; // Golden ratio angle (≈137.5°) in radians
+const SPREAD_BASE = 1;                 // Avoid sqrt(0) spacing
 
 // Filter bar constants
 const FILTER_BAR_PADDING = 20;         // Extra padding below filter bar
@@ -39,6 +42,8 @@ class SpeechBubbles {
         this.map = null;
         this.bubbleData = []; // Store bubble-marker associations for updates
         this.moveHandler = null; // Store reference for cleanup
+        this.connectorLayer = null;
+        this.markers = [];
         
         // Drag state
         this.dragState = {
@@ -72,10 +77,16 @@ class SpeechBubbles {
         // Remove all bubble elements
         const bubbles = document.querySelectorAll('.speech-bubble');
         bubbles.forEach(bubble => bubble.remove());
+
+        if (this.connectorLayer) {
+            this.connectorLayer.remove();
+            this.connectorLayer = null;
+        }
         
         // Clear arrays
         this.speechBubbles = [];
         this.bubbleData = [];
+        this.markers = [];
         
         this.log('Speech bubbles cleared');
     }
@@ -95,13 +106,18 @@ class SpeechBubbles {
         
         this.clearSpeechBubbles();
         this.map = map;
+        this.markers = markers;
+        this.setupConnectorLayer();
         
         // Group events by location (deduplication)
         const eventItems = this.deduplicateEvents(events);
         
         this.log(`Showing ${eventItems.length} speech bubbles (${events.length} events after deduplication)`);
         
-        // Create bubbles with simple grid positioning
+        const occupiedRects = [];
+        const markerBounds = this.getMarkerBounds(markers, map);
+
+        // Create bubbles with collision-aware positioning
         eventItems.forEach((item, index) => {
             const marker = markers.find(m => 
                 m && m.options && m.options.customData && m.options.customData.id === item.event.id
@@ -115,7 +131,9 @@ class SpeechBubbles {
                     item.groupSize,
                     0,
                     item.duplicateCount,
-                    map
+                    map,
+                    occupiedRects,
+                    markerBounds
                 );
             }
         });
@@ -164,9 +182,11 @@ class SpeechBubbles {
      * @param {number} groupIndex - Index within group
      * @param {number} duplicateCount - Number of duplicate events
      * @param {Object} map - Leaflet map instance
+     * @param {Array} occupiedRects - Existing bubble rectangles
+     * @param {Array} markerBounds - Marker rectangles
      * @returns {HTMLElement} Created bubble element
      */
-    createSpeechBubble(event, marker, index, groupSize = 1, groupIndex = 0, duplicateCount = 1, map) {
+    createSpeechBubble(event, marker, index, groupSize = 1, groupIndex = 0, duplicateCount = 1, map, occupiedRects = [], markerBounds = []) {
         if (!marker || !map) return;
         
         // Get marker position in screen coordinates
@@ -213,25 +233,30 @@ class SpeechBubbles {
         `;
         
         // Initialize Lucide icons
-        if (bookmarkingSupported && typeof lucide !== 'undefined') {
-            setTimeout(() => lucide.createIcons(), 10);
+        if (bookmarkingSupported && window.lucide && typeof window.lucide.createIcons === 'function') {
+            setTimeout(() => window.lucide.createIcons(), 10);
         }
         
         // Calculate position relative to marker (bubble appears above/around marker)
-        const position = this.calculateMarkerRelativePosition(markerPos, index);
+        const position = this.calculateMarkerRelativePosition(markerPos, index, occupiedRects, markerBounds);
         bubble.style.left = position.x + 'px';
         bubble.style.top = position.y + 'px';
         
         // Add to map container
         document.getElementById('map').appendChild(bubble);
         this.speechBubbles.push(bubble);
+
+        const bubbleRect = this.getBubbleRect(position.x, position.y);
+        occupiedRects.push(bubbleRect);
+        const connectorLine = this.createConnectorLine(markerPos, bubbleRect);
         
         // Store bubble-marker association for updates on map move
         this.bubbleData.push({
             bubble: bubble,
             marker: marker,
             index: index,
-            userOffset: null // Track user-applied drag offset
+            userOffset: null, // Track user-applied drag offset
+            connector: connectorLine
         });
         
         // Add drag event listeners for repositioning
@@ -339,6 +364,7 @@ class SpeechBubbles {
         // Apply position
         this.dragState.bubble.style.left = newX + 'px';
         this.dragState.bubble.style.top = newY + 'px';
+        this.updateConnectorLineForBubble(this.dragState.bubble);
         
         e.preventDefault();
     }
@@ -412,16 +438,21 @@ class SpeechBubbles {
         const mapContainer = document.getElementById('map');
         const viewportWidth = mapContainer.clientWidth;
         const viewportHeight = mapContainer.clientHeight;
+        this.updateConnectorViewport(viewportWidth, viewportHeight);
         
-        // Get filter bar height to avoid overlap
-        const filterBar = document.getElementById('event-filter-bar');
-        const filterBarHeight = filterBar ? filterBar.offsetHeight + FILTER_BAR_PADDING : DEFAULT_FILTER_BAR_HEIGHT;
+        const { height: filterBarHeight } = this.getFilterBarMetrics(mapContainer);
+        const markerBounds = this.getMarkerBounds(this.markers.length ? this.markers : this.bubbleData.map(entry => entry.marker), this.map);
+        const occupiedRects = [];
         
-        this.bubbleData.forEach(({ bubble, marker, index, userOffset }) => {
+        this.bubbleData.forEach(({ bubble, marker, index, userOffset, connector }) => {
+            if (!this.isValidMarker(marker)) {
+                return;
+            }
             // Get updated marker position in screen coordinates
             const markerPos = this.map.latLngToContainerPoint(marker.getLatLng());
             
             let x, y;
+            let bubbleRect;
             
             // If user has manually repositioned this bubble, use their offset
             if (userOffset) {
@@ -431,16 +462,20 @@ class SpeechBubbles {
                 // Clamp to viewport bounds
                 x = Math.max(BUBBLE_MARGIN, Math.min(x, viewportWidth - BUBBLE_WIDTH - BUBBLE_MARGIN));
                 y = Math.max(filterBarHeight + BUBBLE_MARGIN, Math.min(y, viewportHeight - BUBBLE_HEIGHT - BUBBLE_MARGIN));
+                bubbleRect = this.getBubbleRect(x, y);
             } else {
                 // Use automatic positioning
-                const position = this.calculateMarkerRelativePosition(markerPos, index);
+                const position = this.calculateMarkerRelativePosition(markerPos, index, occupiedRects, markerBounds);
                 x = position.x;
                 y = position.y;
+                bubbleRect = this.getBubbleRect(x, y);
             }
             
             // Update bubble position
             bubble.style.left = x + 'px';
             bubble.style.top = y + 'px';
+
+            occupiedRects.push(bubbleRect);
             
             // Hide bubble if marker is outside viewport (with some margin)
             const isVisible = markerPos.x > -BUBBLE_WIDTH && 
@@ -450,7 +485,193 @@ class SpeechBubbles {
             
             bubble.style.opacity = isVisible ? '' : '0';
             bubble.style.pointerEvents = isVisible ? '' : 'none';
+            if (connector) {
+                this.updateConnectorLine({ bubble, marker, connector }, bubbleRect, markerPos, isVisible);
+            }
         });
+    }
+
+    /**
+     * Create or reset the SVG layer for bubble connectors.
+     */
+    setupConnectorLayer() {
+        if (!this.map) return;
+        const mapContainer = document.getElementById('map');
+        if (!mapContainer) return;
+
+        if (this.connectorLayer) {
+            this.connectorLayer.remove();
+        }
+
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svg.classList.add('bubble-connectors');
+        svg.setAttribute('width', '100%');
+        svg.setAttribute('height', '100%');
+        svg.setAttribute('viewBox', `0 0 ${mapContainer.clientWidth} ${mapContainer.clientHeight}`);
+        mapContainer.appendChild(svg);
+        this.connectorLayer = svg;
+    }
+
+    /**
+     * Update SVG connector viewbox to match the current viewport.
+     * @param {number} width - Map container width.
+     * @param {number} height - Map container height.
+     */
+    updateConnectorViewport(width, height) {
+        if (!this.connectorLayer) return;
+        this.connectorLayer.setAttribute('viewBox', `0 0 ${width} ${height}`);
+    }
+
+    /**
+     * Create a connector line element between a marker and bubble.
+     * @param {Object} markerPos - Marker position in container coordinates.
+     * @param {Object} bubbleRect - Bubble rectangle bounds.
+     * @returns {SVGLineElement|null} Connector line element.
+     */
+    createConnectorLine(markerPos, bubbleRect) {
+        if (!this.connectorLayer) return null;
+        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        line.classList.add('bubble-connector-line');
+        this.connectorLayer.appendChild(line);
+        this.updateConnectorLine({ connector: line }, bubbleRect, markerPos, true);
+        return line;
+    }
+
+    /**
+     * Update connector line for a single bubble (used during drag).
+     * @param {HTMLElement} bubble - Bubble element being moved.
+     */
+    updateConnectorLineForBubble(bubble) {
+        if (!bubble || !this.map) return;
+        const entry = this.bubbleData.find(data => data.bubble === bubble);
+        if (!entry || !entry.marker || !entry.connector) return;
+        const markerPos = this.map.latLngToContainerPoint(entry.marker.getLatLng());
+        const bubbleRect = this.getBubbleRectFromElement(bubble);
+        this.updateConnectorLine(entry, bubbleRect, markerPos, true);
+    }
+
+    /**
+     * Update connector coordinates between a marker and bubble.
+     * @param {Object} entry - Bubble data entry.
+     * @param {Object} bubbleRect - Bubble rectangle bounds.
+     * @param {Object} markerPos - Marker position in container coordinates.
+     * @param {boolean} isVisible - Whether the bubble is visible.
+     */
+    updateConnectorLine(entry, bubbleRect, markerPos, isVisible) {
+        const connector = entry.connector;
+        if (!connector) return;
+        const endPoint = this.getClosestPointOnRect(markerPos, bubbleRect);
+        connector.setAttribute('x1', markerPos.x);
+        connector.setAttribute('y1', markerPos.y);
+        connector.setAttribute('x2', endPoint.x);
+        connector.setAttribute('y2', endPoint.y);
+        connector.style.opacity = isVisible ? '' : '0';
+    }
+
+    /**
+     * Build a rectangle object for collision checks.
+     * @param {number} x - Left position.
+     * @param {number} y - Top position.
+     * @returns {Object} Rectangle bounds.
+     */
+    getBubbleRect(x, y) {
+        return {
+            x,
+            y,
+            width: BUBBLE_WIDTH,
+            height: BUBBLE_HEIGHT
+        };
+    }
+
+    /**
+     * Extract bubble rectangle bounds from a DOM element.
+     * @param {HTMLElement} bubble - Bubble element.
+     * @returns {Object} Rectangle bounds.
+     */
+    getBubbleRectFromElement(bubble) {
+        const x = parseFloat(bubble.style.left) || 0;
+        const y = parseFloat(bubble.style.top) || 0;
+        return this.getBubbleRect(x, y);
+    }
+
+    /**
+     * Get the closest point on a rectangle to a target point.
+     * @param {Object} point - Target point.
+     * @param {Object} rect - Rectangle bounds.
+     * @returns {Object} Closest point.
+     */
+    getClosestPointOnRect(point, rect) {
+        const x = Math.max(rect.x, Math.min(point.x, rect.x + rect.width));
+        const y = Math.max(rect.y, Math.min(point.y, rect.y + rect.height));
+        return { x, y };
+    }
+
+    /**
+     * Check if two rectangles overlap with optional padding.
+     * @param {Object} rectA - First rectangle.
+     * @param {Object} rectB - Second rectangle.
+     * @param {number} padding - Extra gutter between rectangles.
+     * @returns {boolean} True if rectangles overlap.
+     */
+    rectanglesOverlap(rectA, rectB, padding = 0) {
+        return !(rectA.x + rectA.width + padding < rectB.x ||
+                 rectB.x + rectB.width + padding < rectA.x ||
+                 rectA.y + rectA.height + padding < rectB.y ||
+                 rectB.y + rectB.height + padding < rectA.y);
+    }
+
+    /**
+     * Get filter bar bounds and safe height within the map container.
+     * @param {HTMLElement} mapContainer - Map container element.
+     * @returns {Object} Metrics including height and rect.
+     */
+    getFilterBarMetrics(mapContainer) {
+        const filterBar = document.getElementById('event-filter-bar');
+        if (!filterBar || !mapContainer) {
+            return { height: DEFAULT_FILTER_BAR_HEIGHT, rect: null };
+        }
+
+        const mapRect = mapContainer.getBoundingClientRect();
+        const barRect = filterBar.getBoundingClientRect();
+        const rect = {
+            x: barRect.left - mapRect.left,
+            y: barRect.top - mapRect.top,
+            width: barRect.width,
+            height: barRect.height
+        };
+        return {
+            height: rect.y + rect.height + FILTER_BAR_PADDING,
+            rect
+        };
+    }
+
+    /**
+     * Validate marker instance before accessing its position.
+     * @param {Object} marker - Leaflet marker.
+     * @returns {boolean} True if marker can be used.
+     */
+    isValidMarker(marker) {
+        return !!(marker && typeof marker.getLatLng === 'function' && marker._map);
+    }
+
+    /**
+     * Build bounding boxes around markers for collision avoidance.
+     * @param {Array} markers - Leaflet markers.
+     * @param {Object} map - Leaflet map instance.
+     * @returns {Array} Marker rectangles.
+     */
+    getMarkerBounds(markers, map) {
+        if (!markers || !map) return [];
+        return markers.map(marker => {
+            if (!this.isValidMarker(marker)) return null;
+            const pos = map.latLngToContainerPoint(marker.getLatLng());
+            return {
+                x: pos.x - MARKER_CLEARANCE,
+                y: pos.y - MARKER_CLEARANCE,
+                width: MARKER_CLEARANCE * 2,
+                height: MARKER_CLEARANCE * 2
+            };
+        }).filter(Boolean);
     }
     
     /**
@@ -458,46 +679,59 @@ class SpeechBubbles {
      * Bubbles spread like leaves around the marker, growing upward
      * @param {Object} markerPos - {x, y} marker screen position
      * @param {number} index - Bubble index for spread variation
+     * @param {Array} occupiedRects - Existing bubble rectangles
+     * @param {Array} markerBounds - Marker rectangles
      * @returns {Object} {x, y} position for bubble
      */
-    calculateMarkerRelativePosition(markerPos, index) {
-        // Get filter bar height dynamically to avoid overlap
-        const filterBar = document.getElementById('event-filter-bar');
-        const filterBarHeight = filterBar ? filterBar.offsetHeight + FILTER_BAR_PADDING : DEFAULT_FILTER_BAR_HEIGHT;
-        
-        // Get map dimensions
+    calculateMarkerRelativePosition(markerPos, index, occupiedRects = [], markerBounds = []) {
         const mapContainer = document.getElementById('map');
         const viewportWidth = mapContainer.clientWidth;
         const viewportHeight = mapContainer.clientHeight;
-        
-        // Use golden angle for natural leaf-like spread around marker
-        const goldenAngle = Math.PI * (3 - Math.sqrt(5)); // ~137.5 degrees
-        const angle = index * goldenAngle;
-        
-        // Distance from marker increases with index (like tree branches)
-        const offset = BASE_SPREAD_OFFSET + Math.sqrt(index) * SPREAD_FACTOR;
-        
-        // Calculate offset from marker position
-        // Spread mostly upward and sideways (like leaves on a tree)
-        const offsetX = Math.cos(angle) * offset * HORIZONTAL_SPREAD_MULTIPLIER;
-        const offsetY = -Math.abs(Math.sin(angle) * offset) - MARKER_VERTICAL_OFFSET;
-        
-        // Position bubble relative to marker
-        let x = markerPos.x + offsetX - BUBBLE_WIDTH / 2;
-        let y = markerPos.y + offsetY - BUBBLE_HEIGHT;
-        
-        // Add small organic variation for natural feel
-        const seed = (index * SEED_MULTIPLIER_X + SEED_OFFSET) % 100;
-        const organicX = ((seed % VARIATION_RANGE_X) - Math.floor(VARIATION_RANGE_X / 2));
-        const organicY = (((seed * SEED_MULTIPLIER_Y) % VARIATION_RANGE_Y) - Math.floor(VARIATION_RANGE_Y / 2));
-        
-        x += organicX;
-        y += organicY;
-        
-        // Clamp to viewport bounds - ensure bubbles stay below filter bar
+        const { height: filterBarHeight, rect: filterBarRect } = this.getFilterBarMetrics(mapContainer);
+        const startAngle = index * GOLDEN_ANGLE;
+        const seedBase = index * SEED_MULTIPLIER_X + SEED_OFFSET;
+
+        for (let attempt = 0; attempt < MAX_POSITION_ATTEMPTS; attempt++) {
+            const angle = startAngle + attempt * GOLDEN_ANGLE;
+            const offset = BASE_SPREAD_OFFSET + Math.sqrt(attempt + index + SPREAD_BASE) * SPREAD_FACTOR;
+            const offsetX = Math.cos(angle) * offset * HORIZONTAL_SPREAD_MULTIPLIER;
+            const offsetY = -Math.abs(Math.sin(angle) * offset) - MARKER_VERTICAL_OFFSET;
+
+            let x = markerPos.x + offsetX - BUBBLE_WIDTH / 2;
+            let y = markerPos.y + offsetY - BUBBLE_HEIGHT;
+
+            const seed = (seedBase + attempt) % 100;
+            const organicX = ((seed % VARIATION_RANGE_X) - Math.floor(VARIATION_RANGE_X / 2));
+            const organicY = (((seed * SEED_MULTIPLIER_Y) % VARIATION_RANGE_Y) - Math.floor(VARIATION_RANGE_Y / 2));
+
+            x += organicX;
+            y += organicY;
+
+            x = Math.max(BUBBLE_MARGIN, Math.min(x, viewportWidth - BUBBLE_WIDTH - BUBBLE_MARGIN));
+            y = Math.max(filterBarHeight + BUBBLE_MARGIN, Math.min(y, viewportHeight - BUBBLE_HEIGHT - BUBBLE_MARGIN));
+
+            const bubbleRect = this.getBubbleRect(x, y);
+
+            if (filterBarRect && this.rectanglesOverlap(bubbleRect, filterBarRect, BUBBLE_GUTTER)) {
+                continue;
+            }
+
+            if (markerBounds && markerBounds.some(rect => this.rectanglesOverlap(bubbleRect, rect, BUBBLE_GUTTER))) {
+                continue;
+            }
+
+            if (occupiedRects && occupiedRects.some(rect => this.rectanglesOverlap(bubbleRect, rect, BUBBLE_GUTTER))) {
+                continue;
+            }
+
+            return { x, y };
+        }
+
+        let x = markerPos.x - BUBBLE_WIDTH / 2;
+        let y = markerPos.y - MARKER_VERTICAL_OFFSET - BUBBLE_HEIGHT;
         x = Math.max(BUBBLE_MARGIN, Math.min(x, viewportWidth - BUBBLE_WIDTH - BUBBLE_MARGIN));
         y = Math.max(filterBarHeight + BUBBLE_MARGIN, Math.min(y, viewportHeight - BUBBLE_HEIGHT - BUBBLE_MARGIN));
-        
+
         return { x, y };
     }
     
