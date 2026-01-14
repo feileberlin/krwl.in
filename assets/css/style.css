@@ -1453,7 +1453,7 @@ strong, b {
     user-select: none;
 }
 
-/* Dragging state */
+/* Dragging state - overrides hover and animation */
 .speech-bubble.dragging {
     cursor: grabbing;
     z-index: 1100;
@@ -1461,6 +1461,13 @@ strong, b {
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.7),
                 0 0 30px rgba(255, 105, 180, 0.8);
     transition: transform 0.1s ease, box-shadow 0.1s ease;
+    animation: none; /* Cancel appear animation during drag */
+}
+
+/* Prevent hover effects during drag */
+.speech-bubble.dragging:hover {
+    transform: scale(1.08); /* Keep dragging transform, don't apply hover */
+    filter: none;
 }
 
 /* Add subtle animation on appear */

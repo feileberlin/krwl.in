@@ -362,7 +362,7 @@ class SpeechBubbles {
             
             // Store user offset so position persists during map move
             const bubbleDataEntry = this.bubbleData.find(d => d.bubble === bubble);
-            if (bubbleDataEntry && bubbleDataEntry.marker) {
+            if (bubbleDataEntry && bubbleDataEntry.marker && this.map) {
                 const markerPos = this.map.latLngToContainerPoint(bubbleDataEntry.marker.getLatLng());
                 const bubbleX = parseFloat(bubble.style.left);
                 const bubbleY = parseFloat(bubble.style.top);
