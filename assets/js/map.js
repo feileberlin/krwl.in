@@ -217,7 +217,8 @@ class MapManager {
         });
         
         const marker = L.marker([event.location.lat, event.location.lon], {
-            icon: markerIcon
+            icon: markerIcon,
+            customData: { id: event.id }
         }).addTo(this.map);
         
         // Add bookmark class if bookmarked
@@ -225,7 +226,7 @@ class MapManager {
             marker._icon.classList.add('bookmarked-marker');
         }
         
-        // Store event data on marker
+        // Store event data on marker (for backward compatibility)
         marker.eventData = event;
         
         // Add click handler
