@@ -303,8 +303,8 @@ strong, b {
 }
 
 #event-filter-bar .filter-bar-logo svg {
-    width: 1em;
-    height: 1em;
+    width: 1em; /* Match filter bar text size */
+    height: 1em; /* Match filter bar text size */
     stroke: currentColor;
     fill: none;
     filter: drop-shadow(0 0 4px rgba(255, 105, 180, 0.6));

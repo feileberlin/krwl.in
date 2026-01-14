@@ -2,11 +2,9 @@
  * SpeechBubbles Module (Simplified)
  * 
  * Handles speech bubble UI components for events on the map.
- * Simplified positioning using CSS Grid instead of complex collision detection.
+ * Collision-aware positioning with organic spread around markers.
  * Bubbles follow their markers when map is panned/zoomed.
  * Users can drag bubbles to resolve positioning conflicts manually.
- * 
- * KISS: Replaced 100-line calculateBubblePosition() with simple grid layout
  */
 
 // Bubble dimension constants
@@ -21,8 +19,8 @@ const BASE_SPREAD_OFFSET = 60;         // Minimum distance from marker
 const SPREAD_FACTOR = 40;              // Additional spread per bubble
 const HORIZONTAL_SPREAD_MULTIPLIER = 1.2; // Wider horizontal spread
 const MARKER_CLEARANCE = 18;
-const MAX_POSITION_ATTEMPTS = 80;
-const GOLDEN_ANGLE = Math.PI * (3 - Math.sqrt(5)); // ~137.5 degrees
+const MAX_POSITION_ATTEMPTS = 40;
+const GOLDEN_ANGLE = 2.399963229728653; // ~137.5 degrees
 
 // Filter bar constants
 const FILTER_BAR_PADDING = 20;         // Extra padding below filter bar
@@ -234,8 +232,8 @@ class SpeechBubbles {
         `;
         
         // Initialize Lucide icons
-        if (bookmarkingSupported && typeof lucide !== 'undefined') {
-            setTimeout(() => lucide.createIcons(), 10);
+        if (bookmarkingSupported && window.lucide && typeof window.lucide.createIcons === 'function') {
+            setTimeout(() => window.lucide.createIcons(), 10);
         }
         
         // Calculate position relative to marker (bubble appears above/around marker)
@@ -439,12 +437,16 @@ class SpeechBubbles {
         const mapContainer = document.getElementById('map');
         const viewportWidth = mapContainer.clientWidth;
         const viewportHeight = mapContainer.clientHeight;
+        this.updateConnectorViewport(viewportWidth, viewportHeight);
         
         const { height: filterBarHeight } = this.getFilterBarMetrics(mapContainer);
         const markerBounds = this.getMarkerBounds(this.markers.length ? this.markers : this.bubbleData.map(entry => entry.marker), this.map);
         const occupiedRects = [];
         
         this.bubbleData.forEach(({ bubble, marker, index, userOffset, connector }) => {
+            if (!marker || typeof marker.getLatLng !== 'function' || !marker._map) {
+                return;
+            }
             // Get updated marker position in screen coordinates
             const markerPos = this.map.latLngToContainerPoint(marker.getLatLng());
             
@@ -504,6 +506,11 @@ class SpeechBubbles {
         svg.setAttribute('viewBox', `0 0 ${mapContainer.clientWidth} ${mapContainer.clientHeight}`);
         mapContainer.appendChild(svg);
         this.connectorLayer = svg;
+    }
+
+    updateConnectorViewport(width, height) {
+        if (!this.connectorLayer) return;
+        this.connectorLayer.setAttribute('viewBox', `0 0 ${width} ${height}`);
     }
 
     createConnectorLine(markerPos, bubbleRect) {
@@ -586,7 +593,7 @@ class SpeechBubbles {
     getMarkerBounds(markers, map) {
         if (!markers || !map) return [];
         return markers.map(marker => {
-            if (!marker || !marker.getLatLng) return null;
+            if (!marker || !marker.getLatLng || !marker._map) return null;
             const pos = map.latLngToContainerPoint(marker.getLatLng());
             return {
                 x: pos.x - MARKER_CLEARANCE,
@@ -602,14 +609,17 @@ class SpeechBubbles {
      * Bubbles spread like leaves around the marker, growing upward
      * @param {Object} markerPos - {x, y} marker screen position
      * @param {number} index - Bubble index for spread variation
+     * @param {Array} occupiedRects - Existing bubble rectangles
+     * @param {Array} markerBounds - Marker rectangles
      * @returns {Object} {x, y} position for bubble
      */
-    calculateMarkerRelativePosition(markerPos, index) {
+    calculateMarkerRelativePosition(markerPos, index, occupiedRects = [], markerBounds = []) {
         const mapContainer = document.getElementById('map');
         const viewportWidth = mapContainer.clientWidth;
         const viewportHeight = mapContainer.clientHeight;
         const { height: filterBarHeight, rect: filterBarRect } = this.getFilterBarMetrics(mapContainer);
         const startAngle = index * GOLDEN_ANGLE;
+        const seedBase = index * SEED_MULTIPLIER_X + SEED_OFFSET;
 
         for (let attempt = 0; attempt < MAX_POSITION_ATTEMPTS; attempt++) {
             const angle = startAngle + attempt * GOLDEN_ANGLE;
@@ -620,7 +630,7 @@ class SpeechBubbles {
             let x = markerPos.x + offsetX - BUBBLE_WIDTH / 2;
             let y = markerPos.y + offsetY - BUBBLE_HEIGHT;
 
-            const seed = (index * SEED_MULTIPLIER_X + SEED_OFFSET + attempt) % 100;
+            const seed = (seedBase + attempt) % 100;
             const organicX = ((seed % VARIATION_RANGE_X) - Math.floor(VARIATION_RANGE_X / 2));
             const organicY = (((seed * SEED_MULTIPLIER_Y) % VARIATION_RANGE_Y) - Math.floor(VARIATION_RANGE_Y / 2));
 
