@@ -18,6 +18,7 @@ from urllib.parse import urljoin, urlparse, parse_qs
 import re
 import json
 import hashlib
+import time
 from ...base import BaseSource, SourceOptions
 from ...date_utils import resolve_relative_date, extract_time_from_text, resolve_year_for_date
 from ...source_cache import SourceCache
@@ -73,17 +74,26 @@ class FacebookSource(BaseSource):
         self.force_scan = bool(options_config.get('force_scan', False))
         self.post_cache = self._init_post_cache()
         
-        # Initialize session with realistic headers
+        # Initialize session with realistic headers to avoid detection
         if self.available:
             self.session = requests.Session()
             self.session.headers.update({
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
                 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-                'Accept-Language': 'de-DE,de;q=0.9,en-US;q=0.8,en;q=0.7',
-                'Accept-Encoding': 'gzip, deflate',
+                'Accept-Language': 'en-US,en;q=0.9,de;q=0.8',
+                'Accept-Encoding': 'gzip, deflate, br',
+                'DNT': '1',
                 'Connection': 'keep-alive',
                 'Upgrade-Insecure-Requests': '1',
+                'Sec-Fetch-Dest': 'document',
+                'Sec-Fetch-Mode': 'navigate',
+                'Sec-Fetch-Site': 'none',
+                'Cache-Control': 'max-age=0'
             })
+            # Set timeout for all requests
+            self.request_timeout = 15
+            # Add delay between requests (in seconds)
+            self.request_delay = 2
         
         # Initialize image analyzer for OCR
         self.image_analyzer = None
@@ -161,6 +171,28 @@ class FacebookSource(BaseSource):
         
         return 'unknown'
     
+    def _make_request(self, url: str, delay: bool = True) -> Optional['requests.Response']:
+        """Make HTTP request with anti-scraping measures.
+        
+        Args:
+            url: URL to fetch
+            delay: Whether to add delay before request (default True)
+            
+        Returns:
+            Response object or None on error
+        """
+        if delay and hasattr(self, 'request_delay'):
+            time.sleep(self.request_delay)
+        
+        try:
+            timeout = getattr(self, 'request_timeout', 15)
+            response = self.session.get(url, timeout=timeout)
+            response.raise_for_status()
+            return response
+        except Exception as e:
+            print(f"      Request error: {e}")
+            return None
+    
     def _scrape_events_page(self) -> List[Dict[str, Any]]:
         """Scrape events from a Facebook events page.
         
@@ -173,8 +205,10 @@ class FacebookSource(BaseSource):
         mobile_url = self._get_mobile_url(self.url)
         
         try:
-            response = self.session.get(mobile_url, timeout=15)
-            response.raise_for_status()
+            response = self._make_request(mobile_url)
+            if not response:
+                return events
+                
             soup = BeautifulSoup(response.content, 'lxml')
             
             # Try to find event containers
@@ -198,8 +232,10 @@ class FacebookSource(BaseSource):
         mobile_url = self._get_mobile_url(base_url)
         
         try:
-            response = self.session.get(mobile_url, timeout=15)
-            response.raise_for_status()
+            response = self._make_request(mobile_url)
+            if not response:
+                return events
+                
             soup = BeautifulSoup(response.content, 'lxml')
             
             # Extract posts
@@ -454,8 +490,10 @@ class FacebookSource(BaseSource):
             post = {
                 'text': '',
                 'images': [],
+                'image_metadata': [],  # Store image alt text, captions, etc.
                 'links': [],
-                'timestamp': None
+                'timestamp': None,
+                'post_id': None
             }
             
             # Extract text content
@@ -463,11 +501,22 @@ class FacebookSource(BaseSource):
             if text_elem:
                 post['text'] = text_elem.get_text(strip=True)
             
-            # Extract images
+            # Extract post ID from links or data attributes
+            post['post_id'] = self._extract_post_id(element)
+            
+            # Extract images with metadata
             for img in element.find_all('img', src=True):
                 src = img.get('src', '') or img.get('data-src', '')
                 if src and 'emoji' not in src.lower() and 'icon' not in src.lower():
                     post['images'].append(src)
+                    # Extract metadata for this image
+                    metadata = {
+                        'url': src,
+                        'alt': img.get('alt', ''),
+                        'title': img.get('title', ''),
+                        'aria_label': img.get('aria-label', '')
+                    }
+                    post['image_metadata'].append(metadata)
             
             # Extract links
             for link in element.find_all('a', href=True):
@@ -485,6 +534,48 @@ class FacebookSource(BaseSource):
         except Exception as e:
             print(f"      Error parsing post element: {e}")
             return None
+    
+    def _extract_post_id(self, element) -> Optional[str]:
+        """Extract Facebook post ID from element.
+        
+        Args:
+            element: BeautifulSoup element
+            
+        Returns:
+            Post ID string or None
+        """
+        # Try to extract from data-ft attribute (Facebook tracking data)
+        data_ft = element.get('data-ft')
+        if data_ft:
+            try:
+                ft_data = json.loads(data_ft)
+                if 'mf_story_key' in ft_data:
+                    return str(ft_data['mf_story_key'])
+                if 'top_level_post_id' in ft_data:
+                    return str(ft_data['top_level_post_id'])
+            except (json.JSONDecodeError, TypeError):
+                pass
+        
+        # Try to extract from links that contain story_fbid or post IDs
+        for link in element.find_all('a', href=True):
+            href = link['href']
+            # Extract from story_fbid parameter
+            if 'story_fbid=' in href:
+                match = re.search(r'story_fbid=(\d+)', href)
+                if match:
+                    return match.group(1)
+            # Extract from posts/ URL pattern
+            if '/posts/' in href:
+                match = re.search(r'/posts/(\d+)', href)
+                if match:
+                    return match.group(1)
+            # Extract from permalink.php
+            if 'permalink.php' in href:
+                match = re.search(r'story_fbid=(\d+)|id=(\d+)', href)
+                if match:
+                    return match.group(1) or match.group(2)
+        
+        return None
     
     def _convert_post_to_event(self, post: Dict[str, Any]) -> Optional[Dict[str, Any]]:
         """Convert a post to an event if it contains event information.
@@ -505,7 +596,8 @@ class FacebookSource(BaseSource):
         # Analyze images for event flyers using OCR
         image_event_data = None
         if self.ocr_enabled and self.image_analyzer and post.get('images'):
-            image_event_data = self._analyze_post_images(post['images'])
+            post_id = post.get('post_id')
+            image_event_data = self._analyze_post_images(post['images'], post_id)
         
         # Decide if this is an event
         if not has_event_indicators and not image_event_data:
@@ -550,11 +642,15 @@ class FacebookSource(BaseSource):
         
         return keyword_count >= 2 or (keyword_count >= 1 and (has_date or has_time))
     
-    def _analyze_post_images(self, image_urls: List[str]) -> Optional[Dict[str, Any]]:
+    def _analyze_post_images(self, image_urls: List[str], post_id: Optional[str] = None) -> Optional[Dict[str, Any]]:
         """Analyze post images for event flyer content using OCR.
+        
+        Images are cached by post_id to avoid re-downloading and re-processing
+        the same images on subsequent scrapes.
         
         Args:
             image_urls: List of image URLs
+            post_id: Optional Facebook post ID for caching images
             
         Returns:
             Best event data extracted from images or None
@@ -562,15 +658,45 @@ class FacebookSource(BaseSource):
         if not self.image_analyzer:
             return None
         
+        # Setup image cache directory
+        image_cache_dir = None
+        if self.base_path and post_id:
+            image_cache_dir = self.base_path / "data" / "image_cache" / "facebook"
+            image_cache_dir.mkdir(parents=True, exist_ok=True)
+        
         best_result = None
         best_confidence = 0.0
         
-        for url in image_urls[:3]:  # Limit to first 3 images
+        for idx, url in enumerate(image_urls[:3]):  # Limit to first 3 images
             try:
+                # Check if we have a cached version of this image
+                cached_image_path = None
+                if image_cache_dir and post_id:
+                    cached_image_path = image_cache_dir / f"{post_id}_{idx}.jpg"
+                    if cached_image_path.exists():
+                        # Use cached image
+                        result = self.image_analyzer.analyze(str(cached_image_path))
+                        if result and result.get('ocr_confidence', 0) > best_confidence:
+                            best_confidence = result.get('ocr_confidence', 0)
+                            best_result = result
+                        continue
+                
+                # Download and analyze new image
                 result = self.image_analyzer.analyze_url(url, timeout=10)
                 if result and result.get('ocr_confidence', 0) > best_confidence:
                     best_confidence = result.get('ocr_confidence', 0)
                     best_result = result
+                    
+                    # Cache the image for future use
+                    if cached_image_path:
+                        try:
+                            import requests
+                            response = requests.get(url, timeout=10)
+                            response.raise_for_status()
+                            cached_image_path.write_bytes(response.content)
+                        except Exception as e:
+                            print(f"      Failed to cache image: {e}")
+                            
             except Exception as e:
                 print(f"      OCR analysis error: {e}")
                 continue
