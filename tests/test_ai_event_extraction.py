@@ -98,7 +98,7 @@ def test_event_normalization():
         'category': 'music',
         'location_name': 'Main Hall',
         'location_lat': '50.1',
-        'location_lon': 11.2
+        'location_lon': '11.2'
     }
     provider = StubProvider(response=response)
     extractor = LocalEventExtractor({'local_llm': provider})
