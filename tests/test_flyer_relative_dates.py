@@ -59,6 +59,19 @@ def test_relative_date_parsing_from_text():
         assert parsed.minute == minute
 
 
+def test_month_day_without_year():
+    """Handle DD.MM format without year for upcoming month events."""
+    source = build_source()
+    target_date = datetime.now() + timedelta(days=10)
+    text = target_date.strftime("%d.%m.")
+
+    iso_value = source._extract_datetime_from_text(f"{text} 19 Uhr")
+    assert iso_value is not None
+    parsed = datetime.fromisoformat(iso_value)
+    assert parsed.date() == target_date.date()
+    assert parsed.hour == 19
+
+
 def test_ai_fallback_for_missing_date():
     """Use AI provider when no explicit date is found."""
     start_time = (datetime.now() + timedelta(days=3)).replace(

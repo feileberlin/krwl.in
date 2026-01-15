@@ -51,7 +51,8 @@ class FacebookSource(BaseSource):
         super().__init__(source_config, options)
         self.available = SCRAPING_AVAILABLE
         self.ai_providers = ai_providers or {}
-        self.scan_posts = source_config.get('options', {}).get('scan_posts', False)
+        options_config = source_config.get('options') or {}
+        self.scan_posts = bool(options_config.get('scan_posts', False))
         
         # Initialize session with realistic headers
         if self.available:
@@ -616,14 +617,22 @@ class FacebookSource(BaseSource):
         ]
         
         for pattern in time_patterns:
-            time_match = re.search(pattern, text.lower())
-            if time_match:
+            for time_match in re.finditer(pattern, text.lower()):
                 groups = time_match.groups()
                 hour = int(groups[0])
                 minute = int(groups[1]) if len(groups) > 1 and groups[1] else 0
-                return hour, minute
+                if 0 <= hour <= 23 and 0 <= minute <= 59:
+                    return hour, minute
         
         return None
+    
+    def _resolve_year_for_date(self, month: int, day: int) -> int:
+        """Resolve year for dates missing year, preferring upcoming dates."""
+        today = datetime.now()
+        year = today.year
+        if (month, day) < (today.month, today.day):
+            year += 1
+        return year
     
     def _get_ai_provider(self):
         """Get configured AI provider for extraction."""
@@ -681,6 +690,7 @@ class FacebookSource(BaseSource):
             (r'(\d{1,2})\.(\d{1,2})\.(\d{4})', 'DMY4'),
             (r'(\d{1,2})\.(\d{1,2})\.(\d{2})(?!\d)', 'DMY2'),
             (r'(\d{4})-(\d{2})-(\d{2})', 'YMD'),
+            (r'(\d{1,2})\.(\d{1,2})(?:\.(?!\d)|$)', 'DM'),
         ]
         
         date_match = None
@@ -713,6 +723,9 @@ class FacebookSource(BaseSource):
                 day, month, year = int(groups[0]), int(groups[1]), int(groups[2])
             elif date_format == 'DMY2':
                 day, month, year = int(groups[0]), int(groups[1]), 2000 + int(groups[2])
+            elif date_format == 'DM':
+                day, month = int(groups[0]), int(groups[1])
+                year = self._resolve_year_for_date(month, day)
             else:  # YMD
                 year, month, day = int(groups[0]), int(groups[1]), int(groups[2])
             
@@ -761,6 +774,13 @@ class FacebookSource(BaseSource):
                 year = int(match.group(3))
                 if year < 100:
                     year += 2000
+            
+            if not all([day, month, year]):
+                match = re.match(r'(\d{1,2})\.(\d{1,2})(?:\.(?!\d)|$)', date_str)
+                if match:
+                    day = int(match.group(1))
+                    month = int(match.group(2))
+                    year = self._resolve_year_for_date(month, day)
             
             if not all([day, month, year]):
                 return None
