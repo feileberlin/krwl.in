@@ -51,6 +51,7 @@ class FacebookSource(BaseSource):
         super().__init__(source_config, options)
         self.available = SCRAPING_AVAILABLE
         self.ai_providers = ai_providers or {}
+        self.scan_posts = source_config.get('options', {}).get('scan_posts', False)
         
         # Initialize session with realistic headers
         if self.available:
@@ -98,6 +99,9 @@ class FacebookSource(BaseSource):
         if url_type == 'events':
             # Direct events page
             events.extend(self._scrape_events_page())
+            if self.scan_posts:
+                page_url = self._get_page_url(self.url)
+                events.extend(self._scrape_page_posts(page_url=page_url))
         elif url_type == 'page':
             # Regular page - look for posts with event info
             events.extend(self._scrape_page_posts())
@@ -161,7 +165,7 @@ class FacebookSource(BaseSource):
         
         return events
     
-    def _scrape_page_posts(self) -> List[Dict[str, Any]]:
+    def _scrape_page_posts(self, page_url: Optional[str] = None) -> List[Dict[str, Any]]:
         """Scrape posts from a Facebook page that may contain event info.
         
         Returns:
@@ -170,7 +174,8 @@ class FacebookSource(BaseSource):
         events = []
         
         # Try mobile version
-        mobile_url = self._get_mobile_url(self.url)
+        base_url = page_url or self.url
+        mobile_url = self._get_mobile_url(base_url)
         
         try:
             response = self.session.get(mobile_url, timeout=15)
@@ -198,7 +203,7 @@ class FacebookSource(BaseSource):
             List of event dictionaries
         """
         # Similar to page posts
-        return self._scrape_page_posts()
+        return self._scrape_page_posts(page_url=self._get_page_url(self.url))
     
     def _get_mobile_url(self, url: str) -> str:
         """Convert URL to mobile Facebook version.
@@ -210,6 +215,17 @@ class FacebookSource(BaseSource):
             Mobile Facebook URL
         """
         return url.replace('www.facebook.com', 'm.facebook.com').replace('facebook.com', 'm.facebook.com')
+    
+    def _get_page_url(self, url: str) -> str:
+        """Convert event URLs to base page URLs for post scraping."""
+        parsed = urlparse(url)
+        path_parts = [part for part in parsed.path.split('/') if part]
+        if 'events' in path_parts:
+            path_parts = path_parts[:path_parts.index('events')]
+        if 'upcoming_hosted_events' in path_parts:
+            path_parts = path_parts[:path_parts.index('upcoming_hosted_events')]
+        new_path = f"/{'/'.join(path_parts)}" if path_parts else ''
+        return parsed._replace(path=new_path, params='', query='', fragment='').geturl()
     
     def _extract_events_from_html(self, soup: BeautifulSoup) -> List[Dict[str, Any]]:
         """Extract events from HTML soup.

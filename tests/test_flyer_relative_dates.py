@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Tests for flyer-relative date parsing and AI fallback extraction.
+Tests for flyer relative date parsing and AI fallback extraction.
 """
 
 import sys
@@ -72,3 +72,29 @@ def test_ai_fallback_for_missing_date():
     event = source._build_event_from_post(post, None)
 
     assert event["start_time"] == start_time
+
+
+def test_scan_posts_for_event_pages():
+    """Ensure scan_posts enables post scraping for /events URLs."""
+    class SpyFacebookSource(FacebookSource):
+        def __init__(self, source_config, options):
+            super().__init__(source_config, options)
+            self.posts_called_with = None
+
+        def _scrape_events_page(self):
+            return []
+
+        def _scrape_page_posts(self, page_url=None):
+            self.posts_called_with = page_url
+            return []
+
+    source_config = {
+        "name": "Test Events Page",
+        "url": "https://www.facebook.com/TestPage/events",
+        "type": "facebook",
+        "options": {"scan_posts": True}
+    }
+    source = SpyFacebookSource(source_config, SourceOptions())
+    source.scrape()
+
+    assert source.posts_called_with == source._get_page_url(source_config["url"])
