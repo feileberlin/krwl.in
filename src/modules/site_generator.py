@@ -2052,3 +2052,100 @@ window.DEBUG_INFO = {debug_info_json};'''
         print(f"   Runtime configs: {config_count}")
         print("\n" + "=" * 60)
         return True
+    
+    def update_weather_data(self) -> bool:
+        """
+        Update weather data in existing HTML without full rebuild.
+        
+        This method finds and updates the weather.data field inside window.APP_CONFIG
+        in the generated HTML file. This avoids triggering a full site rebuild when
+        weather is scraped hourly.
+        
+        Returns:
+            True if weather data was updated successfully, False otherwise
+        """
+        print("=" * 60)
+        print("⚡ Updating Weather Data")
+        print("=" * 60)
+        
+        html_file = self.static_path / 'index.html'
+        if not html_file.exists():
+            print("\n❌ Error: index.html not found")
+            print("   Run: python3 src/event_manager.py generate")
+            return False
+        
+        print("\nReading existing HTML...")
+        html = self.read_text_file(html_file)
+        
+        print("Loading weather cache...")
+        weather_cache = self.load_weather_cache()
+        
+        # Extract weather data from cache (first entry)
+        weather_data = None
+        if weather_cache and isinstance(weather_cache, dict):
+            for key, entry in weather_cache.items():
+                if isinstance(entry, dict) and entry.get('data'):
+                    weather_data = entry['data']
+                    break
+        
+        if not weather_data:
+            print("⚠️  No weather data found in cache")
+            print("   Run: python3 src/event_manager.py scrape-weather")
+            return False
+        
+        print(f"Found weather data: {weather_data.get('dresscode', 'N/A')}")
+        
+        # Find the APP_CONFIG object and update weather.data field within it
+        # We need to parse and modify the JSON within window.APP_CONFIG
+        app_config_marker = 'window.APP_CONFIG = '
+        app_config_start = html.find(app_config_marker)
+        
+        if app_config_start == -1:
+            print("\n❌ Error: APP_CONFIG not found in HTML")
+            return False
+        
+        app_config_start += len(app_config_marker)
+        
+        # Find the end of the APP_CONFIG object (look for the closing brace and semicolon)
+        app_config_end = html.find(';\n', app_config_start)
+        if app_config_end == -1:
+            print("\n❌ Error: Could not find end of APP_CONFIG")
+            return False
+        
+        # Extract current APP_CONFIG JSON
+        app_config_json_str = html[app_config_start:app_config_end]
+        
+        try:
+            # Parse the APP_CONFIG JSON
+            app_config = json.loads(app_config_json_str)
+            
+            # Update weather.data field
+            if 'weather' not in app_config:
+                app_config['weather'] = {'enabled': True, 'display': {}}
+            
+            app_config['weather']['data'] = weather_data
+            
+            # Serialize back to JSON (preserve formatting based on debug mode)
+            if self.enable_debug_comments:
+                updated_json = json.dumps(app_config, ensure_ascii=False, indent=2)
+            else:
+                updated_json = json.dumps(app_config, ensure_ascii=False)
+            
+            # Replace in HTML
+            new_html = html[:app_config_start] + updated_json + html[app_config_end:]
+            
+            # Write updated HTML
+            with open(html_file, 'w', encoding='utf-8') as f:
+                f.write(new_html)
+            
+            print(f"\n✅ Weather data updated!")
+            print(f"   Output: {html_file}")
+            print(f"   Dresscode: {weather_data.get('dresscode', 'N/A')}")
+            if weather_data.get('temperature'):
+                print(f"   Temperature: {weather_data.get('temperature')}")
+            print("\n" + "=" * 60)
+            return True
+            
+        except json.JSONDecodeError as e:
+            print(f"\n❌ Error: Failed to parse APP_CONFIG JSON: {e}")
+            return False
