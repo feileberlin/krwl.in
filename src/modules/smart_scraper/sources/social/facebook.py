@@ -72,7 +72,7 @@ class FacebookSource(BaseSource):
                     'ocr_enabled': True,
                     'languages': ['eng', 'deu']
                 }
-                self.image_analyzer = ImageAnalyzer(img_config, self.ai_providers)
+                self.image_analyzer = ImageAnalyzer(img_config, ai_providers=self.ai_providers)
             except Exception as e:
                 print(f"    ⚠ Image analyzer init failed: {e}")
         
@@ -583,7 +583,7 @@ class FacebookSource(BaseSource):
         ]
         
         for phrase, offset in relative_offsets:
-            if phrase in text_lower:
+            if re.search(rf'\b{re.escape(phrase)}\b', text_lower):
                 base_date = datetime.now() + timedelta(days=offset)
                 return datetime(base_date.year, base_date.month, base_date.day)
         
@@ -604,7 +604,7 @@ class FacebookSource(BaseSource):
             if time_match:
                 groups = time_match.groups()
                 hour = int(groups[0])
-                minute = int(groups[1]) if len(groups) > 1 else 0
+                minute = int(groups[1]) if len(groups) > 1 and groups[1] else 0
                 return hour, minute
         
         return None
