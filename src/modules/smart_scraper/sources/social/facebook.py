@@ -760,7 +760,8 @@ class FacebookSource(BaseSource):
             or not self._get_post_link(post)
             or not self.options.category
         )
-        if needs_ai:
+        ai_available = self.event_extractor and self.event_extractor.is_available(self.options.ai_provider)
+        if needs_ai and ai_available:
             ai_details = self._ai_extract_event_details(post, image_data)
             if ai_details:
                 start_time = start_time or ai_details.get('start_time')
@@ -800,8 +801,10 @@ class FacebookSource(BaseSource):
         event_id = self._generate_event_id(title, start_time)
         
         link_url = self._get_post_link(post)
-        if not link_url and image_data and image_data.get('urls_found'):
-            link_url = image_data['urls_found'][0]
+        if not link_url and image_data:
+            urls = image_data.get('urls_found') or []
+            if urls:
+                link_url = urls[0]
         if not link_url and ai_details:
             link_url = ai_details.get('url')
 

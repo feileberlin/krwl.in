@@ -78,6 +78,10 @@ class LocalEventExtractor:
 
         return self._normalize_result(result)
 
+    def is_available(self, provider_name: Optional[str] = None) -> bool:
+        """Check if a local AI provider is available."""
+        return self._select_provider(provider_name) is not None
+
     def build_context(
         self,
         post_text: str = "",

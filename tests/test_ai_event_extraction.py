@@ -6,6 +6,7 @@ normalized into event-friendly fields without requiring actual AI services.
 """
 
 import sys
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 # Add src to path
@@ -40,9 +41,10 @@ def test_context_aggregation():
     provider = StubProvider(response={})
     extractor = LocalEventExtractor({'local_llm': provider})
 
+    future_date = (datetime.now(timezone.utc) + timedelta(days=30)).strftime("%d.%m.%Y")
     image_data = {
         'ocr_text': 'Flyer headline\nMain hall',
-        'dates_found': ['12.03.2026'],
+        'dates_found': [future_date],
         'times_found': ['20:00'],
         'urls_found': ['https://example.com/tickets'],
         'prices_found': ['10€'],
