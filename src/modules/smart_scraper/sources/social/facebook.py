@@ -10,6 +10,7 @@ scraping practices.
 """
 
 from typing import Dict, Any, List, Optional
+from pathlib import Path
 from datetime import datetime, timedelta
 from urllib.parse import urljoin, urlparse, parse_qs
 import re
@@ -52,7 +53,8 @@ class FacebookSource(BaseSource):
     DEFAULT_TITLE_PREFIX = "Event from "
     
     def __init__(self, source_config: Dict[str, Any], options: SourceOptions,
-                 base_path=None, ai_providers: Optional[Dict[str, Any]] = None):
+                 base_path: Optional[Path] = None,
+                 ai_providers: Optional[Dict[str, Any]] = None):
         super().__init__(source_config, options, base_path=base_path)
         self.available = SCRAPING_AVAILABLE
         self.ai_providers = ai_providers or {}
@@ -289,8 +291,8 @@ class FacebookSource(BaseSource):
             return True
         
         try:
-            event_date = datetime.fromisoformat(start_time.replace('Z', '+00:00'))
-        except (ValueError, TypeError):
+            event_date = datetime.fromisoformat(str(start_time).replace('Z', '+00:00'))
+        except (ValueError, TypeError, AttributeError):
             return True
         
         now = datetime.now(event_date.tzinfo)

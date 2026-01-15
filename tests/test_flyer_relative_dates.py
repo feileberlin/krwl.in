@@ -95,8 +95,13 @@ def test_ai_fallback_for_missing_date():
 def test_scan_posts_for_event_pages():
     """Ensure scan_posts enables post scraping for /events URLs."""
     class SpyFacebookSource(FacebookSource):
-        def __init__(self, source_config, options):
-            super().__init__(source_config, options, ai_providers=None)
+        def __init__(self, source_config, options, base_path=None):
+            super().__init__(
+                source_config,
+                options,
+                base_path=base_path,
+                ai_providers=None
+            )
             self.posts_called_with = None
             self.available = True
 
