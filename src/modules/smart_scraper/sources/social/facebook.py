@@ -18,6 +18,7 @@ from urllib.parse import urljoin, urlparse, parse_qs
 import re
 import json
 import hashlib
+import time
 from ...base import BaseSource, SourceOptions
 from ...date_utils import resolve_relative_date, extract_time_from_text, resolve_year_for_date
 from ...source_cache import SourceCache
@@ -73,17 +74,26 @@ class FacebookSource(BaseSource):
         self.force_scan = bool(options_config.get('force_scan', False))
         self.post_cache = self._init_post_cache()
         
-        # Initialize session with realistic headers
+        # Initialize session with realistic headers to avoid detection
         if self.available:
             self.session = requests.Session()
             self.session.headers.update({
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
                 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-                'Accept-Language': 'de-DE,de;q=0.9,en-US;q=0.8,en;q=0.7',
-                'Accept-Encoding': 'gzip, deflate',
+                'Accept-Language': 'en-US,en;q=0.9,de;q=0.8',
+                'Accept-Encoding': 'gzip, deflate, br',
+                'DNT': '1',
                 'Connection': 'keep-alive',
                 'Upgrade-Insecure-Requests': '1',
+                'Sec-Fetch-Dest': 'document',
+                'Sec-Fetch-Mode': 'navigate',
+                'Sec-Fetch-Site': 'none',
+                'Cache-Control': 'max-age=0'
             })
+            # Set timeout for all requests
+            self.request_timeout = 15
+            # Add delay between requests (in seconds)
+            self.request_delay = 2
         
         # Initialize image analyzer for OCR
         self.image_analyzer = None
@@ -161,6 +171,28 @@ class FacebookSource(BaseSource):
         
         return 'unknown'
     
+    def _make_request(self, url: str, delay: bool = True) -> Optional['requests.Response']:
+        """Make HTTP request with anti-scraping measures.
+        
+        Args:
+            url: URL to fetch
+            delay: Whether to add delay before request (default True)
+            
+        Returns:
+            Response object or None on error
+        """
+        if delay and hasattr(self, 'request_delay'):
+            time.sleep(self.request_delay)
+        
+        try:
+            timeout = getattr(self, 'request_timeout', 15)
+            response = self.session.get(url, timeout=timeout)
+            response.raise_for_status()
+            return response
+        except Exception as e:
+            print(f"      Request error: {e}")
+            return None
+    
     def _scrape_events_page(self) -> List[Dict[str, Any]]:
         """Scrape events from a Facebook events page.
         
@@ -173,8 +205,10 @@ class FacebookSource(BaseSource):
         mobile_url = self._get_mobile_url(self.url)
         
         try:
-            response = self.session.get(mobile_url, timeout=15)
-            response.raise_for_status()
+            response = self._make_request(mobile_url)
+            if not response:
+                return events
+                
             soup = BeautifulSoup(response.content, 'lxml')
             
             # Try to find event containers
@@ -198,8 +232,10 @@ class FacebookSource(BaseSource):
         mobile_url = self._get_mobile_url(base_url)
         
         try:
-            response = self.session.get(mobile_url, timeout=15)
-            response.raise_for_status()
+            response = self._make_request(mobile_url)
+            if not response:
+                return events
+                
             soup = BeautifulSoup(response.content, 'lxml')
             
             # Extract posts
@@ -454,6 +490,7 @@ class FacebookSource(BaseSource):
             post = {
                 'text': '',
                 'images': [],
+                'image_metadata': [],  # Store image alt text, captions, etc.
                 'links': [],
                 'timestamp': None,
                 'post_id': None
@@ -467,11 +504,19 @@ class FacebookSource(BaseSource):
             # Extract post ID from links or data attributes
             post['post_id'] = self._extract_post_id(element)
             
-            # Extract images
+            # Extract images with metadata
             for img in element.find_all('img', src=True):
                 src = img.get('src', '') or img.get('data-src', '')
                 if src and 'emoji' not in src.lower() and 'icon' not in src.lower():
                     post['images'].append(src)
+                    # Extract metadata for this image
+                    metadata = {
+                        'url': src,
+                        'alt': img.get('alt', ''),
+                        'title': img.get('title', ''),
+                        'aria_label': img.get('aria-label', '')
+                    }
+                    post['image_metadata'].append(metadata)
             
             # Extract links
             for link in element.find_all('a', href=True):
