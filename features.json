@@ -1164,6 +1164,49 @@
       ],
       "test_method": "manual",
       "test_instructions": "1. Open the app with events displayed\n2. Verify bubbles show cursor: grab on hover\n3. Click and drag a bubble - it should move freely\n4. Verify bubble shows elevated style while dragging (scale, shadow)\n5. Release the bubble - it should stay at new position\n6. Pan or zoom the map - dragged bubble should maintain relative position to its marker\n7. Test on mobile: touch and drag should work\n8. Verify map panning is disabled while dragging bubble\n9. Verify clicking bookmark button inside bubble does not trigger drag"
+    },
+    {
+      "id": "ai-categorization",
+      "name": "AI-Powered Event Categorization",
+      "description": "Uses local LLM (Ollama) to intelligently categorize scraped events into schema-defined categories. Falls back to improved keyword-based categorization if AI is unavailable. Privacy-preserving (no external APIs), optional feature that can be enabled/disabled.",
+      "category": "backend",
+      "implemented": true,
+      "files": [
+        "src/modules/ai_categorizer.py",
+        "src/modules/smart_scraper/ai_providers/ollama.py",
+        "src/modules/event_schema.py",
+        "src/modules/scraper.py"
+      ],
+      "config_keys": [
+        "ai.categorization.enabled",
+        "ai.ollama.host",
+        "ai.ollama.model",
+        "ai.ollama.timeout"
+      ],
+      "code_patterns": [
+        {
+          "file": "src/modules/ai_categorizer.py",
+          "pattern": "class AICategorizer|categorize_event|_categorize_with_ai|_categorize_with_keywords",
+          "description": "Main AI categorization logic with fallback"
+        },
+        {
+          "file": "src/modules/smart_scraper/ai_providers/ollama.py",
+          "pattern": "class OllamaProvider|extract_event_info|_build_categorization_prompt",
+          "description": "Ollama LLM provider for event categorization"
+        },
+        {
+          "file": "src/modules/event_schema.py",
+          "pattern": "ai_categorizer|_infer_category.*AI categorization",
+          "description": "EventSchema integration with AI categorizer"
+        },
+        {
+          "file": "src/modules/scraper.py",
+          "pattern": "_validate_and_add_event.*AI categorization|schema._infer_category",
+          "description": "Scraper integration with AI categorization"
+        }
+      ],
+      "test_method": "check_code_patterns",
+      "test_instructions": "1. Run AI categorization tests: python3 tests/test_ai_categorization.py\n2. Test keyword fallback (no Ollama): All 7 test events should categorize correctly\n3. Optional AI test (requires Ollama):\n   a. Install Ollama: https://ollama.ai/\n   b. Run: ollama pull llama3.2\n   c. Start Ollama service\n   d. Enable in config.json: ai.categorization.enabled = true\n   e. Run scraper: python3 src/event_manager.py scrape\n   f. Verify events get categorized (check logs for 'AI categorized')\n4. Test status: python3 -c 'from modules.ai_categorizer import *; from modules.utils import *; c = AICategorizer(load_config(Path(\".\")), Path(\".\")); print(c.get_status())'\n5. Verify fallback works if Ollama unavailable"
     }
   ]
 }
