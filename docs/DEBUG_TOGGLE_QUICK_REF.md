@@ -21,7 +21,16 @@ Edit `config.json`:
 }
 ```
 
-### 3. 🤖 Auto-Detection (Default)
+### 3. 🔧 Force Environment in Config (Respects Manual Override)
+Edit `config.json`:
+```json
+{
+  "environment": "development"
+}
+```
+This forces development mode, automatically enabling debug comments **even in CI/production**.
+
+### 4. 🤖 Auto-Detection (Default)
 ```bash
 # Just run normally - auto-detects environment
 python3 src/event_manager.py generate
@@ -34,8 +43,9 @@ python3 src/event_manager.py generate
 ## Priority Order
 
 1. **Environment Variable** (`DEBUG_COMMENTS`) - overrides everything
-2. **Config File** (`debug_comments.force_enabled`) - overrides auto-detection
-3. **Auto-Detection** - development=on, production/ci=off
+2. **Config File** (`debug_comments.force_enabled`) - explicit debug override
+3. **Config File** (`environment: "development"`) - respects forced environment setting
+4. **Auto-Detection** - development=on, production/ci=off (fallback)
 
 ---
 
@@ -58,6 +68,16 @@ python3 src/event_manager.py generate
 ---
 
 ## Common Scenarios
+
+### Force Debug in CI (e.g., GitHub Actions)
+```json
+// config.json - Force development environment
+{
+  "environment": "development"  // Enables debug comments in CI
+}
+```
+
+**Use case:** You want debug comments in CI builds for troubleshooting, regardless of CI environment detection.
 
 ### Troubleshoot Production Issues
 ```bash

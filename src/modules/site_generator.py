@@ -126,7 +126,8 @@ class SiteGenerator:
         Priority order (KISS approach):
         1. Environment variable DEBUG_COMMENTS (for GitHub Actions override)
         2. Config file debug_comments.force_enabled setting
-        3. Automatic environment detection (development=on, production/ci=off)
+        3. Config file environment forced to "development" (respects manual override)
+        4. Automatic environment detection (development=on, production/ci=off)
         
         Returns:
             True if debug comments should be enabled, False otherwise
@@ -142,26 +143,38 @@ class SiteGenerator:
             logger.info("Debug comments FORCE DISABLED via environment variable DEBUG_COMMENTS")
             return False
         
-        # Priority 2: Check config file setting
+        # Priority 2 & 3: Check config file settings
         try:
             if load_config is not None:
                 config = load_config(self.base_path)
+                
+                # Priority 2: Check debug_comments.force_enabled
                 force_enabled = config.get('debug_comments', {}).get('force_enabled', False)
                 if force_enabled:
-                    logger.info("Debug comments FORCE ENABLED via config.json")
+                    logger.info("Debug comments FORCE ENABLED via config.json (debug_comments.force_enabled=true)")
                     return True
+                
+                # Priority 3: Check if environment is forced to "development" in config
+                # load_config() sets app['environment'] to the actual environment (forced or auto-detected)
+                actual_env = config.get('app', {}).get('environment', '')
+                if actual_env == 'development':
+                    logger.info("Debug comments AUTO-ENABLED (environment forced to 'development' in config.json)")
+                    return True
+                elif actual_env in ('production', 'ci'):
+                    logger.info(f"Debug comments AUTO-DISABLED (environment is '{actual_env}')")
+                    return False
         except Exception as e:
-            logger.warning(f"Could not load debug_comments config: {e}")
+            logger.warning(f"Could not load config for debug comments detection: {e}")
         
-        # Priority 3: Auto-detection based on environment
+        # Priority 4: Fallback to auto-detection based on OS environment variables
         try:
             from .utils import is_production, is_ci
             # Enable debug comments only in development (not production, not CI)
             is_dev = not is_production() and not is_ci()
             if is_dev:
-                logger.info("Debug comments AUTO-ENABLED (development mode)")
+                logger.info("Debug comments AUTO-ENABLED (development mode detected from OS environment)")
             else:
-                logger.info("Debug comments AUTO-DISABLED (production/CI mode)")
+                logger.info("Debug comments AUTO-DISABLED (production/CI mode detected from OS environment)")
             return is_dev
         except ImportError:
             # Fallback: assume production (disable debug comments)
@@ -1747,6 +1760,34 @@ window.DASHBOARD_ICONS = {json.dumps(DASHBOARD_ICONS_MAP, ensure_ascii=False)};'
             }
         else:
             runtime_config['weather'] = {'enabled': False}
+        
+        # Add moon phase and Sunday data for time filters
+        try:
+            from .moon_phase import (
+                get_days_until_full_moon,
+                get_days_until_sunday,
+                get_next_sunday_date,
+                get_next_sunday_formatted
+            )
+            
+            runtime_config['time_filters'] = {
+                'full_moon': {
+                    'days_until': get_days_until_full_moon(),
+                    'enabled': True
+                },
+                'sunday': {
+                    'days_until': get_days_until_sunday(),
+                    'date_iso': get_next_sunday_date(),
+                    'date_formatted': get_next_sunday_formatted(),
+                    'enabled': True
+                }
+            }
+        except Exception as e:
+            logger.warning(f"Failed to calculate moon phase/Sunday data: {e}")
+            runtime_config['time_filters'] = {
+                'full_moon': {'enabled': False},
+                'sunday': {'enabled': False}
+            }
         
         # Calculate debug information
         debug_info = self.calculate_debug_info(primary_config, events)
