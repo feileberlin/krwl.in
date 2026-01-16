@@ -1850,11 +1850,7 @@ window.DEBUG_INFO = {debug_info_json};'''
         dashboard_aside = self.load_component('dashboard-aside.html')
         filter_nav = self.load_component('filter-nav.html')
         
-        # Assemble HTML from components with debug comments showing source files
-        html_parts = [
-            generated_comment,
-            '<!DOCTYPE html>',
-            f'<html lang="{lang}">',
+        html_head_section = '\n'.join([
             self.html_component_comment('html-head.html', 'start'),
             html_head.format(
                 app_name=app_name,
@@ -1864,35 +1860,32 @@ window.DEBUG_INFO = {debug_info_json};'''
                 leaflet_css=stylesheets['leaflet_css'],
                 app_css=stylesheets['app_css']
             ),
-            self.html_component_comment('html-head.html', 'end'),
+            self.html_component_comment('html-head.html', 'end')
+        ])
+        html_body_open_section = '\n'.join([
             self.html_component_comment('html-body-open.html', 'start'),
-            html_body_open.format(
-                noscript_html=noscript_html
-            ),
-            self.html_component_comment('html-body-open.html', 'end'),
-            '',
-            '<!-- Layer 1: Fullscreen map -->',
+            html_body_open.format(noscript_html=noscript_html),
+            self.html_component_comment('html-body-open.html', 'end')
+        ])
+        map_main_section = '\n'.join([
             self.html_component_comment('map-main.html', 'start'),
             map_main,
-            self.html_component_comment('map-main.html', 'end'),
-            '',
-            '<!-- Layer 2: Event popups (rendered by Leaflet) -->',
-            '',
-            '<!-- Layer 3: UI overlays -->',
+            self.html_component_comment('map-main.html', 'end')
+        ])
+        dashboard_aside_section = '\n'.join([
             self.html_component_comment('dashboard-aside.html', 'start'),
             dashboard_aside.format(
                 logo_svg=logo_svg,
                 app_name=app_name
             ),
-            self.html_component_comment('dashboard-aside.html', 'end'),
+            self.html_component_comment('dashboard-aside.html', 'end')
+        ])
+        filter_nav_section = '\n'.join([
             self.html_component_comment('filter-nav.html', 'start'),
-            filter_nav.format(
-                logo_svg=logo_svg
-            ),
-            self.html_component_comment('filter-nav.html', 'end'),
-            '',
-            '<!-- Layer 4: Modals (reserved for future use) -->',
-            '',
+            filter_nav.format(logo_svg=logo_svg),
+            self.html_component_comment('filter-nav.html', 'end')
+        ])
+        html_body_close_section = '\n'.join([
             self.html_component_comment('html-body-close.html', 'start'),
             html_body_close.format(
                 embedded_data=embedded_data,
@@ -1904,6 +1897,45 @@ window.DEBUG_INFO = {debug_info_json};'''
                 app_js=scripts['app_js']
             ),
             self.html_component_comment('html-body-close.html', 'end')
+        ])
+        
+        try:
+            index_template = self.load_component('index.html')
+        except FileNotFoundError:
+            index_template = None
+        
+        if index_template:
+            return index_template.format(
+                generated_comment=generated_comment,
+                lang=lang,
+                html_head=html_head_section,
+                html_body_open=html_body_open_section,
+                map_main=map_main_section,
+                dashboard_aside=dashboard_aside_section,
+                filter_nav=filter_nav_section,
+                html_body_close=html_body_close_section
+            )
+        
+        # Assemble HTML from components with debug comments showing source files
+        html_parts = [
+            generated_comment,
+            '<!DOCTYPE html>',
+            f'<html lang="{lang}">',
+            html_head_section,
+            html_body_open_section,
+            '',
+            '<!-- Layer 1: Fullscreen map -->',
+            map_main_section,
+            '',
+            '<!-- Layer 2: Event popups (rendered by Leaflet) -->',
+            '',
+            '<!-- Layer 3: UI overlays -->',
+            dashboard_aside_section,
+            filter_nav_section,
+            '',
+            '<!-- Layer 4: Modals (reserved for future use) -->',
+            '',
+            html_body_close_section
         ]
         
         return '\n'.join(html_parts)

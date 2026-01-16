@@ -32,6 +32,7 @@ def test_component_loading():
     
     # Test base components
     components = [
+        'index.html',
         'html-head.html',
         'html-body-open.html',
         'html-body-close.html',

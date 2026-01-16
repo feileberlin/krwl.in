@@ -24,6 +24,7 @@ assets/html/
 ├── README.md                          # This file
 ├── variables-reference.md             # CSS variable documentation
 ├── design-tokens.css                  # Generated CSS (auto-created)
+├── index.html                         # Page template for full HTML assembly
 ├── html-head.html                     # <head> with meta, title, styles
 ├── html-body-open.html                # <body> opening + noscript
 ├── html-body-close.html               # Scripts + </body></html>
@@ -44,6 +45,19 @@ assets/html/
 ### HTML Components
 
 All components are in the root components directory for simplicity (KISS principle: flat is better than nested).
+
+#### index.html
+Defines the full-page HTML template used to assemble the final document.
+
+**Template Variables:**
+- `{generated_comment}` - Auto-generated header comment block
+- `{lang}` - HTML language attribute (e.g., `en`, `de`)
+- `{html_head}` - Rendered head component
+- `{html_body_open}` - Rendered body open component
+- `{map_main}` - Rendered map container component
+- `{dashboard_aside}` - Rendered dashboard component
+- `{filter_nav}` - Rendered filter navigation component
+- `{html_body_close}` - Rendered body close component
 
 #### html-head.html
 Contains the HTML `<head>` section with:
