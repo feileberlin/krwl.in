@@ -4,6 +4,7 @@ from typing import Dict, Any, List
 from datetime import datetime, timedelta
 from urllib.parse import urljoin
 import re
+from pathlib import Path
 from ..base import BaseSource, SourceOptions
 
 try:
@@ -12,6 +13,17 @@ try:
     SCRAPING_AVAILABLE = True
 except ImportError:
     SCRAPING_AVAILABLE = False
+
+# Import reviewer notes system for flagging ambiguous locations
+try:
+    from ...reviewer_notes import (
+        ReviewerNotes, 
+        LocationExtractionHelper,
+        enhance_event_with_location_confidence
+    )
+    REVIEWER_NOTES_AVAILABLE = True
+except ImportError:
+    REVIEWER_NOTES_AVAILABLE = False
 
 
 class FrankenpostSource(BaseSource):
@@ -35,6 +47,15 @@ class FrankenpostSource(BaseSource):
             ai_providers=ai_providers
         )
         self.available = SCRAPING_AVAILABLE
+        
+        # Initialize reviewer notes system for flagging ambiguous locations
+        if REVIEWER_NOTES_AVAILABLE and base_path:
+            self.reviewer_notes = ReviewerNotes(Path(base_path))
+        else:
+            self.reviewer_notes = None
+        
+        # Known cities in the region for ambiguity detection
+        self.known_cities = ['Bayreuth', 'Hof', 'Selb', 'Rehau', 'Kulmbach', 'Münchberg']
         
         if self.available:
             self.session = requests.Session()
@@ -136,8 +157,8 @@ class FrankenpostSource(BaseSource):
         response.raise_for_status()
         soup = BeautifulSoup(response.content, 'lxml')
         
-        # Extract location from detail page
-        location = self._extract_location_from_detail(soup)
+        # Extract location from detail page (returns location + extraction details)
+        location, extraction_details = self._extract_location_from_detail(soup)
         
         # Extract description (fuller than listing)
         description = self._extract_description(soup)
@@ -145,7 +166,7 @@ class FrankenpostSource(BaseSource):
         # Parse date
         start_time = self._extract_date(date_text)
         
-        return {
+        event = {
             'id': f"html_frankenpost_{hash(title + start_time)}",
             'title': title[:200],
             'description': description,
@@ -157,8 +178,16 @@ class FrankenpostSource(BaseSource):
             'scraped_at': datetime.now().isoformat(),
             'status': 'pending'
         }
+        
+        # Add location confidence and review flags if reviewer notes available
+        if self.reviewer_notes and REVIEWER_NOTES_AVAILABLE:
+            event = enhance_event_with_location_confidence(
+                event, self.reviewer_notes, extraction_details
+            )
+        
+        return event
     
-    def _extract_location_from_detail(self, soup) -> Dict[str, Any]:
+    def _extract_location_from_detail(self, soup) -> tuple:
         """
         Extract venue location from detail page.
         
@@ -168,10 +197,14 @@ class FrankenpostSource(BaseSource):
         - Venue name patterns
         
         Returns:
-            Location dict with name, lat, lon (coordinates may be estimated)
+            Tuple of (location dict, extraction_details dict) for confidence scoring
         """
         location_name = None
         full_address = None
+        extraction_method = 'unknown'
+        has_full_address = False
+        has_venue_name = False
+        used_default = False
         
         # Strategy 1: Look for location-related labels and fields
         location_keywords = ['Ort:', 'Veranstaltungsort:', 'Location:', 'Adresse:', 'Venue:']
@@ -188,6 +221,8 @@ class FrankenpostSource(BaseSource):
                     location_text = next_elem.get_text(strip=True)
                     if location_text and len(location_text) > 3:
                         location_name = location_text
+                        extraction_method = 'detail_page_label'
+                        has_venue_name = True
                         break
                 
                 # Check within parent
@@ -196,6 +231,8 @@ class FrankenpostSource(BaseSource):
                 parent_text = parent_text.replace(keyword, '').strip()
                 if parent_text and len(parent_text) > 3:
                     location_name = parent_text
+                    extraction_method = 'detail_page_label'
+                    has_venue_name = True
                     break
         
         # Strategy 2: Look for address patterns (German format)
@@ -207,9 +244,11 @@ class FrankenpostSource(BaseSource):
         if addresses:
             # Use first address found
             full_address = addresses[0].strip()
+            has_full_address = True
             # If we don't have a location name yet, use the address
             if not location_name:
                 location_name = full_address
+                extraction_method = 'address_pattern'
         
         # Strategy 3: Look for venue names in title/headings
         if not location_name:
@@ -223,6 +262,8 @@ class FrankenpostSource(BaseSource):
                                   'Saal', 'Kulturzentrum', 'Bibliothek']
                 if any(indicator in text for indicator in venue_indicators):
                     location_name = text
+                    extraction_method = 'venue_in_heading'
+                    has_venue_name = True
                     break
         
         # Parse location to extract coordinates if possible
@@ -231,21 +272,32 @@ class FrankenpostSource(BaseSource):
         
         # If no location found at all, use default from config
         if not location_name and not full_address:
+            used_default = True
+            extraction_method = 'default_fallback'
             default_loc = self.options.default_location
             if default_loc:
-                return default_loc
+                location = default_loc
             else:
-                return {
+                location = {
                     'name': 'Hof',
                     'lat': 50.3167,
                     'lon': 11.9167
                 }
-        
-        # If we have a full address, use it as the name
-        if full_address and not location_name:
+        elif full_address and not location_name:
+            # If we have a full address, use it as the name
             location = self._estimate_coordinates(full_address)
         
-        return location
+        # Build extraction details for confidence scoring
+        extraction_details = {
+            'has_full_address': has_full_address,
+            'has_venue_name': has_venue_name,
+            'used_default': used_default,
+            'used_geocoding': False,  # We're using lookup table, not geocoding
+            'extraction_method': extraction_method,
+            'known_cities': self.known_cities
+        }
+        
+        return location, extraction_details
     
     def _estimate_coordinates(self, location_text: str) -> Dict[str, Any]:
         """
