@@ -1900,10 +1900,8 @@ window.DEBUG_INFO = {debug_info_json};'''
             self.html_component_comment('html-body-close.html', 'end')
         ])
         
-        try:
-            index_template = self.load_component('index.html')
-        except FileNotFoundError:
-            index_template = None
+        index_template_path = self.base_path / 'assets' / 'html' / 'index.html'
+        index_template = index_template_path.read_text(encoding='utf-8') if index_template_path.exists() else None
         
         if index_template:
             return index_template.format(
@@ -1917,7 +1915,7 @@ window.DEBUG_INFO = {debug_info_json};'''
                 html_body_close=html_body_close_section
             )
         
-        # Assemble HTML from components with debug comments showing source files
+        # Fallback for backward compatibility if index.html template is missing.
         html_parts = [
             generated_comment,
             '<!DOCTYPE html>',
