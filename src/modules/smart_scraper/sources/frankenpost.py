@@ -1,9 +1,10 @@
 """Custom Frankenpost scraper with location extraction from detail pages."""
 
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional
 from datetime import datetime, timedelta
 from urllib.parse import urljoin
 import re
+import json
 from pathlib import Path
 from ..base import BaseSource, SourceOptions
 
@@ -55,6 +56,9 @@ class FrankenpostSource(BaseSource):
         
         # Known cities in the region for ambiguity detection
         self.known_cities = ['Bayreuth', 'Hof', 'Selb', 'Rehau', 'Kulmbach', 'Münchberg']
+        
+        # Load verified locations database for coordinate normalization
+        self.verified_locations = self._load_verified_locations(base_path)
         
         if self.available:
             self.session = requests.Session()
@@ -355,6 +359,10 @@ class FrankenpostSource(BaseSource):
                     # This should never happen if config is properly set, but provide minimal fallback
                     raise ValueError("No location found and no default_location configured")
         
+        # Normalize location using verified locations database
+        # This prevents duplicate entries for same venue with slightly different coordinates
+        location = self._normalize_location_with_verified_data(location)
+        
         # Build extraction details for confidence scoring
         extraction_details = {
             'has_full_address': has_full_address,
@@ -402,6 +410,69 @@ class FrankenpostSource(BaseSource):
             'lon': 11.9167
         }
     
+    def _load_verified_locations(self, base_path: Optional[Path]) -> Dict[str, Dict[str, Any]]:
+        """
+        Load verified locations database from JSON file.
+        
+        This database stores canonical geocoordinates for known venues to prevent
+        duplicate location entries with slightly different coordinates.
+        
+        Args:
+            base_path: Repository root path
+            
+        Returns:
+            Dictionary mapping location names to verified location data
+        """
+        if not base_path:
+            return {}
+        
+        verified_locations_file = Path(base_path) / 'assets' / 'json' / 'verified_locations.json'
+        
+        try:
+            if verified_locations_file.exists():
+                with open(verified_locations_file, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+                    return data.get('locations', {})
+            else:
+                return {}
+        except Exception as e:
+            print(f"  ⚠ Warning: Could not load verified locations: {e}")
+            return {}
+    
+    def _normalize_location_with_verified_data(self, location: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Normalize location using verified locations database.
+        
+        Checks verified_locations.json for exact or case-insensitive name match.
+        Returns verified coordinates if found, original location otherwise.
+        
+        Args:
+            location: Location dict with name, lat, lon
+            
+        Returns:
+            Normalized location dict
+        """
+        if not location or not location.get('name') or not self.verified_locations:
+            return location
+        
+        location_name = location.get('name', '').strip()
+        
+        # Exact match
+        if location_name in self.verified_locations:
+            verified = self.verified_locations[location_name].copy()
+            print(f"    ℹ Using verified coordinates for: {location_name}")
+            return verified
+        
+        # Case-insensitive match
+        location_name_lower = location_name.lower()
+        for verified_name, verified_data in self.verified_locations.items():
+            if verified_name.lower() == location_name_lower:
+                verified = verified_data.copy()
+                print(f"    ℹ Using verified coordinates for: {location_name}")
+                return verified
+        
+        # No match - return original
+        return location
     def _extract_description(self, soup) -> str:
         """Extract event description from detail page."""
         # Look for description in common places
