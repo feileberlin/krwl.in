@@ -1300,6 +1300,7 @@ window.DASHBOARD_ICONS = {json.dumps(DASHBOARD_ICONS_MAP, ensure_ascii=False)};'
             raise FileNotFoundError(
                 f"Component not found: {full_path}\n"
                 f"Available components should be in assets/html/:\n"
+                f"  - index.html\n"
                 f"  - html-head.html\n"
                 f"  - html-body-open.html\n"
                 f"  - html-body-close.html\n"
