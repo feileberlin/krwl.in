@@ -173,10 +173,11 @@ class AddressExtractor:
 
 
 class VenueDetector:
-    """Detect venue names from headings."""
+    """Detect venue names from headings and text."""
     
-    # Common German venue indicators
-    VENUE_INDICATORS = [
+    # Common German venue types
+    # These appear in compound words (e.g., "Freiheitshalle" = Freedom Hall)
+    VENUE_TYPES = [
         'Museum', 'Halle', 'Schloss', 'Galerie', 'Theater',
         'Kirche', 'Zentrum', 'Haus', 'Platz', 'Rathaus',
         'Saal', 'Kulturzentrum', 'Bibliothek', 'Stadthalle',
@@ -186,21 +187,23 @@ class VenueDetector:
     @staticmethod
     def contains_venue_indicator(text: str) -> bool:
         """
-        Check if text contains a venue indicator.
+        Check if text contains a venue type indicator.
         
-        Handles German compound words (e.g., "Freiheitshalle" contains "halle").
+        Uses substring matching to handle German compound words where
+        venue types are embedded (e.g., "Freiheitshalle" contains "halle").
+        This is appropriate because German combines words: "Freiheit" + "halle" = "Freiheitshalle".
         
         Args:
             text: Text to check
             
         Returns:
-            True if text contains a venue indicator
+            True if text contains a venue type
         """
         if not text:
             return False
         
         text_lower = text.lower()
-        return any(indicator.lower() in text_lower for indicator in VenueDetector.VENUE_INDICATORS)
+        return any(venue_type.lower() in text_lower for venue_type in VenueDetector.VENUE_TYPES)
     
     @staticmethod
     def extract_venue_from_headings(headings: list) -> Optional[str]:
@@ -211,7 +214,7 @@ class VenueDetector:
             headings: List of heading elements (BeautifulSoup elements)
             
         Returns:
-            First heading text containing a venue indicator, or None
+            First heading text containing a venue type as a complete word, or None
         """
         for heading in headings:
             text = heading.get_text(strip=True)
