@@ -253,6 +253,7 @@ class EventValidator:
         
         Location MUST have:
         - name (non-empty string)
+        - address (full German address: Street Number, ZIP City) - REQUIRED
         - lat (valid latitude -90 to 90)
         - lon (valid longitude -180 to 180)
         
@@ -282,6 +283,22 @@ class EventValidator:
             generic_names = ['Unknown', 'Unknown Location', 'Hof', 'Bayreuth', 'Selb']
             if location['name'] in generic_names:
                 warnings.append(ValidationError('location.name', f'Generic location name "{location["name"]}" should be more specific', severity='warning'))
+        
+        # Validate address (REQUIRED)
+        if 'address' not in location:
+            errors.append(ValidationError('location.address', 'Address is required', severity='error'))
+        elif not location['address']:
+            errors.append(ValidationError('location.address', 'Address cannot be empty', severity='error'))
+        elif not isinstance(location['address'], str):
+            errors.append(ValidationError('location.address', f'Address must be string, got {type(location["address"]).__name__}', severity='error'))
+        else:
+            # Validate address format (German: Street Number, ZIP City)
+            address = location['address']
+            # Check for basic address components
+            has_number = any(char.isdigit() for char in address)
+            has_comma = ',' in address
+            if not (has_number and has_comma):
+                warnings.append(ValidationError('location.address', 'Address should include street number and city (format: Street Number, ZIP City)', severity='warning'))
         
         # Validate latitude
         if 'lat' not in location:

@@ -657,21 +657,23 @@ class GeolocationResolver:
         
         Returns location dict with:
         - name: Location name
+        - address: Full address (REQUIRED)
         - lat, lon: Coordinates (rounded to 4 decimals)
         - needs_review: True if coordinates are estimated/flagged
         - resolution_method: How coordinates were determined
         
         Args:
             location_name: Venue/location name
-            address: Full address string
+            address: Full address string (REQUIRED for complete validation)
             coordinates: Tuple of (lat, lon) if already extracted
             source_name: Scraper source name
             
         Returns:
-            Location dict with name, lat, lon, needs_review, resolution_method
+            Location dict with name, address, lat, lon, needs_review, resolution_method
         """
         result = {
             'name': location_name or address or 'Unknown Location',
+            'address': address,  # REQUIRED - will be None if not provided
             'lat': None,
             'lon': None,
             'needs_review': False,
@@ -684,6 +686,16 @@ class GeolocationResolver:
             result['lon'] = round_coordinate(coordinates[1])
             result['resolution_method'] = 'iframe_extraction'
             result['needs_review'] = False
+            
+            # If we have coordinates but no address, extract from location name
+            if not result['address'] and location_name:
+                # Try to extract city and build basic address
+                from . import CityDetector
+                city = CityDetector.extract_from_text(location_name)
+                if city:
+                    result['address'] = f"{location_name}, {city}"
+                    result['needs_review'] = True  # Address needs verification
+            
             return result
         
         # Strategy 2: Check verified locations database (exact match)
@@ -696,12 +708,14 @@ class GeolocationResolver:
         
         # Strategy 3: Extract city from address and use city coordinates
         if address:
+            from . import CityDetector
             city = CityDetector.extract_from_address(address)
             if city:
                 city_coords = CityDetector.get_city_coordinates(city)
                 if city_coords:
                     result['lat'] = city_coords['lat']
                     result['lon'] = city_coords['lon']
+                    result['address'] = address  # Keep provided address
                     result['resolution_method'] = 'address_city_lookup'
                     result['needs_review'] = True  # City center, not exact venue
                     
@@ -713,12 +727,15 @@ class GeolocationResolver:
         
         # Strategy 4: Extract city from venue name
         if location_name:
+            from . import CityDetector
             city = CityDetector.extract_from_text(location_name)
             if city:
                 city_coords = CityDetector.get_city_coordinates(city)
                 if city_coords:
                     result['lat'] = city_coords['lat']
                     result['lon'] = city_coords['lon']
+                    # Build basic address from venue name and city
+                    result['address'] = f"{location_name}, {city}"
                     result['resolution_method'] = 'venue_name_city_lookup'
                     result['needs_review'] = True  # City center, not exact venue
                     

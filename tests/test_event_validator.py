@@ -26,6 +26,7 @@ def test_valid_event():
         'description': 'This is a test event',
         'location': {
             'name': 'Test Venue',
+            'address': 'Teststraße 1, 95030 Hof',  # REQUIRED
             'lat': 50.3167,
             'lon': 11.9167
         },
@@ -86,17 +87,25 @@ def test_missing_required_fields():
 
 
 def test_invalid_location_no_coordinates():
-    """Test validation fails for location without coordinates."""
+    """Test validation fails for location without coordinates or address."""
     print("\n" + "="*60)
-    print("Test: Location Without Coordinates (CRITICAL)")
+    print("Test: Location Without Complete Data (CRITICAL)")
     print("="*60)
     
     test_cases = [
+        # No address
+        {
+            'id': 'test_0',
+            'title': 'Test Event',
+            'location': {'name': 'Test Venue', 'lat': 50.3167, 'lon': 11.9167},  # Missing address
+            'start_time': '2026-01-20T18:00:00',
+            'source': 'Test'
+        },
         # No latitude
         {
             'id': 'test_1',
             'title': 'Test Event',
-            'location': {'name': 'Test Venue', 'lon': 11.9167},
+            'location': {'name': 'Test Venue', 'address': 'Test Street 1, Hof', 'lon': 11.9167},
             'start_time': '2026-01-20T18:00:00',
             'source': 'Test'
         },
@@ -104,7 +113,7 @@ def test_invalid_location_no_coordinates():
         {
             'id': 'test_2',
             'title': 'Test Event',
-            'location': {'name': 'Test Venue', 'lat': 50.3167},
+            'location': {'name': 'Test Venue', 'address': 'Test Street 1, Hof', 'lat': 50.3167},
             'start_time': '2026-01-20T18:00:00',
             'source': 'Test'
         },
@@ -112,7 +121,7 @@ def test_invalid_location_no_coordinates():
         {
             'id': 'test_3',
             'title': 'Test Event',
-            'location': {'name': 'Test Venue', 'lat': None, 'lon': None},
+            'location': {'name': 'Test Venue', 'address': 'Test Street 1, Hof', 'lat': None, 'lon': None},
             'start_time': '2026-01-20T18:00:00',
             'source': 'Test'
         },
@@ -219,15 +228,15 @@ def test_bulk_validation():
         {
             'id': 'valid_1',
             'title': 'Valid Event 1',
-            'location': {'name': 'Venue 1', 'lat': 50.3, 'lon': 11.9},
+            'location': {'name': 'Venue 1', 'address': 'Street 1, Hof', 'lat': 50.3, 'lon': 11.9},
             'start_time': '2026-01-20T18:00:00',
             'source': 'Test'
         },
-        # Invalid event (missing location coords)
+        # Invalid event (missing address and coords)
         {
             'id': 'invalid_1',
             'title': 'Invalid Event 1',
-            'location': {'name': 'Venue 2'},  # Missing lat/lon
+            'location': {'name': 'Venue 2'},  # Missing address and lat/lon
             'start_time': '2026-01-20T18:00:00',
             'source': 'Test'
         },
@@ -235,14 +244,14 @@ def test_bulk_validation():
         {
             'id': 'valid_2',
             'title': 'Valid Event 2',
-            'location': {'name': 'Venue 3', 'lat': 49.9, 'lon': 11.6},
+            'location': {'name': 'Venue 3', 'address': 'Street 3, Bayreuth', 'lat': 49.9, 'lon': 11.6},
             'start_time': '2026-01-20T19:00:00',
             'source': 'Test'
         },
-        # Invalid event (missing title)
+        # Invalid event (missing title and address)
         {
             'id': 'invalid_2',
-            'location': {'name': 'Venue 4', 'lat': 50.1, 'lon': 12.1},
+            'location': {'name': 'Venue 4', 'lat': 50.1, 'lon': 12.1},  # Missing address
             'start_time': '2026-01-20T20:00:00',
             'source': 'Test'
         },
@@ -282,24 +291,25 @@ def test_no_publish_incomplete():
         {
             'id': 'frankenpost_1',
             'title': 'Richard-Wagner-Museum Exhibition',
-            'location': {'name': 'Hof', 'lat': 50.3167, 'lon': 11.9167},  # Generic city
+            'location': {'name': 'Hof', 'address': 'Hof', 'lat': 50.3167, 'lon': 11.9167},  # Generic city
             'start_time': '2026-01-20T10:00:00',
             'source': 'Frankenpost'
         },
-        # Event with no coordinates
+        # Event with no coordinates or address
         {
             'id': 'frankenpost_2',
             'title': 'MAKkultur Concert',
-            'location': {'name': 'MAKkultur', 'lat': None, 'lon': None},
+            'location': {'name': 'MAKkultur', 'lat': None, 'lon': None},  # Missing coords AND address
             'start_time': '2026-01-21T19:00:00',
             'source': 'Frankenpost'
         },
-        # Event with needs_review flag
+        # Event with needs_review flag but complete data
         {
             'id': 'frankenpost_3',
             'title': 'Sportheim Event',
             'location': {
                 'name': 'Sportheim',
+                'address': 'Sportheim, Hof',
                 'lat': 50.3167,
                 'lon': 11.9167,
                 'needs_review': True
