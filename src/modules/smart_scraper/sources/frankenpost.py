@@ -262,40 +262,18 @@ class FrankenpostSource(BaseSource):
                         break
         
         # NEW Strategy 2: Iframe Geolocation Extraction
-        # Look for iframe tags with map-related src attributes
+        # Use CoordinateExtractor utility to avoid code duplication
         if not latitude or not longitude:
+            from ..scraper_utils import CoordinateExtractor
+            
             iframes = soup.find_all('iframe', src=True)
             for iframe in iframes:
                 src = iframe.get('src', '').lower()
                 if 'map' in src or 'geo' in src:
                     src_original = iframe.get('src', '')
-                    
-                    # Try Google Maps patterns: ?q=lat,lon or @lat,lon or [?&]q=lat,lon
-                    google_match = re.search(r'[?&@]q?=?(-?\d+\.\d+),(-?\d+\.\d+)', src_original)
-                    if google_match:
-                        latitude = round(float(google_match.group(1)), 4)
-                        longitude = round(float(google_match.group(2)), 4)
-                        break
-                    
-                    # Try OpenStreetMap pattern: ?mlat=lat&mlon=lon
-                    osm_match1 = re.search(r'mlat=(-?\d+\.\d+)&mlon=(-?\d+\.\d+)', src_original)
-                    if osm_match1:
-                        latitude = round(float(osm_match1.group(1)), 4)
-                        longitude = round(float(osm_match1.group(2)), 4)
-                        break
-                    
-                    # Try OpenStreetMap pattern: #map=zoom/lat/lon
-                    osm_match2 = re.search(r'#map=\d+/(-?\d+\.\d+)/(-?\d+\.\d+)', src_original)
-                    if osm_match2:
-                        latitude = round(float(osm_match2.group(1)), 4)
-                        longitude = round(float(osm_match2.group(2)), 4)
-                        break
-                    
-                    # Try Apple Maps patterns: ll=lat,lon or ?ll=lat,lon
-                    apple_match = re.search(r'[?&]?ll=(-?\d+\.\d+),(-?\d+\.\d+)', src_original)
-                    if apple_match:
-                        latitude = round(float(apple_match.group(1)), 4)
-                        longitude = round(float(apple_match.group(2)), 4)
+                    coords = CoordinateExtractor.extract_from_iframe(src_original)
+                    if coords:
+                        latitude, longitude = coords
                         break
         
         # Strategy 3: Look for location-related labels and fields

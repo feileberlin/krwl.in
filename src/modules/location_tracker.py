@@ -93,9 +93,21 @@ class LocationTracker:
         if location_name in generic_names:
             return
         
-        # Round coordinates to 4 decimal places
-        lat = round(location.get('lat'), 4) if location.get('lat') is not None else None
-        lon = round(location.get('lon'), 4) if location.get('lon') is not None else None
+        # Round coordinates to 4 decimal places with type safety
+        raw_lat = location.get('lat')
+        raw_lon = location.get('lon')
+        lat: Optional[float] = None
+        lon: Optional[float] = None
+        if raw_lat is not None:
+            try:
+                lat = round(float(raw_lat), 4)
+            except (TypeError, ValueError):
+                lat = None
+        if raw_lon is not None:
+            try:
+                lon = round(float(raw_lon), 4)
+            except (TypeError, ValueError):
+                lon = None
         
         # Add or update entry
         if location_name not in self.unverified_locations:

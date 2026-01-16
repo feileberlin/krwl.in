@@ -160,11 +160,8 @@ class EventEditor:
         """Approve and publish an event with validation"""
         try:
             # Check minimal requirements first (clearer error messages)
-            # Import the validation function from event_manager
-            import sys
-            from pathlib import Path
-            sys.path.insert(0, str(Path(__file__).parent.parent))
-            from event_manager import minimal_eventdata_requirements_check
+            # Import the validation function from event_manager using package-relative import
+            from ..event_manager import minimal_eventdata_requirements_check
             
             is_valid, error_msg = minimal_eventdata_requirements_check(event)
             if not is_valid:

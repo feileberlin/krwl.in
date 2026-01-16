@@ -1085,6 +1085,10 @@ strong, b {
     line-height: 1.4;
 }
 
+.debug-warning-message.with-spacing {
+    margin-top: 1em;
+}
+
 .debug-warning-message strong {
     color: var(--color-warning);
 }

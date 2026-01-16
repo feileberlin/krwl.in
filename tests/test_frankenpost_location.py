@@ -4,6 +4,7 @@ Test for Frankenpost custom scraper location extraction
 """
 
 import sys
+import traceback
 from pathlib import Path
 
 # Add src to path
@@ -225,7 +226,6 @@ def test_location_extraction():
                 
         except Exception as e:
             print(f"  ✗ Error: {e}")
-            import traceback
             traceback.print_exc()
             failed += 1
     
@@ -307,6 +307,5 @@ if __name__ == '__main__':
             
     except Exception as e:
         print(f"\n✗ Test error: {e}")
-        import traceback
         traceback.print_exc()
         sys.exit(1)

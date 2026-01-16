@@ -447,6 +447,9 @@ class EventsApp {
             if (pendingCount > 0 || unverifiedCount > 0) {
                 let messages = [];
                 
+                // Get repository URL from config (fallback to hardcoded for backward compatibility)
+                const repoUrl = this.config?.app?.repository?.url || 'https://github.com/feileberlin/krwl-hof';
+                
                 // Pending events warning
                 if (pendingCount > 0) {
                     messages.push(`
@@ -456,7 +459,7 @@ class EventsApp {
                         </div>
                         <div class="debug-warning-hint">
                             Events must be reviewed and approved before appearing on the map.
-                            <a href="https://github.com/feileberlin/krwl-hof/actions/workflows/scrape-events.yml" 
+                            <a href="${repoUrl}/actions/workflows/scrape-events.yml" 
                                target="_blank" 
                                rel="noopener noreferrer"
                                class="debug-warning-link">→ Review Events in GitHub Actions</a>
@@ -466,14 +469,15 @@ class EventsApp {
                 
                 // Unverified locations warning
                 if (unverifiedCount > 0) {
+                    const unverifiedMessageClass = `debug-warning-message${pendingCount > 0 ? ' with-spacing' : ''}`;
                     messages.push(`
-                        <div class="debug-warning-message" style="margin-top: ${pendingCount > 0 ? '1em' : '0'};">
+                        <div class="${unverifiedMessageClass}">
                             <strong>${unverifiedCount} unverified location${unverifiedCount > 1 ? 's' : ''}</strong> 
                             ${unverifiedCount > 1 ? 'need' : 'needs'} verification.
                         </div>
                         <div class="debug-warning-hint">
                             Locations should be added to <code>verified_locations.json</code> to prevent duplicates.
-                            <a href="https://github.com/feileberlin/krwl-hof/blob/main/assets/json/unverified_locations.json" 
+                            <a href="${repoUrl}/blob/main/assets/json/unverified_locations.json" 
                                target="_blank" 
                                rel="noopener noreferrer"
                                class="debug-warning-link">→ View Unverified Locations</a>
