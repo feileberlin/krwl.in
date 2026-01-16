@@ -196,6 +196,8 @@ class FrankenpostSource(BaseSource):
         Extract venue location from detail page.
         
         Looks for:
+        - H3 + Strong tag patterns for structured location
+        - Iframe coordinates from embedded maps
         - Location/Ort labels and their values
         - Address patterns (Street Number, ZIP City)
         - Venue name patterns
@@ -205,12 +207,71 @@ class FrankenpostSource(BaseSource):
         """
         location_name = None
         full_address = None
+        latitude = None
+        longitude = None
         extraction_method = 'unknown'
         has_full_address = False
         has_venue_name = False
         used_default = False
         
-        # Strategy 1: Look for location-related labels and fields
+        # NEW Strategy 1: H3 + Strong Tag Pattern
+        # Look for <h3>Location</h3> or <h3>Ort</h3> followed by <strong> tag
+        h3_tags = soup.find_all('h3')
+        for h3 in h3_tags:
+            h3_text = h3.get_text(strip=True).lower()
+            if 'location' in h3_text or 'ort' in h3_text:
+                # Find the next strong tag after this h3
+                strong_tag = h3.find_next('strong')
+                if strong_tag:
+                    strong_text = strong_tag.get_text(strip=True)
+                    if strong_text and len(strong_text) > 3:
+                        location_name = strong_text
+                        extraction_method = 'h3_strong_tag'
+                        has_venue_name = True
+                        
+                        # Also check for accompanying address in parent element
+                        parent = strong_tag.parent
+                        if parent:
+                            parent_text = parent.get_text(strip=True)
+                            # Look for address pattern in the parent
+                            address_pattern = r'([A-ZÄÖÜ][a-zäöüß\-\s\.]+\s+\d+[a-z]?\s*,\s*\d{5}\s+[A-ZÄÖÜ][a-zäöüß\-\s]+)'
+                            address_match = re.search(address_pattern, parent_text)
+                            if address_match:
+                                full_address = address_match.group(1).strip()
+                                has_full_address = True
+                        break
+        
+        # NEW Strategy 2: Iframe Geolocation Extraction
+        # Look for iframe tags with map-related src attributes
+        if not latitude or not longitude:
+            iframes = soup.find_all('iframe', src=True)
+            for iframe in iframes:
+                src = iframe.get('src', '').lower()
+                if 'map' in src or 'geo' in src:
+                    src_original = iframe.get('src', '')
+                    
+                    # Try Google Maps patterns: ?q=lat,lon or @lat,lon or [?&]q=lat,lon
+                    google_match = re.search(r'[?&@]q?=?(-?\d+\.\d+),(-?\d+\.\d+)', src_original)
+                    if google_match:
+                        latitude = float(google_match.group(1))
+                        longitude = float(google_match.group(2))
+                        break
+                    
+                    # Try OpenStreetMap pattern: ?mlat=lat&mlon=lon
+                    osm_match1 = re.search(r'mlat=(-?\d+\.\d+)&mlon=(-?\d+\.\d+)', src_original)
+                    if osm_match1:
+                        latitude = float(osm_match1.group(1))
+                        longitude = float(osm_match1.group(2))
+                        break
+                    
+                    # Try OpenStreetMap pattern: #map=zoom/lat/lon
+                    osm_match2 = re.search(r'#map=\d+/(-?\d+\.\d+)/(-?\d+\.\d+)', src_original)
+                    if osm_match2:
+                        latitude = float(osm_match2.group(1))
+                        longitude = float(osm_match2.group(2))
+                        break
+        
+        # Strategy 3: Look for location-related labels and fields
         location_keywords = ['Ort:', 'Veranstaltungsort:', 'Location:', 'Adresse:', 'Venue:']
         for keyword in location_keywords:
             # Find label with keyword
@@ -239,22 +300,23 @@ class FrankenpostSource(BaseSource):
                     has_venue_name = True
                     break
         
-        # Strategy 2: Look for address patterns (German format)
+        # Strategy 4: Look for address patterns (German format)
         # Pattern: Street Number, ZIP City (e.g., "Maximilianstraße 33, 95444 Bayreuth")
-        page_text = soup.get_text()
-        address_pattern = r'([A-ZÄÖÜ][a-zäöüß\-\s\.]+\s+\d+[a-z]?\s*,\s*\d{5}\s+[A-ZÄÖÜ][a-zäöüß\-\s]+)'
-        addresses = re.findall(address_pattern, page_text)
+        if not has_full_address:  # Only search if not already found
+            page_text = soup.get_text()
+            address_pattern = r'([A-ZÄÖÜ][a-zäöüß\-\s\.]+\s+\d+[a-z]?\s*,\s*\d{5}\s+[A-ZÄÖÜ][a-zäöüß\-\s]+)'
+            addresses = re.findall(address_pattern, page_text)
+            
+            if addresses:
+                # Use first address found
+                full_address = addresses[0].strip()
+                has_full_address = True
+                # If we don't have a location name yet, use the address
+                if not location_name:
+                    location_name = full_address
+                    extraction_method = 'address_pattern'
         
-        if addresses:
-            # Use first address found
-            full_address = addresses[0].strip()
-            has_full_address = True
-            # If we don't have a location name yet, use the address
-            if not location_name:
-                location_name = full_address
-                extraction_method = 'address_pattern'
-        
-        # Strategy 3: Look for venue names in title/headings
+        # Strategy 5: Look for venue names in title/headings
         if not location_name:
             # Check for venue patterns in headings
             headings = soup.find_all(['h1', 'h2', 'h3', 'h4'])
@@ -270,28 +332,34 @@ class FrankenpostSource(BaseSource):
                     has_venue_name = True
                     break
         
-        # Parse location to extract coordinates if possible
-        # Check if we have a full address or just a venue name
-        location = self._estimate_coordinates(location_name if location_name else '')
-        
-        # If no location found at all, use default from config
-        if not location_name and not full_address:
-            used_default = True
-            extraction_method = 'default_fallback'
-            default_loc = self.options.default_location
-            if default_loc:
-                location = default_loc
+        # Coordinate handling: Use extracted coordinates if available, otherwise estimate
+        if latitude is not None and longitude is not None:
+            # Use coordinates extracted from iframe
+            location = {
+                'name': location_name if location_name else full_address if full_address else 'Unknown',
+                'lat': latitude,
+                'lon': longitude
+            }
+        else:
+            # Fall back to coordinate estimation based on location text
+            if location_name or full_address:
+                location = self._estimate_coordinates(location_name if location_name else full_address)
             else:
-                # This should never happen if config is properly set, but provide minimal fallback
-                raise ValueError("No location found and no default_location configured")
-        elif full_address and not location_name:
-            # If we have a full address, use it as the name
-            location = self._estimate_coordinates(full_address)
+                # No location found at all, use default from config
+                used_default = True
+                extraction_method = 'default_fallback'
+                default_loc = self.options.default_location
+                if default_loc:
+                    location = default_loc
+                else:
+                    # This should never happen if config is properly set, but provide minimal fallback
+                    raise ValueError("No location found and no default_location configured")
         
         # Build extraction details for confidence scoring
         extraction_details = {
             'has_full_address': has_full_address,
             'has_venue_name': has_venue_name,
+            'has_coordinates': latitude is not None and longitude is not None,
             'used_default': used_default,
             'used_geocoding': False,  # We're using lookup table, not geocoding
             'extraction_method': extraction_method,
