@@ -8,16 +8,20 @@ The KRWL HOF event manager automatically adds debug comments to generated HTML f
 
 ### Automatic Environment Detection with Force Override (KISS)
 
-Debug comments are controlled by a simple 3-level priority system:
+Debug comments are controlled by a simple 4-level priority system:
 
 1. **🎯 Environment Variable** (highest priority - for GitHub Actions)
    - Set `DEBUG_COMMENTS=true` to force enable
    - Set `DEBUG_COMMENTS=false` to force disable
    
-2. **⚙️ Config File Setting** (second priority - for local override)
+2. **⚙️ Config File Setting** (second priority - explicit debug override)
    - Edit `config.json`: set `"debug_comments": {"force_enabled": true}`
    
-3. **🤖 Auto-Detection** (default behavior)
+3. **🔧 Config Environment Override** (third priority - respects forced environment)
+   - Edit `config.json`: set `"environment": "development"`
+   - Enables debug comments **even in CI/production environments**
+   
+4. **🤖 Auto-Detection** (default behavior - fallback)
    - ✅ **Development** (local machine) → Debug comments **ENABLED**
    - ❌ **Production/CI** (deployed/CI) → Debug comments **DISABLED**
 
