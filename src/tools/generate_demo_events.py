@@ -42,6 +42,11 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 import random
 
+DEMO_PLACEHOLDER_TITLE = "Test Community Gathering"
+DEMO_PLACEHOLDER_TITLE_REPLACEMENT = "Community Meetup at Test Venue"
+DEMO_PLACEHOLDER_DESCRIPTION_PHRASE = "test event for approval flow testing"
+DEMO_PLACEHOLDER_DESCRIPTION_REPLACEMENT = "Friendly community meetup with introductions, snacks, and local tips."
+
 def cleanup_old_files(base_dir="."):
     """Remove old unnecessary files before generating new ones."""
     base_path = Path(base_dir)
@@ -78,11 +83,11 @@ def load_real_events(base_dir="."):
     """Load real events from production data as templates."""
     base_path = Path(base_dir)
     
-    # Try multiple locations for events file (prefer data over static)
+    # Try multiple locations for events file (prefer data/assets over static)
     possible_paths = [
         base_path / "data" / "events.json",
+        base_path / "assets" / "json" / "events.json",
         base_path / "static" / "events.json",
-        base_path / "data" / "events.json",
         base_path / "events.json",
     ]
     
@@ -143,6 +148,19 @@ def create_demo_event_from_template(template, event_id, time_offset, now):
     
     return demo_event
 
+def normalize_demo_template(template):
+    """Normalize template text for more appealing demo content."""
+    title = template.get("title", "Demo Event")
+    description = template.get("description", "Demo event based on real data.")
+
+    if DEMO_PLACEHOLDER_TITLE in title:
+        title = DEMO_PLACEHOLDER_TITLE_REPLACEMENT
+
+    if DEMO_PLACEHOLDER_DESCRIPTION_PHRASE in description.lower():
+        description = DEMO_PLACEHOLDER_DESCRIPTION_REPLACEMENT
+
+    return title, description
+
 def generate_demo_events_from_templates(real_events, now):
     """Generate demo events using real events as templates with relative time specifications."""
     
@@ -167,55 +185,58 @@ def generate_demo_events_from_templates(real_events, now):
         next_sunrise = now.replace(hour=6, minute=0, second=0, microsecond=0)
     
     # Define useful time scenarios for testing (expanded with sunrise edge cases and timezone tests)
-    # Format: (offset, suffix, description, tz_offset, relative_time_spec)
+    # Format:
+    #   (offset, suffix, title_label, description, tz_offset, relative_time_spec)
+    #   (offset, suffix, title_label, description, tz_offset)
+    #   (offset, suffix, title_label, description)
     time_scenarios = [
         # Current time scenarios (basic functionality)
-        (timedelta(minutes=-30), "happening_now", "Event happening now", 0, {"type": "offset", "minutes": -30, "duration_hours": 2}),
-        (timedelta(minutes=-5), "started_5min_ago", "Started 5 minutes ago", 0, {"type": "offset", "minutes": -5, "duration_hours": 2}),
-        (timedelta(minutes=5), "starting_5min", "Starting in 5 minutes", 0, {"type": "offset", "minutes": 5, "duration_hours": 2}),
-        (timedelta(minutes=15), "starting_15min", "Starting in 15 minutes", 0, {"type": "offset", "minutes": 15, "duration_hours": 2}),
-        (timedelta(minutes=30), "starting_30min", "Starting in 30 minutes", 0, {"type": "offset", "minutes": 30, "duration_hours": 2}),
-        (timedelta(hours=1), "in_1hour", "Event starting in 1 hour", 0, {"type": "offset", "hours": 1, "duration_hours": 2}),
-        (timedelta(hours=2), "in_2hours", "Event in 2 hours", 0, {"type": "offset", "hours": 2, "duration_hours": 2}),
-        (timedelta(hours=4), "this_evening", "Event this evening", 0, {"type": "offset", "hours": 4, "duration_hours": 2}),
-        (timedelta(hours=-2, minutes=-10), "just_ended", "Event that just ended", 0, {"type": "offset", "hours": -2, "minutes": -10, "duration_hours": 2}),
-        (timedelta(minutes=45), "very_soon", "Event very soon", 0, {"type": "offset", "minutes": 45, "duration_hours": 2}),
+        (timedelta(minutes=-30), "happening_now", "Live now", "Live now — drop in for the current highlights", 0, {"type": "offset", "minutes": -30, "duration_hours": 2}),
+        (timedelta(minutes=-5), "started_5min_ago", "Just started", "Just started — doors opened a few minutes ago", 0, {"type": "offset", "minutes": -5, "duration_hours": 2}),
+        (timedelta(minutes=5), "starting_5min", "Starts in 5 min", "Starts in 5 minutes — grab your spot", 0, {"type": "offset", "minutes": 5, "duration_hours": 2}),
+        (timedelta(minutes=15), "starting_15min", "Starts in 15 min", "Starts in 15 minutes — meet at the entrance", 0, {"type": "offset", "minutes": 15, "duration_hours": 2}),
+        (timedelta(minutes=30), "starting_30min", "Starts in 30 min", "Starts in 30 minutes — settle in with a quick coffee", 0, {"type": "offset", "minutes": 30, "duration_hours": 2}),
+        (timedelta(hours=1), "in_1hour", "Starts in 1 hour", "Starts in 1 hour — plan your evening ahead", 0, {"type": "offset", "hours": 1, "duration_hours": 2}),
+        (timedelta(hours=2), "in_2hours", "Starts in 2 hours", "Starts in 2 hours — add it to your calendar", 0, {"type": "offset", "hours": 2, "duration_hours": 2}),
+        (timedelta(hours=4), "this_evening", "This evening", "This evening — unwind with a relaxed session", 0, {"type": "offset", "hours": 4, "duration_hours": 2}),
+        (timedelta(hours=-2, minutes=-10), "just_ended", "Just ended", "Just ended — highlights and recap available", 0, {"type": "offset", "hours": -2, "minutes": -10, "duration_hours": 2}),
+        (timedelta(minutes=45), "very_soon", "Very soon", "Very soon — warm-up and introductions are underway", 0, {"type": "offset", "minutes": 45, "duration_hours": 2}),
         
         # Timezone test cases - critical for international users
-        (timedelta(hours=1), "utc_plus1", "Event in UTC+1 timezone", 1, {"type": "offset", "hours": 1, "duration_hours": 2, "timezone_offset": 1}),
-        (timedelta(hours=1), "utc_plus2", "Event in UTC+2 timezone", 2, {"type": "offset", "hours": 1, "duration_hours": 2, "timezone_offset": 2}),
-        (timedelta(hours=1), "utc_minus5", "Event in UTC-5 timezone (EST)", -5, {"type": "offset", "hours": 1, "duration_hours": 2, "timezone_offset": -5}),
-        (timedelta(hours=1), "utc_plus9", "Event in UTC+9 timezone (JST)", 9, {"type": "offset", "hours": 1, "duration_hours": 2, "timezone_offset": 9}),
-        (timedelta(minutes=30), "utc_plus530", "Event in UTC+5:30 (IST)", 5.5, {"type": "offset", "minutes": 30, "duration_hours": 2, "timezone_offset": 5.5}),
+        (timedelta(hours=1), "utc_plus1", "UTC+1 local time", "Timezone demo in UTC+1 — shows local start time", 1, {"type": "offset", "hours": 1, "duration_hours": 2, "timezone_offset": 1}),
+        (timedelta(hours=1), "utc_plus2", "UTC+2 local time", "Timezone demo in UTC+2 — local time check", 2, {"type": "offset", "hours": 1, "duration_hours": 2, "timezone_offset": 2}),
+        (timedelta(hours=1), "utc_minus5", "UTC-5 local time", "Timezone demo in UTC-5 (EST) — local time check", -5, {"type": "offset", "hours": 1, "duration_hours": 2, "timezone_offset": -5}),
+        (timedelta(hours=1), "utc_plus9", "UTC+9 local time", "Timezone demo in UTC+9 (JST) — local time check", 9, {"type": "offset", "hours": 1, "duration_hours": 2, "timezone_offset": 9}),
+        (timedelta(minutes=30), "utc_plus530", "UTC+5:30 local time", "Timezone demo in UTC+5:30 (IST) — local time check", 5.5, {"type": "offset", "minutes": 30, "duration_hours": 2, "timezone_offset": 5.5}),
         
         # Sunrise edge cases - critical for testing
         # Event ending 5 minutes before sunrise (should show)
-        ((next_sunrise - now) - timedelta(hours=2), "before_sunrise_5min", "Ends 5min before sunrise", 0, {"type": "sunrise_relative", "end_offset_minutes": -5, "start_offset_hours": -2}),
+        ((next_sunrise - now) - timedelta(hours=2), "before_sunrise_5min", "Ends before sunrise", "Ends 5 minutes before sunrise — late-night session", 0, {"type": "sunrise_relative", "end_offset_minutes": -5, "start_offset_hours": -2}),
         # Event ending exactly at sunrise (edge case)
-        ((next_sunrise - now) - timedelta(hours=1, minutes=30), "at_sunrise", "Ends at sunrise", 0, {"type": "sunrise_relative", "end_offset_minutes": 0, "start_offset_hours": -1.5}),
+        ((next_sunrise - now) - timedelta(hours=1, minutes=30), "at_sunrise", "Ends at sunrise", "Ends at sunrise — early-bird finale", 0, {"type": "sunrise_relative", "end_offset_minutes": 0, "start_offset_hours": -1.5}),
         # Event ending 5 minutes after sunrise (should NOT show)
-        ((next_sunrise - now) - timedelta(hours=1), "after_sunrise_5min", "Ends 5min after sunrise", 0, {"type": "sunrise_relative", "end_offset_minutes": 5, "start_offset_hours": -1}),
+        ((next_sunrise - now) - timedelta(hours=1), "after_sunrise_5min", "Ends after sunrise", "Ends 5 minutes after sunrise — should be filtered", 0, {"type": "sunrise_relative", "end_offset_minutes": 5, "start_offset_hours": -1}),
         # Event crossing sunrise boundary (starts before, ends after)
-        ((next_sunrise - now) - timedelta(hours=3), "crossing_sunrise", "Crosses sunrise boundary", 0, {"type": "sunrise_relative", "start_offset_hours": -2, "end_offset_hours": 1}),
+        ((next_sunrise - now) - timedelta(hours=3), "crossing_sunrise", "Crosses sunrise", "Crosses sunrise — spans pre-dawn into morning", 0, {"type": "sunrise_relative", "start_offset_hours": -2, "end_offset_hours": 1}),
         # Event starting just before sunrise
-        ((next_sunrise - now) - timedelta(minutes=30), "starting_before_sunrise", "Starts 30min before sunrise", 0, {"type": "sunrise_relative", "start_offset_minutes": -30, "end_offset_minutes": 30}),
+        ((next_sunrise - now) - timedelta(minutes=30), "starting_before_sunrise", "Starts before sunrise", "Starts 30 minutes before sunrise — early meetup", 0, {"type": "sunrise_relative", "start_offset_minutes": -30, "end_offset_minutes": 30}),
         # Event starting after sunrise (should NOT show)
-        ((next_sunrise - now) + timedelta(minutes=30), "starting_after_sunrise", "Starts 30min after sunrise", 0, {"type": "sunrise_relative", "start_offset_minutes": 30, "end_offset_hours": 2}),
+        ((next_sunrise - now) + timedelta(minutes=30), "starting_after_sunrise", "Starts after sunrise", "Starts 30 minutes after sunrise — morning session", 0, {"type": "sunrise_relative", "start_offset_minutes": 30, "end_offset_hours": 2}),
         # All-night event (starts evening, ends at sunrise)
-        ((next_sunrise - now) - timedelta(hours=8), "all_night", "All night until sunrise", 0, {"type": "sunrise_relative", "start_offset_hours": -8, "end_offset_minutes": 0}),
+        ((next_sunrise - now) - timedelta(hours=8), "all_night", "All night", "All-night event until sunrise — overnight hangout", 0, {"type": "sunrise_relative", "start_offset_hours": -8, "end_offset_minutes": 0}),
     ]
     
     demo_events = []
     
     # Use real events as templates, cycling through them
     for i, scenario in enumerate(time_scenarios):
-        if len(scenario) == 5:
-            offset, suffix, description, tz_offset, relative_spec = scenario
-        elif len(scenario) == 4:
-            offset, suffix, description, tz_offset = scenario
+        if len(scenario) == 6:
+            offset, suffix, title_label, scenario_description, tz_offset, relative_spec = scenario
+        elif len(scenario) == 5:
+            offset, suffix, title_label, scenario_description, tz_offset = scenario
             relative_spec = None
         else:
-            offset, suffix, description = scenario
+            offset, suffix, title_label, scenario_description = scenario
             tz_offset = 0
             relative_spec = None
             
@@ -235,6 +256,7 @@ def generate_demo_events_from_templates(real_events, now):
             }
         
         event_id = f"demo_{suffix}"
+        template_title, template_description = normalize_demo_template(template)
         
         # Calculate start time
         start_time = now + offset
@@ -272,10 +294,11 @@ def generate_demo_events_from_templates(real_events, now):
                 
             # Create event with custom times
             tz_suffix = f" (TZ: {tz_offset:+.1f})" if tz_offset != 0 else ""
+            title_suffix = f" — {title_label}" if title_label else ""
             demo_event = {
                 "id": event_id,
-                "title": f"[DEMO] {template.get('title', 'Demo Event')}{tz_suffix}",
-                "description": f"{description}. {template.get('description', 'Testing sunrise filtering.')}",
+                "title": f"[DEMO] {template_title}{title_suffix}{tz_suffix}",
+                "description": f"{scenario_description}. {template_description}",
                 "location": template.get('location', {
                     "name": "Demo Location",
                     "lat": 50.3167,
@@ -307,10 +330,11 @@ def generate_demo_events_from_templates(real_events, now):
             # Add timezone info to title if testing timezone
             tz_suffix = f" (TZ: {tz_offset:+.1f})" if tz_offset != 0 else ""
             
+            title_suffix = f" — {title_label}" if title_label else ""
             demo_event = {
                 "id": event_id,
-                "title": f"[DEMO] {template.get('title', 'Demo Event')}{tz_suffix}",
-                "description": f"{description}. {template.get('description', 'Demo event based on real data.')}",
+                "title": f"[DEMO] {template_title}{title_suffix}{tz_suffix}",
+                "description": f"{scenario_description}. {template_description}",
                 "location": template.get('location', {
                     "name": "Demo Location",
                     "lat": 50.3167,
@@ -348,10 +372,11 @@ def generate_demo_events_from_templates(real_events, now):
     
     far_start = now + timedelta(hours=2)
     far_end = far_start + timedelta(hours=2)
+    far_title, far_description = normalize_demo_template(far_template)
     far_event = {
         "id": "demo_far_away",
-        "title": f"[DEMO] {far_template.get('title', 'Demo Event')}",
-        "description": f"Event 250km away for distance testing. {far_template.get('description', '')}",
+        "title": f"[DEMO] {far_title} — 250 km away",
+        "description": f"Distance test: 250 km away in Berlin for long-range filtering. {far_description}",
         "location": far_template['location'],
         "start_time": fmt(far_start),
         "end_time": fmt(far_end),
