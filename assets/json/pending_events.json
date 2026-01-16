@@ -775,7 +775,24 @@
       "url": "https://event.frankenpost.de/detail.php?event_id=3153008",
       "category": "default",
       "tags": []
+    },
+    {
+      "id": "html_frankenpost_3158952564487606433",
+      "title": "Spot(t)-Light. Richard Wagner in der zeitgen\u00f6ssischen Karikatur",
+      "description": "Freitag,16.01.2026,10:00 Uhr",
+      "location": {
+        "name": "Hof",
+        "lat": 50.3167,
+        "lon": 11.9167
+      },
+      "start_time": "2026-01-16T18:00:00",
+      "end_time": null,
+      "status": "pending",
+      "source": "Frankenpost",
+      "url": "https://event.frankenpost.de/detail.php?event_id=3152961",
+      "category": "default",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-01-16T03:57:54.433250"
+  "last_scraped": "2026-01-16T15:14:30.299754"
 }
