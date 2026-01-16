@@ -16,6 +16,10 @@ PLACEHOLDER_TITLE = "Test Community Gathering"
 PLACEHOLDER_DESCRIPTION_PHRASES = [
     "test event for approval flow testing",
 ]
+PLACEHOLDER_TITLE_LOWER = PLACEHOLDER_TITLE.lower()
+PLACEHOLDER_DESCRIPTION_PHRASES_LOWER = [
+    phrase.lower() for phrase in PLACEHOLDER_DESCRIPTION_PHRASES
+]
 
 
 def load_demo_events():
@@ -60,11 +64,11 @@ def test_no_placeholder_copy():
         title_text = event.get("title", "").lower()
         description_text = event.get("description", "").lower()
 
-        if PLACEHOLDER_TITLE.lower() in title_text:
+        if PLACEHOLDER_TITLE_LOWER in title_text:
             violations.append((event.get("id", "unknown"), PLACEHOLDER_TITLE))
 
-        for phrase in PLACEHOLDER_DESCRIPTION_PHRASES:
-            if phrase.lower() in description_text:
+        for phrase in PLACEHOLDER_DESCRIPTION_PHRASES_LOWER:
+            if phrase in description_text:
                 violations.append((event.get("id", "unknown"), phrase))
 
     if violations:
