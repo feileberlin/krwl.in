@@ -17,20 +17,20 @@ class EventFilter {
         
         // Define category groups - subcategories roll up to parent categories
         this.categoryGroups = {
-            'sports': ['american-football', 'soccer', 'basketball', 'tennis', 'running', 'cycling', 'swimming', 'fitness', 'athletics', 'sports', 'sports-field'],
-            'music': ['concert', 'festival', 'live-music', 'opera', 'classical', 'rock', 'jazz', 'music'],
-            'arts': ['theater', 'dance', 'performance', 'exhibition', 'gallery', 'museum', 'arts', 'cultural'],
-            'food': ['restaurant', 'cafe', 'dining', 'culinary', 'food'],
+            'sports': ['american-football', 'soccer', 'basketball', 'tennis', 'running', 'cycling', 'swimming', 'fitness', 'athletics', 'sports-field'],
+            'music': ['concert', 'festival', 'live-music', 'opera', 'classical', 'rock', 'jazz'],
+            'arts': ['theater', 'dance', 'performance', 'exhibition', 'gallery', 'museum', 'cultural'],
+            'food': ['restaurant', 'cafe', 'dining', 'culinary'],
             'historical-monuments': ['castle', 'monument', 'tower', 'ruins', 'palace'],
-            'shopping': ['shopping', 'market', 'bazaar', 'fair', 'trade-show'],
-            'religious': ['church', 'religious', 'spiritual', 'worship', 'ceremony'],
+            'shopping': ['market', 'bazaar', 'fair', 'trade-show'],
+            'religious': ['church', 'spiritual', 'worship', 'ceremony'],
             'education': ['library', 'national-archive', 'research', 'academic', 'study'],
-            'nature': ['park', 'nature', 'garden', 'outdoors', 'recreation'],
+            'nature': ['park', 'garden', 'outdoors', 'recreation'],
             'technology': ['tech', 'innovation', 'startup', 'hackathon', 'coding'],
-            'health': ['health', 'wellness', 'medical', 'therapy', 'healing'],
-            'family': ['family', 'kids', 'children', 'youth', 'playground'],
-            'business': ['business', 'networking', 'conference', 'corporate', 'professional'],
-            'government': ['parliament', 'mayors-office', 'civic', 'government', 'public-office']
+            'health': ['wellness', 'medical', 'therapy', 'healing'],
+            'family': ['kids', 'children', 'youth', 'playground'],
+            'business': ['networking', 'conference', 'corporate', 'professional'],
+            'government': ['parliament', 'mayors-office', 'civic', 'public-office']
         };
     }
     
@@ -94,7 +94,7 @@ class EventFilter {
                 return this.getNextSundayPrimetime();
                 
             case 'full-moon':
-                return this.getNextFullMoonMorning();
+                return this.getNextFullMoon();
                 
             case '6h':
                 return new Date(now.getTime() + 6 * 60 * 60 * 1000);
@@ -169,7 +169,7 @@ class EventFilter {
      * Get next full moon (not tied to Sunday)
      * @returns {Date} Next full moon
      */
-    getNextFullMoonMorning() {
+    getNextFullMoon() {
         // Known full moon: January 6, 2000, 18:14 UTC
         const knownFullMoon = new Date(Date.UTC(2000, 0, 6, 18, 14, 0));
         

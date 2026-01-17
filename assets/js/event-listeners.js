@@ -300,7 +300,7 @@ class EventListeners {
             });
             
             // Full moon
-            const fullMoon = this.app.eventFilter.getNextFullMoonMorning();
+            const fullMoon = this.app.eventFilter.getNextFullMoon();
             ranges.push({
                 value: 'full-moon',
                 label: `til full moon (${formatTimeRemaining(fullMoon)})`,
