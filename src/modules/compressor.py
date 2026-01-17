@@ -31,7 +31,9 @@ try:
     BROTLI_AVAILABLE = True
 except ImportError:
     BROTLI_AVAILABLE = False
-    logger.warning("Brotli not available. Install with: pip install brotli")
+    BROTLI_IMPORT_ERROR = "Brotli not available. Install with: pip install brotli"
+    # Note: Warning is logged in compress_brotli method (line ~155),
+    # not at import time to avoid interference with other commands
 
 
 class Compressor:
