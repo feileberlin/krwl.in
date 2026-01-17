@@ -55,11 +55,12 @@ except ImportError:
 
 # Import jsonplate for KISS JSON templating
 try:
-    from .jsonplate_helper import render_json_template, is_jsonplate_available
+    from .jsonplate_helper import render_json_template, is_jsonplate_available, JsonTemplateHelper
     JSONPLATE_AVAILABLE = is_jsonplate_available()
 except ImportError:
     JSONPLATE_AVAILABLE = False
     render_json_template = None
+    JsonTemplateHelper = None
 
 
 # Third-party dependencies to fetch (stored under lib/)
@@ -1614,12 +1615,11 @@ window.DASHBOARD_ICONS = {json.dumps(DASHBOARD_ICONS_MAP, ensure_ascii=False)};'
             Runtime config dictionary for frontend
         """
         # Check if jsonplate is available
-        if not JSONPLATE_AVAILABLE or render_json_template is None:
+        if not JSONPLATE_AVAILABLE or render_json_template is None or JsonTemplateHelper is None:
             logger.debug("jsonplate not available, using traditional config building")
             return self._build_runtime_config_fallback(primary_config, weather_cache)
         
         try:
-            from .jsonplate_helper import JsonTemplateHelper
             helper = JsonTemplateHelper(self.base_path)
             
             # Build base runtime config using template

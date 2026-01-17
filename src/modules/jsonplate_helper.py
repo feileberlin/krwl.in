@@ -148,41 +148,58 @@ class JsonTemplateHelper:
         """
         import re
         
-        # Replace {{variable}} patterns with JSON-encoded values
-        def replace_match(match):
+        # Note: This is a simplified fallback for when jsonplate is not installed.
+        # It handles the most common cases but may not cover all edge cases.
+        # Install jsonplate for full functionality: pip install jsonplate
+        
+        result = template
+        
+        # First pass: Replace bare variable names with their values
+        # This handles jsonplate's bare variable syntax (e.g., debug_enabled, event_count)
+        for key, value in params.items():
+            # Convert value to JSON representation
+            if isinstance(value, bool):
+                json_val = 'true' if value else 'false'
+            elif value is None:
+                json_val = 'null'
+            elif isinstance(value, str):
+                json_val = json.dumps(value)
+            elif isinstance(value, (int, float)):
+                json_val = str(value)
+            else:
+                json_val = json.dumps(value)
+            
+            # Replace bare variable name (word boundary match)
+            # Only replace if followed by comma, closing brace/bracket, or end of object
+            pattern = rf'\b{key}\b(?=\s*[,}}\]\s])'
+            result = re.sub(pattern, json_val, result)
+        
+        # Second pass: Replace {{variable}} patterns (string interpolation)
+        def replace_template_var(match):
             var_name = match.group(1)
             if var_name in params:
                 value = params[var_name]
                 if isinstance(value, str):
-                    return f'"{value}"'
+                    return value  # Already in string context, don't add quotes
                 elif isinstance(value, bool):
                     return 'true' if value else 'false'
                 elif value is None:
                     return 'null'
                 else:
-                    return json.dumps(value)
+                    return str(value)
             return match.group(0)  # Keep original if not found
         
-        # Also handle bare variable names (jsonplate syntax)
-        result = template
-        for key, value in params.items():
-            # Replace bare variable names (not in quotes, not in strings)
-            # This is a simplified approach
-            if isinstance(value, bool):
-                result = re.sub(rf'\b{key}\b(?!["\'])', 
-                               'true' if value else 'false', 
-                               result)
-            elif isinstance(value, (int, float)):
-                result = re.sub(rf'\b{key}\b(?!["\'])', str(value), result)
-        
-        # Replace {{variable}} patterns
-        result = re.sub(r'\{\{(\w+)\}\}', replace_match, result)
+        result = re.sub(r'\{\{(\w+)\}\}', replace_template_var, result)
         
         return json.loads(result)
     
     def validate_template(self, template_name: str) -> bool:
         """
         Validate that a template has correct JSON syntax.
+        
+        Note: This is a basic validation that checks if the template can be
+        loaded and parsed. For full validation, use jsonplate's built-in
+        error handling when rendering the template.
         
         Args:
             template_name: Name of the template to validate
@@ -192,18 +209,30 @@ class JsonTemplateHelper:
         """
         template = self.load_template(template_name)
         
-        # Try to parse with dummy values to check structure
-        # Extract all variable names from the template
+        # Extract variable names from template patterns
         import re
-        variables = set(re.findall(r'\{\{(\w+)\}\}', template))
-        variables.update(re.findall(r'\b([a-z_][a-z0-9_]*)\b', template))
         
-        # Remove JSON keywords
+        # Find {{variable}} placeholders
+        mustache_vars = set(re.findall(r'\{\{(\w+)\}\}', template))
+        
+        # Find bare variable names that are used as JSON values
+        # Look for patterns like: "key": variable_name or [variable_name]
+        bare_vars = set(re.findall(r':\s*([a-z_][a-z0-9_]*)\s*[,}\]]', template))
+        bare_vars.update(re.findall(r'\[\s*([a-z_][a-z0-9_]*)\s*[,\]]', template))
+        
+        # Combine and remove JSON keywords
+        variables = mustache_vars | bare_vars
         json_keywords = {'true', 'false', 'null'}
         variables -= json_keywords
         
-        # Create dummy params
-        dummy_params = {var: f"__{var}__" for var in variables}
+        # Create dummy params with appropriate types
+        dummy_params = {}
+        for var in variables:
+            # Use string values for mustache vars, dummy objects for bare vars
+            if var in mustache_vars:
+                dummy_params[var] = f"__{var}__"
+            else:
+                dummy_params[var] = {}  # Use empty dict as placeholder
         
         try:
             if JSONPLATE_AVAILABLE:
