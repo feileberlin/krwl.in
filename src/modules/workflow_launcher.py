@@ -275,6 +275,47 @@ class WorkflowLauncher:
             print(f"DEBUG: Unexpected error: {type(e).__name__}: {str(e)}", file=sys.stderr)
             return False, "Error triggering workflow: An unexpected error occurred"
     
+    def get_workflow_run_inputs(self, run_id: int) -> Optional[Dict[str, str]]:
+        """
+        Get workflow dispatch inputs for a specific run using GitHub API
+        
+        Args:
+            run_id: The workflow run database ID
+            
+        Returns:
+            Dictionary of inputs, or None if not available or error
+        """
+        auth_ok, auth_msg = self.check_gh_auth()
+        if not auth_ok:
+            return None
+        
+        try:
+            # Use gh api to get workflow run details including inputs
+            # The inputs field is only present for workflow_dispatch events
+            result = subprocess.run(
+                ['gh', 'api', f'repos/{{owner}}/{{repo}}/actions/runs/{run_id}', 
+                 '--jq', '.inputs'],
+                capture_output=True,
+                text=True,
+                timeout=10,
+                cwd=self.base_path
+            )
+            
+            if result.returncode == 0 and result.stdout.strip():
+                output = result.stdout.strip()
+                # Check if output is "null" (no inputs) or actual JSON
+                if output == "null" or not output:
+                    return None
+                inputs = json.loads(output)
+                return inputs if inputs else None
+            else:
+                return None
+                
+        except (json.JSONDecodeError, subprocess.TimeoutExpired, subprocess.CalledProcessError):
+            return None
+        except Exception:
+            return None
+    
     def get_workflow_runs(self, workflow_id: str, limit: int = 5) -> Tuple[bool, List[Dict]]:
         """
         Get recent runs of a workflow
@@ -299,7 +340,7 @@ class WorkflowLauncher:
         try:
             result = subprocess.run(
                 ['gh', 'run', 'list', '--workflow', workflow_file, '--limit', str(limit), '--json', 
-                 'databaseId,conclusion,status,createdAt,headBranch'],
+                 'databaseId,conclusion,status,createdAt,headBranch,event,displayTitle'],
                 capture_output=True,
                 text=True,
                 timeout=30,
@@ -308,6 +349,14 @@ class WorkflowLauncher:
             
             if result.returncode == 0:
                 runs = json.loads(result.stdout)
+                
+                # Fetch inputs for each workflow_dispatch run
+                for run in runs:
+                    if run.get('event') == 'workflow_dispatch':
+                        inputs = self.get_workflow_run_inputs(run.get('databaseId'))
+                        if inputs:
+                            run['inputs'] = inputs
+                
                 return True, runs
             else:
                 return False, []
@@ -400,7 +449,20 @@ def main():
                 conclusion = run.get('conclusion', '-')
                 branch = run.get('headBranch', '-')
                 created = run.get('createdAt', '-')
-                print(f"Run #{run.get('databaseId')}: {status} / {conclusion} (branch: {branch}, created: {created})")
+                event = run.get('event', '-')
+                
+                # Basic run info
+                print(f"Run #{run.get('databaseId')}: {status} / {conclusion}")
+                print(f"  Branch: {branch}, Event: {event}, Created: {created}")
+                
+                # Show workflow dispatch inputs if available
+                inputs = run.get('inputs')
+                if inputs:
+                    print(f"  Dispatch Options:")
+                    for key, value in inputs.items():
+                        print(f"    • {key}: {value}")
+                
+                print()  # Blank line between runs
             print("-" * 80)
         elif success:
             print("No recent runs found.")
