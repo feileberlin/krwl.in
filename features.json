@@ -561,20 +561,23 @@
     {
       "id": "workflow-launcher",
       "name": "GitHub Actions Workflow Launcher",
-      "description": "Launch and manage GitHub Actions workflows using GitHub CLI (module exists but not integrated in TUI/CLI yet)",
+      "description": "Launch and manage GitHub Actions workflows using GitHub CLI. View workflow runs with dispatch options displayed in the status overview. Shows which inputs were selected when manually triggering workflows via workflow_dispatch.",
       "category": "backend",
       "implemented": true,
       "files": [
-        "src/modules/workflow_launcher.py"
+        "src/modules/workflow_launcher.py",
+        "tests/test_workflow_inputs.py"
       ],
       "code_patterns": [
         {
           "file": "src/modules/workflow_launcher.py",
-          "pattern": "class WorkflowLauncher|def trigger_workflow|gh workflow run",
-          "description": "Workflow launcher class and GitHub CLI integration"
+          "pattern": "class WorkflowLauncher|def trigger_workflow|def get_workflow_run_inputs|gh workflow run",
+          "description": "Workflow launcher class with dispatch options display"
         }
       ],
-      "test_method": "check_code_patterns"
+      "test_method": "run_custom_test",
+      "test_file": "tests/test_workflow_inputs.py",
+      "test_instructions": "1. Run workflow input tests: python3 tests/test_workflow_inputs.py\n2. View demo: python3 examples/demo_workflow_inputs.py\n3. List workflows: python3 src/modules/workflow_launcher.py list\n4. Check status (requires gh auth): python3 src/modules/workflow_launcher.py status scrape-events"
     },
     {
       "id": "copilot-custom-instructions",
