@@ -38,7 +38,6 @@ When debug comments are enabled, you'll see detailed metadata for:
 
 2. **JavaScript Resources**
    - Leaflet JS (map library)
-   - i18n JS (internationalization system)
    - Modular app JS (concatenated from `assets/js/*.js`)
    - Lucide Icons library
 

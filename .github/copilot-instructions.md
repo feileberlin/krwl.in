@@ -29,7 +29,6 @@ KRWL HOF is a **mobile-first Progressive Web App (PWA)** for discovering communi
 - **Framework**: None (vanilla JS)
 - **Maps**: Leaflet.js
 - **PWA**: Manifest.json for installability (service worker planned for future)
-- **i18n**: Custom implementation (`assets/js/i18n.js`)
 - **Files**: 
   - `public/index.html` - Main app
   - `assets/js/app.js` - App logic
@@ -122,8 +121,7 @@ krwl-hof/
 │   ├── css/
 │   │   └── style.css       # ✅ Source styles
 │   ├── js/
-│   │   ├── app.js          # ✅ Source app logic
-│   │   └── i18n.js         # ✅ Source i18n logic
+│   │   └── app.js          # ✅ Source app logic
 │   ├── html/               # HTML template components
 │   │   ├── html-head.html      # HTML head section with meta tags
 │   │   ├── html-body-open.html # Opening body tag
@@ -147,9 +145,6 @@ krwl-hof/
 │       ├── rejected_events.json # Rejected events log
 │       ├── archived_events.json # Archived past events
 │       ├── events.demo.json    # Demo events for development
-│       ├── i18n/               # Internationalization
-│       │   ├── content.json    # English translations
-│       │   └── content.de.json # German translations
 │       ├── old/                # Event backups
 │       └── templates/          # JSON templates
 │
@@ -185,8 +180,7 @@ krwl-hof/
 | `src/modules/workflow_launcher.py` | GitHub Actions | Modifying CI/CD integration |
 | `assets/js/app.js` | Frontend logic | Adding map features, filters, or UI behavior |
 | `assets/css/style.css` | Styles | Changing appearance, layout, or themes |
-| `assets/js/i18n.js` | Internationalization | Modifying translation loading or fallback |
-| `config.[prod,dev].json` | Configuration | Adding settings, sources, or options |
+| `config.json` | Configuration | Adding settings, sources, or options |
 | `features.json` | Feature registry | **ALWAYS** when adding new features |
 
 ## File System Structure - HTML Template Components
@@ -226,8 +220,6 @@ html_head = generator.load_component('html-head.html')  # Loads from /assets/htm
 ✅ **DO edit these source files:**
 - `assets/css/style.css` - Source styles
 - `assets/js/app.js` - Source app logic  
-- `assets/js/i18n.js` - Source i18n logic
-- `event-data/content.json` / `event-data/content.de.json` - Translations
 
 📝 **Note:** The `site_generator.py` reads source files directly from `assets/css/` and `assets/js/` directories. Build output goes to `public/index.html`.
 
@@ -256,15 +248,13 @@ python3 src/event_manager.py build production  # or development
 │       │                                       │
 │       ├─ UI/Frontend related?                │
 │       │   ├─ Styling → assets/css/style.css │
-│       │   ├─ Logic → assets/js/app.js       │
-│       │   └─ i18n → assets/js/i18n.js       │
-│       │             + event-data/content.[en|de].json   │
+│       │   └─ Logic → assets/js/app.js       │
 │       │                                       │
 │       ├─ Build/Generation related?           │
 │       │   └─ src/modules/site_generator.py   │
 │       │                                       │
 │       ├─ Configuration related?              │
-│       │   ├─ Settings → config.[prod,dev].json
+│       │   ├─ Settings → config.json
 │       │   └─ Config UI → src/modules/config_editor.py
 │       │                                       │
 │       ├─ Workflow/CI related?                │
@@ -442,10 +432,10 @@ Before submitting PR:
 
 ### To modify the HTML:
 1. Edit component templates in `layouts/components/` directory
-2. Edit source CSS/JS files: `assets/css/style.css`, `assets/js/app.js`, `assets/js/i18n.js`
+2. Edit source CSS/JS files: `assets/css/style.css`, `assets/js/app.js`
 3. For advanced changes, edit `src/modules/site_generator.py` build logic
-4. Run: `python3 src/event_manager.py build production` (or `development`)
-5. Commit both source changes AND generated `public/index.html` or `public/index.html`
+4. Run: `python3 src/event_manager.py generate`
+5. Commit both source changes AND generated `public/index.html`
 
 ## Build and Test Instructions
 
@@ -489,9 +479,6 @@ python3 test_event_schema.py --verbose
 
 # KISS principle compliance
 python3 check_kiss.py --verbose
-
-# Translation tests
-python3 test_translations.py --verbose
 
 # Scheduler tests
 python3 test_scheduler.py --verbose
@@ -1096,14 +1083,8 @@ GitHub Pages serves the `public/` directory directly.
 ### Add a new filter
 1. Edit `assets/js/app.js` (filter logic)
 2. Edit `assets/css/style.css` (filter UI styles)
-3. Rebuild: `python3 src/event_manager.py build production`
+3. Rebuild: `python3 src/event_manager.py generate`
 4. Test: `python3 src/event_manager.py test filters --verbose`
-
-### Add a new translation
-1. Edit `data/i18n/content.json` (English)
-2. Edit `data/i18n/content.de.json` (German)
-3. Use in code: `i18n.t('key.path')`
-4. Test: `python3 test_translations.py --verbose`
 
 ### Update documentation
 1. Run: `python3 scripts/generate_readme.py` to regenerate README.md
