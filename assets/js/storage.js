@@ -13,8 +13,45 @@ class EventStorage {
     constructor(config) {
         this.config = config;
         this.MAX_BOOKMARKS = 15;
-        this.bookmarks = this.loadBookmarks();
+        this.MAX_CUSTOM_LOCATIONS = 10;
+        this.bookmarks = this.loadBookmarks();  // Load bookmarks BEFORE custom locations
+        this.customLocations = this.loadCustomLocations();
         this.browserFeatures = this.detectBrowserFeatures();
+        
+        // Initialize custom locations with predefined locations if empty
+        this.initializeDefaultCustomLocations();
+    }
+    
+    /**
+     * Initialize custom locations with predefined locations from config
+     * Only runs once when localStorage is empty
+     */
+    initializeDefaultCustomLocations() {
+        // Only initialize if custom locations are empty
+        if (this.customLocations.length > 0) {
+            return;
+        }
+        
+        // Get predefined locations from config
+        const predefinedLocs = this.config?.map?.predefined_locations || [];
+        
+        // Copy predefined locations to custom locations
+        predefinedLocs.forEach((loc) => {
+            this.customLocations.push({
+                id: `custom_${loc.name}_${Date.now()}`,
+                name: loc.display_name,
+                lat: loc.lat,
+                lon: loc.lon,
+                created: new Date().toISOString(),
+                fromPredefined: true
+            });
+        });
+        
+        // Save if we added any
+        if (this.customLocations.length > 0) {
+            this.saveCustomLocations();
+            this.log('Initialized custom locations from predefined locations', this.customLocations);
+        }
     }
     
     /**
@@ -69,6 +106,7 @@ class EventStorage {
                 maxDistance: filters.maxDistance,
                 locationType: filters.locationType,
                 selectedPredefinedLocation: filters.selectedPredefinedLocation,
+                selectedCustomLocation: filters.selectedCustomLocation,
                 useCustomLocation: filters.useCustomLocation,
                 customLat: filters.customLat,
                 customLon: filters.customLon
@@ -180,6 +218,127 @@ class EventStorage {
      */
     getBookmarks() {
         return [...this.bookmarks];
+    }
+    
+    /**
+     * Load custom locations from localStorage
+     * @returns {Array} Array of custom location objects
+     */
+    loadCustomLocations() {
+        try {
+            const locationsData = localStorage.getItem('krwl_custom_locations');
+            if (locationsData) {
+                const locations = JSON.parse(locationsData);
+                this.log('Custom locations loaded from localStorage', locations);
+                return Array.isArray(locations) ? locations : [];
+            }
+        } catch (error) {
+            console.warn('Failed to load custom locations:', error);
+        }
+        return [];
+    }
+    
+    /**
+     * Save custom locations to localStorage
+     */
+    saveCustomLocations() {
+        try {
+            const locationsData = JSON.stringify(this.customLocations);
+            localStorage.setItem('krwl_custom_locations', locationsData);
+            this.log('Custom locations saved to localStorage', this.customLocations);
+        } catch (error) {
+            console.warn('Failed to save custom locations:', error);
+        }
+    }
+    
+    /**
+     * Add a new custom location
+     * @param {Object} location - Location object {name, lat, lon}
+     * @returns {boolean} True if added successfully
+     */
+    addCustomLocation(location) {
+        if (!location || !location.name || location.lat === undefined || location.lon === undefined) {
+            console.warn('Invalid location object');
+            return false;
+        }
+        
+        // Check if we've reached the limit
+        if (this.customLocations.length >= this.MAX_CUSTOM_LOCATIONS) {
+            console.warn('Maximum custom locations reached');
+            return false;
+        }
+        
+        // Add unique ID based on timestamp
+        const newLocation = {
+            id: `custom_${Date.now()}`,
+            name: location.name,
+            lat: location.lat,
+            lon: location.lon,
+            created: new Date().toISOString()
+        };
+        
+        this.customLocations.push(newLocation);
+        this.saveCustomLocations();
+        this.log('Custom location added:', newLocation);
+        return true;
+    }
+    
+    /**
+     * Update an existing custom location
+     * @param {string} id - Location ID
+     * @param {Object} updates - Updates object {name?, lat?, lon?}
+     * @returns {boolean} True if updated successfully
+     */
+    updateCustomLocation(id, updates) {
+        const index = this.customLocations.findIndex(loc => loc.id === id);
+        if (index === -1) {
+            console.warn('Custom location not found:', id);
+            return false;
+        }
+        
+        // Apply updates
+        if (updates.name !== undefined) this.customLocations[index].name = updates.name;
+        if (updates.lat !== undefined) this.customLocations[index].lat = updates.lat;
+        if (updates.lon !== undefined) this.customLocations[index].lon = updates.lon;
+        
+        this.saveCustomLocations();
+        this.log('Custom location updated:', this.customLocations[index]);
+        return true;
+    }
+    
+    /**
+     * Delete a custom location
+     * @param {string} id - Location ID
+     * @returns {boolean} True if deleted successfully
+     */
+    deleteCustomLocation(id) {
+        const index = this.customLocations.findIndex(loc => loc.id === id);
+        if (index === -1) {
+            console.warn('Custom location not found:', id);
+            return false;
+        }
+        
+        const deleted = this.customLocations.splice(index, 1);
+        this.saveCustomLocations();
+        this.log('Custom location deleted:', deleted[0]);
+        return true;
+    }
+    
+    /**
+     * Get all custom locations
+     * @returns {Array} Array of custom location objects
+     */
+    getCustomLocations() {
+        return [...this.customLocations];
+    }
+    
+    /**
+     * Get a custom location by ID
+     * @param {string} id - Location ID
+     * @returns {Object|null} Location object or null if not found
+     */
+    getCustomLocationById(id) {
+        return this.customLocations.find(loc => loc.id === id) || null;
     }
     
     /**

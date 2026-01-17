@@ -37,6 +37,7 @@ class EventsApp {
             category: 'all',
             locationType: 'geolocation',
             selectedPredefinedLocation: null,
+            selectedCustomLocation: null,
             useCustomLocation: false,
             customLat: null,
             customLon: null
@@ -95,6 +96,10 @@ class EventsApp {
     async init() {
         this.config = window.APP_CONFIG || this.getDefaultConfig();
         this.log('App initialized', 'Config:', this.config);
+        
+        // Make app instance globally available for dashboard
+        window.app = this;
+        window.eventsApp = this;
         
         this.showMainContent();
         

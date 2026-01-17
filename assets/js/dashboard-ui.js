@@ -33,12 +33,138 @@ class DashboardUI {
         this.updateCachingInfo(debugInfo);
         this.updateDOMCacheInfo();
         this.updateSizeBreakdown(debugInfo);
-        
-        // Warnings section
-        this.updateWarnings(duplicateStats);
-        
-        // Show the debug section
+        this.updateCacheStatistics();
+        this.updateDuplicateWarnings(duplicateStats);
+        this.updateCustomLocations();
         this.showDebugSection();
+    }
+    
+    /**
+     * Update custom locations display in dashboard
+     */
+    updateCustomLocations() {
+        const container = document.getElementById('custom-locations-list');
+        if (!container) return;
+        
+        // Get storage from global app instance if available
+        const app = window.app || window.eventsApp;
+        if (!app || !app.storage) {
+            container.innerHTML = '<div class="custom-locations-empty">Storage not available</div>';
+            return;
+        }
+        
+        const customLocs = app.storage.getCustomLocations();
+        
+        if (customLocs.length === 0) {
+            container.innerHTML = '<div class="custom-locations-empty">No locations saved yet</div>';
+            return;
+        }
+        
+        let html = '';
+        
+        // Show all custom locations (includes initialized predefined locations)
+        customLocs.forEach((loc) => {
+            const locationLabel = loc.fromPredefined ? 
+                `<i data-lucide="map-pin" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle;"></i> ${loc.name}` : 
+                `<i data-lucide="edit-3" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle;"></i> ${loc.name}`;
+            
+            html += `
+                <div class="custom-location-item">
+                    <div class="custom-location-header">
+                        <div class="custom-location-name">${locationLabel}</div>
+                    </div>
+                    <div class="custom-location-coords">${loc.lat.toFixed(4)}°, ${loc.lon.toFixed(4)}°</div>
+                    <div class="custom-location-actions">
+                        <button class="custom-location-btn" data-action="edit" data-id="${loc.id}">Edit</button>
+                        <button class="custom-location-btn delete" data-action="delete" data-id="${loc.id}">Delete</button>
+                    </div>
+                </div>
+            `;
+        });
+        
+        container.innerHTML = html;
+        
+        // Initialize Lucide icons for the newly added HTML
+        if (window.lucide && typeof window.lucide.createIcons === 'function') {
+            window.lucide.createIcons();
+        }
+        
+        // Attach event listeners to action buttons
+        container.querySelectorAll('.custom-location-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const action = btn.getAttribute('data-action');
+                const id = btn.getAttribute('data-id');
+                
+                if (action === 'edit') {
+                    this.editCustomLocation(id, app);
+                } else if (action === 'delete') {
+                    this.deleteCustomLocation(id, app);
+                }
+            });
+        });
+    }
+    
+    /**
+     * Edit a custom location
+     * @param {string} id - Location ID
+     * @param {Object} app - App instance
+     */
+    editCustomLocation(id, app) {
+        const loc = app.storage.getCustomLocationById(id);
+        if (!loc) return;
+        
+        const newName = prompt('Enter new name:', loc.name);
+        if (!newName || !newName.trim()) return;
+        
+        const newLatStr = prompt('Enter new latitude:', loc.lat.toString());
+        const newLonStr = prompt('Enter new longitude:', loc.lon.toString());
+        
+        const newLat = parseFloat(newLatStr);
+        const newLon = parseFloat(newLonStr);
+        
+        if (isNaN(newLat) || isNaN(newLon)) {
+            alert('Invalid coordinates!');
+            return;
+        }
+        
+        const success = app.storage.updateCustomLocation(id, {
+            name: newName.trim(),
+            lat: newLat,
+            lon: newLon
+        });
+        
+        if (success) {
+            alert('✅ Location updated!');
+            this.updateCustomLocations();
+            // Refresh the location dropdown
+            if (app.eventListeners) {
+                app.eventListeners.setupFilterListeners();
+            }
+        }
+    }
+    
+    /**
+     * Delete a custom location
+     * @param {string} id - Location ID
+     * @param {Object} app - App instance
+     */
+    deleteCustomLocation(id, app) {
+        const loc = app.storage.getCustomLocationById(id);
+        if (!loc) return;
+        
+        if (!confirm(`Delete "${loc.name}"?`)) {
+            return;
+        }
+        
+        const success = app.storage.deleteCustomLocation(id);
+        if (success) {
+            alert('✅ Location deleted!');
+            this.updateCustomLocations();
+            // Refresh the location dropdown
+            if (app.eventListeners) {
+                app.eventListeners.setupFilterListeners();
+            }
+        }
     }
     
     updateGitInfo(debugInfo) {
