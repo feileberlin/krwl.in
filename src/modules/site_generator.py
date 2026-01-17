@@ -1911,7 +1911,6 @@ window.DEBUG_INFO = {debug_info_json};'''
                 fetch_interceptor=fetch_interceptor,
                 leaflet_js=scripts['leaflet_js'],
                 lucide_js=scripts.get('lucide_js', '// Lucide not available'),
-                i18n_js=scripts['i18n_js'],
                 app_js=scripts['app_js']
             ),
             self.html_component_comment('html-body-close.html', 'end')
@@ -1942,7 +1941,7 @@ window.DEBUG_INFO = {debug_info_json};'''
             True if generation succeeds, False otherwise
         """
         print("=" * 60)
-        print("🔨 Generating Static Site (German)")
+        print("🔨 Generating Static Site")
         print("=" * 60)
         
         if not self.ensure_dependencies_present():
@@ -2055,7 +2054,7 @@ window.DEBUG_INFO = {debug_info_json};'''
         print(f"   Output: {output_file} ({len(html_de) / 1024:.1f} KB)")
         print(f"   Total events: {len(events)}")
         print(f"   Configs: {len(configs)} (runtime-selected)")
-        print(f"   Language: German (primary)")
+        print(f"   Language: English")
         print("\n" + "=" * 60)
         return True
     
