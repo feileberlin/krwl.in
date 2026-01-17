@@ -32,7 +32,7 @@ font-weight: 700;
 
 
 
-#event-filter-bar .filter-bar-logo {
+#event-filter-bar > .filter-bar-logo {
 display: inline-flex;
     align-items: center;
     margin-right: 0.5rem;

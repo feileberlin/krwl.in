@@ -30,11 +30,11 @@ background: var(--color-medium-tone-alpha-35);
     margin-bottom: 0.25rem;
 }
 
-.filter-bar-dropdown-item .item-label {
+.filter-bar-dropdown-item > .item-label {
 flex: 1;
 }
 
-.filter-bar-dropdown-item .item-count {
+.filter-bar-dropdown-item > .item-count {
 color: var(--color-text-secondary);
     font-size: 0.85rem;
     font-weight: 500;

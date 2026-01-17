@@ -8,8 +8,8 @@
    ═══════════════════════════════════════════════════════════════════════ */
 
 
-.bubble-location i[data-lucide="map-pin"],
-.bubble-location svg {
+.bubble-location > i[data-lucide="map-pin"],
+.bubble-location > svg {
 width: 14px;
     height: 14px;
     stroke: currentColor;
@@ -49,23 +49,23 @@ border-color: var(--color-bookmark);
                 0 0 15px var(--color-bookmark-alpha-40);
 }
 
-.speech-bubble.bubble-is-bookmarked .bubble-time-headline {
+.speech-bubble.bubble-is-bookmarked > .bubble-time-headline {
 color: var(--color-bookmark);
 }
 
-.speech-bubble.bubble-is-bookmarked .bubble-date {
+.speech-bubble.bubble-is-bookmarked > .bubble-date {
 color: var(--color-bookmark-light);
 }
 
-.speech-bubble.bubble-is-bookmarked .bubble-title {
+.speech-bubble.bubble-is-bookmarked > .bubble-title {
 color: var(--color-bookmark-lighter);
 }
 
-.speech-bubble.bubble-is-bookmarked .bubble-location {
+.speech-bubble.bubble-is-bookmarked > .bubble-location {
 color: var(--color-bookmark-light);
 }
 
-.speech-bubble.bubble-is-bookmarked .bubble-distance {
+.speech-bubble.bubble-is-bookmarked > .bubble-distance {
 color: var(--color-bookmark-light);
 }
 
@@ -124,8 +124,8 @@ color: var(--color-primary);
     line-height: 1.2;
 }
 
-.bubble-distance i[data-lucide="footprints"],
-.bubble-distance svg {
+.bubble-distance > i[data-lucide="footprints"],
+.bubble-distance > svg {
 width: 14px;
     height: 14px;
     stroke: currentColor;
@@ -134,8 +134,8 @@ width: 14px;
     flex-shrink: 0;
 }
 
-.bubble-bookmark i[data-lucide="heart"],
-.bubble-bookmark svg {
+.bubble-bookmark > i[data-lucide="heart"],
+.bubble-bookmark > svg {
 width: 20px;
     height: 20px;
     stroke: var(--color-text-secondary); 

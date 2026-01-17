@@ -8,7 +8,7 @@
    ═══════════════════════════════════════════════════════════════════════ */
 
 
-.location-override input[type="checkbox"] {
+.location-override > input[type="checkbox"] {
 margin-right: 0.5rem;
     cursor: pointer;
 }
@@ -27,7 +27,7 @@ display: none;
 margin-bottom: 1.5rem;
 }
 
-.custom-location-field input {
+.custom-location-field > input {
 width: 100%;
     padding: 0.6rem;
     background: var(--color-bg-primary);
@@ -38,13 +38,13 @@ width: 100%;
     font-family: 'Roboto Mono', monospace;
 }
 
-.custom-location-field input:focus {
+.custom-location-field > input:focus {
 outline: none;
     border-color: var(--color-primary);
     box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-ecobarbie-light-tone) 20%, transparent);
 }
 
-.custom-location-field label {
+.custom-location-field > label {
 display: block;
     color: var(--color-text-primary);
     font-size: 0.9rem;

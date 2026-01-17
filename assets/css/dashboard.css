@@ -8,20 +8,20 @@
    ═══════════════════════════════════════════════════════════════════════ */
 
 
-.dashboard-content h2 {
+.dashboard-content > h2 {
 margin-bottom: 1rem;
     color: var(--color-primary);
     text-shadow: 0 0 10px var(--color-primary-alpha-30);
     font-size: 1.5rem;
 }
 
-.dashboard-section h3 {
+.dashboard-section > h3 {
 color: var(--color-primary);
     font-size: 1rem;
     margin-bottom: 0.5rem;
 }
 
-.dashboard-section h3:hover .dashboard-section-icon {
+.dashboard-section > h3:hover .dashboard-section-icon {
 color: var(--color-ecobarbie-light-shade); 
 
 

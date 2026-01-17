@@ -8,7 +8,7 @@
    ═══════════════════════════════════════════════════════════════════════ */
 
 
-.event-detail-edge h3 {
+.event-detail-edge > h3 {
 color: var(--color-primary);
     font-size: 0.95rem;
     margin-bottom: 0.5rem;
@@ -36,7 +36,7 @@ background: var(--color-primary-hover);
 font-weight: 500;
 }
 
-.event-detail-edge p {
+.event-detail-edge > p {
 color: var(--color-text-secondary);
     font-size: 0.85rem;
     margin: 0.3rem 0;
@@ -51,7 +51,7 @@ display: none;
 display: none;
 }
 
-*:not([class*='leaflet']) {
+body :not([class*='leaflet']) {
 margin: 0;
     padding: 0;
     box-sizing: border-box;

@@ -8,13 +8,13 @@
    ═══════════════════════════════════════════════════════════════════════ */
 
 
-.custom-location-content h3 {
+.custom-location-content > h3 {
 color: var(--color-primary);
     margin: 0 0 0.5rem 0;
     font-size: 1.2rem;
 }
 
-.detail-content h2 {
+.detail-content > h2 {
 margin-bottom: 1rem;
     color: var(--color-primary);
     text-shadow: 0 0 10px var(--color-primary-alpha-30);
@@ -84,7 +84,7 @@ background: var(--color-bg-secondary);
     box-shadow: 0 0 20px var(--color-primary-alpha-30);
 }
 
-.detail-content p {
+.detail-content > p {
 line-height: 1.6;
     margin-bottom: 1rem;
     color: var(--color-text-secondary);

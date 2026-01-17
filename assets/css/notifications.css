@@ -20,7 +20,7 @@
 color: var(--color-warning);
 }
 
-.debug-warning-message strong {
+.debug-warning-message > strong {
 color: var(--color-warning);
 }
 
