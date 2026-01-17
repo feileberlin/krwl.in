@@ -153,7 +153,11 @@ class FacebookSource(BaseSource):
                 events.extend(self._scrape_events_page())
                 events.extend(self._scrape_page_posts())
         except Exception as e:
-            print(f"    ⚠ Direct scraping failed: {str(e)[:50]}")
+            print(f"    ⚠ Direct scraping failed: {type(e).__name__}: {str(e)}")
+            import traceback
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.debug("Full traceback:", exc_info=True)
             direct_scraping_failed = True
         
         # If direct scraping returned no events or failed, try web search fallback
@@ -1074,11 +1078,22 @@ class FacebookSource(BaseSource):
         using web search APIs (DuckDuckGo, Bing, etc.) which can work even
         when direct Facebook access is blocked (e.g., in CI environments).
         
-        Note: This returns basic event information found through search.
-        It's less detailed than direct scraping but provides a fallback.
+        **Implementation Note**: This currently logs search queries for external
+        processing rather than executing searches directly. This is by design to:
+        1. Avoid adding web search API dependencies
+        2. Allow manual review of search queries before execution
+        3. Enable integration with external automation tools
+        
+        **For Production Use**: Consider implementing one of these approaches:
+        - Integrate with DuckDuckGo API for automated searching
+        - Use GitHub Actions workflow to process logged queries
+        - Implement manual search query execution via TUI
+        
+        Note: This returns an empty list by design. The logged queries can be
+        processed by external automation that has access to web_search tools.
         
         Returns:
-            List of events found through web search
+            List of events found through web search (currently empty)
         """
         events = []
         
@@ -1090,17 +1105,16 @@ class FacebookSource(BaseSource):
         
         print(f"    🔍 Web search for: {page_name}")
         
-        # For now, return empty list - this will be called by external automation
-        # that has access to web_search tool (GitHub Actions, etc.)
-        # The automation can:
+        # Log search query for external processing
+        # External automation (GitHub Actions, manual TUI, etc.) can:
         # 1. Detect this message in logs
         # 2. Call web_search externally
         # 3. Parse results and add to pending events
         
-        # Store search query for external use
         search_query = f"{page_name} events upcoming Germany"
         print(f"    💡 Web search query: '{search_query}'")
         print(f"    💡 To scrape manually: Use web search with this query")
+        print(f"    💡 External automation can process this query automatically")
         
         return events
     

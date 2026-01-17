@@ -1,11 +1,11 @@
 """Custom scraper for VHS Hofer Land (Volkshochschule)."""
 
 from typing import Dict, Any, List, Optional
-from datetime import datetime, timedelta
+from datetime import datetime
 from urllib.parse import urljoin
-import re
 from pathlib import Path
 from ...base import BaseSource, SourceOptions
+from .date_utils import extract_date_from_text, generate_stable_event_id
 
 try:
     import requests
@@ -36,7 +36,11 @@ class VHSSource(BaseSource):
         if self.available:
             self.session = requests.Session()
             self.session.headers.update({
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                'User-Agent': (
+                    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
+                    'AppleWebKit/537.36 (KHTML, like Gecko) '
+                    'Chrome/120.0.0.0 Safari/537.36'
+                )
             })
     
     def scrape(self) -> List[Dict[str, Any]]:
@@ -107,9 +111,9 @@ class VHSSource(BaseSource):
         link_elem = container.find('a', href=True)
         event_url = urljoin(self.url, link_elem['href']) if link_elem else self.url
         
-        # Extract date
+        # Extract date using shared utility
         date_text = container.get_text()
-        start_time = self._extract_date(date_text)
+        start_time = extract_date_from_text(date_text, default_hour=18)
         
         # Use default location
         location = self.options.default_location or {
@@ -119,7 +123,7 @@ class VHSSource(BaseSource):
         }
         
         return {
-            'id': f"vhs_{hash(title + start_time)}",
+            'id': generate_stable_event_id('vhs', title, start_time),
             'title': title[:200],
             'description': description,
             'location': location,
@@ -131,38 +135,3 @@ class VHSSource(BaseSource):
             'scraped_at': datetime.now().isoformat(),
             'status': 'pending'
         }
-    
-    def _extract_date(self, text: str) -> str:
-        """Extract date from text using German date patterns."""
-        # Look for common German date formats
-        patterns = [
-            (r'(\d{1,2})\.(\d{1,2})\.(\d{4})', 'DMY'),  # DD.MM.YYYY
-            (r'(\d{1,2})\.(\d{1,2})\.(\d{2})', 'DMY_SHORT'),  # DD.MM.YY
-            (r'(\d{4})-(\d{2})-(\d{2})', 'YMD'),  # YYYY-MM-DD
-            (r'ab\s+(\d{1,2})\.(\d{1,2})\.(\d{4})', 'DMY'),  # ab DD.MM.YYYY
-        ]
-        
-        for pattern, format_type in patterns:
-            match = re.search(pattern, text)
-            if match:
-                try:
-                    groups = match.groups()
-                    if format_type == 'DMY':
-                        day, month, year = groups[-3:]
-                        date = datetime(int(year), int(month), int(day), 18, 0)
-                    elif format_type == 'DMY_SHORT':
-                        day, month, year = groups[-3:]
-                        year = int('20' + year) if int(year) < 50 else int('19' + year)
-                        date = datetime(year, int(month), int(day), 18, 0)
-                    elif format_type == 'YMD':
-                        year, month, day = groups[-3:]
-                        date = datetime(int(year), int(month), int(day), 18, 0)
-                    
-                    # Only return dates in the future
-                    if date > datetime.now():
-                        return date.isoformat()
-                except (ValueError, TypeError):
-                    continue
-        
-        # Default to next week if no valid date found
-        return (datetime.now() + timedelta(days=7)).replace(hour=18, minute=0).isoformat()

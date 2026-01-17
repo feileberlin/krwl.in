@@ -213,8 +213,9 @@ class SmartScraper:
         source_type = source.get('type', 'html')
         source_name = str(source.get('name', '')).strip().lower()
         
-        # Check for custom source handlers first (by exact source name)
-        # This allows overriding default handlers for specific sites
+        # Check for custom source handlers first (by normalized source name)
+        # Note: Source names must match exactly (case-insensitive, whitespace-stripped)
+        # E.g., "VHS Last Minute" matches "vhs last minute" after normalization
         custom_mappings = {
             'frankenpost': 'frankenpost',
             'freiheitshalle': 'freiheitshalle',
