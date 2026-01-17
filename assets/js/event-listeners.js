@@ -237,8 +237,8 @@ class EventListeners {
             // Map to items with counts at the beginning
             return categories.map((item) => {
                 const count = item.value === 'all' ? totalCount : item.count;
-                // For "all", show "20 events". For others, show count + label
-                const displayLabel = item.value === 'all' ? 'events' : item.label;
+                // For "all", show "20 events total". For others, show count + label
+                const displayLabel = item.value === 'all' ? 'events total' : item.label;
                 return {
                     ...item,
                     label: `${count} ${displayLabel}`
