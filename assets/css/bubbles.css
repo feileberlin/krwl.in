@@ -51,9 +51,30 @@
 
 /* Bookmarked bubble - different border color */
 .speech-bubble.bubble-is-bookmarked {
-    border-color: #ffb3b3; /* Light/bright red border for bookmarked bubbles */
+    border-color: var(--color-bookmark); /* Light/bright red border for bookmarked bubbles */
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5),
                 0 0 15px rgba(255, 179, 179, 0.4); /* Match border color in shadow */
+}
+
+/* Change all text colors inside bookmarked bubble to match border */
+.speech-bubble.bubble-is-bookmarked .bubble-time-headline {
+    color: var(--color-bookmark); /* Light red headline */
+}
+
+.speech-bubble.bubble-is-bookmarked .bubble-date {
+    color: var(--color-bookmark-light); /* Lighter shade for date */
+}
+
+.speech-bubble.bubble-is-bookmarked .bubble-title {
+    color: var(--color-bookmark-lighter); /* Very light red for title */
+}
+
+.speech-bubble.bubble-is-bookmarked .bubble-location {
+    color: var(--color-bookmark-light); /* Lighter shade for location */
+}
+
+.speech-bubble.bubble-is-bookmarked .bubble-distance {
+    color: var(--color-bookmark-light); /* Lighter shade for distance */
 }
 
 /* Bookmarked bubble hover state */
@@ -191,25 +212,28 @@
     justify-content: center;
 }
 
-/* Lucide heart icon styling */
-.bubble-bookmark i[data-lucide="heart"] {
+/* Lucide heart icon styling - target both <i> and <svg> (after Lucide processes) */
+.bubble-bookmark i[data-lucide="heart"],
+.bubble-bookmark svg {
     width: 20px;
     height: 20px;
-    stroke: #ffb3b3; /* Light/bright red stroke for unbookmarked */
+    stroke: var(--color-bookmark); /* Light/bright red stroke for unbookmarked */
     stroke-width: 2; /* Outlined by default */
     fill: none; /* No fill when unbookmarked */
     transition: stroke 0.2s ease, fill 0.2s ease, stroke-width 0.2s ease;
 }
 
-.bubble-bookmark:hover i[data-lucide="heart"] {
+.bubble-bookmark:hover i[data-lucide="heart"],
+.bubble-bookmark:hover svg {
     transform: scale(1.2);
-    stroke: #ffb3b3; /* Light/bright red on hover */
+    stroke: var(--color-bookmark); /* Light/bright red on hover */
 }
 
-.bubble-bookmark.bookmarked i[data-lucide="heart"] {
+.bubble-bookmark.bookmarked i[data-lucide="heart"],
+.bubble-bookmark.bookmarked svg {
     stroke: none; /* No stroke when bookmarked - KISS approach */
     stroke-width: 0; /* Remove stroke completely */
-    fill: #ffb3b3; /* Filled with light/bright red when bookmarked */
+    fill: var(--color-bookmark); /* Filled with light/bright red when bookmarked */
 }
 
 .bubble-bookmark.bookmarked {
