@@ -30,11 +30,6 @@ strong, b {
 font-weight: 700;
 }
 
-position: fixed;
-    top: 10px;
-    left: 10px;
-    right: auto;
-    max-width: calc(var(--app-width) - 80px); 
 
 
 #event-filter-bar .filter-bar-logo {
