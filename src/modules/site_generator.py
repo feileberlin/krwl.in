@@ -745,19 +745,8 @@ class SiteGenerator:
                 {'library': 'Leaflet.js', 'version': '1.9.4'}
             )
         
-        # Load i18n.js with debug comments
-        i18n_path = self.base_path / "assets" / 'js' / 'i18n.js'
-        i18n_js = self.read_text_file(i18n_path)
-        i18n_js = self.wrap_with_debug_comment(
-            i18n_js,
-            'js',
-            'assets/js/i18n.js',
-            {'description': 'Internationalization system'}
-        )
-        
         scripts = {
-            'leaflet_js': leaflet_js,
-            'i18n_js': i18n_js
+            'leaflet_js': leaflet_js
         }
         
         # KISS Refactoring: Build modular app.js from components
@@ -903,15 +892,6 @@ class SiteGenerator:
 }})();
 '''
         return lucide_js.strip()
-    
-    def load_translation_data(self) -> Tuple[Dict, Dict]:
-        """Load translation files for all languages"""
-        data_path = self.base_path / 'assets' / 'json' / 'i18n'
-        with open(data_path / 'content.json', 'r') as f:
-            content_en = json.load(f)
-        with open(data_path / 'content.de.json', 'r') as f:
-            content_de = json.load(f)
-        return content_en, content_de
     
     def load_weather_cache(self) -> Dict:
         """Load weather cache if it exists, return empty dict if not"""
@@ -1224,12 +1204,11 @@ window.DASHBOARD_ICONS = {json.dumps(DASHBOARD_ICONS_MAP, ensure_ascii=False)};'
         future_events.sort(key=lambda x: (not x['is_running'], x['start_time']))
         return future_events
     
-    def build_noscript_html(self, events: List[Dict], content_en: Dict, app_name: str) -> str:
+    def build_noscript_html(self, events: List[Dict], app_name: str) -> str:
         """Build complete noscript HTML with event list."""
         import locale
         
         future_events = self.filter_and_sort_future_events(events)
-        translations = content_en.get('noscript', {})
         
         # Set locale to English for consistent date formatting
         try:
@@ -1245,16 +1224,16 @@ window.DASHBOARD_ICONS = {json.dumps(DASHBOARD_ICONS_MAP, ensure_ascii=False)};'
             '<div style="max-width:1200px;margin:0 auto;padding:2rem;background:#1a1a1a;color:#fff;font-family:sans-serif">',
             f'<h1 style="color:#D689B8;margin-bottom:1rem">{html.escape(app_name)}</h1>',
             '<div style="background:#401B2D;padding:1rem;border-radius:8px;margin-bottom:1.5rem;border-left:4px solid #D689B8">',
-            f'<p style="margin:0;color:#E8A5C8"><strong>{html.escape(translations.get("warning", "⚠️ JavaScript is disabled."))}</strong></p>',
-            f'<p style="margin:0.5rem 0 0 0;color:#ccc;font-size:0.9rem">{html.escape(translations.get("info", "Enable JavaScript for interactive map."))}</p>',
+            '<p style="margin:0;color:#E8A5C8"><strong>⚠️ JavaScript is disabled.</strong></p>',
+            '<p style="margin:0.5rem 0 0 0;color:#ccc;font-size:0.9rem">Enable JavaScript for interactive map.</p>',
             '</div>'
         ]
         
         # Events or empty message
         if not future_events:
-            html_parts.append(f'<p style="color:#888;text-align:center;padding:2rem">{html.escape(translations.get("no_events", "No upcoming events."))}</p>')
+            html_parts.append('<p style="color:#888;text-align:center;padding:2rem">No upcoming events.</p>')
         else:
-            html_parts.append(f'<h2 style="color:#D689B8;font-size:1.5rem;margin-bottom:1.5rem">{html.escape(translations.get("upcoming_events", "Upcoming Events"))} <span style="color:#888;font-size:1rem">({len(future_events)} events)</span></h2>')
+            html_parts.append(f'<h2 style="color:#D689B8;font-size:1.5rem;margin-bottom:1.5rem">Upcoming Events <span style="color:#888;font-size:1rem">({len(future_events)} events)</span></h2>')
             html_parts.append('<div style="display:flex;flex-direction:column;gap:1.5rem">')
             
             for event_item in future_events:
@@ -1262,12 +1241,10 @@ window.DASHBOARD_ICONS = {json.dumps(DASHBOARD_ICONS_MAP, ensure_ascii=False)};'
                 event_start_time = event_item['start_time']
                 event_is_running = event_item['is_running']
                 
-                # Use translations for badge and link text
-                badge_text = html.escape(translations.get("happening_now", "HAPPENING NOW"))
-                running_badge = f'<span style="background:#D689B8;color:#fff;padding:0.25rem 0.75rem;border-radius:4px;font-size:0.85rem;font-weight:600;margin-left:0.5rem">{badge_text}</span>' if event_is_running else ''
+                # Badge and link text (hardcoded English)
+                running_badge = '<span style="background:#D689B8;color:#fff;padding:0.25rem 0.75rem;border-radius:4px;font-size:0.85rem;font-weight:600;margin-left:0.5rem">HAPPENING NOW</span>' if event_is_running else ''
                 
-                view_details_text = html.escape(translations.get("view_details", "View Event Details →"))
-                event_link = f'<a href="{html.escape(event_data.get("url", ""))}" target="_blank" rel="noopener noreferrer" style="display:inline-block;background:#D689B8;color:#fff;padding:0.5rem 1rem;border-radius:5px;text-decoration:none;font-weight:600">{view_details_text}</a>' if event_data.get('url') else ''
+                event_link = f'<a href="{html.escape(event_data.get("url", ""))}" target="_blank" rel="noopener noreferrer" style="display:inline-block;background:#D689B8;color:#fff;padding:0.5rem 1rem;border-radius:5px;text-decoration:none;font-weight:600">View Event Details →</a>' if event_data.get('url') else ''
                 
                 html_parts.append(f'''<article style="background:#2a2a2a;border-radius:8px;padding:1.5rem;border-left:4px solid #D689B8">
 <h3 style="color:#D689B8;margin:0 0 0.75rem 0;font-size:1.25rem">{html.escape(event_data.get('title', 'Untitled'))}{running_badge}</h3>
@@ -1285,7 +1262,7 @@ window.DASHBOARD_ICONS = {json.dumps(DASHBOARD_ICONS_MAP, ensure_ascii=False)};'
         # Footer
         html_parts.extend([
             '<footer style="margin-top:2rem;padding-top:2rem;border-top:1px solid #3a3a3a;color:#888;text-align:center">',
-            f'<p style="margin:0">{html.escape(translations.get("footer", "Enable JavaScript for best experience."))}</p>',
+            '<p style="margin:0">Enable JavaScript for best experience.</p>',
             '</footer>',
             '</div>'
         ])
@@ -1691,8 +1668,6 @@ window.DASHBOARD_ICONS = {json.dumps(DASHBOARD_ICONS_MAP, ensure_ascii=False)};'
         self,
         configs: List[Dict],
         events: List[Dict],
-        content_en: Dict,
-        content_de: Dict,
         stylesheets: Dict[str, str],
         scripts: Dict[str, str],
         marker_icons: Dict[str, str],
@@ -1708,8 +1683,6 @@ window.DASHBOARD_ICONS = {json.dumps(DASHBOARD_ICONS_MAP, ensure_ascii=False)};'
         Args:
             configs: List of configuration objects
             events: List of event data
-            content_en: English translations
-            content_de: German translations
             stylesheets: Dict of CSS content (leaflet_css, app_css, etc.)
             scripts: Dict of JavaScript content
             marker_icons: Dict of marker icon data URLs
@@ -1725,7 +1698,7 @@ window.DASHBOARD_ICONS = {json.dumps(DASHBOARD_ICONS_MAP, ensure_ascii=False)};'
         logo_svg = self.read_logo_svg()
         
         # Build noscript HTML
-        noscript_html = self.build_noscript_html(events, content_en, app_name)
+        noscript_html = self.build_noscript_html(events, app_name)
         
         # Extract minimal runtime config for frontend (backend config.json is not fetched by frontend)
         primary_config = configs[0] if configs else {}
@@ -1799,8 +1772,6 @@ window.DASHBOARD_ICONS = {json.dumps(DASHBOARD_ICONS_MAP, ensure_ascii=False)};'
         # Build embedded data strings with individual wrapping
         app_config_json = json.dumps(runtime_config, ensure_ascii=False, indent=2 if self.enable_debug_comments else None)
         events_json = json.dumps(events, ensure_ascii=False, indent=2 if self.enable_debug_comments else None)
-        content_en_json = json.dumps(content_en, ensure_ascii=False, indent=2 if self.enable_debug_comments else None)
-        content_de_json = json.dumps(content_de, ensure_ascii=False, indent=2 if self.enable_debug_comments else None)
         marker_icons_json = json.dumps(marker_icons, ensure_ascii=False, indent=2 if self.enable_debug_comments else None)
         dashboard_icons_json = json.dumps(DASHBOARD_ICONS_MAP, ensure_ascii=False, indent=2 if self.enable_debug_comments else None)
         debug_info_json = json.dumps(debug_info, ensure_ascii=False, indent=2 if self.enable_debug_comments else None)
@@ -1814,14 +1785,6 @@ window.DASHBOARD_ICONS = {json.dumps(DASHBOARD_ICONS_MAP, ensure_ascii=False)};'
             events_wrapped = self.wrap_with_debug_comment(
                 events_json, 'json', 'assets/json/events.json + events.demo.json',
                 {'description': 'Published events data', 'count': len(events)}
-            )
-            content_en_wrapped = self.wrap_with_debug_comment(
-                content_en_json, 'json', 'assets/json/i18n/content.json',
-                {'description': 'English translations'}
-            )
-            content_de_wrapped = self.wrap_with_debug_comment(
-                content_de_json, 'json', 'assets/json/i18n/content.de.json',
-                {'description': 'German translations'}
             )
             marker_icons_wrapped = self.wrap_with_debug_comment(
                 marker_icons_json, 'json', 'assets/markers/*.svg (base64)',
@@ -1845,12 +1808,6 @@ window.APP_CONFIG = {app_config_json};
 {events_wrapped}
 window.__INLINE_EVENTS_DATA__ = {{ "events": {events_json} }};
 
-{content_en_wrapped}
-window.EMBEDDED_CONTENT_EN = {content_en_json};
-
-{content_de_wrapped}
-window.EMBEDDED_CONTENT_DE = {content_de_json};
-
 {marker_icons_wrapped}
 window.MARKER_ICONS = {marker_icons_json};
 
@@ -1865,8 +1822,6 @@ window.DEBUG_INFO = {debug_info_json};'''
 // config.json is backend-only, frontend uses this minimal runtime config
 window.APP_CONFIG = {app_config_json};
 window.__INLINE_EVENTS_DATA__ = {{ "events": {events_json} }};
-window.EMBEDDED_CONTENT_EN = {content_en_json};
-window.EMBEDDED_CONTENT_DE = {content_de_json};
 window.MARKER_ICONS = {marker_icons_json};
 window.DASHBOARD_ICONS = {dashboard_icons_json};
 window.DEBUG_INFO = {debug_info_json};'''
@@ -1956,7 +1911,6 @@ window.DEBUG_INFO = {debug_info_json};'''
                 fetch_interceptor=fetch_interceptor,
                 leaflet_js=scripts['leaflet_js'],
                 lucide_js=scripts.get('lucide_js', '// Lucide not available'),
-                i18n_js=scripts['i18n_js'],
                 app_js=scripts['app_js']
             ),
             self.html_component_comment('html-body-close.html', 'end')
@@ -1968,21 +1922,16 @@ window.DEBUG_INFO = {debug_info_json};'''
         """
         Generate complete static site with inlined HTML.
         
-        Generates single HTML file in primary language (German):
-        - public/index.html (German - default/primary language)
-        
-        Multi-language infrastructure (i18n.js, translation files) is preserved
-        but only German version is generated and deployed.
+        Generates single HTML file in English.
         
         Process:
         1. Ensures dependencies are present (Leaflet.js) - auto-fetches if missing
         2. Loads all configurations from config.json
         3. Loads stylesheets (Leaflet CSS, app CSS)
-        4. Loads JavaScript files (Leaflet, i18n, app.js)
+        4. Loads JavaScript files (Leaflet, app.js)
         5. Loads event data (real events + demo events)
-        6. Loads translations (English and German) for i18n.js
-        7. Builds HTML structure using templates with all assets inlined
-        8. Lints and validates generated content (HTML, CSS, JS, translations, SVG)
+        6. Builds HTML structure using templates with all assets inlined
+        7. Lints and validates generated content (HTML, CSS, JS, SVG)
         9. Writes output to public/index.html (German - primary language)
         
         Args:
@@ -1992,7 +1941,7 @@ window.DEBUG_INFO = {debug_info_json};'''
             True if generation succeeds, False otherwise
         """
         print("=" * 60)
-        print("🔨 Generating Static Site (German)")
+        print("🔨 Generating Static Site")
         print("=" * 60)
         
         if not self.ensure_dependencies_present():
@@ -2010,9 +1959,6 @@ window.DEBUG_INFO = {debug_info_json};'''
         print("Loading content data...")
         events = self.load_all_events()
         
-        print("Loading translations...")
-        content_en, content_de = self.load_translation_data()
-        
         print("Loading weather cache...")
         weather_cache = self.load_weather_cache()
         if weather_cache:
@@ -2028,15 +1974,15 @@ window.DEBUG_INFO = {debug_info_json};'''
         
         print(f"Building HTML ({len(events)} total events)...")
         
-        # Build German HTML (primary language)
-        print("\n📝 Generating German version (primary language)")
+        # Build HTML (English only)
+        print("\n📝 Generating HTML")
         html_de = self.build_html_from_components(
-            configs, events, content_en, content_de,
+            configs, events,
             stylesheets, scripts, marker_icons,
             weather_cache=weather_cache,
-            lang='de'
+            lang='en'
         )
-        print("✅ German site generated using components")
+        print("✅ Site generated using components")
         
         # Calculate HTML size breakdown
         html_sizes = self.calculate_html_size_breakdown(html_de)
@@ -2078,8 +2024,6 @@ window.DEBUG_INFO = {debug_info_json};'''
                 html_content=html_de,
                 stylesheets=stylesheets,
                 scripts=scripts,
-                translations_en=content_en,
-                translations_de=content_de,
                 svg_files=svg_files
             )
             
@@ -2110,7 +2054,7 @@ window.DEBUG_INFO = {debug_info_json};'''
         print(f"   Output: {output_file} ({len(html_de) / 1024:.1f} KB)")
         print(f"   Total events: {len(events)}")
         print(f"   Configs: {len(configs)} (runtime-selected)")
-        print(f"   Language: German (primary)")
+        print(f"   Language: English")
         print("\n" + "=" * 60)
         return True
     

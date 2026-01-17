@@ -102,15 +102,6 @@ class FilterDescriptionUI {
         element.textContent = `[${description}]`;
     }
 
-    resolveTranslation(key, fallback) {
-        if (!window.i18n || typeof window.i18n.t !== 'function') {
-            return fallback;
-        }
-        
-        const value = window.i18n.t(key);
-        return value === key ? fallback : value;
-    }
-    
     /**
      * Get location description text
      * @param {Object} filters - Filter settings
@@ -130,14 +121,14 @@ class FilterDescriptionUI {
         
         // Geolocation - always show "from here" when geolocation is active
         if (filters.locationType === 'geolocation') {
-            return this.resolveTranslation('filters.locations.geolocation', 'from here');
+            return 'from here';
         }
         
         return 'from here';
     }
     
     /**
-     * Get predefined location text with i18n support
+     * Get predefined location text
      * @param {number} locationIndex - Index of predefined location
      * @returns {string} Location text
      */
@@ -147,15 +138,7 @@ class FilterDescriptionUI {
         
         if (!selectedLoc) return 'from here';
         
-        // Try to get translated name, fallback to display_name
-        const translatedName = this.resolveTranslation(
-            `filters.predefined_locations.${selectedLoc.name}`,
-            selectedLoc.display_name
-        );
-        
-        const prefix = this.resolveTranslation('filters.locations.prefix', 'from');
-        
-        return `${prefix} ${translatedName}`;
+        return `from ${selectedLoc.display_name}`;
     }
     
     /**

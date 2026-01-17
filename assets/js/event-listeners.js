@@ -292,28 +292,15 @@ class EventListeners {
         const locationTextEl = document.getElementById('filter-bar-location');
         if (!locationTextEl) return;
         
-        const resolveTranslation = (key, fallback) => {
-            if (!window.i18n || typeof window.i18n.t !== 'function') {
-                return fallback;
-            }
-            
-            const value = window.i18n.t(key);
-            return value === key ? fallback : value;
-        };
-        
         const getLocationItems = () => {
-            const geolocationLabel = resolveTranslation('filters.locations.geolocation', 'from here');
-            const prefix = resolveTranslation('filters.locations.prefix', 'from');
+            const geolocationLabel = 'from here';
+            const prefix = 'from';
             const predefinedLocs = this.app.config?.map?.predefined_locations || [];
             
             const items = [{ label: geolocationLabel, value: 'geolocation' }];
             
             predefinedLocs.forEach((loc, index) => {
-                const translatedName = resolveTranslation(
-                    `filters.predefined_locations.${loc.name}`,
-                    loc.display_name
-                );
-                items.push({ label: `${prefix} ${translatedName}`, value: `predefined-${index}` });
+                items.push({ label: `${prefix} ${loc.display_name}`, value: `predefined-${index}` });
             });
             
             return items;

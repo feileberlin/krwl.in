@@ -143,8 +143,8 @@ print(f'Debug comments enabled: {gen.enable_debug_comments}')
 
 When enabled, debug metadata is added to:
 - ✅ CSS (Roboto fonts, Leaflet CSS, app styles)
-- ✅ JavaScript (Leaflet, i18n, app modules, Lucide icons)
-- ✅ JSON (events, translations, config, markers)
+- ✅ JavaScript (Leaflet, app modules, Lucide icons)
+- ✅ JSON (events, config, markers)
 - ✅ HTML components (boundary markers with file paths)
 
 **File size impact:** ~5-10 KB overhead (only when enabled)

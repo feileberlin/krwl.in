@@ -438,8 +438,8 @@ class Linter:
         html_content: str,
         stylesheets: Dict[str, str],
         scripts: Dict[str, str],
-        translations_en: Dict,
-        translations_de: Dict,
+        translations_en: Dict = None,
+        translations_de: Dict = None,
         svg_files: Dict[str, str] = None
     ) -> LintResult:
         """
@@ -449,8 +449,8 @@ class Linter:
             html_content: Complete HTML content
             stylesheets: Dict of CSS content {filename: content}
             scripts: Dict of JavaScript content {filename: content}
-            translations_en: English translation dict
-            translations_de: German translation dict
+            translations_en: Optional English translation dict (deprecated)
+            translations_de: Optional German translation dict (deprecated)
             svg_files: Optional dict of SVG content {filename: content}
         
         Returns:
@@ -490,17 +490,20 @@ class Linter:
                 combined_result.merge(svg_result)
                 self._print_result(svg_result, f"SVG - {filename}")
         
-        # Lint Translations
-        print("\n🌐 Validating Translations...")
-        en_result = self.lint_translations(translations_en, "en")
-        de_result = self.lint_translations(translations_de, "de")
-        consistency_result = self.lint_translation_consistency(translations_en, translations_de)
-        combined_result.merge(en_result)
-        combined_result.merge(de_result)
-        combined_result.merge(consistency_result)
-        self._print_result(en_result, "Translations - EN")
-        self._print_result(de_result, "Translations - DE")
-        self._print_result(consistency_result, "Translation Consistency")
+        # Lint Translations (skip if not provided - i18n removed)
+        if translations_en is not None and translations_de is not None:
+            print("\n🌐 Validating Translations...")
+            en_result = self.lint_translations(translations_en, "en")
+            de_result = self.lint_translations(translations_de, "de")
+            consistency_result = self.lint_translation_consistency(translations_en, translations_de)
+            combined_result.merge(en_result)
+            combined_result.merge(de_result)
+            combined_result.merge(consistency_result)
+            self._print_result(en_result, "Translations - EN")
+            self._print_result(de_result, "Translations - DE")
+            self._print_result(consistency_result, "Translation Consistency")
+        else:
+            print("\n🌐 Skipping Translation Validation (i18n removed)")
         
         # Lint Accessibility
         print("\n♿ Validating Accessibility...")

@@ -183,11 +183,10 @@ displayEvents()
 
 ## Future Enhancements (Optional)
 
-1. **i18n**: Translate bubble content
-2. **Themes**: Alternative bubble styles
-3. **Animations**: More elaborate transitions
-4. **Smart Positioning**: ML-based bubble placement
-5. **Accessibility**: ARIA labels, keyboard navigation
+1. **Themes**: Alternative bubble styles
+2. **Animations**: More elaborate transitions
+3. **Smart Positioning**: ML-based bubble placement
+4. **Accessibility**: ARIA labels, keyboard navigation
 6. **Bookmark Sharing**: Export/import bookmarks
 7. **Bubble Clustering**: Group nearby events
 
