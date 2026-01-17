@@ -59,6 +59,12 @@ class EventListeners {
                 this.closeDashboard(dashboardMenu, dashboardLogo);
             }
         });
+        
+        // Add custom location button handler
+        const addLocationBtn = document.getElementById('add-custom-location-btn');
+        if (addLocationBtn) {
+            addLocationBtn.addEventListener('click', () => this.addCustomLocation());
+        }
     }
     
     createFocusTrap(container) {
@@ -373,20 +379,25 @@ class EventListeners {
         const getLocationItems = () => {
             const geolocationLabel = 'from here';
             const prefix = 'from';
-            const predefinedLocs = this.app.config?.map?.predefined_locations || [];
+            const customLocs = this.app.storage.getCustomLocations();
             
             const items = [{ label: geolocationLabel, value: 'geolocation' }];
             
-            predefinedLocs.forEach((loc, index) => {
-                items.push({ label: `${prefix} ${loc.display_name}`, value: `predefined-${index}` });
+            // Add custom locations (includes initialized predefined locations)
+            customLocs.forEach((loc) => {
+                items.push({ 
+                    label: `${prefix} ${loc.name}`, 
+                    value: `custom-${loc.id}`,
+                    customLocation: true
+                });
             });
             
             return items;
         };
         
         const getCurrentValue = () => {
-            if (this.app.filters.locationType === 'predefined' && this.app.filters.selectedPredefinedLocation !== null) {
-                return `predefined-${this.app.filters.selectedPredefinedLocation}`;
+            if (this.app.filters.locationType === 'custom' && this.app.filters.selectedCustomLocation) {
+                return `custom-${this.app.filters.selectedCustomLocation}`;
             }
             return 'geolocation';
         };
@@ -399,6 +410,7 @@ class EventListeners {
                 if (value === 'geolocation') {
                     this.app.filters.locationType = 'geolocation';
                     this.app.filters.selectedPredefinedLocation = null;
+                    this.app.filters.selectedCustomLocation = null;
                     this.app.storage.saveFiltersToCookie(this.app.filters);
                     
                     const userLocation = this.app.mapManager?.userLocation;
@@ -419,25 +431,27 @@ class EventListeners {
                     return;
                 }
                 
-                if (value.startsWith('predefined-')) {
-                    const index = Number.parseInt(value.replace('predefined-', ''), 10);
-                    const predefinedLocs = this.app.config?.map?.predefined_locations || [];
-                    const selectedLoc = predefinedLocs[index];
+                if (value.startsWith('custom-')) {
+                    const locationId = value.replace('custom-', '');
+                    const selectedLoc = this.app.storage.getCustomLocationById(locationId);
                     if (!selectedLoc) return;
                     
-                    this.app.filters.locationType = 'predefined';
-                    this.app.filters.selectedPredefinedLocation = index;
+                    this.app.filters.locationType = 'custom';
+                    this.app.filters.selectedPredefinedLocation = null;
+                    this.app.filters.selectedCustomLocation = locationId;
+                    this.app.filters.customLat = selectedLoc.lat;
+                    this.app.filters.customLon = selectedLoc.lon;
                     this.app.storage.saveFiltersToCookie(this.app.filters);
                     
                     // Center map with zoom based on current distance filter
                     const distanceKm = this.app.filters.maxDistance;
                     this.app.mapManager?.centerMap(selectedLoc.lat, selectedLoc.lon, null, distanceKm);
                     
-                    // Update reference marker to show predefined location
+                    // Update reference marker to show custom location
                     this.app.mapManager.updateReferenceMarker(
                         selectedLoc.lat, 
                         selectedLoc.lon, 
-                        selectedLoc.display_name || 'Selected location'
+                        selectedLoc.name || 'Custom location'
                     );
                     
                     this.app.displayEvents();
@@ -472,6 +486,38 @@ class EventListeners {
                 this.app.mapManager?.invalidateSize();
             }, this.app.ORIENTATION_CHANGE_DELAY);
         });
+    }
+    
+    addCustomLocation() {
+        const name = prompt('Enter location name:', 'My Location');
+        if (!name || !name.trim()) return;
+        
+        const latStr = prompt('Enter latitude:', '50.3167');
+        const lonStr = prompt('Enter longitude:', '11.9167');
+        
+        const lat = parseFloat(latStr);
+        const lon = parseFloat(lonStr);
+        
+        if (isNaN(lat) || isNaN(lon)) {
+            alert('Invalid coordinates!');
+            return;
+        }
+        
+        const success = this.app.storage.addCustomLocation({
+            name: name.trim(),
+            lat: lat,
+            lon: lon
+        });
+        
+        if (success) {
+            alert(`✅ Location "${name.trim()}" saved!`);
+            // Refresh dashboard display
+            this.app.updateDashboard();
+            // Refresh dropdown
+            this.setupFilterListeners();
+        } else {
+            alert('❌ Failed to save location (limit: 10)');
+        }
     }
 }
 

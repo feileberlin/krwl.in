@@ -1455,13 +1455,21 @@ window.DASHBOARD_ICONS = {json.dumps(DASHBOARD_ICONS_MAP, ensure_ascii=False)};'
             if pending_file.exists():
                 with open(pending_file, 'r', encoding='utf-8') as f:
                     pending_data = json.load(f)
-                    pending_count = len(pending_data)
+                    # Handle both dict format {'pending_events': [...]} and list format
+                    if isinstance(pending_data, dict):
+                        pending_count = len(pending_data.get('pending_events', []))
+                    else:
+                        pending_count = len(pending_data)
             
             archived_count = 0
             if archived_file.exists():
                 with open(archived_file, 'r', encoding='utf-8') as f:
                     archived_data = json.load(f)
-                    archived_count = len(archived_data)
+                    # Handle both dict format {'archived_events': [...]} and list format
+                    if isinstance(archived_data, dict):
+                        archived_count = len(archived_data.get('archived_events', []))
+                    else:
+                        archived_count = len(archived_data)
             
             debug_info['event_counts'] = {
                 'published': len(events),
