@@ -310,6 +310,13 @@ def _resolve_json_path(base_path, filename):
     Prefer the location where the specific file already exists.
     If the file does not exist in either location, default to the
     new assets/json directory as the creation target.
+
+    Args:
+        base_path: Repository root path.
+        filename: JSON filename to locate.
+
+    Returns:
+        Path to the resolved JSON file location.
     """
     assets_dir = base_path / 'assets' / 'json'
     data_dir = base_path / 'data'
