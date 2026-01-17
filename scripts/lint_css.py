@@ -12,7 +12,7 @@ Checks for:
 
 import re
 from pathlib import Path
-from typing import List, Dict, Tuple
+from typing import Dict
 from collections import defaultdict
 
 class CSSLinter:
