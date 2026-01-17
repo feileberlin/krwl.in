@@ -221,8 +221,12 @@ class EventListeners {
                 }
             });
             
-            // Add ungrouped categories (sorted)
+            // Add ungrouped categories (sorted), excluding "uncategorized"
             Array.from(ungroupedCategories).sort().forEach((categoryValue) => {
+                // Skip "uncategorized" - these events only appear in "all events"
+                if (categoryValue === 'uncategorized') {
+                    return;
+                }
                 categories.push({
                     label: `${categoryValue} events`,
                     value: categoryValue,
