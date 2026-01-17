@@ -58,8 +58,8 @@ class FilterDescriptionUI {
         }
         clearTimeout(element._typingTimer);
         const minTypoLength = 6; // Minimum length before adding a typo (avoid short labels)
-        const defaultTypoIndex = 3; // Early typo position for quick correction
-        const typoIndex = text.length > minTypoLength ? Math.min(defaultTypoIndex, text.length - 2) : -1; // Keep typo off last char
+        const preferredTypoIndex = 3; // Early typo position for quick correction
+        const typoIndex = text.length > minTypoLength ? Math.min(preferredTypoIndex, text.length - 2) : -1; // Keep typo off last char
         const typoChar = typoIndex > -1 ? 'x' : '';
         const frames = [];
         for (let i = 1; i <= text.length; i++) {
