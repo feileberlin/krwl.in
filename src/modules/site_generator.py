@@ -53,6 +53,14 @@ except ImportError:
     # Fallback if utils is not available
     load_config = None
 
+# Import jsonplate for KISS JSON templating
+try:
+    from .jsonplate_helper import render_json_template, is_jsonplate_available
+    JSONPLATE_AVAILABLE = is_jsonplate_available()
+except ImportError:
+    JSONPLATE_AVAILABLE = False
+    render_json_template = None
+
 
 # Third-party dependencies to fetch (stored under lib/)
 # Note: Lucide icons are NOT part of these dependencies anymore – they are provided
@@ -1587,6 +1595,163 @@ window.DASHBOARD_ICONS = {json.dumps(DASHBOARD_ICONS_MAP, ensure_ascii=False)};'
         
         return debug_info
     
+    def build_runtime_config_with_jsonplate(
+        self,
+        primary_config: Dict,
+        weather_cache: Dict = None
+    ) -> Dict:
+        """
+        Build runtime config using jsonplate templates (KISS approach).
+        
+        Uses declarative JSON templates instead of programmatic dict building.
+        Falls back to traditional approach if jsonplate is not available.
+        
+        Args:
+            primary_config: Primary configuration dict
+            weather_cache: Optional weather cache data
+            
+        Returns:
+            Runtime config dictionary for frontend
+        """
+        # Check if jsonplate is available
+        if not JSONPLATE_AVAILABLE or render_json_template is None:
+            logger.debug("jsonplate not available, using traditional config building")
+            return self._build_runtime_config_fallback(primary_config, weather_cache)
+        
+        try:
+            from .jsonplate_helper import JsonTemplateHelper
+            helper = JsonTemplateHelper(self.base_path)
+            
+            # Build base runtime config using template
+            runtime_config = helper.render(
+                'runtime_config_base',
+                debug_enabled=primary_config.get('debug', False),
+                environment=primary_config.get('app', {}).get('environment', 'unknown'),
+                map_config=primary_config.get('map', {}),
+                data_source=primary_config.get('data', {}).get('source', 'real'),
+                data_sources=primary_config.get('data', {}).get('sources', {})
+            )
+            
+            # Build weather config using template
+            weather_config = primary_config.get('weather', {})
+            if weather_config.get('enabled', False):
+                weather_data = None
+                if weather_cache and isinstance(weather_cache, dict):
+                    for key, entry in weather_cache.items():
+                        if isinstance(entry, dict) and entry.get('data'):
+                            weather_data = entry['data']
+                            break
+                
+                runtime_config['weather'] = helper.render(
+                    'weather_config',
+                    weather_enabled=True,
+                    display_config=weather_config.get('display', {}),
+                    weather_data=weather_data
+                )
+            else:
+                runtime_config['weather'] = {'enabled': False}
+            
+            # Build time filters using template
+            try:
+                from .moon_phase import (
+                    get_days_until_full_moon,
+                    get_days_until_sunday,
+                    get_next_sunday_date,
+                    get_next_sunday_formatted
+                )
+                
+                runtime_config['time_filters'] = helper.render(
+                    'time_filters',
+                    days_until_full_moon=get_days_until_full_moon(),
+                    full_moon_enabled=True,
+                    days_until_sunday=get_days_until_sunday(),
+                    sunday_date_iso=get_next_sunday_date(),
+                    sunday_date_formatted=get_next_sunday_formatted(),
+                    sunday_enabled=True
+                )
+            except Exception as e:
+                logger.warning(f"Failed to calculate moon phase/Sunday data: {e}")
+                runtime_config['time_filters'] = {
+                    'full_moon': {'enabled': False},
+                    'sunday': {'enabled': False}
+                }
+            
+            logger.debug("Built runtime config using jsonplate templates")
+            return runtime_config
+            
+        except Exception as e:
+            logger.warning(f"jsonplate template rendering failed: {e}, using fallback")
+            return self._build_runtime_config_fallback(primary_config, weather_cache)
+    
+    def _build_runtime_config_fallback(
+        self,
+        primary_config: Dict,
+        weather_cache: Dict = None
+    ) -> Dict:
+        """
+        Build runtime config using traditional dict building (fallback).
+        
+        This is the original implementation, kept as fallback when
+        jsonplate templates are not available or fail.
+        """
+        runtime_config = {
+            'debug': primary_config.get('debug', False),
+            'app': {
+                'environment': primary_config.get('app', {}).get('environment', 'unknown')
+            },
+            'map': primary_config.get('map', {}),
+            'data': {
+                'source': primary_config.get('data', {}).get('source', 'real'),
+                'sources': primary_config.get('data', {}).get('sources', {})
+            }
+        }
+        
+        weather_config = primary_config.get('weather', {})
+        if weather_config.get('enabled', False):
+            weather_data = None
+            if weather_cache and isinstance(weather_cache, dict):
+                for key, entry in weather_cache.items():
+                    if isinstance(entry, dict) and entry.get('data'):
+                        weather_data = entry['data']
+                        break
+            
+            runtime_config['weather'] = {
+                'enabled': True,
+                'display': weather_config.get('display', {}),
+                'data': weather_data
+            }
+        else:
+            runtime_config['weather'] = {'enabled': False}
+        
+        try:
+            from .moon_phase import (
+                get_days_until_full_moon,
+                get_days_until_sunday,
+                get_next_sunday_date,
+                get_next_sunday_formatted
+            )
+            
+            runtime_config['time_filters'] = {
+                'full_moon': {
+                    'days_until': get_days_until_full_moon(),
+                    'enabled': True
+                },
+                'sunday': {
+                    'days_until': get_days_until_sunday(),
+                    'date_iso': get_next_sunday_date(),
+                    'date_formatted': get_next_sunday_formatted(),
+                    'enabled': True
+                }
+            }
+        except Exception as e:
+            logger.warning(f"Failed to calculate moon phase/Sunday data: {e}")
+            runtime_config['time_filters'] = {
+                'full_moon': {'enabled': False},
+                'sunday': {'enabled': False}
+            }
+        
+        return runtime_config
+    
     def calculate_html_size_breakdown(self, html: str) -> Dict:
         """
         Calculate size breakdown of generated HTML.
@@ -1716,67 +1881,10 @@ window.DASHBOARD_ICONS = {json.dumps(DASHBOARD_ICONS_MAP, ensure_ascii=False)};'
         # Build noscript HTML
         noscript_html = self.build_noscript_html(events, app_name)
         
-        # Extract minimal runtime config for frontend (backend config.json is not fetched by frontend)
+        # Build runtime config using jsonplate templates (KISS approach)
+        # This replaces the manual dict building with declarative templates
         primary_config = configs[0] if configs else {}
-        runtime_config = {
-            'debug': primary_config.get('debug', False),
-            'app': {
-                'environment': primary_config.get('app', {}).get('environment', 'unknown')
-            },
-            'map': primary_config.get('map', {}),
-            'data': {
-                'source': primary_config.get('data', {}).get('source', 'real'),
-                'sources': primary_config.get('data', {}).get('sources', {})
-            }
-        }
-        
-        # Add weather to runtime config if enabled (simplified: single location weather embedded in config)
-        weather_config = primary_config.get('weather', {})
-        if weather_config.get('enabled', False):
-            # Extract current weather from weather_cache if available
-            weather_data = None
-            if weather_cache and isinstance(weather_cache, dict):
-                # Get first available weather entry (simplified: single location)
-                for key, entry in weather_cache.items():
-                    if isinstance(entry, dict) and entry.get('data'):
-                        weather_data = entry['data']
-                        break
-            
-            runtime_config['weather'] = {
-                'enabled': True,
-                'display': weather_config.get('display', {}),
-                'data': weather_data  # Current weather data or None
-            }
-        else:
-            runtime_config['weather'] = {'enabled': False}
-        
-        # Add moon phase and Sunday data for time filters
-        try:
-            from .moon_phase import (
-                get_days_until_full_moon,
-                get_days_until_sunday,
-                get_next_sunday_date,
-                get_next_sunday_formatted
-            )
-            
-            runtime_config['time_filters'] = {
-                'full_moon': {
-                    'days_until': get_days_until_full_moon(),
-                    'enabled': True
-                },
-                'sunday': {
-                    'days_until': get_days_until_sunday(),
-                    'date_iso': get_next_sunday_date(),
-                    'date_formatted': get_next_sunday_formatted(),
-                    'enabled': True
-                }
-            }
-        except Exception as e:
-            logger.warning(f"Failed to calculate moon phase/Sunday data: {e}")
-            runtime_config['time_filters'] = {
-                'full_moon': {'enabled': False},
-                'sunday': {'enabled': False}
-            }
+        runtime_config = self.build_runtime_config_with_jsonplate(primary_config, weather_cache)
         
         # Calculate debug information
         debug_info = self.calculate_debug_info(primary_config, events)

@@ -1,0 +1,5 @@
+{
+    "enabled": weather_enabled,
+    "display": display_config,
+    "data": weather_data
+}

@@ -1,0 +1,11 @@
+{
+    "debug": debug_enabled,
+    "app": {
+        "environment": "{{environment}}"
+    },
+    "map": map_config,
+    "data": {
+        "source": "{{data_source}}",
+        "sources": data_sources
+    }
+}

@@ -1231,6 +1231,36 @@
       ],
       "test_method": "check_code_patterns",
       "test_instructions": "1. Run AI extraction tests: python3 tests/test_ai_event_extraction.py\n2. Optional: run smart scraper tests: python3 tests/test_smart_scraper.py\n3. With Ollama running, scrape a Facebook source and confirm AI-enriched fields populate"
+    },
+    {
+      "id": "jsonplate-templating",
+      "name": "JSON Templating with jsonplate",
+      "description": "KISS-compliant JSON templating using jsonplate library. Replaces complex dict building with declarative JSON templates for runtime config generation.",
+      "category": "backend",
+      "implemented": true,
+      "files": [
+        "src/modules/jsonplate_helper.py",
+        "src/modules/site_generator.py",
+        "assets/json/templates/runtime_config_base.json",
+        "assets/json/templates/time_filters.json",
+        "assets/json/templates/weather_config.json",
+        "assets/json/templates/lucide_icons.json"
+      ],
+      "config_keys": [],
+      "code_patterns": [
+        {
+          "file": "src/modules/jsonplate_helper.py",
+          "pattern": "class JsonTemplateHelper|render_json_template|jsonplate\\.parse",
+          "description": "JSON template helper with jsonplate integration"
+        },
+        {
+          "file": "src/modules/site_generator.py",
+          "pattern": "build_runtime_config_with_jsonplate|render_json_template|JSONPLATE_AVAILABLE",
+          "description": "Site generator using jsonplate for config building"
+        }
+      ],
+      "test_method": "check_code_patterns",
+      "test_instructions": "1. Test helper: python3 src/modules/jsonplate_helper.py test\n2. List templates: python3 src/modules/jsonplate_helper.py list\n3. Generate site: python3 src/event_manager.py generate"
     }
   ]
 }
