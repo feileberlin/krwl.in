@@ -140,14 +140,36 @@ class SmartScraper:
         """Register custom source handlers for specific sites."""
         try:
             from .sources import frankenpost
+            from .sources.custom import FreiheitshalleSource, VHSSource, HofStadtSource
             
             # Register Frankenpost custom handler
-            # This will be used instead of generic HTML scraper for Frankenpost
             self.registry.register('frankenpost',
                 lambda cfg, opts, base_path=self.base_path,
                 ai_providers=self.ai_providers: frankenpost.FrankenpostSource(
                     cfg, opts, base_path=base_path, ai_providers=ai_providers
                 ))
+            
+            # Register Freiheitshalle custom handler
+            self.registry.register('freiheitshalle',
+                lambda cfg, opts, base_path=self.base_path,
+                ai_providers=self.ai_providers: FreiheitshalleSource(
+                    cfg, opts, base_path=base_path, ai_providers=ai_providers
+                ))
+            
+            # Register VHS custom handler
+            self.registry.register('vhs',
+                lambda cfg, opts, base_path=self.base_path,
+                ai_providers=self.ai_providers: VHSSource(
+                    cfg, opts, base_path=base_path, ai_providers=ai_providers
+                ))
+            
+            # Register Hof Stadt custom handler
+            self.registry.register('hofstadt',
+                lambda cfg, opts, base_path=self.base_path,
+                ai_providers=self.ai_providers: HofStadtSource(
+                    cfg, opts, base_path=base_path, ai_providers=ai_providers
+                ))
+                
         except ImportError as e:
             logger.debug(f"Custom sources unavailable: {e}")
     
@@ -192,10 +214,16 @@ class SmartScraper:
         source_name = str(source.get('name', '')).strip().lower()
         
         # Check for custom source handlers first (by exact source name)
-        # This allows overriding default handlers for specific sites while
-        # avoiding accidental matches when names merely contain "frankenpost".
-        if source_name == 'frankenpost':
-            source_type = 'frankenpost'
+        # This allows overriding default handlers for specific sites
+        custom_mappings = {
+            'frankenpost': 'frankenpost',
+            'freiheitshalle': 'freiheitshalle',
+            'vhs last minute': 'vhs',
+            'wochenmarkt hof': 'hofstadt',
+        }
+        
+        if source_name in custom_mappings:
+            source_type = custom_mappings[source_name]
         
         # Get source-specific options
         options = SourceOptions.from_dict(source.get('options', {}))
