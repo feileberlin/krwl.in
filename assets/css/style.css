@@ -778,6 +778,50 @@ strong, b {
     box-shadow: 0 0 0 2px rgba(214, 137, 184, 0.15);
 }
 
+/* Edit mode coordinates container - same structure as view */
+.custom-location-coords-edit {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    font-family: var(--font-family-mono);
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.4rem 0.6rem;
+}
+
+/* Inline coordinate inputs - minimal styling to blend with text */
+.custom-location-input--inline {
+    background: var(--tint-50); /* Light background */
+    border: 1px solid var(--border-secondary);
+    color: var(--shade-100); /* Darkest possible */
+    padding: 0.3rem 0.5rem;
+    border-radius: var(--radius-small);
+    font-size: 0.8rem;
+    font-family: var(--font-family-mono);
+    transition: all 0.2s;
+    width: auto;
+    min-width: 80px;
+    display: inline-block;
+}
+
+.custom-location-input--inline:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    background: var(--tint-50);
+    box-shadow: 0 0 0 2px rgba(214, 137, 184, 0.15);
+}
+
+.custom-location-input--inline:hover:not(:focus) {
+    border-color: var(--border-primary);
+}
+
+/* Inline save button */
+.custom-location-btn--inline {
+    padding: 0.3rem 0.5rem;
+    margin-left: 0.3rem;
+    min-width: auto;
+}
+
 .custom-location-actions {
     display: none; /* Hide Edit buttons - edit mode is activated by clicking coordinates */
 }

@@ -120,48 +120,37 @@ class DashboardUI {
                         <div class="custom-location-coords custom-location-coords--clickable" data-location-id="${loc.id}" tabindex="0" role="button" aria-label="Click to edit coordinates">${loc.lat.toFixed(4)}°, ${loc.lon.toFixed(4)}°</div>
                     </div>
                     
-                    <!-- Edit State (hidden by default) -->
+                    <!-- Edit State (hidden by default) - Same structure as view state -->
                     <div class="custom-location-edit" style="display: none;">
-                        <div class="custom-location-form">
-                            <div class="form-group">
-                                <label for="edit-name-${loc.id}">Name</label>
-                                <input type="text" 
-                                       id="edit-name-${loc.id}" 
-                                       class="custom-location-input" 
-                                       value="${loc.name}" 
-                                       placeholder="Location name"
-                                       maxlength="50">
+                        <div class="custom-location-header">
+                            <div class="custom-location-actions">
+                                <!-- Empty - maintains same structure as view -->
                             </div>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="edit-lat-${loc.id}">Latitude</label>
-                                    <input type="text" 
-                                           id="edit-lat-${loc.id}" 
-                                           class="custom-location-input custom-location-input--coordinate" 
-                                           value="${loc.lat.toFixed(4)}" 
-                                           placeholder="Latitude"
-                                           pattern="^-?\\d+\\.\\d{4}$"
-                                           data-type="latitude">
-                                </div>
-                                <div class="form-group">
-                                    <label for="edit-lon-${loc.id}">Longitude</label>
-                                    <input type="text" 
-                                           id="edit-lon-${loc.id}" 
-                                           class="custom-location-input custom-location-input--coordinate" 
-                                           value="${loc.lon.toFixed(4)}" 
-                                           placeholder="Longitude"
-                                           pattern="^-?\\d+\\.\\d{4}$"
-                                           data-type="longitude">
-                                </div>
-                                <div class="form-group" style="display: flex; gap: 0.3rem;">
-                                    <button class="custom-location-btn custom-location-btn--save" data-action="save" data-id="${loc.id}" title="Save changes">
-                                        <i data-lucide="check" style="width: 14px; height: 14px;"></i>
-                                    </button>
-                                    <button class="custom-location-btn custom-location-btn--cancel" data-action="cancel" data-id="${loc.id}" title="Cancel editing" style="display: none;">
-                                        <i data-lucide="x" style="width: 14px; height: 14px;"></i>
-                                    </button>
-                                </div>
+                            <div class="custom-location-name">
+                                <i data-lucide="${iconType}" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle;"></i>
+                                <span class="location-name-text">${loc.name}</span>
                             </div>
+                        </div>
+                        <div class="custom-location-coords-edit">
+                            <input type="text" 
+                                   id="edit-lat-${loc.id}" 
+                                   class="custom-location-input custom-location-input--coordinate custom-location-input--inline" 
+                                   value="${loc.lat.toFixed(4)}" 
+                                   placeholder="Latitude"
+                                   pattern="^-?\\d+\\.\\d{4}$"
+                                   data-type="latitude"
+                                   aria-label="Latitude">°, 
+                            <input type="text" 
+                                   id="edit-lon-${loc.id}" 
+                                   class="custom-location-input custom-location-input--coordinate custom-location-input--inline" 
+                                   value="${loc.lon.toFixed(4)}" 
+                                   placeholder="Longitude"
+                                   pattern="^-?\\d+\\.\\d{4}$"
+                                   data-type="longitude"
+                                   aria-label="Longitude">°
+                            <button class="custom-location-btn custom-location-btn--save custom-location-btn--inline" data-action="save" data-id="${loc.id}" title="Save changes">
+                                <i data-lucide="check" style="width: 14px; height: 14px;"></i>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -284,10 +273,10 @@ class DashboardUI {
             viewState.style.display = 'none';
             editState.style.display = 'block';
             
-            // Focus on the name input
-            const nameInput = editState.querySelector(`#edit-name-${id}`);
-            if (nameInput) {
-                setTimeout(() => nameInput.focus(), 50);
+            // Focus on the latitude input (first coordinate input)
+            const latInput = editState.querySelector(`#edit-lat-${id}`);
+            if (latInput) {
+                setTimeout(() => latInput.focus(), 50);
             }
             
             // Add ESC key listener to exit edit mode (use capture phase to intercept before dashboard handler)
@@ -313,11 +302,9 @@ class DashboardUI {
             if (app && app.storage) {
                 const loc = app.storage.getCustomLocationById(id);
                 if (loc) {
-                    const nameInput = editState.querySelector(`#edit-name-${id}`);
                     const latInput = editState.querySelector(`#edit-lat-${id}`);
                     const lonInput = editState.querySelector(`#edit-lon-${id}`);
                     
-                    if (nameInput) nameInput.value = loc.name;
                     if (latInput) latInput.value = loc.lat.toFixed(4);
                     if (lonInput) lonInput.value = loc.lon.toFixed(4);
                 }
@@ -335,18 +322,17 @@ class DashboardUI {
         if (!item) return;
         
         const editState = item.querySelector('.custom-location-edit');
-        const nameInput = editState.querySelector(`#edit-name-${id}`);
         const latInput = editState.querySelector(`#edit-lat-${id}`);
         const lonInput = editState.querySelector(`#edit-lon-${id}`);
         
-        if (!nameInput || !latInput || !lonInput) return;
+        if (!latInput || !lonInput) return;
         
         // Get current location to check if it's predefined
         const currentLoc = app.storage.getCustomLocationById(id);
         if (!currentLoc) return;
         
-        // Get values
-        let newName = nameInput.value.trim();
+        // Get values - name stays the same, only coordinates change
+        let newName = currentLoc.name;
         let latValue = latInput.value.trim();
         let lonValue = lonInput.value.trim();
         
@@ -369,11 +355,6 @@ class DashboardUI {
             const originalLoc = app.storage.getOriginalPredefinedLocation(id);
             
             if (originalLoc) {
-                // If name is empty, use original predefined name
-                if (!newName) {
-                    newName = originalLoc.display_name;
-                }
-                
                 // If lat is empty or invalid, use original predefined lat
                 if (isNaN(newLat) || latInput.value.trim() === '') {
                     newLat = originalLoc.lat;
@@ -387,10 +368,6 @@ class DashboardUI {
         }
         
         // Validate (after applying defaults for predefined locations)
-        if (!newName) {
-            this.showValidationError(nameInput, 'Name cannot be empty');
-            return;
-        }
         
         if (isNaN(newLat) || newLat < -90 || newLat > 90) {
             this.showValidationError(latInput, 'Invalid latitude (must be between -90 and 90)');
