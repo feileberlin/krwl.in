@@ -15,6 +15,8 @@ This document serves as a **permanent reference** for the KRWL HOF **truly monoc
 
 **Monochromatic Design:** Every single color in the application - backgrounds, text, borders, accents, warnings, errors - derives from the ecoBarbie pink base color using HSV transformations.
 
+**Palette Size:** **Streamlined 6-color core palette** (2 tints, 2 shades, 2 tones) for maximum distinction and clarity. Fewer steps = more distinct colors = clearer visual hierarchy.
+
 > **Note:** This is a reference document only. The actual colors used in the application are defined in `config.json` under the `design.colors` section with inline color preview comments (█ blocks). To modify colors, edit `config.json` and regenerate design tokens using `python3 src/tools/generate_design_tokens.py`.
 
 ---
