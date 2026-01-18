@@ -1,0 +1,6 @@
+{
+  "_comment": "Organizer library for unified entity management system",
+  "_description": "Central organizer repository with ID-based references. Events reference organizers via organizer_id.",
+  "_version": "1.0",
+  "organizers": []
+}

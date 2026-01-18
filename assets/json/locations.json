@@ -1,0 +1,6 @@
+{
+  "_comment": "Location library for unified entity management system",
+  "_description": "Central location repository with ID-based references. Events reference locations via location_id.",
+  "_version": "1.0",
+  "locations": []
+}
