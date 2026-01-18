@@ -263,7 +263,7 @@ COMMANDS:
                               - Allows community members to submit events via /submit
                               - Supports flyer upload with OCR via photo messages
                               - Provides /contact for admin messaging
-                              - All submissions saved to incoming.json for review
+                              - All submissions saved to pending_events.json for review
     
     schema validate           Validate events against schema
     schema migrate            Migrate events to new schema format

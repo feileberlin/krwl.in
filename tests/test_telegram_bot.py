@@ -48,7 +48,7 @@ def test_bot_instantiation_requires_library():
     
     if not TELEGRAM_AVAILABLE:
         try:
-            bot = TelegramBot(config, base_path)
+            TelegramBot(config, base_path)
             print("❌ Bot should require python-telegram-bot library")
             return False
         except ImportError as e:
@@ -72,7 +72,7 @@ def test_bot_instantiation_requires_library():
                 'limits': {},
                 'messages': {}
             }
-            bot = TelegramBot(test_config, base_path)
+            TelegramBot(test_config, base_path)
             print("✅ Bot can be instantiated with library installed")
             return True
         except Exception as e:

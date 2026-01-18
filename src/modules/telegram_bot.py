@@ -16,21 +16,18 @@ import logging
 import re
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, Any, Optional, List, TYPE_CHECKING
-from io import BytesIO
-import json
+from typing import Dict, Any, Optional, TYPE_CHECKING
 
 # Configure module logger
 logger = logging.getLogger(__name__)
 
 try:
-    from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+    from telegram import Update
     from telegram.ext import (
         Application,
         CommandHandler,
         MessageHandler,
         ConversationHandler,
-        CallbackQueryHandler,
         filters,
         ContextTypes
     )
@@ -489,6 +486,7 @@ class TelegramBot:
             'type': 'contact_form',
             'title': f"Contact from @{user.username or user.id}",
             'description': message_text,
+            'teaser': f"Contact form message from {user.first_name or 'user'}",
             'location': {
                 'name': 'Contact Form',
                 'lat': 50.3167,
@@ -498,7 +496,7 @@ class TelegramBot:
             'start_time': datetime.now().isoformat(),
             'end_time': None,
             'url': f"https://t.me/{user.username}" if user.username else None,
-            'source': 'telegram_bot_contact',
+            'source': f"https://t.me/{user.username}" if user.username else "https://t.me",
             'scraped_at': datetime.now().isoformat(),
             'status': 'pending',
             'category': 'contact',
@@ -519,10 +517,11 @@ class TelegramBot:
         )
         
         # Notify admins immediately
+        contact_info = f"Reply via: https://t.me/{user.username}" if user.username else f"User ID: {user.id}"
         await self._notify_admins(
             f"📨 New contact message from @{user.username or user.id}:\n\n"
             f"{message_text}\n\n"
-            f"Reply via: https://t.me/{user.username}" if user.username else f"User ID: {user.id}"
+            f"{contact_info}"
         )
         
         return ConversationHandler.END
@@ -531,7 +530,7 @@ class TelegramBot:
     
     def _parse_date(self, date_str: str) -> Optional[str]:
         """Parse date string to ISO format."""
-        formats = ['%Y-%m-%d', '%d.%m.%Y', '%d/%m/%Y', '%Y/%m/%d']
+        formats = ['%Y-%m-%d', '%d.%m.%Y', '%d.%m.%y', '%d/%m/%Y', '%d/%m/%y', '%Y/%m/%d']
         for fmt in formats:
             try:
                 dt = datetime.strptime(date_str.strip(), fmt)
@@ -557,7 +556,6 @@ class TelegramBot:
         
         date_str = data.get('date', 'Unknown')
         time_str = data.get('time', 'Unknown')
-        start_time = f"{date_str}T{time_str}:00" if time_str else date_str
         
         summary = (
             "📋 Event Summary:\n\n"
@@ -580,10 +578,20 @@ class TelegramBot:
         
         event_id = f"telegram_{user.id}_{int(datetime.now().timestamp())}"
         
+        # Generate teaser from title and description
+        title = user_data.get('title', '')
+        description = user_data.get('description') or ''
+        teaser = title[:200] if len(title) <= 200 else title[:197] + '...'
+        if not teaser and description:
+            teaser = description[:200] if len(description) <= 200 else description[:197] + '...'
+        if not teaser:
+            teaser = "Event submitted via Telegram"
+        
         return {
             'id': event_id,
-            'title': user_data.get('title'),
-            'description': user_data.get('description') or '',
+            'title': title,
+            'description': description,
+            'teaser': teaser,
             'location': {
                 'name': user_data.get('location'),
                 'lat': 50.3167,  # Default Hof coordinates
@@ -592,8 +600,8 @@ class TelegramBot:
             },
             'start_time': start_time,
             'end_time': None,
-            'url': None,
-            'source': 'telegram_bot_submission',
+            'url': f"https://t.me/{user.username}" if user.username else None,
+            'source': f"https://t.me/{user.username}" if user.username else "https://t.me",
             'scraped_at': datetime.now().isoformat(),
             'status': 'pending',
             'category': 'community',
@@ -640,10 +648,16 @@ class TelegramBot:
                 found_date = self._parse_date(matches[0])
                 break
         
+        # Generate teaser from OCR text
+        teaser_text = ocr_text[:200] if len(ocr_text) <= 200 else ocr_text[:197] + '...'
+        if not teaser_text.strip():
+            teaser_text = title[:200] if len(title) <= 200 else title[:197] + '...'
+        
         return {
             'id': event_id,
             'title': title[:100],  # Limit length
             'description': ocr_text[:500],  # Include OCR text as description
+            'teaser': teaser_text,
             'location': {
                 'name': 'Hof',  # Default, needs verification
                 'lat': 50.3167,
@@ -652,8 +666,8 @@ class TelegramBot:
             },
             'start_time': f"{found_date}T00:00:00" if found_date else datetime.now().isoformat(),
             'end_time': None,
-            'url': None,
-            'source': 'telegram_bot_flyer',
+            'url': f"https://t.me/{user.username}" if user.username else None,
+            'source': f"https://t.me/{user.username}" if user.username else "https://t.me",
             'scraped_at': datetime.now().isoformat(),
             'status': 'pending',
             'category': 'community',

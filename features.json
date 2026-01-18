@@ -1264,7 +1264,7 @@
     {
       "id": "telegram-bot",
       "name": "Telegram Bot for Event Submissions",
-      "description": "Telegram bot that allows community members to submit events, upload flyer images with OCR processing, and contact admins. All submissions are saved to incoming.json for editorial review.",
+      "description": "Telegram bot that allows community members to submit events, upload flyer images with OCR processing, and contact admins. All submissions are saved to pending_events.json for editorial review.",
       "category": "backend",
       "implemented": true,
       "files": [
