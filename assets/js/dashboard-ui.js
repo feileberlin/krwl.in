@@ -122,10 +122,6 @@ class DashboardUI {
                     
                     <!-- Edit State (hidden by default) -->
                     <div class="custom-location-edit" style="display: none;">
-                        <div class="custom-location-edit-header">
-                            <i data-lucide="${iconType}" style="width: 14px; height: 14px;"></i>
-                            <span>Editing Location</span>
-                        </div>
                         <div class="custom-location-form">
                             <div class="form-group">
                                 <label for="edit-name-${loc.id}">Name</label>
@@ -159,16 +155,14 @@ class DashboardUI {
                                            max="180"
                                            placeholder="Longitude">
                                 </div>
-                            </div>
-                            <div class="custom-location-edit-actions">
-                                <button class="custom-location-btn custom-location-btn--save" data-action="save" data-id="${loc.id}">
-                                    <i data-lucide="check" style="width: 14px; height: 14px;"></i>
-                                    <span>Save</span>
-                                </button>
-                                <button class="custom-location-btn custom-location-btn--cancel" data-action="cancel" data-id="${loc.id}">
-                                    <i data-lucide="x" style="width: 14px; height: 14px;"></i>
-                                    <span>Cancel</span>
-                                </button>
+                                <div class="form-group" style="display: flex; gap: 0.3rem;">
+                                    <button class="custom-location-btn custom-location-btn--save" data-action="save" data-id="${loc.id}" title="Save changes">
+                                        <i data-lucide="check" style="width: 14px; height: 14px;"></i>
+                                    </button>
+                                    <button class="custom-location-btn custom-location-btn--cancel" data-action="cancel" data-id="${loc.id}" title="Cancel editing" style="display: none;">
+                                        <i data-lucide="x" style="width: 14px; height: 14px;"></i>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -226,6 +220,18 @@ class DashboardUI {
             if (nameInput) {
                 setTimeout(() => nameInput.focus(), 50);
             }
+            
+            // Add ESC key listener to exit edit mode
+            const escHandler = (e) => {
+                if (e.key === 'Escape') {
+                    e.stopPropagation(); // Prevent dashboard from closing
+                    this.toggleEditMode(id, false);
+                    document.removeEventListener('keydown', escHandler);
+                }
+            };
+            document.addEventListener('keydown', escHandler);
+            // Store handler for cleanup
+            editState.dataset.escHandler = 'attached';
         } else {
             // Exit edit mode (restore original values)
             viewState.style.display = 'block';

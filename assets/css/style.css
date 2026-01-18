@@ -877,8 +877,9 @@ strong, b {
 
 .form-row {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr auto;
     gap: 0.6rem;
+    align-items: end; /* Align button to bottom with inputs */
 }
 
 .form-group label {
@@ -889,9 +890,9 @@ strong, b {
 
 /* Input styling with EcoBarbie theme */
 .custom-location-input {
-    background: var(--bg-primary);
+    background: var(--tint-50); /* Light background */
     border: 1px solid var(--border-secondary);
-    color: var(--text-primary);
+    color: var(--shade-100); /* Darkest possible */
     padding: 0.5rem 0.7rem;
     border-radius: var(--radius-small);
     font-size: 0.85rem;
@@ -899,10 +900,22 @@ strong, b {
     transition: all 0.2s;
 }
 
+/* Hide number input spinner buttons */
+.custom-location-input[type="number"]::-webkit-outer-spin-button,
+.custom-location-input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.custom-location-input[type="number"] {
+    -moz-appearance: textfield; /* Firefox */
+    appearance: textfield;
+}
+
 .custom-location-input:focus {
     outline: none;
     border-color: var(--color-primary);
-    background: var(--bg-secondary);
+    background: var(--tint-50); /* Keep light background on focus */
     box-shadow: 0 0 0 2px rgba(214, 137, 184, 0.15);
 }
 
@@ -946,6 +959,8 @@ strong, b {
     align-items: center;
     justify-content: center;
     gap: 0.4rem;
+    padding: 0.5rem 0.7rem; /* Slightly larger for icon-only button */
+    min-width: 40px; /* Ensure button is not too small */
 }
 
 .custom-location-btn--save:hover {
@@ -954,6 +969,12 @@ strong, b {
     color: var(--bg-primary);
     transform: translateY(-1px);
     box-shadow: 0 2px 8px rgba(214, 137, 184, 0.3);
+}
+
+/* When save button shows only icon (no text span) */
+.custom-location-btn--save:not(:has(span)) {
+    padding: 0.6rem;
+    aspect-ratio: 1; /* Make it square */
 }
 
 /* Cancel button - secondary action */
