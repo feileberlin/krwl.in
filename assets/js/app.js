@@ -21,7 +21,7 @@ class EventsApp {
         this.speechBubbles = new SpeechBubbles(this.config, this.storage);
         this.utils = new EventUtils(this.config);
         this.dashboardUI = new DashboardUI(this.config, this.utils);
-        this.filterDescriptionUI = new FilterDescriptionUI(this.config);
+        this.filterDescriptionUI = new FilterDescriptionUI(this.config, this.storage);
         this.eventListeners = new EventListeners(this);
         
         // App state
