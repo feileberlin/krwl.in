@@ -204,6 +204,7 @@ PYTHONPATH=$(pwd) python3 tests/test_scraper.py
 ### Full Debugging Guide
 
 For comprehensive debugging guidance, see:
+- **[Test Debugging Guide](../docs/DEBUG_TESTS.md)** - Complete guide with examples and solutions
 - [GitHub Copilot Instructions](../.github/copilot-instructions.md) - Section: "How to Debug Pre-Existing Test Failures"
 
 ## See Also

@@ -543,6 +543,8 @@ When you run tests, if you discover any failing tests:
 
 ### 🔍 How to Debug Pre-Existing Test Failures
 
+> **📘 Full Documentation:** For a comprehensive debugging guide with detailed examples and solutions, see [docs/DEBUG_TESTS.md](../docs/DEBUG_TESTS.md)
+
 When you encounter test failures (especially in CI or when focused on specific jobs), follow this systematic debugging approach:
 
 #### Step 1: Identify the Failing Tests
