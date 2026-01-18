@@ -6,12 +6,14 @@ Provides a Telegram bot interface for:
 2. Flyer uploads (OCR processing of event flyers)
 3. Contact form (messaging admins)
 
-All submissions are saved to incoming.json (formerly pending_events.json)
-for editorial review.
+All submissions are saved to pending_events.json for editorial review.
+Note: The configuration mentions "incoming.json" as the new name, but
+the actual file path is assets/json/pending_events.json.
 """
 
 import os
 import logging
+import re
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, Any, Optional, List, TYPE_CHECKING
@@ -139,7 +141,10 @@ class TelegramBot:
     
     def _save_to_incoming(self, event_data: Dict[str, Any]):
         """
-        Save event data to incoming.json.
+        Save event data to pending_events.json.
+        
+        Note: This file may be referred to as "incoming.json" in documentation,
+        but the actual file path is assets/json/pending_events.json.
         
         Args:
             event_data: Event dictionary to save
@@ -147,7 +152,7 @@ class TelegramBot:
         pending_data = load_pending_events(self.base_path)
         pending_data['pending_events'].append(event_data)
         save_pending_events(self.base_path, pending_data)
-        logger.info(f"Saved event to incoming.json: {event_data.get('title', 'Untitled')}")
+        logger.info(f"Saved event to pending_events.json: {event_data.get('title', 'Untitled')}")
     
     async def _notify_admins(self, message: str):
         """
@@ -624,7 +629,6 @@ class TelegramBot:
         title = lines[0] if lines else "Event from Flyer"
         
         # Try to extract date patterns
-        import re
         date_patterns = [
             r'\d{1,2}[./]\d{1,2}[./]\d{2,4}',
             r'\d{4}-\d{2}-\d{2}'
