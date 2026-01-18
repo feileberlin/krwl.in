@@ -15,7 +15,7 @@ This document serves as a **permanent reference** for the KRWL HOF **truly monoc
 
 **Monochromatic Design:** Every single color in the application - backgrounds, text, borders, accents, warnings, errors - derives from the ecoBarbie pink base color using HSV transformations.
 
-**Palette Size:** **Streamlined 0/50/100 system** (3 colors per category) for maximum distinction and clarity. Larger steps = more distinct colors = clearer visual hierarchy.
+**Palette Size:** **Consolidated base + 50/100 system** (2 steps per category) for maximum distinction and minimal duplication. The base color (`primary`) serves as 0% for all three categories (tints, shades, tones), eliminating redundant color definitions.
 
 > **Note:** This is a reference document only. The actual colors used in the application are defined in `config.json` under the `design.colors` section with inline color preview comments (█ blocks). To modify colors, edit `config.json` and regenerate design tokens using `python3 src/tools/generate_design_tokens.py`.
 
@@ -34,61 +34,49 @@ A **monochromatic color scheme** uses variations of a single hue by adjusting:
 
 ### Primary ecoBarbie Colors
 
+**Base color serves as 0% for all transformations (tints, shades, tones).**
+
 | Color Preview | Name | Hex | RGB | CSS Variable | Usage |
 |---------------|------|-----|-----|--------------|-------|
-| ![#D689B8](https://img.shields.io/badge/%20-%20-D689B8?style=flat-square) | **Primary** | `#D689B8` | 214, 137, 184 | `--color-primary` | Primary brand color, accents, highlights |
-| ![#E8A5C8](https://img.shields.io/badge/%20-%20-E8A5C8?style=flat-square) | **Primary Hover** | `#E8A5C8` | 232, 165, 200 | `--color-primary-hover` | Hover states for primary |
-| ![#D689B8](https://img.shields.io/badge/%20-%20-D689B8?style=flat-square) | **Success** | `#D689B8` | 214, 137, 184 | `--color-success` | Success state (uses primary) |
+| ![#D689B8](https://img.shields.io/badge/%20-%20-D689B8?style=flat-square) | **Primary (Base)** | `#D689B8` | 214, 137, 184 | `--color-primary` | Base color for all transformations, brand color |
+| ![#E8A5C8](https://img.shields.io/badge/%20-%20-E8A5C8?style=flat-square) | **Primary Hover** | `#E8A5C8` | 232, 165, 200 | `--color-primary-hover` | Interactive hover states |
+| ![#D689B8](https://img.shields.io/badge/%20-%20-D689B8?style=flat-square) | **Success** | `#D689B8` | 214, 137, 184 | `--color-success` | Success state (references primary) |
 
 ### ecoBarbie Tints (+ White) - Scientifically Generated
 
 **Usage:** Light backgrounds, hover states, subtle highlights, soft UI elements
 
-**System:** 0/50/100 - Base color, mid-point, and white for maximum distinction
+**System:** **Primary** (0%) + 50/100 - Base color as starting point, mid-point for distinction, white for maximum contrast
 
 | Color Preview | Name | Hex | RGB | CSS Variable | Lightness |
 |---------------|------|-----|-----|--------------|-----------|
-| ![#D689B8](https://img.shields.io/badge/%20-%20-D689B8?style=flat-square) | **Tint 0% (Base)** | `#D689B8` | 214, 137, 184 | `--color-tint-0` | Base ecoBarbie color |
+| ![#D689B8](https://img.shields.io/badge/%20-%20-D689B8?style=flat-square) | **(Use Primary)** | `#D689B8` | 214, 137, 184 | `--color-primary` | Base color (0% tint) |
 | ![#EAC0DA](https://img.shields.io/badge/%20-%20-EAC0DA?style=flat-square) | **Tint 50%** | `#eac0da` | 234, 192, 218 | `--color-tint-50` | Light backgrounds, hover states |
-| ![#FFFFFF](https://img.shields.io/badge/%20-%20-FFFFFF?style=flat-square) | **Tint 100%** | `#ffffff` | 255, 255, 255 | `--color-tint-100` | Pure white, maximum lightness |
-| ![#EEB2D7](https://img.shields.io/badge/%20-%20-EEB2D7?style=flat-square) | **Tint 60%** | `#eeb2d7` | 238, 178, 215 | `--color-tint-60` | Very light backgrounds |
-| ![#F6C1E2](https://img.shields.io/badge/%20-%20-F6C1E2?style=flat-square) | **Tint 80%** | `#f6c1e2` | 246, 193, 226 | `--color-tint-80` | Ultra-light highlights |
+| ![#FFFFFF](https://img.shields.io/badge/%20-%20-FFFFFF?style=flat-square) | **Tint 100%** | `#ffffff` | 255, 255, 255 | `--color-tint-100` | Pure white, maximum contrast |
 
 ### ecoBarbie Shades (+ Black) - Scientifically Generated
 
 **Usage:** Text on light backgrounds, borders, dark accents, depth, shadows
 
+**System:** **Primary** (0%) + 50/100 - Base color as starting point, mid-point for distinction, black for maximum contrast
+
 | Color Preview | Name | Hex | RGB | CSS Variable | Darkness |
 |---------------|------|-----|-----|--------------|----------|
-| ![#AB6D93](https://img.shields.io/badge/%20-%20-AB6D93?style=flat-square) | **Shade 20%** | `#ab6d93` | 171, 109, 147 | `--color-shade-20` | Medium dark |
-| ![#80526E](https://img.shields.io/badge/%20-%20-80526E?style=flat-square) | **Shade 40%** | `#80526e` | 128, 82, 110 | `--color-shade-40` | Dark accents |
-| ![#553649](https://img.shields.io/badge/%20-%20-553649?style=flat-square) | **Shade 60%** | `#553649` | 85, 54, 73 | `--color-shade-60` | Very dark backgrounds |
-| ![#2A1B24](https://img.shields.io/badge/%20-%20-2A1B24?style=flat-square) | **Shade 80%** | `#2a1b24` | 42, 27, 36 | `--color-shade-80` | Near-black backgrounds |
+| ![#D689B8](https://img.shields.io/badge/%20-%20-D689B8?style=flat-square) | **(Use Primary)** | `#D689B8` | 214, 137, 184 | `--color-primary` | Base color (0% shade) |
+| ![#6B445C](https://img.shields.io/badge/%20-%20-6B445C?style=flat-square) | **Shade 50%** | `#6b445c` | 107, 68, 92 | `--color-shade-50` | Dark accents, borders, text |
+| ![#000000](https://img.shields.io/badge/%20-%20-000000?style=flat-square) | **Shade 100%** | `#000000` | 0, 0, 0 | `--color-shade-100` | Pure black, maximum contrast |
 
 ### ecoBarbie Tones (+ Grey) - Scientifically Generated
 
 **Usage:** Subtle accents, disabled states, secondary elements, soft UI, muted effects
 
+**System:** **Primary** (0%) + 50/100 - Base color as starting point, mid-point for distinction, grey for maximum desaturation
+
 | Color Preview | Name | Hex | RGB | CSS Variable | Saturation |
 |---------------|------|-----|-----|--------------|------------|
-| ![#D698BE](https://img.shields.io/badge/%20-%20-D698BE?style=flat-square) | **Tone 20%** | `#d698be` | 214, 152, 190 | `--color-tone-20` | Slightly desaturated |
-| ![#D6A7C4](https://img.shields.io/badge/%20-%20-D6A7C4?style=flat-square) | **Tone 40%** | `#d6a7c4` | 214, 167, 196 | `--color-tone-40` | Moderate desaturation |
-| ![#D6B7CA](https://img.shields.io/badge/%20-%20-D6B7CA?style=flat-square) | **Tone 60%** | `#d6b7ca` | 214, 183, 202 | `--color-tone-60` | Soft neutral |
-| ![#D6C6D0](https://img.shields.io/badge/%20-%20-D6C6D0?style=flat-square) | **Tone 80%** | `#d6c6d0` | 214, 198, 208 | `--color-tone-80` | Very soft neutral |
-
-### Legacy Colors (Backward Compatibility)
-
-| Color Preview | Name | Hex | RGB | CSS Variable | Notes |
-|---------------|------|-----|-----|--------------|-------|
-| ![#FFB3DF](https://img.shields.io/badge/%20-%20-FFB3DF?style=flat-square) | **Medium Tint** | `#FFB3DF` | 255, 179, 223 | `--color-medium-tint` | Legacy bright tint |
-| ![#D689B8](https://img.shields.io/badge/%20-%20-D689B8?style=flat-square) | **Light Tone** | `#D689B8` | 214, 137, 184 | `--color-light-tone` | Duplicate of primary |
-| ![#B05F8E](https://img.shields.io/badge/%20-%20-B05F8E?style=flat-square) | **Medium Tone** | `#B05F8E` | 176, 95, 142 | `--color-medium-tone` | Similar to shade_20 |
-| ![#8A4A70](https://img.shields.io/badge/%20-%20-8A4A70?style=flat-square) | **Dark Tone** | `#8A4A70` | 138, 74, 112 | `--color-dark-tone` | Similar to shade_40 |
-| ![#BF5087](https://img.shields.io/badge/%20-%20-BF5087?style=flat-square) | **Light Shade** | `#BF5087` | 191, 80, 135 | `--color-light-shade` | Consider removing |
-
-### Neutral Greys & Blacks
-
-**Note:** In a true monochromatic design, there are NO neutral greys. All dark/light colors derive from ecoBarbie.
+| ![#D689B8](https://img.shields.io/badge/%20-%20-D689B8?style=flat-square) | **(Use Primary)** | `#D689B8` | 214, 137, 184 | `--color-primary` | Base color (0% desaturation) |
+| ![#D6AFC7](https://img.shields.io/badge/%20-%20-D6AFC7?style=flat-square) | **Tone 50%** | `#d6afc7` | 214, 175, 199 | `--color-tone-50` | Disabled states, secondary text |
+| ![#D6D6D6](https://img.shields.io/badge/%20-%20-D6D6D6?style=flat-square) | **Tone 100%** | `#d6d6d6` | 214, 214, 214 | `--color-tone-100` | Neutral grey, fully desaturated |
 
 ### Background Colors (Very Dark Shades)
 
