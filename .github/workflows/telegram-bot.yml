@@ -103,7 +103,7 @@ jobs:
           
           # Run bot with timeout
           # The bot will run for specified duration then exit gracefully
-          timeout --signal=SIGINT ${DURATION}m python3 -m src.modules.telegram_bot || {
+          timeout --signal=SIGINT ${DURATION}m python3 src/event_manager.py telegram-bot || {
             EXIT_CODE=$?
             if [ $EXIT_CODE -eq 124 ]; then
               echo "✅ Bot stopped after ${DURATION} minutes (normal timeout)"
