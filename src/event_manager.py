@@ -260,6 +260,27 @@ COMMANDS:
     
     config validate           Validate configuration file
     
+    locations list            List all locations in library
+    locations list --verified List only verified locations
+    locations add             Add new location to library
+    locations update ID       Update location by ID
+    locations delete ID       Delete location by ID
+    locations verify ID       Mark location as verified
+    locations search QUERY    Search locations by name
+    locations merge SRC TGT   Merge source location into target
+    locations stats           Show location usage statistics
+    
+    organizers list           List all organizers in library
+    organizers list --verified List only verified organizers
+    organizers add            Add new organizer to library
+    organizers verify ID      Mark organizer as verified
+    organizers search QUERY   Search organizers by name
+    organizers stats          Show organizer usage statistics
+    
+    analyze-entities          Analyze entity reference coverage in events
+    resolve-entities          Resolve entity references in events
+    resolve-entities --output FILE  Save resolved events to file
+    
     test                      Run all tests
     test --list               List available test categories and tests
     test core                 Run core functionality tests
@@ -372,6 +393,21 @@ EXAMPLES:
     
     # Get help
     python3 event_manager.py --help
+    
+    # Entity Management Commands
+    python3 event_manager.py locations list
+    python3 event_manager.py locations add --name "Theater Hof" --lat 50.3200 --lon 11.9180 --address "Kulmbacher Str., 95030 Hof" --verified
+    python3 event_manager.py locations search "Theater"
+    python3 event_manager.py locations verify loc_theater_hof
+    python3 event_manager.py locations stats
+    
+    python3 event_manager.py organizers list
+    python3 event_manager.py organizers add --name "Theater Hof" --website "https://theater-hof.de" --verified
+    python3 event_manager.py organizers search "Theater"
+    python3 event_manager.py organizers stats
+    
+    python3 event_manager.py analyze-entities
+    python3 event_manager.py resolve-entities --output resolved_events.json
 
 WILDCARD PATTERNS:
     Bulk operations support Unix-style wildcards:
@@ -1925,6 +1961,23 @@ def _execute_command(args, base_path, config):
             print(f"Error: Unknown config subcommand '{subcommand}'")
             return 1
     
+    # Entity Management Commands
+    if command == 'locations':
+        # Location management subcommands
+        return _execute_locations_command(args, base_path)
+    
+    if command == 'organizers':
+        # Organizer management subcommands
+        return _execute_organizers_command(args, base_path)
+    
+    if command == 'analyze-entities':
+        # Analyze entity coverage in events
+        return cli_analyze_entities(base_path)
+    
+    if command == 'resolve-entities':
+        # Resolve entity references in events
+        return cli_resolve_entities(base_path, args)
+    
     if command is None:
         # No command - launch interactive TUI
         app = EventManagerTUI()
@@ -1963,6 +2016,482 @@ def _execute_dependencies_command(args, base_path):
     print(f"Error: Unknown dependencies subcommand '{subcommand}'")
     print("Usage: python3 event_manager.py dependencies [fetch|check]")
     return 1
+
+
+def _execute_locations_command(args, base_path):
+    """
+    Execute locations management subcommand.
+    
+    Handles all location-related CLI operations: list, add, edit, verify, search, merge, stats.
+    
+    Args:
+        args: Parsed command line arguments
+        base_path: Repository root path
+        
+    Returns:
+        Exit code (0 for success, 1 for error)
+    """
+    from modules.location_manager import LocationManager
+    
+    if not args.args:
+        print("Error: Missing locations subcommand")
+        print("Usage: python3 event_manager.py locations [list|add|update|delete|verify|search|merge|stats]")
+        return 1
+    
+    manager = LocationManager(base_path)
+    subcommand = args.args[0]
+    
+    if subcommand == 'list':
+        # List all locations
+        verified_only = '--verified' in args.args
+        locations = manager.list(verified_only=verified_only)
+        
+        if not locations:
+            print("No locations found.")
+            return 0
+        
+        print(f"\n📍 Locations ({len(locations)} total):")
+        print("=" * 80)
+        for loc in locations:
+            status = "✓" if loc.verified else "○"
+            print(f"{status} {loc.name} (ID: {loc.id})")
+            print(f"   Coordinates: ({loc.lat}, {loc.lon})")
+            if loc.address:
+                print(f"   Address: {loc.address}")
+            if loc.usage_count > 0:
+                print(f"   Used by {loc.usage_count} events")
+            print()
+        
+        return 0
+    
+    if subcommand == 'add':
+        # Add new location
+        # Parse arguments: --name NAME --lat LAT --lon LON [--address ADDR] [--verified]
+        try:
+            name_idx = args.args.index('--name') + 1
+            name = args.args[name_idx]
+            
+            lat_idx = args.args.index('--lat') + 1
+            lat = float(args.args[lat_idx])
+            
+            lon_idx = args.args.index('--lon') + 1
+            lon = float(args.args[lon_idx])
+            
+            address = None
+            if '--address' in args.args:
+                address_idx = args.args.index('--address') + 1
+                address = args.args[address_idx]
+            
+            verified = '--verified' in args.args
+            
+            location = manager.add(name, lat, lon, address=address, verified=verified)
+            print(f"\n✅ Added location: {location.name}")
+            print(f"   ID: {location.id}")
+            print(f"   Coordinates: ({location.lat}, {location.lon})")
+            if location.address:
+                print(f"   Address: {location.address}")
+            print(f"   Verified: {'Yes' if location.verified else 'No'}")
+            
+            return 0
+        except (ValueError, IndexError) as e:
+            print(f"Error: {e}")
+            print("\nUsage: python3 event_manager.py locations add --name NAME --lat LAT --lon LON [--address ADDR] [--verified]")
+            print("\nExample:")
+            print("  python3 event_manager.py locations add --name 'Theater Hof' --lat 50.3200 --lon 11.9180 --address 'Kulmbacher Str., 95030 Hof' --verified")
+            return 1
+    
+    if subcommand == 'update':
+        # Update existing location
+        if len(args.args) < 2:
+            print("Error: Missing location ID")
+            print("Usage: python3 event_manager.py locations update LOCATION_ID [--name NAME] [--lat LAT] [--lon LON] [--address ADDR]")
+            return 1
+        
+        location_id = args.args[1]
+        kwargs = {}
+        
+        # Parse update arguments
+        if '--name' in args.args:
+            kwargs['name'] = args.args[args.args.index('--name') + 1]
+        if '--lat' in args.args:
+            kwargs['lat'] = float(args.args[args.args.index('--lat') + 1])
+        if '--lon' in args.args:
+            kwargs['lon'] = float(args.args[args.args.index('--lon') + 1])
+        if '--address' in args.args:
+            kwargs['address'] = args.args[args.args.index('--address') + 1]
+        
+        if not kwargs:
+            print("Error: No fields to update")
+            return 1
+        
+        try:
+            location = manager.update(location_id, **kwargs)
+            print(f"\n✅ Updated location: {location.name} (ID: {location_id})")
+            return 0
+        except KeyError:
+            print(f"Error: Location {location_id} not found")
+            return 1
+    
+    if subcommand == 'delete':
+        # Delete location
+        if len(args.args) < 2:
+            print("Error: Missing location ID")
+            print("Usage: python3 event_manager.py locations delete LOCATION_ID")
+            return 1
+        
+        location_id = args.args[1]
+        if manager.delete(location_id):
+            print(f"\n✅ Deleted location: {location_id}")
+            return 0
+        else:
+            print(f"Error: Location {location_id} not found")
+            return 1
+    
+    if subcommand == 'verify':
+        # Verify location
+        if len(args.args) < 2:
+            print("Error: Missing location ID")
+            print("Usage: python3 event_manager.py locations verify LOCATION_ID")
+            return 1
+        
+        location_id = args.args[1]
+        if manager.verify(location_id):
+            print(f"\n✅ Verified location: {location_id}")
+            return 0
+        else:
+            print(f"Error: Location {location_id} not found")
+            return 1
+    
+    if subcommand == 'search':
+        # Search locations
+        if len(args.args) < 2:
+            print("Error: Missing search query")
+            print("Usage: python3 event_manager.py locations search QUERY")
+            return 1
+        
+        query = ' '.join(args.args[1:])
+        results = manager.search(query)
+        
+        if not results:
+            print(f"\n❌ No locations found matching '{query}'")
+            return 0
+        
+        print(f"\n🔍 Search results for '{query}' ({len(results)} found):")
+        print("=" * 80)
+        for loc in results:
+            status = "✓" if loc.verified else "○"
+            print(f"{status} {loc.name} (ID: {loc.id})")
+            print(f"   Coordinates: ({loc.lat}, {loc.lon})")
+            if loc.address:
+                print(f"   Address: {loc.address}")
+            print()
+        
+        return 0
+    
+    if subcommand == 'merge':
+        # Merge two locations
+        if len(args.args) < 3:
+            print("Error: Missing source and/or target location IDs")
+            print("Usage: python3 event_manager.py locations merge SOURCE_ID TARGET_ID")
+            return 1
+        
+        source_id = args.args[1]
+        target_id = args.args[2]
+        
+        if manager.merge_locations(source_id, target_id):
+            print(f"\n✅ Merged {source_id} into {target_id}")
+            return 0
+        else:
+            print(f"Error: Failed to merge locations")
+            return 1
+    
+    if subcommand == 'stats':
+        # Show statistics
+        stats = manager.get_statistics()
+        
+        print("\n📊 Location Statistics:")
+        print("=" * 80)
+        print(f"Total locations: {stats['total_locations']}")
+        print(f"Verified: {stats['verified_locations']}")
+        print(f"Unverified: {stats['unverified_locations']}")
+        print(f"With address: {stats['locations_with_address']}")
+        print(f"With phone: {stats['locations_with_phone']}")
+        print(f"With website: {stats['locations_with_website']}")
+        
+        if stats['most_used_locations']:
+            print("\n🔥 Most used locations:")
+            for i, loc_info in enumerate(stats['most_used_locations'], 1):
+                if loc_info['usage_count'] > 0:
+                    print(f"  {i}. {loc_info['name']} ({loc_info['usage_count']} events)")
+        
+        return 0
+    
+    print(f"Error: Unknown locations subcommand '{subcommand}'")
+    print("Usage: python3 event_manager.py locations [list|add|update|delete|verify|search|merge|stats]")
+    return 1
+
+
+def _execute_organizers_command(args, base_path):
+    """
+    Execute organizers management subcommand.
+    
+    Handles all organizer-related CLI operations: list, add, edit, verify, search, merge, stats.
+    
+    Args:
+        args: Parsed command line arguments
+        base_path: Repository root path
+        
+    Returns:
+        Exit code (0 for success, 1 for error)
+    """
+    from modules.organizer_manager import OrganizerManager
+    
+    if not args.args:
+        print("Error: Missing organizers subcommand")
+        print("Usage: python3 event_manager.py organizers [list|add|update|delete|verify|search|merge|stats]")
+        return 1
+    
+    manager = OrganizerManager(base_path)
+    subcommand = args.args[0]
+    
+    if subcommand == 'list':
+        # List all organizers
+        verified_only = '--verified' in args.args
+        organizers = manager.list(verified_only=verified_only)
+        
+        if not organizers:
+            print("No organizers found.")
+            return 0
+        
+        print(f"\n👥 Organizers ({len(organizers)} total):")
+        print("=" * 80)
+        for org in organizers:
+            status = "✓" if org.verified else "○"
+            print(f"{status} {org.name} (ID: {org.id})")
+            if org.website:
+                print(f"   Website: {org.website}")
+            if org.email:
+                print(f"   Email: {org.email}")
+            if org.usage_count > 0:
+                print(f"   Used by {org.usage_count} events")
+            print()
+        
+        return 0
+    
+    if subcommand == 'add':
+        # Add new organizer
+        # Parse arguments: --name NAME [--email EMAIL] [--phone PHONE] [--website URL] [--verified]
+        try:
+            name_idx = args.args.index('--name') + 1
+            name = args.args[name_idx]
+            
+            kwargs = {}
+            if '--email' in args.args:
+                kwargs['email'] = args.args[args.args.index('--email') + 1]
+            if '--phone' in args.args:
+                kwargs['phone'] = args.args[args.args.index('--phone') + 1]
+            if '--website' in args.args:
+                kwargs['website'] = args.args[args.args.index('--website') + 1]
+            
+            verified = '--verified' in args.args
+            
+            organizer = manager.add(name, verified=verified, **kwargs)
+            print(f"\n✅ Added organizer: {organizer.name}")
+            print(f"   ID: {organizer.id}")
+            if organizer.website:
+                print(f"   Website: {organizer.website}")
+            if organizer.email:
+                print(f"   Email: {organizer.email}")
+            print(f"   Verified: {'Yes' if organizer.verified else 'No'}")
+            
+            return 0
+        except (ValueError, IndexError) as e:
+            print(f"Error: {e}")
+            print("\nUsage: python3 event_manager.py organizers add --name NAME [--email EMAIL] [--phone PHONE] [--website URL] [--verified]")
+            print("\nExample:")
+            print("  python3 event_manager.py organizers add --name 'Theater Hof' --website 'https://theater-hof.de' --verified")
+            return 1
+    
+    if subcommand == 'verify':
+        # Verify organizer
+        if len(args.args) < 2:
+            print("Error: Missing organizer ID")
+            print("Usage: python3 event_manager.py organizers verify ORGANIZER_ID")
+            return 1
+        
+        organizer_id = args.args[1]
+        if manager.verify(organizer_id):
+            print(f"\n✅ Verified organizer: {organizer_id}")
+            return 0
+        else:
+            print(f"Error: Organizer {organizer_id} not found")
+            return 1
+    
+    if subcommand == 'search':
+        # Search organizers
+        if len(args.args) < 2:
+            print("Error: Missing search query")
+            print("Usage: python3 event_manager.py organizers search QUERY")
+            return 1
+        
+        query = ' '.join(args.args[1:])
+        results = manager.search(query)
+        
+        if not results:
+            print(f"\n❌ No organizers found matching '{query}'")
+            return 0
+        
+        print(f"\n🔍 Search results for '{query}' ({len(results)} found):")
+        print("=" * 80)
+        for org in results:
+            status = "✓" if org.verified else "○"
+            print(f"{status} {org.name} (ID: {org.id})")
+            if org.website:
+                print(f"   Website: {org.website}")
+            print()
+        
+        return 0
+    
+    if subcommand == 'stats':
+        # Show statistics
+        stats = manager.get_statistics()
+        
+        print("\n📊 Organizer Statistics:")
+        print("=" * 80)
+        print(f"Total organizers: {stats['total_organizers']}")
+        print(f"Verified: {stats['verified_organizers']}")
+        print(f"Unverified: {stats['unverified_organizers']}")
+        print(f"With email: {stats['organizers_with_email']}")
+        print(f"With phone: {stats['organizers_with_phone']}")
+        print(f"With website: {stats['organizers_with_website']}")
+        
+        if stats['most_used_organizers']:
+            print("\n🔥 Most used organizers:")
+            for i, org_info in enumerate(stats['most_used_organizers'], 1):
+                if org_info['usage_count'] > 0:
+                    print(f"  {i}. {org_info['name']} ({org_info['usage_count']} events)")
+        
+        return 0
+    
+    print(f"Error: Unknown organizers subcommand '{subcommand}'")
+    print("Usage: python3 event_manager.py organizers [list|add|verify|search|stats]")
+    return 1
+
+
+def cli_analyze_entities(base_path):
+    """
+    Analyze entity coverage in events.
+    
+    Shows statistics on how events use the entity reference system.
+    
+    Args:
+        base_path: Repository root path
+        
+    Returns:
+        Exit code (0 for success, 1 for error)
+    """
+    from modules.entity_resolver import EntityResolver
+    
+    # Load events
+    events_data = load_events(base_path)
+    events = events_data.get('events', [])
+    
+    pending_data = load_pending_events(base_path)
+    pending = pending_data.get('pending_events', [])
+    
+    all_events = events + pending
+    
+    if not all_events:
+        print("No events found to analyze.")
+        return 0
+    
+    # Analyze coverage
+    resolver = EntityResolver(base_path)
+    stats = resolver.analyze_entity_coverage(all_events)
+    
+    print("\n📊 Entity Coverage Analysis:")
+    print("=" * 80)
+    print(f"Total events: {stats['total_events']}")
+    print()
+    
+    print("📍 Location Usage:")
+    print(f"  • Tier 1 (Reference only): {stats['locations']['tier_1_reference']}")
+    print(f"  • Tier 2 (Partial override): {stats['locations']['tier_2_override']}")
+    print(f"  • Tier 3 (Full embedded): {stats['locations']['tier_3_embedded']}")
+    print(f"  • No location: {stats['locations']['no_location']}")
+    
+    if stats['locations'].get('most_used'):
+        print("\n  🔥 Most used locations:")
+        for loc_id, count in stats['locations']['most_used'][:5]:
+            print(f"     - {loc_id}: {count} events")
+    
+    print()
+    print("👥 Organizer Usage:")
+    print(f"  • Tier 1 (Reference only): {stats['organizers']['tier_1_reference']}")
+    print(f"  • Tier 2 (Partial override): {stats['organizers']['tier_2_override']}")
+    print(f"  • Tier 3 (Full embedded): {stats['organizers']['tier_3_embedded']}")
+    print(f"  • No organizer: {stats['organizers']['no_organizer']}")
+    
+    if stats['organizers'].get('most_used'):
+        print("\n  🔥 Most used organizers:")
+        for org_id, count in stats['organizers']['most_used'][:5]:
+            print(f"     - {org_id}: {count} events")
+    
+    return 0
+
+
+def cli_resolve_entities(base_path, args):
+    """
+    Resolve entity references in events and optionally save to file.
+    
+    Args:
+        base_path: Repository root path
+        args: Command arguments
+        
+    Returns:
+        Exit code (0 for success, 1 for error)
+    """
+    from modules.entity_resolver import EntityResolver
+    
+    # Load events
+    events_data = load_events(base_path)
+    events = events_data.get('events', [])
+    
+    if not events:
+        print("No events found to resolve.")
+        return 0
+    
+    # Resolve entities
+    resolver = EntityResolver(base_path)
+    resolved_events = resolver.resolve_events(events)
+    
+    # Check for output file
+    output_file = None
+    if '--output' in args.args:
+        output_idx = args.args.index('--output') + 1
+        if output_idx < len(args.args):
+            output_file = Path(base_path) / args.args[output_idx]
+    
+    if output_file:
+        # Save to file
+        import json
+        output_data = {
+            'events': resolved_events,
+            'resolved_at': datetime.now().isoformat(),
+            'total_count': len(resolved_events)
+        }
+        
+        with open(output_file, 'w', encoding='utf-8') as f:
+            json.dump(output_data, f, indent=2, ensure_ascii=False)
+        
+        print(f"\n✅ Resolved {len(resolved_events)} events")
+        print(f"   Saved to: {output_file}")
+    else:
+        # Print summary
+        print(f"\n✅ Resolved {len(resolved_events)} events")
+        print("\nUse --output FILE to save resolved events to a file")
+    
+    return 0
 
 
 def main():
