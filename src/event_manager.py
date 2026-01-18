@@ -49,6 +49,23 @@ except ImportError as e:
     ConfigValidator = None
     IconModeTUI = None
 
+# Import entity management modules
+try:
+    from modules.entity_operations import EntityOperations, EntityOperationsCLI
+    from modules.locations import LocationManager, LocationTUI, LocationCLI
+    from modules.organizers import OrganizerManager, OrganizerTUI, OrganizerCLI
+except ImportError as e:
+    print(f"Warning: Failed to import entity modules: {e}")
+    # Graceful degradation
+    EntityOperations = None
+    EntityOperationsCLI = None
+    LocationManager = None
+    LocationTUI = None
+    LocationCLI = None
+    OrganizerManager = None
+    OrganizerTUI = None
+    OrganizerCLI = None
+
 
 class EventManagerTUI:
     """Main TUI class for event management"""
@@ -259,6 +276,30 @@ COMMANDS:
     icons compare             Compare icon modes
     
     config validate           Validate configuration file
+    
+    entities add-references   Add location_id and organizer_id to all events
+    entities add-references --dry-run  Preview changes without applying
+    entities track-overrides  Track override patterns across events
+    entities validate         Validate all entity references
+    entities migrate          Extract entities to libraries (one-time)
+    
+    locations                 Launch interactive location management TUI
+    locations list            List all locations
+    locations add --name NAME --lat LAT --lon LON [--address ADDR]
+                              Add new location
+    locations verify LOCATION_ID  Mark location as verified
+    locations search QUERY    Search locations by name or address
+    locations merge SOURCE_ID TARGET_ID  Merge two locations
+    locations stats           Show location statistics
+    
+    organizers                Launch interactive organizer management TUI
+    organizers list           List all organizers
+    organizers add --name NAME [--website URL] [--email EMAIL]
+                              Add new organizer
+    organizers verify ORGANIZER_ID  Mark organizer as verified
+    organizers search QUERY   Search organizers by name
+    organizers merge SOURCE_ID TARGET_ID  Merge two organizers
+    organizers stats          Show organizer statistics
     
     test                      Run all tests
     test --list               List available test categories and tests
@@ -1924,6 +1965,156 @@ def _execute_command(args, base_path, config):
         else:
             print(f"Error: Unknown config subcommand '{subcommand}'")
             return 1
+    
+    # Entity management commands
+    if command == 'entities':
+        if EntityOperationsCLI is None:
+            print("Error: Entity modules not available")
+            return 1
+        
+        if not args.args:
+            print("Error: Missing entities subcommand")
+            print("Usage: python3 event_manager.py entities [add-references|track-overrides|validate|migrate]")
+            return 1
+        
+        # Create a pseudo-args object for the CLI handler
+        class EntityArgs:
+            def __init__(self, subcommand, remaining_args):
+                self.entity_command = subcommand
+                # Parse flags from remaining args
+                self.dry_run = '--dry-run' in remaining_args
+                self.force = '--force' in remaining_args
+                self.format = 'json' if '--format' in remaining_args and 'json' in remaining_args else 'text'
+        
+        entity_args = EntityArgs(args.args[0], args.args[1:] if len(args.args) > 1 else [])
+        cli = EntityOperationsCLI(base_path)
+        return cli.handle_command(entity_args)
+    
+    if command == 'locations':
+        if LocationCLI is None:
+            print("Error: Location modules not available")
+            return 1
+        
+        if not args.args:
+            # Launch interactive TUI
+            if LocationTUI:
+                tui = LocationTUI(base_path)
+                tui.run()
+                return 0
+            else:
+                print("Error: Missing locations subcommand")
+                print("Usage: python3 event_manager.py locations [list|add|edit|verify|search|merge|stats]")
+                return 1
+        
+        # Parse location CLI arguments
+        class LocationArgs:
+            def __init__(self, subcommand, remaining_args):
+                self.location_command = subcommand
+                # Parse based on subcommand
+                if subcommand == 'list':
+                    self.verified_only = '--verified-only' in remaining_args
+                    self.format = 'json' if '--format' in remaining_args and 'json' in remaining_args else 'text'
+                elif subcommand == 'add':
+                    # Parse --name, --lat, --lon, --address
+                    self.name = None
+                    self.lat = None
+                    self.lon = None
+                    self.address = None
+                    i = 0
+                    while i < len(remaining_args):
+                        if remaining_args[i] == '--name' and i + 1 < len(remaining_args):
+                            self.name = remaining_args[i + 1]
+                            i += 2
+                        elif remaining_args[i] == '--lat' and i + 1 < len(remaining_args):
+                            self.lat = float(remaining_args[i + 1])
+                            i += 2
+                        elif remaining_args[i] == '--lon' and i + 1 < len(remaining_args):
+                            self.lon = float(remaining_args[i + 1])
+                            i += 2
+                        elif remaining_args[i] == '--address' and i + 1 < len(remaining_args):
+                            self.address = remaining_args[i + 1]
+                            i += 2
+                        else:
+                            i += 1
+                elif subcommand in ['verify', 'edit']:
+                    self.location_id = remaining_args[0] if remaining_args else None
+                    self.verified_by = None
+                    if '--verified-by' in remaining_args:
+                        idx = remaining_args.index('--verified-by')
+                        if idx + 1 < len(remaining_args):
+                            self.verified_by = remaining_args[idx + 1]
+                elif subcommand == 'search':
+                    self.query = remaining_args[0] if remaining_args else None
+                elif subcommand == 'merge':
+                    self.source_id = remaining_args[0] if len(remaining_args) > 0 else None
+                    self.target_id = remaining_args[1] if len(remaining_args) > 1 else None
+        
+        location_args = LocationArgs(args.args[0], args.args[1:] if len(args.args) > 1 else [])
+        cli = LocationCLI(base_path)
+        return cli.handle_command(location_args)
+    
+    if command == 'organizers':
+        if OrganizerCLI is None:
+            print("Error: Organizer modules not available")
+            return 1
+        
+        if not args.args:
+            # Launch interactive TUI
+            if OrganizerTUI:
+                tui = OrganizerTUI(base_path)
+                tui.run()
+                return 0
+            else:
+                print("Error: Missing organizers subcommand")
+                print("Usage: python3 event_manager.py organizers [list|add|edit|verify|search|merge|stats]")
+                return 1
+        
+        # Parse organizer CLI arguments
+        class OrganizerArgs:
+            def __init__(self, subcommand, remaining_args):
+                self.organizer_command = subcommand
+                # Parse based on subcommand
+                if subcommand == 'list':
+                    self.verified_only = '--verified-only' in remaining_args
+                    self.format = 'json' if '--format' in remaining_args and 'json' in remaining_args else 'text'
+                elif subcommand == 'add':
+                    # Parse --name, --website, --email, --phone
+                    self.name = None
+                    self.website = None
+                    self.email = None
+                    self.phone = None
+                    i = 0
+                    while i < len(remaining_args):
+                        if remaining_args[i] == '--name' and i + 1 < len(remaining_args):
+                            self.name = remaining_args[i + 1]
+                            i += 2
+                        elif remaining_args[i] == '--website' and i + 1 < len(remaining_args):
+                            self.website = remaining_args[i + 1]
+                            i += 2
+                        elif remaining_args[i] == '--email' and i + 1 < len(remaining_args):
+                            self.email = remaining_args[i + 1]
+                            i += 2
+                        elif remaining_args[i] == '--phone' and i + 1 < len(remaining_args):
+                            self.phone = remaining_args[i + 1]
+                            i += 2
+                        else:
+                            i += 1
+                elif subcommand in ['verify', 'edit']:
+                    self.organizer_id = remaining_args[0] if remaining_args else None
+                    self.verified_by = None
+                    if '--verified-by' in remaining_args:
+                        idx = remaining_args.index('--verified-by')
+                        if idx + 1 < len(remaining_args):
+                            self.verified_by = remaining_args[idx + 1]
+                elif subcommand == 'search':
+                    self.query = remaining_args[0] if remaining_args else None
+                elif subcommand == 'merge':
+                    self.source_id = remaining_args[0] if len(remaining_args) > 0 else None
+                    self.target_id = remaining_args[1] if len(remaining_args) > 1 else None
+        
+        organizer_args = OrganizerArgs(args.args[0], args.args[1:] if len(args.args) > 1 else [])
+        cli = OrganizerCLI(base_path)
+        return cli.handle_command(organizer_args)
     
     if command is None:
         # No command - launch interactive TUI

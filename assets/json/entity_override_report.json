@@ -1,0 +1,49 @@
+{
+  "total_events": 5,
+  "location_patterns": {
+    "reference_only": 0,
+    "partial_override": 0,
+    "full_override": 5,
+    "needs_migration": 0
+  },
+  "organizer_patterns": {
+    "reference_only": 5,
+    "partial_override": 0,
+    "full_override": 0,
+    "needs_migration": 0
+  },
+  "partial_overrides": [],
+  "full_overrides": [
+    {
+      "event_id": "html_frankenpost_-3959068800383208116",
+      "title": "Kunst in Bayreuth - Werke der 1940er bis 1960er Jahre - aus den Sammlungen und Stiftungen im Kunstmuseum",
+      "entity_type": "location",
+      "embedded": "Kunstmuseum Bayreuth"
+    },
+    {
+      "event_id": "html_frankenpost_4878466979842611893",
+      "title": "Ausstellung zum Fotowettbewerb: Zeig mir deine Lebenswerte Stadt (bis 7. Januar 2026)",
+      "entity_type": "location",
+      "embedded": "RW21 Volkshochschule Bayreuth"
+    },
+    {
+      "event_id": "html_frankenpost_6710371282043762830",
+      "title": "Führung durch die Wohnräume der Sommerresidenz der Markgräfin Caroline",
+      "entity_type": "location",
+      "embedded": "Schloss Carolinenruhe"
+    },
+    {
+      "event_id": "test_event_001",
+      "title": "Test Community Gathering",
+      "entity_type": "location",
+      "embedded": "Test Venue Berlin"
+    },
+    {
+      "event_id": "test_kiss_123",
+      "title": "KISS Test Event",
+      "entity_type": "location",
+      "embedded": "Test Venue"
+    }
+  ],
+  "needs_migration": []
+}
