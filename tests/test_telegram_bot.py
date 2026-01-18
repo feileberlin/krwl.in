@@ -122,6 +122,37 @@ def test_helper_methods():
         return True
 
 
+def test_cli_uses_asyncio_run_directly():
+    """Test that CLI command uses asyncio.run() directly, not start_sync()."""
+    import inspect
+    
+    # Import the CLI function
+    from src.event_manager import cli_telegram_bot
+    
+    # Get the source code of the function
+    source = inspect.getsource(cli_telegram_bot)
+    
+    # Verify it uses asyncio.run() directly
+    if 'asyncio.run(bot.run())' in source:
+        print("✅ CLI command uses asyncio.run() directly")
+        print("   This avoids nested event loop conflicts in GitHub Actions")
+        has_direct_call = True
+    else:
+        print("❌ CLI command doesn't use asyncio.run() directly")
+        has_direct_call = False
+    
+    # Verify it doesn't use the problematic start_sync() method
+    if 'bot.start_sync()' not in source:
+        print("✅ CLI command doesn't use deprecated start_sync() method")
+        no_start_sync = True
+    else:
+        print("❌ CLI command still uses start_sync() method")
+        print("   This causes 'RuntimeError: This event loop is already running' in GitHub Actions")
+        no_start_sync = False
+    
+    return has_direct_call and no_start_sync
+
+
 def main():
     """Run all tests."""
     print("=" * 60)
@@ -133,6 +164,7 @@ def main():
         ("Telegram Availability", test_telegram_availability),
         ("Bot Instantiation", test_bot_instantiation_requires_library),
         ("Helper Methods", test_helper_methods),
+        ("CLI Event Loop Fix", test_cli_uses_asyncio_run_directly),
     ]
     
     results = []
