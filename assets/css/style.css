@@ -756,11 +756,30 @@ strong, b {
     font-family: var(--font-family-mono);
 }
 
+/* Clickable coordinates for inline editing */
+.custom-location-coords--clickable {
+    cursor: pointer;
+    padding: 0.4rem 0.6rem;
+    border-radius: var(--radius-small);
+    transition: all 0.2s;
+    background: var(--bg-secondary);
+    border: 1px solid transparent;
+}
+
+.custom-location-coords--clickable:hover {
+    background: var(--bg-tertiary);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.custom-location-coords--clickable:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 2px rgba(214, 137, 184, 0.15);
+}
+
 .custom-location-actions {
-    display: flex;
-    gap: 0.4rem;
-    flex-shrink: 0; /* Prevent buttons from shrinking */
-    margin-right: 0.5rem; /* Add spacing after buttons */
+    display: none; /* Hide Edit buttons - edit mode is activated by clicking coordinates */
 }
 
 .custom-location-btn {

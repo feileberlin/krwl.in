@@ -117,7 +117,7 @@ class DashboardUI {
                                 <span class="location-name-text">${loc.name}</span>
                             </div>
                         </div>
-                        <div class="custom-location-coords">${loc.lat.toFixed(4)}°, ${loc.lon.toFixed(4)}°</div>
+                        <div class="custom-location-coords custom-location-coords--clickable" data-location-id="${loc.id}" tabindex="0" role="button" aria-label="Click to edit coordinates">${loc.lat.toFixed(4)}°, ${loc.lon.toFixed(4)}°</div>
                     </div>
                     
                     <!-- Edit State (hidden by default) -->
@@ -135,25 +135,23 @@ class DashboardUI {
                             <div class="form-row">
                                 <div class="form-group">
                                     <label for="edit-lat-${loc.id}">Latitude</label>
-                                    <input type="number" 
+                                    <input type="text" 
                                            id="edit-lat-${loc.id}" 
-                                           class="custom-location-input" 
-                                           value="${loc.lat}" 
-                                           step="0.0001"
-                                           min="-90"
-                                           max="90"
-                                           placeholder="Latitude">
+                                           class="custom-location-input custom-location-input--coordinate" 
+                                           value="${loc.lat.toFixed(4)}" 
+                                           placeholder="Latitude"
+                                           pattern="^-?\\d+\\.\\d{4}$"
+                                           data-type="latitude">
                                 </div>
                                 <div class="form-group">
                                     <label for="edit-lon-${loc.id}">Longitude</label>
-                                    <input type="number" 
+                                    <input type="text" 
                                            id="edit-lon-${loc.id}" 
-                                           class="custom-location-input" 
-                                           value="${loc.lon}" 
-                                           step="0.0001"
-                                           min="-180"
-                                           max="180"
-                                           placeholder="Longitude">
+                                           class="custom-location-input custom-location-input--coordinate" 
+                                           value="${loc.lon.toFixed(4)}" 
+                                           placeholder="Longitude"
+                                           pattern="^-?\\d+\\.\\d{4}$"
+                                           data-type="longitude">
                                 </div>
                                 <div class="form-group" style="display: flex; gap: 0.3rem;">
                                     <button class="custom-location-btn custom-location-btn--save" data-action="save" data-id="${loc.id}" title="Save changes">
@@ -176,6 +174,77 @@ class DashboardUI {
         if (window.lucide && typeof window.lucide.createIcons === 'function') {
             window.lucide.createIcons();
         }
+        
+        // Attach click/focus handlers to coordinates for inline editing
+        container.querySelectorAll('.custom-location-coords--clickable').forEach(coordElement => {
+            const id = coordElement.getAttribute('data-location-id');
+            
+            // Click handler
+            coordElement.addEventListener('click', () => {
+                this.toggleEditMode(id, true);
+            });
+            
+            // Keyboard handler (Enter/Space)
+            coordElement.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    this.toggleEditMode(id, true);
+                }
+            });
+        });
+        
+        // Attach input validation to coordinate inputs
+        container.querySelectorAll('.custom-location-input--coordinate').forEach(input => {
+            // Format value on blur to ensure exactly 4 decimal places
+            input.addEventListener('blur', (e) => {
+                const value = e.target.value.trim();
+                const type = e.target.getAttribute('data-type');
+                
+                // Try to parse as number
+                const num = parseFloat(value);
+                if (!isNaN(num)) {
+                    // Validate range
+                    if (type === 'latitude' && (num < -90 || num > 90)) {
+                        this.showValidationError(e.target, 'Latitude must be between -90 and 90');
+                        return;
+                    }
+                    if (type === 'longitude' && (num < -180 || num > 180)) {
+                        this.showValidationError(e.target, 'Longitude must be between -180 and 180');
+                        return;
+                    }
+                    
+                    // Format to exactly 4 decimal places
+                    e.target.value = num.toFixed(4);
+                }
+            });
+            
+            // Validate input in real-time
+            input.addEventListener('input', (e) => {
+                let value = e.target.value;
+                
+                // Allow: digits, minus sign (at start), and one decimal point
+                // Remove any characters that aren't digits, minus, or decimal
+                value = value.replace(/[^\d.-]/g, '');
+                
+                // Ensure minus is only at the start
+                if (value.indexOf('-') > 0) {
+                    value = value.replace(/-/g, '');
+                }
+                
+                // Ensure only one decimal point
+                const parts = value.split('.');
+                if (parts.length > 2) {
+                    value = parts[0] + '.' + parts.slice(1).join('');
+                }
+                
+                // Limit to 4 decimal places
+                if (parts.length === 2 && parts[1].length > 4) {
+                    value = parts[0] + '.' + parts[1].substring(0, 4);
+                }
+                
+                e.target.value = value;
+            });
+        });
         
         // Attach event listeners to all action buttons
         container.querySelectorAll('.custom-location-btn').forEach(btn => {
@@ -249,8 +318,8 @@ class DashboardUI {
                     const lonInput = editState.querySelector(`#edit-lon-${id}`);
                     
                     if (nameInput) nameInput.value = loc.name;
-                    if (latInput) latInput.value = loc.lat;
-                    if (lonInput) lonInput.value = loc.lon;
+                    if (latInput) latInput.value = loc.lat.toFixed(4);
+                    if (lonInput) lonInput.value = loc.lon.toFixed(4);
                 }
             }
         }
@@ -278,8 +347,22 @@ class DashboardUI {
         
         // Get values
         let newName = nameInput.value.trim();
-        let newLat = parseFloat(latInput.value);
-        let newLon = parseFloat(lonInput.value);
+        let latValue = latInput.value.trim();
+        let lonValue = lonInput.value.trim();
+        
+        // Validate decimal format (exactly 4 decimal places)
+        const decimalRegex = /^-?\d+\.\d{4}$/;
+        if (!decimalRegex.test(latValue)) {
+            this.showValidationError(latInput, 'Latitude must have exactly 4 decimal places (e.g., 50.3081)');
+            return;
+        }
+        if (!decimalRegex.test(lonValue)) {
+            this.showValidationError(lonInput, 'Longitude must have exactly 4 decimal places (e.g., 11.9233)');
+            return;
+        }
+        
+        let newLat = parseFloat(latValue);
+        let newLon = parseFloat(lonValue);
         
         // Handle empty fields for predefined locations - revert to config.json values
         if (currentLoc.fromPredefined) {
