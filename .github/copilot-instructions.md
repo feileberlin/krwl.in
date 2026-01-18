@@ -1336,8 +1336,8 @@ The project includes automated WCAG 2.1 Level AA compliance checking during the 
 1. Linter runs automatically during `python3 src/event_manager.py generate`
 2. Warnings are displayed in the debug section of the dashboard menu (when debug mode is enabled)
 3. Warnings are **non-blocking** - build continues even with warnings
-4. Full lint protocol is saved to `public/lint_protocol.txt` for detailed review
-5. Warnings are clickable in the UI to show full context and remediation guidance
+4. Full WCAG protocol is saved to `public/wcag_protocol.txt` for detailed review
+5. Warnings shown as summary with link to protocol file
 
 **What is checked:**
 - Missing `lang` attribute on `<html>` tag (WCAG 3.1.1)
@@ -1352,15 +1352,15 @@ The project includes automated WCAG 2.1 Level AA compliance checking during the 
 1. Enable debug mode (automatic in local development)
 2. Open the dashboard menu (click logo)
 3. Scroll to "WCAG AA Compliance" section
-4. Click on individual warnings to expand full protocol details
-5. For full report: view `public/lint_protocol.txt`
+4. Click link to view full protocol details
+5. For full report: view `public/wcag_protocol.txt`
 
 **Files involved:**
 - `src/modules/linter.py` - Linting logic and WCAG checks
 - `src/modules/site_generator.py` - Runs linter during build
 - `assets/js/dashboard-ui.js` - Displays warnings in UI
-- `assets/css/style.css` - Styles for clickable warning items
-- `public/lint_protocol.txt` - Full lint report (auto-generated)
+- `assets/css/style.css` - Styles for warning section
+- `public/wcag_protocol.txt` - Full WCAG report (auto-generated)
 
 ## Performance
 

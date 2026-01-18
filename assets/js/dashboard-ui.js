@@ -443,12 +443,12 @@ class DashboardUI {
             <strong>${warningCount} accessibility ${warningCount === 1 ? 'warning' : 'warnings'}</strong>
             ${errorCount > 0 ? ` · ${errorCount} ${errorCount === 1 ? 'error' : 'errors'}` : ''}
             <br>
-            <span style="font-size: 0.85em; color: var(--color-text-tertiary); margin-top: 0.5rem; display: block;">
+            <span class="debug-lint-details">
                 For details, see 
                 <a href="wcag_protocol.txt" 
                    target="_blank" 
                    rel="noopener noreferrer"
-                   style="color: var(--color-primary); text-decoration: underline;">
+                   class="debug-lint-details-link">
                     wcag_protocol.txt
                 </a>
             </span>
