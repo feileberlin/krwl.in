@@ -20,6 +20,7 @@ from modules.editor import EventEditor
 from modules.site_generator import SiteGenerator
 from modules.archive_events import EventArchiver, print_config_info
 from modules.batch_operations import expand_wildcards, process_in_batches, find_events_by_ids, determine_batch_size
+from modules.vgn_transit import VGNTransit
 from modules.utils import (
     load_config, load_events, save_events, 
     load_pending_events, save_pending_events, 
@@ -259,6 +260,10 @@ COMMANDS:
     icons compare             Compare icon modes
     
     config validate           Validate configuration file
+    
+    vgn analyze [TIME]        Analyze public transport reachability (default: 30 min)
+    vgn suggest-sources [TIME] Suggest event sources in reachable areas
+    vgn export-report [TIME] [FILE] Export comprehensive transit analysis report
     
     test                      Run all tests
     test --list               List available test categories and tests
@@ -1685,6 +1690,178 @@ def cli_config_validate(base_path):
     return 0 if is_valid else 1
 
 
+def cli_vgn_analyze(base_path, config, max_time=30):
+    """
+    Analyze public transport reachability using VGN data
+    
+    Shows stations and municipalities reachable within specified travel time.
+    
+    Args:
+        base_path: Project root path
+        config: Configuration dictionary
+        max_time: Maximum travel time in minutes (default: 30)
+    """
+    print("\n🚇 VGN Transit Reachability Analysis")
+    print("=" * 60)
+    
+    vgn = VGNTransit(config, base_path)
+    
+    if not vgn.is_available():
+        print("\n❌ VGN integration not available")
+        print("\nTo enable VGN integration:")
+        print("1. Install VGN library: pip install vgn")
+        print("2. Enable in config.json: vgn.enabled = true")
+        print("3. Configure reference location in config.json")
+        return 1
+    
+    print(f"\n📍 Reference Location:")
+    print(f"   {vgn.vgn_config.get('reference_location', {}).get('name', 'Hof')}")
+    print(f"   ({vgn.reference_lat}, {vgn.reference_lon})")
+    print(f"\n⏱️  Maximum Travel Time: {max_time} minutes")
+    print("\n" + "─" * 60)
+    
+    # Get reachable stations
+    print("\n🚉 Reachable Stations:")
+    stations = vgn.get_reachable_stations(max_time)
+    
+    if not stations:
+        print("   No stations found within travel time")
+    else:
+        for station in stations:
+            print(f"\n   • {station.name}")
+            print(f"     Municipality: {station.municipality}")
+            print(f"     Travel Time: {station.travel_time_minutes} min")
+            print(f"     Transfers: {station.transfers}")
+            if station.line:
+                print(f"     Line: {station.line}")
+    
+    # Get reachable municipalities
+    print("\n\n🏘️  Reachable Municipalities:")
+    municipalities = vgn.get_reachable_municipalities(max_time)
+    
+    if not municipalities:
+        print("   No municipalities found")
+    else:
+        for muni in municipalities:
+            print(f"\n   • {muni['name']}")
+            print(f"     Stations: {muni['station_count']}")
+            print(f"     Min Travel Time: {muni['min_travel_time']} min")
+    
+    print("\n" + "=" * 60)
+    print("\n💡 Tip: Use 'vgn suggest-sources' to find event sources in these areas")
+    
+    return 0
+
+
+def cli_vgn_suggest_sources(base_path, config, max_time=30):
+    """
+    Suggest event sources based on transit reachability
+    
+    Identifies social media pages, news sites, and cultural venues
+    in reachable areas that might publish events.
+    
+    Args:
+        base_path: Project root path
+        config: Configuration dictionary
+        max_time: Maximum travel time in minutes (default: 30)
+    """
+    print("\n🔍 VGN Event Source Discovery")
+    print("=" * 60)
+    
+    vgn = VGNTransit(config, base_path)
+    
+    if not vgn.is_available():
+        print("\n❌ VGN integration not available")
+        print("Enable in config.json: vgn.enabled = true")
+        return 1
+    
+    print(f"\n⏱️  Maximum Travel Time: {max_time} minutes")
+    print("\nAnalyzing reachable areas for event sources...")
+    
+    # Get suggested sources
+    sources = vgn.suggest_event_sources(max_time)
+    
+    if not sources:
+        print("\n⚠️  No additional sources found")
+        print("\nCurrently configured sources already cover reachable areas.")
+    else:
+        print(f"\n✅ Found {len(sources)} potential event sources:")
+        print("\n" + "─" * 60)
+        
+        # Group by municipality
+        by_municipality = {}
+        for source in sources:
+            if source.municipality not in by_municipality:
+                by_municipality[source.municipality] = []
+            by_municipality[source.municipality].append(source)
+        
+        for muni, muni_sources in by_municipality.items():
+            print(f"\n📍 {muni} ({muni_sources[0].travel_time_minutes} min travel time):")
+            
+            for source in muni_sources:
+                print(f"\n   • {source.name}")
+                print(f"     Type: {source.type}")
+                print(f"     Category: {source.category}")
+                print(f"     URL: {source.url}")
+                print(f"     Description: {source.description}")
+    
+    print("\n" + "=" * 60)
+    print("\n💡 Add these sources to config.json → scraping.sources[] to scrape them")
+    
+    return 0
+
+
+def cli_vgn_export_report(base_path, config, max_time=30, output_file=None):
+    """
+    Export comprehensive VGN analysis report
+    
+    Generates a JSON report with all reachability data, suggested sources,
+    and transit information.
+    
+    Args:
+        base_path: Project root path
+        config: Configuration dictionary
+        max_time: Maximum travel time in minutes (default: 30)
+        output_file: Optional output file path
+    """
+    print("\n📄 Exporting VGN Analysis Report")
+    print("=" * 60)
+    
+    vgn = VGNTransit(config, base_path)
+    
+    if not vgn.is_available():
+        print("\n❌ VGN integration not available")
+        return 1
+    
+    # Set output path
+    if output_file:
+        output_path = Path(output_file)
+    else:
+        output_path = base_path / vgn.vgn_config.get('analysis', {}).get(
+            'output_path', 'assets/json/vgn_analysis.json'
+        )
+    
+    print(f"\n⏱️  Maximum Travel Time: {max_time} minutes")
+    print(f"📁 Output: {output_path}")
+    print("\nGenerating report...")
+    
+    try:
+        report = vgn.export_analysis_report(max_time, output_path)
+        
+        print("\n✅ Report generated successfully!")
+        print(f"\n📊 Summary:")
+        print(f"   • Stations: {len(report['reachable_stations'])}")
+        print(f"   • Municipalities: {len(report['reachable_municipalities'])}")
+        print(f"   • Suggested Sources: {len(report['suggested_sources'])}")
+        print(f"\n📁 Full report saved to: {output_path}")
+        
+    except Exception as e:
+        print(f"\n❌ Error generating report: {e}")
+        return 1
+    
+    return 0
+
+
 def _execute_command(args, base_path, config):
     """Execute the specified CLI command.
     
@@ -1923,6 +2100,37 @@ def _execute_command(args, base_path, config):
             return cli_config_validate(base_path)
         else:
             print(f"Error: Unknown config subcommand '{subcommand}'")
+            return 1
+    
+    if command == 'vgn':
+        # VGN transit integration subcommands
+        if not args.args:
+            print("Error: Missing vgn subcommand")
+            print("Usage: python3 event_manager.py vgn [analyze|suggest-sources|export-report]")
+            print("Examples:")
+            print("  python3 event_manager.py vgn analyze")
+            print("  python3 event_manager.py vgn analyze 45  # 45 minutes travel time")
+            print("  python3 event_manager.py vgn suggest-sources")
+            print("  python3 event_manager.py vgn export-report")
+            return 1
+        
+        subcommand = args.args[0]
+        
+        # Parse optional time parameter
+        max_time = 30  # default
+        if len(args.args) > 1 and args.args[1].isdigit():
+            max_time = int(args.args[1])
+        
+        if subcommand == 'analyze':
+            return cli_vgn_analyze(base_path, config, max_time)
+        elif subcommand == 'suggest-sources':
+            return cli_vgn_suggest_sources(base_path, config, max_time)
+        elif subcommand == 'export-report':
+            output_file = args.args[2] if len(args.args) > 2 else None
+            return cli_vgn_export_report(base_path, config, max_time, output_file)
+        else:
+            print(f"Error: Unknown vgn subcommand '{subcommand}'")
+            print("Available subcommands: analyze, suggest-sources, export-report")
             return 1
     
     if command is None:
