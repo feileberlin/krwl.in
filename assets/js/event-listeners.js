@@ -59,12 +59,6 @@ class EventListeners {
                 this.closeDashboard(dashboardMenu, dashboardLogo);
             }
         });
-        
-        // Add custom location button handler
-        const addLocationBtn = document.getElementById('add-custom-location-btn');
-        if (addLocationBtn) {
-            addLocationBtn.addEventListener('click', () => this.addCustomLocation());
-        }
     }
     
     createFocusTrap(container) {
@@ -489,38 +483,6 @@ class EventListeners {
                 this.app.mapManager?.invalidateSize();
             }, this.app.ORIENTATION_CHANGE_DELAY);
         });
-    }
-    
-    addCustomLocation() {
-        const name = prompt('Enter location name:', 'My Location');
-        if (!name || !name.trim()) return;
-        
-        const latStr = prompt('Enter latitude:', '50.3167');
-        const lonStr = prompt('Enter longitude:', '11.9167');
-        
-        const lat = parseFloat(latStr);
-        const lon = parseFloat(lonStr);
-        
-        if (isNaN(lat) || isNaN(lon)) {
-            alert('Invalid coordinates!');
-            return;
-        }
-        
-        const success = this.app.storage.addCustomLocation({
-            name: name.trim(),
-            lat: lat,
-            lon: lon
-        });
-        
-        if (success) {
-            alert(`✅ Location "${name.trim()}" saved!`);
-            // Refresh dashboard display
-            this.app.updateDashboard();
-            // Refresh dropdown
-            this.setupFilterListeners();
-        } else {
-            alert('❌ Failed to save location (limit: 10)');
-        }
     }
 }
 
