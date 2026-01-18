@@ -34,9 +34,9 @@ A **monochromatic color scheme** uses variations of a single hue by adjusting:
 
 | Color Preview | Name | Hex | RGB | CSS Variable | Usage |
 |---------------|------|-----|-----|--------------|-------|
-| ![#D689B8](https://via.placeholder.com/20x20/D689B8/D689B8.png) | **Primary** | `#D689B8` | 214, 137, 184 | `--color-primary` | Primary brand color, accents, highlights |
-| ![#E8A5C8](https://via.placeholder.com/20x20/E8A5C8/E8A5C8.png) | **Primary Hover** | `#E8A5C8` | 232, 165, 200 | `--color-primary-hover` | Hover states for primary |
-| ![#D689B8](https://via.placeholder.com/20x20/D689B8/D689B8.png) | **Success** | `#D689B8` | 214, 137, 184 | `--color-success` | Success state (uses primary) |
+| ![#D689B8](data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="20" height="20"%3E%3Crect width="20" height="20" fill="%23D689B8"/%3E%3C/svg%3E) | **Primary** | `#D689B8` | 214, 137, 184 | `--color-primary` | Primary brand color, accents, highlights |
+| ![#E8A5C8](data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="20" height="20"%3E%3Crect width="20" height="20" fill="%23E8A5C8"/%3E%3C/svg%3E) | **Primary Hover** | `#E8A5C8` | 232, 165, 200 | `--color-primary-hover` | Hover states for primary |
+| ![#D689B8](data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="20" height="20"%3E%3Crect width="20" height="20" fill="%23D689B8"/%3E%3C/svg%3E) | **Success** | `#D689B8` | 214, 137, 184 | `--color-success` | Success state (uses primary) |
 
 ### ecoBarbie Tints (+ White) - Scientifically Generated
 
@@ -44,10 +44,10 @@ A **monochromatic color scheme** uses variations of a single hue by adjusting:
 
 | Color Preview | Name | Hex | RGB | CSS Variable | Lightness |
 |---------------|------|-----|-----|--------------|-----------|
-| ![#de96c2](https://via.placeholder.com/20x20/de96c2/de96c2.png) | **Tint 20%** | `#de96c2` | 222, 150, 194 | `--color-tint-20` | Subtle tint |
-| ![#e6a4cc](https://via.placeholder.com/20x20/e6a4cc/e6a4cc.png) | **Tint 40%** | `#e6a4cc` | 230, 164, 204 | `--color-tint-40` | Light backgrounds |
-| ![#eeb2d7](https://via.placeholder.com/20x20/eeb2d7/eeb2d7.png) | **Tint 60%** | `#eeb2d7` | 238, 178, 215 | `--color-tint-60` | Very light backgrounds |
-| ![#f6c1e2](https://via.placeholder.com/20x20/f6c1e2/f6c1e2.png) | **Tint 80%** | `#f6c1e2` | 246, 193, 226 | `--color-tint-80` | Ultra-light highlights |
+| ![#de96c2](data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="20" height="20"%3E%3Crect width="20" height="20" fill="%23DE96C2"/%3E%3C/svg%3E) | **Tint 20%** | `#de96c2` | 222, 150, 194 | `--color-tint-20` | Subtle tint |
+| ![#e6a4cc](data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="20" height="20"%3E%3Crect width="20" height="20" fill="%23E6A4CC"/%3E%3C/svg%3E) | **Tint 40%** | `#e6a4cc` | 230, 164, 204 | `--color-tint-40` | Light backgrounds |
+| ![#eeb2d7](data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="20" height="20"%3E%3Crect width="20" height="20" fill="%23EEB2D7"/%3E%3C/svg%3E) | **Tint 60%** | `#eeb2d7` | 238, 178, 215 | `--color-tint-60` | Very light backgrounds |
+| ![#f6c1e2](data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="20" height="20"%3E%3Crect width="20" height="20" fill="%23F6C1E2"/%3E%3C/svg%3E) | **Tint 80%** | `#f6c1e2` | 246, 193, 226 | `--color-tint-80` | Ultra-light highlights |
 
 ### ecoBarbie Shades (+ Black) - Scientifically Generated
 
@@ -55,10 +55,10 @@ A **monochromatic color scheme** uses variations of a single hue by adjusting:
 
 | Color Preview | Name | Hex | RGB | CSS Variable | Darkness |
 |---------------|------|-----|-----|--------------|----------|
-| ![#ab6d93](https://via.placeholder.com/20x20/ab6d93/ab6d93.png) | **Shade 20%** | `#ab6d93` | 171, 109, 147 | `--color-shade-20` | Medium dark |
-| ![#80526e](https://via.placeholder.com/20x20/80526e/80526e.png) | **Shade 40%** | `#80526e` | 128, 82, 110 | `--color-shade-40` | Dark accents |
-| ![#553649](https://via.placeholder.com/20x20/553649/553649.png) | **Shade 60%** | `#553649` | 85, 54, 73 | `--color-shade-60` | Very dark backgrounds |
-| ![#2a1b24](https://via.placeholder.com/20x20/2a1b24/2a1b24.png) | **Shade 80%** | `#2a1b24` | 42, 27, 36 | `--color-shade-80` | Near-black backgrounds |
+| ![#ab6d93](data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="20" height="20"%3E%3Crect width="20" height="20" fill="%23AB6D93"/%3E%3C/svg%3E) | **Shade 20%** | `#ab6d93` | 171, 109, 147 | `--color-shade-20` | Medium dark |
+| ![#80526e](data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="20" height="20"%3E%3Crect width="20" height="20" fill="%2380526E"/%3E%3C/svg%3E) | **Shade 40%** | `#80526e` | 128, 82, 110 | `--color-shade-40` | Dark accents |
+| ![#553649](data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="20" height="20"%3E%3Crect width="20" height="20" fill="%23553649"/%3E%3C/svg%3E) | **Shade 60%** | `#553649` | 85, 54, 73 | `--color-shade-60` | Very dark backgrounds |
+| ![#2a1b24](data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="20" height="20"%3E%3Crect width="20" height="20" fill="%232A1B24"/%3E%3C/svg%3E) | **Shade 80%** | `#2a1b24` | 42, 27, 36 | `--color-shade-80` | Near-black backgrounds |
 
 ### ecoBarbie Tones (+ Grey) - Scientifically Generated
 
@@ -66,20 +66,20 @@ A **monochromatic color scheme** uses variations of a single hue by adjusting:
 
 | Color Preview | Name | Hex | RGB | CSS Variable | Saturation |
 |---------------|------|-----|-----|--------------|------------|
-| ![#d698be](https://via.placeholder.com/20x20/d698be/d698be.png) | **Tone 20%** | `#d698be` | 214, 152, 190 | `--color-tone-20` | Slightly desaturated |
-| ![#d6a7c4](https://via.placeholder.com/20x20/d6a7c4/d6a7c4.png) | **Tone 40%** | `#d6a7c4` | 214, 167, 196 | `--color-tone-40` | Moderate desaturation |
-| ![#d6b7ca](https://via.placeholder.com/20x20/d6b7ca/d6b7ca.png) | **Tone 60%** | `#d6b7ca` | 214, 183, 202 | `--color-tone-60` | Soft neutral |
-| ![#d6c6d0](https://via.placeholder.com/20x20/d6c6d0/d6c6d0.png) | **Tone 80%** | `#d6c6d0` | 214, 198, 208 | `--color-tone-80` | Very soft neutral |
+| ![#d698be](data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="20" height="20"%3E%3Crect width="20" height="20" fill="%23D698BE"/%3E%3C/svg%3E) | **Tone 20%** | `#d698be` | 214, 152, 190 | `--color-tone-20` | Slightly desaturated |
+| ![#d6a7c4](data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="20" height="20"%3E%3Crect width="20" height="20" fill="%23D6A7C4"/%3E%3C/svg%3E) | **Tone 40%** | `#d6a7c4` | 214, 167, 196 | `--color-tone-40` | Moderate desaturation |
+| ![#d6b7ca](data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="20" height="20"%3E%3Crect width="20" height="20" fill="%23D6B7CA"/%3E%3C/svg%3E) | **Tone 60%** | `#d6b7ca` | 214, 183, 202 | `--color-tone-60` | Soft neutral |
+| ![#d6c6d0](data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="20" height="20"%3E%3Crect width="20" height="20" fill="%23D6C6D0"/%3E%3C/svg%3E) | **Tone 80%** | `#d6c6d0` | 214, 198, 208 | `--color-tone-80` | Very soft neutral |
 
 ### Legacy Colors (Backward Compatibility)
 
 | Color Preview | Name | Hex | RGB | CSS Variable | Notes |
 |---------------|------|-----|-----|--------------|-------|
-| ![#FFB3DF](https://via.placeholder.com/20x20/FFB3DF/FFB3DF.png) | **Medium Tint** | `#FFB3DF` | 255, 179, 223 | `--color-medium-tint` | Legacy bright tint |
-| ![#D689B8](https://via.placeholder.com/20x20/D689B8/D689B8.png) | **Light Tone** | `#D689B8` | 214, 137, 184 | `--color-light-tone` | Duplicate of primary |
-| ![#B05F8E](https://via.placeholder.com/20x20/B05F8E/B05F8E.png) | **Medium Tone** | `#B05F8E` | 176, 95, 142 | `--color-medium-tone` | Similar to shade_20 |
-| ![#8A4A70](https://via.placeholder.com/20x20/8A4A70/8A4A70.png) | **Dark Tone** | `#8A4A70` | 138, 74, 112 | `--color-dark-tone` | Similar to shade_40 |
-| ![#BF5087](https://via.placeholder.com/20x20/BF5087/BF5087.png) | **Light Shade** | `#BF5087` | 191, 80, 135 | `--color-light-shade` | Consider removing |
+| ![#FFB3DF](data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="20" height="20"%3E%3Crect width="20" height="20" fill="%23FFB3DF"/%3E%3C/svg%3E) | **Medium Tint** | `#FFB3DF` | 255, 179, 223 | `--color-medium-tint` | Legacy bright tint |
+| ![#D689B8](data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="20" height="20"%3E%3Crect width="20" height="20" fill="%23D689B8"/%3E%3C/svg%3E) | **Light Tone** | `#D689B8` | 214, 137, 184 | `--color-light-tone` | Duplicate of primary |
+| ![#B05F8E](data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="20" height="20"%3E%3Crect width="20" height="20" fill="%23B05F8E"/%3E%3C/svg%3E) | **Medium Tone** | `#B05F8E` | 176, 95, 142 | `--color-medium-tone` | Similar to shade_20 |
+| ![#8A4A70](data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="20" height="20"%3E%3Crect width="20" height="20" fill="%238A4A70"/%3E%3C/svg%3E) | **Dark Tone** | `#8A4A70` | 138, 74, 112 | `--color-dark-tone` | Similar to shade_40 |
+| ![#BF5087](data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="20" height="20"%3E%3Crect width="20" height="20" fill="%23BF5087"/%3E%3C/svg%3E) | **Light Shade** | `#BF5087` | 191, 80, 135 | `--color-light-shade` | Consider removing |
 
 ### Neutral Greys & Blacks
 
@@ -91,9 +91,9 @@ A **monochromatic color scheme** uses variations of a single hue by adjusting:
 
 | Color Preview | Name | Hex | RGB | CSS Variable | Usage |
 |---------------|------|-----|-----|--------------|-------|
-| ![#110a0e](https://via.placeholder.com/20x20/110a0e/110a0e.png) | **BG Primary** | `#110a0e` | 17, 10, 14 | `--color-bg-primary` | Main background (92% darker) |
-| ![#150d12](https://via.placeholder.com/20x20/150d12/150d12.png) | **BG Secondary** | `#150d12` | 21, 13, 18 | `--color-bg-secondary` | Secondary background (90% darker) |
-| ![#191016](https://via.placeholder.com/20x20/191016/191016.png) | **BG Tertiary** | `#191016` | 25, 16, 22 | `--color-bg-tertiary` | Tertiary background (88% darker) |
+| ![#110a0e](data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="20" height="20"%3E%3Crect width="20" height="20" fill="%23110A0E"/%3E%3C/svg%3E) | **BG Primary** | `#110a0e` | 17, 10, 14 | `--color-bg-primary` | Main background (92% darker) |
+| ![#150d12](data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="20" height="20"%3E%3Crect width="20" height="20" fill="%23150D12"/%3E%3C/svg%3E) | **BG Secondary** | `#150d12` | 21, 13, 18 | `--color-bg-secondary` | Secondary background (90% darker) |
+| ![#191016](data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="20" height="20"%3E%3Crect width="20" height="20" fill="%23191016"/%3E%3C/svg%3E) | **BG Tertiary** | `#191016` | 25, 16, 22 | `--color-bg-tertiary` | Tertiary background (88% darker) |
 
 ### Text Colors (Very Light Tints)
 
@@ -101,9 +101,9 @@ A **monochromatic color scheme** uses variations of a single hue by adjusting:
 
 | Color Preview | Name | Hex | RGB | CSS Variable | Contrast | Usage |
 |---------------|------|-----|-----|--------------|----------|-------|
-| ![#f9f5f8](https://via.placeholder.com/20x20/f9f5f8/f9f5f8.png) | **Text Primary** | `#f9f5f8` | 249, 245, 248 | `--color-text-primary` | High | Primary text (98% lighter) |
-| ![#f2e9ee](https://via.placeholder.com/20x20/f2e9ee/f2e9ee.png) | **Text Secondary** | `#f2e9ee` | 242, 233, 238 | `--color-text-secondary` | Medium | Secondary text (95% lighter) |
-| ![#eadde5](https://via.placeholder.com/20x20/eadde5/eadde5.png) | **Text Tertiary** | `#eadde5` | 234, 221, 229 | `--color-text-tertiary` | Lower | Tertiary text (92% lighter) |
+| ![#f9f5f8](data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="20" height="20"%3E%3Crect width="20" height="20" fill="%23F9F5F8"/%3E%3C/svg%3E) | **Text Primary** | `#f9f5f8` | 249, 245, 248 | `--color-text-primary` | High | Primary text (98% lighter) |
+| ![#f2e9ee](data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="20" height="20"%3E%3Crect width="20" height="20" fill="%23F2E9EE"/%3E%3C/svg%3E) | **Text Secondary** | `#f2e9ee` | 242, 233, 238 | `--color-text-secondary` | Medium | Secondary text (95% lighter) |
+| ![#eadde5](data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="20" height="20"%3E%3Crect width="20" height="20" fill="%23EADDE5"/%3E%3C/svg%3E) | **Text Tertiary** | `#eadde5` | 234, 221, 229 | `--color-text-tertiary` | Lower | Tertiary text (92% lighter) |
 
 ### Border Colors (Medium Dark Shades)
 
@@ -111,8 +111,8 @@ A **monochromatic color scheme** uses variations of a single hue by adjusting:
 
 | Color Preview | Name | Hex | RGB | CSS Variable | Usage |
 |---------------|------|-----|-----|--------------|-------|
-| ![#35222e](https://via.placeholder.com/20x20/35222e/35222e.png) | **Border Primary** | `#35222e` | 53, 34, 46 | `--color-border-primary` | Primary border (75% darker) |
-| ![#2f1e28](https://via.placeholder.com/20x20/2f1e28/2f1e28.png) | **Border Secondary** | `#2f1e28` | 47, 30, 40 | `--color-border-secondary` | Secondary border (78% darker) |
+| ![#35222e](data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="20" height="20"%3E%3Crect width="20" height="20" fill="%2335222E"/%3E%3C/svg%3E) | **Border Primary** | `#35222e` | 53, 34, 46 | `--color-border-primary` | Primary border (75% darker) |
+| ![#2f1e28](data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="20" height="20"%3E%3Crect width="20" height="20" fill="%232F1E28"/%3E%3C/svg%3E) | **Border Secondary** | `#2f1e28` | 47, 30, 40 | `--color-border-secondary` | Secondary border (78% darker) |
 
 ### Accent Colors (Monochromatic Variants)
 
@@ -120,12 +120,12 @@ A **monochromatic color scheme** uses variations of a single hue by adjusting:
 
 | Color Preview | Name | Hex | RGB | CSS Variable | Transform | Usage |
 |---------------|------|-----|-----|--------------|-----------|-------|
-| ![#e07fba](https://via.placeholder.com/20x20/e07fba/e07fba.png) | **Accent** | `#e07fba` | 224, 127, 186 | `--color-accent` | +20% sat, +5% val | Links, info, highlights |
-| ![#eb7dc0](https://via.placeholder.com/20x20/eb7dc0/eb7dc0.png) | **Warning** | `#eb7dc0` | 235, 125, 192 | `--color-warning` | +30% sat, +10% val | Warnings, pending states |
-| ![#954476](https://via.placeholder.com/20x20/954476/954476.png) | **Error** | `#954476` | 149, 68, 118 | `--color-error` | +50% sat, -30% val | Errors, critical alerts |
-| ![#eeb2d7](https://via.placeholder.com/20x20/eeb2d7/eeb2d7.png) | **Bookmark** | `#eeb2d7` | 238, 178, 215 | `--color-bookmark` | Same as tint_60 | Bookmark highlight |
-| ![#f6c1e2](https://via.placeholder.com/20x20/f6c1e2/f6c1e2.png) | **Bookmark Light** | `#f6c1e2` | 246, 193, 226 | `--color-bookmark-light` | Same as tint_80 | Bookmark hover |
-| ![#fce0ef](https://via.placeholder.com/20x20/fce0ef/fce0ef.png) | **Bookmark Lighter** | `#fce0ef` | 252, 224, 239 | `--color-bookmark-lighter` | 90% lighter tint | Bookmark subtle |
+| ![#e07fba](data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="20" height="20"%3E%3Crect width="20" height="20" fill="%23E07FBA"/%3E%3C/svg%3E) | **Accent** | `#e07fba` | 224, 127, 186 | `--color-accent` | +20% sat, +5% val | Links, info, highlights |
+| ![#eb7dc0](data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="20" height="20"%3E%3Crect width="20" height="20" fill="%23EB7DC0"/%3E%3C/svg%3E) | **Warning** | `#eb7dc0` | 235, 125, 192 | `--color-warning` | +30% sat, +10% val | Warnings, pending states |
+| ![#954476](data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="20" height="20"%3E%3Crect width="20" height="20" fill="%23954476"/%3E%3C/svg%3E) | **Error** | `#954476` | 149, 68, 118 | `--color-error` | +50% sat, -30% val | Errors, critical alerts |
+| ![#eeb2d7](data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="20" height="20"%3E%3Crect width="20" height="20" fill="%23EEB2D7"/%3E%3C/svg%3E) | **Bookmark** | `#eeb2d7` | 238, 178, 215 | `--color-bookmark` | Same as tint_60 | Bookmark highlight |
+| ![#f6c1e2](data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="20" height="20"%3E%3Crect width="20" height="20" fill="%23F6C1E2"/%3E%3C/svg%3E) | **Bookmark Light** | `#f6c1e2` | 246, 193, 226 | `--color-bookmark-light` | Same as tint_80 | Bookmark hover |
+| ![#fce0ef](data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="20" height="20"%3E%3Crect width="20" height="20" fill="%23FCE0EF"/%3E%3C/svg%3E) | **Bookmark Lighter** | `#fce0ef` | 252, 224, 239 | `--color-bookmark-lighter` | 90% lighter tint | Bookmark subtle |
 ---
 
 ## Alpha Channel Variations
