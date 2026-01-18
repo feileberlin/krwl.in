@@ -8,10 +8,12 @@
 
 ## Overview
 
-This document serves as a **permanent reference** for the KRWL HOF monochromatic color palette based on the **ecoBarbie** theme. All colors are derived from a single base color and its variations through scientifically-calculated tints, shades, and tones.
+This document serves as a **permanent reference** for the KRWL HOF **truly monochromatic** color palette based on the **ecoBarbie** theme. **ALL colors** are derived from a single base color (#D689B8) through scientifically-calculated tints, shades, and tones - no exceptions.
 
 **Base Color:** ecoBarbie `#D689B8` (RGB: 214, 137, 184)  
 **Color Theory:** HSV: 323.4° hue, 36.0% saturation, 83.9% value
+
+**Monochromatic Design:** Every single color in the application - backgrounds, text, borders, accents, warnings, errors - derives from the ecoBarbie pink base color using HSV transformations.
 
 > **Note:** This is a reference document only. The actual colors used in the application are defined in `config.json` under the `design.colors` section with inline color preview comments (█ blocks). To modify colors, edit `config.json` and regenerate design tokens using `python3 src/tools/generate_design_tokens.py`.
 
@@ -30,93 +32,100 @@ A **monochromatic color scheme** uses variations of a single hue by adjusting:
 
 ### Primary ecoBarbie Colors
 
-| Name | Hex | RGB | CSS Variable | Usage |
-|------|-----|-----|--------------|-------|
-| **█ Primary** | `#D689B8` | 214, 137, 184 | `--color-primary` | Primary brand color, accents, highlights |
-| **█ Primary Hover** | `#E8A5C8` | 232, 165, 200 | `--color-primary-hover` | Hover states for primary |
-| **█ Success** | `#D689B8` | 214, 137, 184 | `--color-success` | Success state (uses primary) |
+| Color Preview | Name | Hex | RGB | CSS Variable | Usage |
+|---------------|------|-----|-----|--------------|-------|
+| ![#D689B8](https://via.placeholder.com/20x20/D689B8/D689B8.png) | **Primary** | `#D689B8` | 214, 137, 184 | `--color-primary` | Primary brand color, accents, highlights |
+| ![#E8A5C8](https://via.placeholder.com/20x20/E8A5C8/E8A5C8.png) | **Primary Hover** | `#E8A5C8` | 232, 165, 200 | `--color-primary-hover` | Hover states for primary |
+| ![#D689B8](https://via.placeholder.com/20x20/D689B8/D689B8.png) | **Success** | `#D689B8` | 214, 137, 184 | `--color-success` | Success state (uses primary) |
 
 ### ecoBarbie Tints (+ White) - Scientifically Generated
 
 **Usage:** Light backgrounds, hover states, subtle highlights, soft UI elements
 
-| Name | Hex | RGB | CSS Variable | Lightness |
-|------|-----|-----|--------------|-----------|
-| **█ Tint 20%** | `#de96c2` | 222, 150, 194 | `--color-tint-20` | Subtle tint |
-| **█ Tint 40%** | `#e6a4cc` | 230, 164, 204 | `--color-tint-40` | Light backgrounds |
-| **█ Tint 60%** | `#eeb2d7` | 238, 178, 215 | `--color-tint-60` | Very light backgrounds |
-| **█ Tint 80%** | `#f6c1e2` | 246, 193, 226 | `--color-tint-80` | Ultra-light highlights |
+| Color Preview | Name | Hex | RGB | CSS Variable | Lightness |
+|---------------|------|-----|-----|--------------|-----------|
+| ![#de96c2](https://via.placeholder.com/20x20/de96c2/de96c2.png) | **Tint 20%** | `#de96c2` | 222, 150, 194 | `--color-tint-20` | Subtle tint |
+| ![#e6a4cc](https://via.placeholder.com/20x20/e6a4cc/e6a4cc.png) | **Tint 40%** | `#e6a4cc` | 230, 164, 204 | `--color-tint-40` | Light backgrounds |
+| ![#eeb2d7](https://via.placeholder.com/20x20/eeb2d7/eeb2d7.png) | **Tint 60%** | `#eeb2d7` | 238, 178, 215 | `--color-tint-60` | Very light backgrounds |
+| ![#f6c1e2](https://via.placeholder.com/20x20/f6c1e2/f6c1e2.png) | **Tint 80%** | `#f6c1e2` | 246, 193, 226 | `--color-tint-80` | Ultra-light highlights |
 
 ### ecoBarbie Shades (+ Black) - Scientifically Generated
 
 **Usage:** Text on light backgrounds, borders, dark accents, depth, shadows
 
-| Name | Hex | RGB | CSS Variable | Darkness |
-|------|-----|-----|--------------|----------|
-| **█ Shade 20%** | `#ab6d93` | 171, 109, 147 | `--color-shade-20` | Medium dark |
-| **█ Shade 40%** | `#80526e` | 128, 82, 110 | `--color-shade-40` | Dark accents |
-| **█ Shade 60%** | `#553649` | 85, 54, 73 | `--color-shade-60` | Very dark backgrounds |
-| **█ Shade 80%** | `#2a1b24` | 42, 27, 36 | `--color-shade-80` | Near-black backgrounds |
+| Color Preview | Name | Hex | RGB | CSS Variable | Darkness |
+|---------------|------|-----|-----|--------------|----------|
+| ![#ab6d93](https://via.placeholder.com/20x20/ab6d93/ab6d93.png) | **Shade 20%** | `#ab6d93` | 171, 109, 147 | `--color-shade-20` | Medium dark |
+| ![#80526e](https://via.placeholder.com/20x20/80526e/80526e.png) | **Shade 40%** | `#80526e` | 128, 82, 110 | `--color-shade-40` | Dark accents |
+| ![#553649](https://via.placeholder.com/20x20/553649/553649.png) | **Shade 60%** | `#553649` | 85, 54, 73 | `--color-shade-60` | Very dark backgrounds |
+| ![#2a1b24](https://via.placeholder.com/20x20/2a1b24/2a1b24.png) | **Shade 80%** | `#2a1b24` | 42, 27, 36 | `--color-shade-80` | Near-black backgrounds |
 
 ### ecoBarbie Tones (+ Grey) - Scientifically Generated
 
 **Usage:** Subtle accents, disabled states, secondary elements, soft UI, muted effects
 
-| Name | Hex | RGB | CSS Variable | Saturation |
-|------|-----|-----|--------------|------------|
-| **█ Tone 20%** | `#d698be` | 214, 152, 190 | `--color-tone-20` | Slightly desaturated |
-| **█ Tone 40%** | `#d6a7c4` | 214, 167, 196 | `--color-tone-40` | Moderate desaturation |
-| **█ Tone 60%** | `#d6b7ca` | 214, 183, 202 | `--color-tone-60` | Soft neutral |
-| **█ Tone 80%** | `#d6c6d0` | 214, 198, 208 | `--color-tone-80` | Very soft neutral |
+| Color Preview | Name | Hex | RGB | CSS Variable | Saturation |
+|---------------|------|-----|-----|--------------|------------|
+| ![#d698be](https://via.placeholder.com/20x20/d698be/d698be.png) | **Tone 20%** | `#d698be` | 214, 152, 190 | `--color-tone-20` | Slightly desaturated |
+| ![#d6a7c4](https://via.placeholder.com/20x20/d6a7c4/d6a7c4.png) | **Tone 40%** | `#d6a7c4` | 214, 167, 196 | `--color-tone-40` | Moderate desaturation |
+| ![#d6b7ca](https://via.placeholder.com/20x20/d6b7ca/d6b7ca.png) | **Tone 60%** | `#d6b7ca` | 214, 183, 202 | `--color-tone-60` | Soft neutral |
+| ![#d6c6d0](https://via.placeholder.com/20x20/d6c6d0/d6c6d0.png) | **Tone 80%** | `#d6c6d0` | 214, 198, 208 | `--color-tone-80` | Very soft neutral |
 
 ### Legacy Colors (Backward Compatibility)
 
-| Name | Hex | RGB | CSS Variable | Notes |
-|------|-----|-----|--------------|-------|
-| **█ Medium Tint** | `#FFB3DF` | 255, 179, 223 | `--color-medium-tint` | Legacy bright tint |
-| **█ Light Tone** | `#D689B8` | 214, 137, 184 | `--color-light-tone` | Duplicate of primary |
-| **█ Medium Tone** | `#B05F8E` | 176, 95, 142 | `--color-medium-tone` | Similar to shade_20 |
-| **█ Dark Tone** | `#8A4A70` | 138, 74, 112 | `--color-dark-tone` | Similar to shade_40 |
-| **█ Light Shade** | `#BF5087` | 191, 80, 135 | `--color-light-shade` | Consider removing |
+| Color Preview | Name | Hex | RGB | CSS Variable | Notes |
+|---------------|------|-----|-----|--------------|-------|
+| ![#FFB3DF](https://via.placeholder.com/20x20/FFB3DF/FFB3DF.png) | **Medium Tint** | `#FFB3DF` | 255, 179, 223 | `--color-medium-tint` | Legacy bright tint |
+| ![#D689B8](https://via.placeholder.com/20x20/D689B8/D689B8.png) | **Light Tone** | `#D689B8` | 214, 137, 184 | `--color-light-tone` | Duplicate of primary |
+| ![#B05F8E](https://via.placeholder.com/20x20/B05F8E/B05F8E.png) | **Medium Tone** | `#B05F8E` | 176, 95, 142 | `--color-medium-tone` | Similar to shade_20 |
+| ![#8A4A70](https://via.placeholder.com/20x20/8A4A70/8A4A70.png) | **Dark Tone** | `#8A4A70` | 138, 74, 112 | `--color-dark-tone` | Similar to shade_40 |
+| ![#BF5087](https://via.placeholder.com/20x20/BF5087/BF5087.png) | **Light Shade** | `#BF5087` | 191, 80, 135 | `--color-light-shade` | Consider removing |
 
 ### Neutral Greys & Blacks
 
-| Name | Hex | RGB | Usage |
-|------|-----|-----|-------|
-| **Pure Black** | `#000000` | 0, 0, 0 | Shadows, true black |
-| **Near Black** | `#0D0D0D` | 13, 13, 13 | Very dark UI |
-| **Dark Grey 1** | `#0d1117` | 13, 17, 23 | Primary background |
-| **Dark Grey 2** | `#161b22` | 22, 27, 34 | Secondary background |
-| **Dark Grey 3** | `#1a1a1a` | 26, 26, 26 | Cards, panels |
-| **Dark Grey 4** | `#21262d` | 33, 38, 45 | Tertiary background |
-| **Medium Dark** | `#2a2a2a` | 42, 42, 42 | Buttons, controls |
-| **Medium Grey** | `#3a3a3a` | 58, 58, 58 | Borders |
-| **Light Grey** | `#555555` | 85, 85, 85 | Inactive text |
-| **Lighter Grey** | `#888888` | 136, 136, 136 | Subtle text |
+**Note:** In a true monochromatic design, there are NO neutral greys. All dark/light colors derive from ecoBarbie.
 
-### Text Colors
+### Background Colors (Very Dark Shades)
 
-| Name | Hex | RGB | Usage | Contrast |
-|------|-----|-----|-------|----------|
-| **Text Primary** | `#c9d1d9` | 201, 209, 217 | Main text | 11.1:1 on `#0d1117` |
-| **Text Secondary** | `#8b949e` | 139, 148, 158 | Secondary text | 6.5:1 on `#0d1117` |
-| **Text Tertiary** | `#6e7681` | 110, 118, 129 | Tertiary text | 4.8:1 on `#0d1117` |
-| **White** | `#ffffff` | 255, 255, 255 | High contrast text | 21:1 on black |
-| **Light Text** | `#ddd` | 221, 221, 221 | Light text on dark | 14:1 on `#1a1a1a` |
-| **Muted Text** | `#ccc` | 204, 204, 204 | Muted text | 12:1 on `#1a1a1a` |
+**Monochromatic:** 88-92% darker shades of ecoBarbie for backgrounds
 
-### Accent Colors (Non-Monochromatic)
+| Color Preview | Name | Hex | RGB | CSS Variable | Usage |
+|---------------|------|-----|-----|--------------|-------|
+| ![#110a0e](https://via.placeholder.com/20x20/110a0e/110a0e.png) | **BG Primary** | `#110a0e` | 17, 10, 14 | `--color-bg-primary` | Main background (92% darker) |
+| ![#150d12](https://via.placeholder.com/20x20/150d12/150d12.png) | **BG Secondary** | `#150d12` | 21, 13, 18 | `--color-bg-secondary` | Secondary background (90% darker) |
+| ![#191016](https://via.placeholder.com/20x20/191016/191016.png) | **BG Tertiary** | `#191016` | 25, 16, 22 | `--color-bg-tertiary` | Tertiary background (88% darker) |
 
-| Name | Hex | RGB | Usage | Notes |
-|------|-----|-----|-------|-------|
-| **Accent Blue** | `#58a6ff` | 88, 166, 255 | Links, info | Contrast color for variety |
-| **Warning Orange** | `#d29922` | 210, 153, 34 | Warnings, pending | High visibility |
-| **Warning Alt** | `#f59e0b` | 245, 158, 11 | Alternative warning | Brighter orange |
-| **Error Red** | `#f85149` | 248, 81, 73 | Errors, critical | Alert color |
-| **Bookmark Red** | `#ffb3b3` | 255, 179, 179 | Bookmarked items | Light red for bookmarks |
-| **Bookmark Light** | `#ffcccc` | 255, 204, 204 | Bookmark hover | Even lighter |
-| **Bookmark Lighter** | `#ffe6e6` | 255, 230, 230 | Bookmark subtle | Subtle background |
+### Text Colors (Very Light Tints)
 
+**Monochromatic:** 92-98% lighter tints of ecoBarbie for text on dark backgrounds
+
+| Color Preview | Name | Hex | RGB | CSS Variable | Contrast | Usage |
+|---------------|------|-----|-----|--------------|----------|-------|
+| ![#f9f5f8](https://via.placeholder.com/20x20/f9f5f8/f9f5f8.png) | **Text Primary** | `#f9f5f8` | 249, 245, 248 | `--color-text-primary` | High | Primary text (98% lighter) |
+| ![#f2e9ee](https://via.placeholder.com/20x20/f2e9ee/f2e9ee.png) | **Text Secondary** | `#f2e9ee` | 242, 233, 238 | `--color-text-secondary` | Medium | Secondary text (95% lighter) |
+| ![#eadde5](https://via.placeholder.com/20x20/eadde5/eadde5.png) | **Text Tertiary** | `#eadde5` | 234, 221, 229 | `--color-text-tertiary` | Lower | Tertiary text (92% lighter) |
+
+### Border Colors (Medium Dark Shades)
+
+**Monochromatic:** 75-78% darker shades of ecoBarbie for borders
+
+| Color Preview | Name | Hex | RGB | CSS Variable | Usage |
+|---------------|------|-----|-----|--------------|-------|
+| ![#35222e](https://via.placeholder.com/20x20/35222e/35222e.png) | **Border Primary** | `#35222e` | 53, 34, 46 | `--color-border-primary` | Primary border (75% darker) |
+| ![#2f1e28](https://via.placeholder.com/20x20/2f1e28/2f1e28.png) | **Border Secondary** | `#2f1e28` | 47, 30, 40 | `--color-border-secondary` | Secondary border (78% darker) |
+
+### Accent Colors (Monochromatic Variants)
+
+**Monochromatic:** All accents derive from ecoBarbie with saturation/value adjustments for visual distinction
+
+| Color Preview | Name | Hex | RGB | CSS Variable | Transform | Usage |
+|---------------|------|-----|-----|--------------|-----------|-------|
+| ![#e07fba](https://via.placeholder.com/20x20/e07fba/e07fba.png) | **Accent** | `#e07fba` | 224, 127, 186 | `--color-accent` | +20% sat, +5% val | Links, info, highlights |
+| ![#eb7dc0](https://via.placeholder.com/20x20/eb7dc0/eb7dc0.png) | **Warning** | `#eb7dc0` | 235, 125, 192 | `--color-warning` | +30% sat, +10% val | Warnings, pending states |
+| ![#954476](https://via.placeholder.com/20x20/954476/954476.png) | **Error** | `#954476` | 149, 68, 118 | `--color-error` | +50% sat, -30% val | Errors, critical alerts |
+| ![#eeb2d7](https://via.placeholder.com/20x20/eeb2d7/eeb2d7.png) | **Bookmark** | `#eeb2d7` | 238, 178, 215 | `--color-bookmark` | Same as tint_60 | Bookmark highlight |
+| ![#f6c1e2](https://via.placeholder.com/20x20/f6c1e2/f6c1e2.png) | **Bookmark Light** | `#f6c1e2` | 246, 193, 226 | `--color-bookmark-light` | Same as tint_80 | Bookmark hover |
+| ![#fce0ef](https://via.placeholder.com/20x20/fce0ef/fce0ef.png) | **Bookmark Lighter** | `#fce0ef` | 252, 224, 239 | `--color-bookmark-lighter` | 90% lighter tint | Bookmark subtle |
 ---
 
 ## Alpha Channel Variations
@@ -312,6 +321,15 @@ All colors are defined in **sRGB** color space for maximum web compatibility.
 
 ## Version History
 
+- **v3.0** (2026-01-18): TRUE Monochromatic Design - ALL colors derive from ecoBarbie
+  - **Breaking change**: Replaced ALL non-ecoBarbie colors with monochromatic variants
+  - Backgrounds: `bg_*` now use 88-92% darker ecoBarbie shades (was blue-grey)
+  - Text: `text_*` now use 92-98% lighter ecoBarbie tints (was neutral grey)
+  - Borders: `border_*` now use 75-78% darker ecoBarbie shades (was grey)
+  - Accents: `accent`, `warning`, `error` now use saturation/value adjusted ecoBarbie (was blue/orange/red)
+  - Bookmarks: Now use ecoBarbie tints (tint_60, tint_80, 90% tint)
+  - **Result**: 100% monochromatic palette - every color derives from #D689B8
+  - Added color preview images in documentation using placeholder service
 - **v2.2** (2026-01-18): Simplified naming - removed "ecobarbie" prefix
   - Renamed: `ecobarbie_tint_*` → `tint_*` (shorter, cleaner names)
   - Renamed: `ecobarbie_shade_*` → `shade_*`
