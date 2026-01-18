@@ -1,28 +1,22 @@
 /**
  * Forms Module - Contact Form & Flyer Upload
  * 
- * Handles form submissions for:
- * - Contact form (sends message via Telegram Bot API)
- * - Flyer upload form (creates pending event via Telegram Bot API)
+ * Handles client-side behavior for:
+ * - Contact form (validates input and shows user-friendly guidance)
+ * - Flyer upload form (validates input and explains how to submit events)
  * 
- * KISS: Simple client-side form handling with direct Telegram Bot API calls
+ * KISS: Simple client-side form handling that displays status messages
+ * and alternative contact methods (e.g. GitHub issues) without making
+ * any direct API calls.
  * 
- * Note: This uses a serverless function or GitHub Actions workflow as a proxy
- * to keep the TELEGRAM_BOT_TOKEN secret.
+ * Backend integration (e.g. Telegram Bot API via serverless function
+ * or GitHub Actions workflow) is planned for Phase 2.
  */
 
 class FormsManager {
     constructor(config) {
         this.config = config;
         this.isSubmitting = false;
-        
-        // Telegram configuration from config
-        this.telegramConfig = config.telegram || {};
-        this.adminChatIds = this.telegramConfig.admin_chat_ids || [];
-        
-        // API endpoint (GitHub Actions workflow or serverless function)
-        // This will be a GitHub Actions workflow that proxies to Telegram Bot API
-        this.apiEndpoint = 'https://api.github.com/repos/feileberlin/krwl-hof/dispatches';
         
         this.init();
     }
@@ -64,6 +58,11 @@ class FormsManager {
         }
         
         this.isSubmitting = true;
+        
+        // Disable submit button to prevent double-submission
+        const submitBtn = form.querySelector('button[type="submit"]');
+        if (submitBtn) submitBtn.disabled = true;
+        
         this.showStatus(statusEl, 'loading', 'Sending message...');
         this.disableForm(form, true);
         
@@ -90,6 +89,10 @@ class FormsManager {
         } finally {
             this.isSubmitting = false;
             this.disableForm(form, false);
+            
+            // Re-enable submit button
+            const submitBtn = form.querySelector('button[type="submit"]');
+            if (submitBtn) submitBtn.disabled = false;
         }
     }
     
@@ -123,14 +126,19 @@ class FormsManager {
             return;
         }
         
-        // Check file type
-        const allowedTypes = ['image/jpeg', 'image/png', 'application/pdf'];
+        // Check file type (include both image/jpeg and image/jpg for broader compatibility)
+        const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'];
         if (!allowedTypes.includes(file.type)) {
             this.showStatus(statusEl, 'error', 'Invalid file type. Please upload JPG, PNG, or PDF.');
             return;
         }
         
         this.isSubmitting = true;
+        
+        // Disable submit button to prevent double-submission
+        const submitBtn = form.querySelector('button[type="submit"]');
+        if (submitBtn) submitBtn.disabled = true;
+        
         this.showStatus(statusEl, 'loading', 'Uploading flyer...');
         this.disableForm(form, true);
         
@@ -159,46 +167,96 @@ class FormsManager {
         } finally {
             this.isSubmitting = false;
             this.disableForm(form, false);
+            
+            // Re-enable submit button
+            const submitBtn2 = form.querySelector('button[type="submit"]');
+            if (submitBtn2) submitBtn2.disabled = false;
         }
     }
     
     isValidEmail(email) {
-        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        // More robust email validation pattern
+        const re = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
         return re.test(email);
-    }
-    
-    async fileToBase64(file) {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = () => {
-                const base64 = reader.result.split(',')[1];
-                resolve(base64);
-            };
-            reader.onerror = reject;
-            reader.readAsDataURL(file);
-        });
-    }
-    
-    formatFileSize(bytes) {
-        if (bytes < 1024) return bytes + ' B';
-        if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
-        return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
     }
     
     showStatus(element, type, message) {
         if (!element) return;
         
+        // Clear any previous timeout and click handler to avoid leaks/duplication
+        if (element._statusTimeout) {
+            clearTimeout(element._statusTimeout);
+            element._statusTimeout = null;
+        }
+        if (element._statusClickHandler) {
+            element.removeEventListener('click', element._statusClickHandler);
+            element._statusClickHandler = null;
+        }
+        
         element.style.display = 'block';
         element.className = 'form-status form-status--' + type;
         
-        // Support multiline messages
-        element.innerHTML = message.replace(/\n/g, '<br>');
+        // Support multiline messages safely without using innerHTML
+        // Treat message as plain text and insert <br> elements between lines
+        const text = String(message == null ? '' : message);
         
-        // Auto-hide success messages after 10 seconds
+        // Clear any existing content
+        while (element.firstChild) {
+            element.removeChild(element.firstChild);
+        }
+        
+        const lines = text.split('\n');
+        lines.forEach((line, index) => {
+            element.appendChild(document.createTextNode(line));
+            if (index < lines.length - 1) {
+                element.appendChild(document.createElement('br'));
+            }
+        });
+        
+        // Add a close button for manual dismissal
+        const closeButton = document.createElement('button');
+        closeButton.type = 'button';
+        closeButton.className = 'form-status__close';
+        closeButton.setAttribute('aria-label', 'Close message');
+        closeButton.textContent = '×';
+        element.appendChild(closeButton);
+        
+        const hideStatus = () => {
+            element.style.display = 'none';
+            if (element._statusTimeout) {
+                clearTimeout(element._statusTimeout);
+                element._statusTimeout = null;
+            }
+            if (element._statusClickHandler) {
+                element.removeEventListener('click', element._statusClickHandler);
+                element._statusClickHandler = null;
+            }
+        };
+        
+        // Allow dismissal by clicking anywhere on the status element
+        const clickHandler = (event) => {
+            // Prevent default button behavior
+            event.preventDefault();
+            hideStatus();
+        };
+        
+        element._statusClickHandler = clickHandler;
+        element.addEventListener('click', clickHandler);
+        
+        // Auto-hide messages:
+        // - success after 10 seconds
+        // - error after 20 seconds (longer visibility)
+        let timeoutDuration = null;
         if (type === 'success') {
-            setTimeout(() => {
-                element.style.display = 'none';
-            }, 10000);
+            timeoutDuration = 10000;
+        } else if (type === 'error') {
+            timeoutDuration = 20000;
+        }
+        
+        if (timeoutDuration !== null) {
+            element._statusTimeout = setTimeout(() => {
+                hideStatus();
+            }, timeoutDuration);
         }
     }
     

@@ -1120,7 +1120,7 @@ strong, b {
     outline: none;
     border-color: var(--color-primary);
     background: var(--tint-50);
-    box-shadow: 0 0 0 2px rgba(214, 137, 184, 0.15);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-primary) 15%, transparent);
 }
 
 .dashboard-input:hover:not(:focus),
@@ -1186,7 +1186,7 @@ strong, b {
     background: var(--color-primary-hover);
     border-color: var(--color-primary-hover);
     transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(214, 137, 184, 0.3);
+    box-shadow: 0 2px 8px color-mix(in srgb, var(--color-primary) 30%, transparent);
 }
 
 .dashboard-btn:disabled {
@@ -1196,6 +1196,8 @@ strong, b {
 
 .dashboard-btn i {
     flex-shrink: 0;
+    width: 16px;
+    height: 16px;
 }
 
 .form-status {
@@ -1204,22 +1206,45 @@ strong, b {
     font-size: 0.85rem;
     margin-top: 0.5rem;
     animation: fadeIn 0.3s;
+    position: relative;
+    cursor: pointer;
+}
+
+.form-status__close {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background: none;
+    border: none;
+    color: inherit;
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+    padding: 0;
+    width: 20px;
+    height: 20px;
+}
+
+.form-status__close:hover {
+    opacity: 1;
 }
 
 .form-status--success {
-    background: rgba(214, 137, 184, 0.15);
+    background: color-mix(in srgb, var(--color-primary) 15%, transparent);
     border: 1px solid var(--color-primary);
     color: var(--color-primary);
 }
 
 .form-status--error {
-    background: rgba(149, 68, 118, 0.15);
+    background: color-mix(in srgb, var(--color-error) 15%, transparent);
     border: 1px solid var(--color-error);
     color: var(--color-error);
 }
 
 .form-status--loading {
-    background: rgba(214, 137, 184, 0.1);
+    background: color-mix(in srgb, var(--color-primary) 10%, transparent);
     border: 1px solid var(--color-primary);
     color: var(--text-secondary);
 }
