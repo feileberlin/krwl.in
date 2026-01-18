@@ -1752,7 +1752,12 @@ def cli_telegram_bot(base_path, config):
         print("🤖 Starting Telegram bot...")
         print("📱 Bot is ready to receive event submissions and contact messages")
         print("\nPress Ctrl+C to stop\n")
-        bot.start_sync()
+        
+        # FIX: Use asyncio.run() directly instead of start_sync()
+        # This eliminates the nested asyncio.run() call that causes event loop conflicts
+        import asyncio
+        asyncio.run(bot.run())
+        
         return 0
         
     except ValueError as e:
