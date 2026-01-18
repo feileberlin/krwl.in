@@ -17,7 +17,8 @@
       "scraped_at": "2026-01-17T15:00:00",
       "status": "pending",
       "category": "community",
-      "teaser": "KISS Test Event am 20.01."
+      "teaser": "KISS Test Event am 20.01.",
+      "location_id": "loc_test_venue"
     }
   ],
   "last_scraped": "2026-01-17T15:09:46.330894"

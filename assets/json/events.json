@@ -8,7 +8,7 @@
         "name": "Kunstmuseum Bayreuth",
         "lat": 49.944,
         "lon": 11.5747,
-        "address": "Maximilianstra\u00dfe 33, 95444 Bayreuth"
+        "address": "Maximilianstraße 33, 95444 Bayreuth"
       },
       "start_time": "2026-01-01T18:00:00",
       "end_time": null,
@@ -18,7 +18,8 @@
       "status": "published",
       "published_at": "2026-01-01T13:42:00.700054",
       "category": "arts",
-      "teaser": "Donnerstag,01.01."
+      "teaser": "Donnerstag,01.01.",
+      "location_id": "loc_kunstmuseum_bayreuth"
     },
     {
       "id": "html_frankenpost_4878466979842611893",
@@ -38,12 +39,13 @@
       "status": "published",
       "published_at": "2026-01-01T13:42:00.700226",
       "category": "arts",
-      "teaser": "Donnerstag,01.01."
+      "teaser": "Donnerstag,01.01.",
+      "location_id": "loc_rw21_volkshochschule_bayreuth"
     },
     {
       "id": "html_frankenpost_6710371282043762830",
-      "title": "F\u00fchrung durch die Wohnr\u00e4ume der Sommerresidenz der Markgr\u00e4fin Caroline",
-      "description": "F\u00fchrung durch die Wohnr\u00e4ume der Sommerresidenz der Markgr\u00e4fin Caroline am 01.01.2026 18:00",
+      "title": "Führung durch die Wohnräume der Sommerresidenz der Markgräfin Caroline",
+      "description": "Führung durch die Wohnräume der Sommerresidenz der Markgräfin Caroline am 01.01.2026 18:00",
       "location": {
         "name": "Schloss Carolinenruhe",
         "lat": 49.93047,
@@ -58,7 +60,8 @@
       "status": "published",
       "published_at": "2026-01-01T13:42:00.700343",
       "category": "palace",
-      "teaser": "F\u00fchrung durch die Wohnr\u00e4ume der Sommerresidenz der Markgr\u00e4fin Caroline"
+      "teaser": "Führung durch die Wohnräume der Sommerresidenz der Markgräfin Caroline",
+      "location_id": "loc_schloss_carolinenruhe"
     },
     {
       "id": "test_event_001",
@@ -78,9 +81,10 @@
       "status": "published",
       "published_at": "2026-01-01T14:45:54.237616",
       "category": "community",
-      "teaser": "A test event for approval flow testing"
+      "teaser": "A test event for approval flow testing",
+      "location_id": "loc_test_venue_berlin"
     }
   ],
-  "last_updated": "2026-01-03T15:47:19.164009",
+  "last_updated": "2026-01-18T16:09:01.314777",
   "pending_count": 1
 }
