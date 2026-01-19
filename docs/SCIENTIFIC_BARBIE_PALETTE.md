@@ -21,6 +21,8 @@ This palette is **100% monochromatic** - every color is scientifically derived f
 
 ## Complete Scientific Palette - 15 Unique Colors
 
+> **Important:** The emoji squares (🟪⬜⬛) in the table below are **unicode characters** that don't show actual color variations. They're just visual markers (purple square, white square, black square). For actual color previews, see the "Large Color Swatches" section below with HTML color blocks.
+
 <div style="font-size: 1.5em;">
 
 | Badge | Name | Hex | RGB | Transform | Category | Usage |
@@ -56,30 +58,87 @@ This palette is **100% monochromatic** - every color is scientifically derived f
 
 ## Large Color Swatches for Better Visibility
 
+> **Note:** The emoji squares (🟪⬜⬛) are unicode characters that don't show actual colors - they're just visual indicators. Below are HTML color swatches showing the **real colors**.
+
 ### Primary
-<h2 style="font-size: 3em;">🟪🟪🟪🟪🟪 <code>#D689B8</code> Primary (Base)</h2>
+<div style="display: flex; align-items: center; margin: 20px 0;">
+  <div style="width: 200px; height: 80px; background-color: #D689B8; border: 2px solid #333; border-radius: 8px; margin-right: 20px;"></div>
+  <div style="font-size: 1.5em;"><strong>Primary (Base)</strong><br/><code>#D689B8</code> (214, 137, 184)</div>
+</div>
 
 ### Tints (Lighter)
-<h3 style="font-size: 2.5em;">🟪🟪🟪🟪🟪 <code>#e09fc7</code> Tint 25%</h3>
-<h3 style="font-size: 2.5em;">🟪🟪🟪🟪🟪 <code>#eab7d6</code> Tint 50%</h3>
-<h3 style="font-size: 2.5em;">🟪🟪🟪🟪🟪 <code>#f4d1e7</code> Tint 75%</h3>
-<h3 style="font-size: 2.5em;">⬜⬜⬜⬜⬜ <code>#ffecf7</code> Tint 100%</h3>
+<div style="display: flex; align-items: center; margin: 20px 0;">
+  <div style="width: 200px; height: 60px; background-color: #e09fc7; border: 2px solid #333; border-radius: 8px; margin-right: 20px;"></div>
+  <div style="font-size: 1.2em;"><strong>Tint 25%</strong><br/><code>#e09fc7</code> (224, 159, 199)</div>
+</div>
+
+<div style="display: flex; align-items: center; margin: 20px 0;">
+  <div style="width: 200px; height: 60px; background-color: #eab7d6; border: 2px solid #333; border-radius: 8px; margin-right: 20px;"></div>
+  <div style="font-size: 1.2em;"><strong>Tint 50%</strong><br/><code>#eab7d6</code> (234, 183, 214)</div>
+</div>
+
+<div style="display: flex; align-items: center; margin: 20px 0;">
+  <div style="width: 200px; height: 60px; background-color: #f4d1e7; border: 2px solid #333; border-radius: 8px; margin-right: 20px;"></div>
+  <div style="font-size: 1.2em;"><strong>Tint 75%</strong><br/><code>#f4d1e7</code> (244, 209, 231)</div>
+</div>
+
+<div style="display: flex; align-items: center; margin: 20px 0;">
+  <div style="width: 200px; height: 60px; background-color: #ffecf7; border: 2px solid #333; border-radius: 8px; margin-right: 20px;"></div>
+  <div style="font-size: 1.2em;"><strong>Tint 100%</strong><br/><code>#ffecf7</code> (255, 236, 247)</div>
+</div>
 
 ### Shades (Darker)
-<h3 style="font-size: 2.5em;">🟪🟪🟪🟪🟪 <code>#a0668a</code> Shade 25%</h3>
-<h3 style="font-size: 2.5em;">🟪🟪🟪🟪🟪 <code>#6b445c</code> Shade 50%</h3>
-<h3 style="font-size: 2.5em;">🟪🟪🟪🟪🟪 <code>#35222e</code> Shade 75%</h3>
-<h3 style="font-size: 2.5em;">⬛⬛⬛⬛⬛ <code>#000000</code> Shade 100%</h3>
+<div style="display: flex; align-items: center; margin: 20px 0;">
+  <div style="width: 200px; height: 60px; background-color: #a0668a; border: 2px solid #333; border-radius: 8px; margin-right: 20px;"></div>
+  <div style="font-size: 1.2em;"><strong>Shade 25%</strong><br/><code>#a0668a</code> (160, 102, 138)</div>
+</div>
+
+<div style="display: flex; align-items: center; margin: 20px 0;">
+  <div style="width: 200px; height: 60px; background-color: #6b445c; border: 2px solid #333; border-radius: 8px; margin-right: 20px;"></div>
+  <div style="font-size: 1.2em;"><strong>Shade 50%</strong><br/><code>#6b445c</code> (107, 68, 92)</div>
+</div>
+
+<div style="display: flex; align-items: center; margin: 20px 0;">
+  <div style="width: 200px; height: 60px; background-color: #35222e; border: 2px solid #333; border-radius: 8px; margin-right: 20px;"></div>
+  <div style="font-size: 1.2em;"><strong>Shade 75%</strong><br/><code>#35222e</code> (53, 34, 46)</div>
+</div>
+
+<div style="display: flex; align-items: center; margin: 20px 0;">
+  <div style="width: 200px; height: 60px; background-color: #000000; border: 2px solid #333; border-radius: 8px; margin-right: 20px;"></div>
+  <div style="font-size: 1.2em;"><strong>Shade 100%</strong><br/><code>#000000</code> (0, 0, 0)</div>
+</div>
 
 ### Tones (Muted)
-<h3 style="font-size: 2.5em;">🟪🟪🟪🟪🟪 <code>#d6afc7</code> Tone 50%</h3>
-<h3 style="font-size: 2.5em;">🟪🟪🟪🟪🟪 <code>#d6c2ce</code> Tone 75%</h3>
-<h3 style="font-size: 2.5em;">🟪🟪🟪🟪🟪 <code>#d6d6d6</code> Tone 100%</h3>
+<div style="display: flex; align-items: center; margin: 20px 0;">
+  <div style="width: 200px; height: 60px; background-color: #d6afc7; border: 2px solid #333; border-radius: 8px; margin-right: 20px;"></div>
+  <div style="font-size: 1.2em;"><strong>Tone 50%</strong><br/><code>#d6afc7</code> (214, 175, 199)</div>
+</div>
+
+<div style="display: flex; align-items: center; margin: 20px 0;">
+  <div style="width: 200px; height: 60px; background-color: #d6c2ce; border: 2px solid #333; border-radius: 8px; margin-right: 20px;"></div>
+  <div style="font-size: 1.2em;"><strong>Tone 75%</strong><br/><code>#d6c2ce</code> (214, 194, 206)</div>
+</div>
+
+<div style="display: flex; align-items: center; margin: 20px 0;">
+  <div style="width: 200px; height: 60px; background-color: #d6d6d6; border: 2px solid #333; border-radius: 8px; margin-right: 20px;"></div>
+  <div style="font-size: 1.2em;"><strong>Tone 100%</strong><br/><code>#d6d6d6</code> (214, 214, 214)</div>
+</div>
 
 ### Special
-<h3 style="font-size: 2.5em;">🟪🟪🟪🟪🟪 <code>#e27aba</code> Accent</h3>
-<h3 style="font-size: 2.5em;">🟪🟪🟪🟪🟪 <code>#ef69bb</code> Warning</h3>
-<h3 style="font-size: 2.5em;">🟪🟪🟪🟪🟪 <code>#a33779</code> Error</h3>
+<div style="display: flex; align-items: center; margin: 20px 0;">
+  <div style="width: 200px; height: 60px; background-color: #e27aba; border: 2px solid #333; border-radius: 8px; margin-right: 20px;"></div>
+  <div style="font-size: 1.2em;"><strong>Accent</strong><br/><code>#e27aba</code> (226, 122, 186)</div>
+</div>
+
+<div style="display: flex; align-items: center; margin: 20px 0;">
+  <div style="width: 200px; height: 60px; background-color: #ef69bb; border: 2px solid #333; border-radius: 8px; margin-right: 20px;"></div>
+  <div style="font-size: 1.2em;"><strong>Warning</strong><br/><code>#ef69bb</code> (239, 105, 187)</div>
+</div>
+
+<div style="display: flex; align-items: center; margin: 20px 0;">
+  <div style="width: 200px; height: 60px; background-color: #a33779; border: 2px solid #333; border-radius: 8px; margin-right: 20px;"></div>
+  <div style="font-size: 1.2em;"><strong>Error</strong><br/><code>#a33779</code> (163, 55, 121)</div>
+</div>
 
 ---
 
