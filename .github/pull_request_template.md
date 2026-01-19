@@ -97,6 +97,19 @@ python3 src/event_manager.py test filters --verbose
 - [ ] Tested keyboard navigation (if UI changes)
 - [ ] Verified accessibility (if UI changes)
 
+## 🔍 PR Preview
+
+<!-- A preview artifact will be automatically generated when you create this PR -->
+<!-- Check the PR comments for a download link and testing instructions -->
+
+**Preview Status:** 
+- [ ] Preview artifact downloaded and tested locally
+- [ ] Map loads correctly with all features
+- [ ] No console errors in browser DevTools
+- [ ] Mobile view tested (if UI changes)
+
+> **Note:** PR previews are built in development mode and include demo events (pink markers) and a DEV watermark. This is expected behavior for testing.
+
 ## Screenshots (if applicable)
 
 <!-- Add screenshots for UI changes -->
