@@ -1,19 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 48" width="32" height="48">
-  <!-- Lucide music marker - unified gyro shape -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" width="96" height="96">
+  <!-- Icon-only marker (no gyro outline) - 3x larger -->
   
-  <!-- Drop shadow -->
-  <ellipse cx="16" cy="46" rx="6" ry="2" fill="#000" opacity="0.5"/>
+<!-- Drop shadow for depth -->
+  <ellipse cx="48.0" cy="90" rx="19.2" ry="6.0" fill="#000" opacity="0.3"/>
   
-  <!-- STANDARD GYRO SHAPE (same for all) -->
-  <path d="M16 2 C9 2 3 8 3 15 C3 24 16 46 16 46 C16 46 29 24 29 15 C29 8 23 2 16 2 Z" 
-        fill="none" stroke="#D689B8" stroke-width="2"/>
-  
-  <!-- Lucide icon (scaled and positioned) -->
+  <!-- Icon content scaled 3x and centered -->
+  <g transform="translate(0.0, 3.0) scale(3)">
+<!-- Lucide icon (scaled and positioned) -->
   <g transform="translate(16, 15) scale(0.5)" stroke="#D689B8" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
     <g transform="translate(-12, -12)">
 <path d="M9 18V5l12-2v13" />
   <circle cx="6" cy="18" r="3" />
   <circle cx="18" cy="16" r="3" />
     </g>
+  </g>
   </g>
 </svg>
