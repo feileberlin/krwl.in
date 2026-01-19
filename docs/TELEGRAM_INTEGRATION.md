@@ -193,6 +193,44 @@ Use the existing `telegram-bot.yml` workflow or integrate into a persistent runn
 
 ### For Admins
 
+#### Managing Trusted Organizers
+
+To add, update, or revoke trusted organizer PINs:
+
+**Using CLI:**
+```bash
+# Generate new PIN with hash
+python3 src/event_manager.py pin-generate
+
+# Compute hash for existing PIN
+python3 src/event_manager.py pin-hash 1234
+
+# Validate PIN format
+python3 src/event_manager.py pin-validate 5678
+
+# Check configured slots
+python3 src/event_manager.py pin-status
+```
+
+**Using TUI:**
+```bash
+python3 src/event_manager.py
+# → Choose option 9: "🔐 Manage Organizer PINs"
+# → Interactive menu with all PIN management options
+```
+
+**Steps to add new trusted organizer:**
+1. Generate PIN: `python3 src/event_manager.py pin-generate`
+2. Copy the hash from output
+3. Add to GitHub Secrets: `ORGANIZER_PIN_HASH_1` (or _2, _3)
+4. Share PIN with organizer securely (encrypted message)
+5. Organizer can now publish directly via Telegram
+
+**To revoke a PIN:**
+1. Delete the corresponding GitHub Secret (`ORGANIZER_PIN_HASH_1`, etc.)
+2. Generate new PIN if replacing
+3. Notify organizer of revocation
+
 #### Reviewing Flyer Submissions
 
 1. Check GitHub issues with label `telegram-submission` + `flyer`

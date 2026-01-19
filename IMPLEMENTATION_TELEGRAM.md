@@ -79,6 +79,30 @@ $ python3 scripts/manage_pins.py generate
 🔐 Hash: 8f7a5b...
 ```
 
+#### `src/modules/pin_manager.py` (NEW)
+**Integrated PIN management module with TUI and CLI interfaces:**
+
+**CLI Commands:**
+```bash
+python3 src/event_manager.py pin-generate    # Generate new PIN
+python3 src/event_manager.py pin-hash 1234   # Show hash for PIN
+python3 src/event_manager.py pin-validate PIN # Validate format
+python3 src/event_manager.py pin-status      # Show slot status
+```
+
+**TUI Integration:**
+- Added menu option 9: "🔐 Manage Organizer PINs"
+- Interactive menu with all PIN management features
+- Full integration with event manager TUI
+
+**Features:**
+- Generate random 4-digit PINs
+- Compute SHA256 hashes
+- Validate PIN format
+- Check GitHub Secrets slot status
+- Display setup instructions
+- Security warnings
+
 ### 4. Documentation
 
 #### `docs/TELEGRAM_INTEGRATION.md`
@@ -180,9 +204,24 @@ Add these in: Settings > Secrets and variables > Actions
 4. `ORGANIZER_PIN_HASH_3` - SHA256 hash of third PIN (optional)
 
 ### Generate PIN Hashes
+
+**Option 1: Standalone script**
 ```bash
 python3 scripts/manage_pins.py generate
 # Save hash to GitHub Secrets
+```
+
+**Option 2: Integrated CLI (RECOMMENDED)**
+```bash
+python3 src/event_manager.py pin-generate
+# Generates PIN and shows GitHub Secrets instructions
+```
+
+**Option 3: Interactive TUI**
+```bash
+python3 src/event_manager.py
+# → Choose option 9: "🔐 Manage Organizer PINs"
+# → Choose option 1: "Generate new PIN"
 ```
 
 ### Run Bot
