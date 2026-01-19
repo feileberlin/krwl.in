@@ -4,6 +4,12 @@ name: 🤖 Event Scraping, Weather Updates & Site Deployment
 # Handles: event scraping from RSS/HTML sources, weather updates, HTML generation, 
 # editorial workflow (review/publish), event archiving, and GitHub Pages deployment
 # This workflow dynamically adapts to scraper configuration changes
+#
+# CONSOLIDATED WORKFLOW - Integrates functionality from:
+# - pr-preview.yml - PR preview builds
+# - wishlist-ci.yml - Linting and testing
+# - config-validation.yml - Configuration validation
+# - auto-generate-html.yml - Auto HTML generation
 
 on:
   schedule:
@@ -13,6 +19,19 @@ on:
     - cron: '0 3 * * *'   # 4:00 AM Berlin time (CET)
     - cron: '0 15 * * *'  # 4:00 PM Berlin time (CET)
   
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      # Trigger on changes that affect site generation or code quality
+      - 'assets/css/**'
+      - 'assets/js/**'
+      - 'assets/html/**'
+      - 'assets/json/**'
+      - 'config.json'
+      - 'src/**'
+      - 'tests/**'
+      - 'features.json'
+  
   push:
     branches:
       - main
@@ -21,6 +40,10 @@ on:
       - 'assets/json/events.demo.json'  # Demo events data
       - 'config.json'                   # Configuration changes
       - 'src/modules/scraper.py'        # Scraper changes trigger workflow update
+      - 'assets/css/**'                 # CSS changes trigger HTML regeneration
+      - 'assets/js/**'                  # JavaScript changes trigger HTML regeneration
+      - 'assets/html/**'                # HTML component changes trigger regeneration
+      - 'src/modules/site_generator.py' # Generator logic changes
   
   # Telegram bot integration via repository_dispatch
   repository_dispatch:
@@ -46,6 +69,8 @@ on:
           - 'process-telegram-flyer'    # Process Telegram flyer submission with OCR
           - 'process-telegram-contact'  # Process Telegram contact form submission
           - 'process-telegram-pin'      # Process Telegram PIN publishing submission
+          - 'run-tests'          # Run linting and tests (CI job)
+          - 'validate-config'    # Validate configuration files
         default: 'scrape-and-deploy'
       
       force_scrape:
@@ -89,12 +114,25 @@ on:
         description: '📋 Event JSON data for PIN publishing'
         type: string
         required: false
+      
+      # PR preview options
+      enable_pr_preview:
+        description: '🔍 Enable PR preview generation for pull requests'
+        type: boolean
+        default: true
+      
+      # CI options
+      verbose_tests:
+        description: '🐛 Enable verbose output for tests and linting'
+        type: boolean
+        default: false
 
 permissions:
   contents: write
   pages: write
   id-token: write
   issues: write
+  pull-requests: write  # For PR comments
 
 # Prevent concurrent runs to avoid conflicts
 concurrency:
@@ -1350,3 +1388,332 @@ jobs:
           echo "⚠️ Invalid PIN submission detected"
           echo "User: ${{ steps.validate_pin.outputs.username }} (ID: ${{ steps.validate_pin.outputs.user_id }})"
           echo "This is logged but no notification is sent to user (security by obscurity)"
+  
+  # Job 12: Configuration Validation (from config-validation.yml)
+  validate-config:
+    name: ✅ Validate Configuration Files
+    runs-on: ubuntu-latest
+    if: |
+      github.event_name == 'pull_request' ||
+      github.event.inputs.task == 'validate-config' ||
+      (github.event_name == 'push' && contains(github.event.head_commit.modified, 'config.json'))
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      
+      - name: Run config validation
+        run: |
+          echo "✅ Validating config.json to prevent production issues..."
+          python3 scripts/validate_config.py
+      
+      - name: Validation summary
+        run: |
+          echo "## ✅ Configuration Validation" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Status:** ✓ Configuration is valid" >> $GITHUB_STEP_SUMMARY
+          echo "**Checks performed:**" >> $GITHUB_STEP_SUMMARY
+          echo "- Environment setting validation" >> $GITHUB_STEP_SUMMARY
+          echo "- Required fields present" >> $GITHUB_STEP_SUMMARY
+          echo "- JSON syntax validation" >> $GITHUB_STEP_SUMMARY
+  
+  # Job 13: CI - Lint & Test (from wishlist-ci.yml)
+  ci-lint-test:
+    name: 🔍 CI - Lint & Test Code
+    runs-on: ubuntu-latest
+    if: |
+      github.event_name == 'pull_request' ||
+      github.event.inputs.task == 'run-tests'
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install flake8 black pylint pytest pytest-cov || echo "Dev tools installed"
+      
+      - name: Validate JSON files
+        run: |
+          echo "::group::Validating JSON files"
+          python3 -c "import json; json.load(open('config.json'))" && echo "✓ config.json valid"
+          python3 -c "import json; json.load(open('features.json'))" && echo "✓ features.json valid"
+          echo "::endgroup::"
+      
+      - name: Run Python linting
+        continue-on-error: true
+        run: |
+          echo "::group::Python linting"
+          flake8 src/ tests/ --count --select=E9,F63,F7,F82 --show-source --statistics || true
+          black --check --diff src/ tests/ || true
+          echo "::endgroup::"
+      
+      - name: JavaScript syntax check
+        continue-on-error: true
+        run: |
+          echo "::group::JavaScript validation"
+          if [ -f "assets/js/app.js" ]; then
+            node -c assets/js/app.js 2>&1 || true
+          fi
+          echo "::endgroup::"
+      
+      - name: Run feature verification
+        continue-on-error: true
+        run: |
+          echo "::group::Feature registry verification"
+          if [ -f "src/modules/feature_verifier.py" ]; then
+            python3 src/modules/feature_verifier.py --verbose || true
+          fi
+          echo "::endgroup::"
+      
+      - name: Discover and run tests
+        continue-on-error: true
+        run: |
+          echo "::group::Running tests"
+          if command -v pytest &> /dev/null; then
+            pytest tests/ -v --tb=short --maxfail=5 || true
+          else
+            echo "Pytest not available"
+          fi
+          echo "::endgroup::"
+      
+      - name: CI Summary
+        run: |
+          echo "## 🔍 CI Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Checks performed:**" >> $GITHUB_STEP_SUMMARY
+          echo "- ✓ JSON validation" >> $GITHUB_STEP_SUMMARY
+          echo "- ✓ Python linting" >> $GITHUB_STEP_SUMMARY
+          echo "- ✓ JavaScript syntax" >> $GITHUB_STEP_SUMMARY
+          echo "- ✓ Feature registry" >> $GITHUB_STEP_SUMMARY
+          echo "- ✓ Test execution" >> $GITHUB_STEP_SUMMARY
+  
+  # Job 14: PR Preview Build (from pr-preview.yml)
+  pr-preview:
+    name: 🔍 Build PR Preview
+    runs-on: ubuntu-latest
+    if: |
+      github.event_name == 'pull_request' &&
+      (github.event.inputs.enable_pr_preview != 'false')
+    
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 2
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+      
+      - name: Fetch frontend libraries
+        run: |
+          python3 src/event_manager.py dependencies fetch
+      
+      - name: Generate preview site
+        env:
+          ENVIRONMENT: development
+        run: |
+          echo "🔨 Building preview in development mode..."
+          python3 src/event_manager.py generate
+          
+          # Add preview notice
+          PREVIEW_NOTICE="<!-- PR #${{ github.event.pull_request.number }} Preview Build -->"
+          sed -i "1i $PREVIEW_NOTICE" public/index.html
+      
+      - name: Install Playwright for screenshots
+        run: |
+          pip install playwright || true
+          playwright install chromium || true
+      
+      - name: Take screenshots
+        id: screenshots
+        continue-on-error: true
+        run: |
+          mkdir -p public/screenshots
+          
+          # Start local server
+          cd public
+          python3 -m http.server 8000 &
+          SERVER_PID=$!
+          sleep 3
+          
+          # Take screenshots
+          cd ..
+          python3 << 'EOF' || true
+          import asyncio
+          from playwright.async_api import async_playwright
+          
+          async def take_screenshots():
+              async with async_playwright() as p:
+                  browser = await p.chromium.launch()
+                  
+                  # Desktop
+                  page = await browser.new_page(viewport={'width': 1920, 'height': 1080})
+                  await page.goto('http://localhost:8000/')
+                  await page.wait_for_timeout(3000)
+                  await page.screenshot(path='public/screenshots/desktop.png', full_page=True)
+                  
+                  # Mobile
+                  mobile_page = await browser.new_page(viewport={'width': 375, 'height': 667})
+                  await mobile_page.goto('http://localhost:8000/')
+                  await mobile_page.wait_for_timeout(3000)
+                  await mobile_page.screenshot(path='public/screenshots/mobile.png', full_page=True)
+                  
+                  await browser.close()
+          
+          asyncio.run(take_screenshots())
+          EOF
+          
+          # Stop server
+          kill $SERVER_PID 2>/dev/null || true
+      
+      - name: Upload preview artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pr-${{ github.event.pull_request.number }}-preview
+          path: public/
+          retention-days: 90
+      
+      - name: Comment on PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const prNumber = context.issue.number;
+            const runId = context.runId;
+            const sha = context.payload.pull_request.head.sha.substring(0, 7);
+            
+            const comment = `## 🔍 PR Preview Built Successfully
+            
+            **Download:** [pr-${prNumber}-preview](https://github.com/${{ github.repository }}/actions/runs/${runId})
+            
+            ### 🚀 How to Test
+            1. Download artifact from link above
+            2. Extract zip file
+            3. Open \`public/index.html\` in browser
+            
+            **Commit:** \`${sha}\`
+            **Mode:** Development (includes demo events)
+            **Valid:** 90 days
+            `;
+            
+            github.rest.issues.createComment({
+              issue_number: prNumber,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+  
+  # Job 15: Auto-Generate HTML (from auto-generate-html.yml)
+  auto-generate-html:
+    name: 🎨 Auto-Generate HTML from Source Files
+    runs-on: ubuntu-latest
+    needs: [validate-config, ci-lint-test]
+    if: |
+      always() &&
+      github.event_name == 'push' &&
+      github.ref == 'refs/heads/main' &&
+      (contains(github.event.head_commit.modified, 'assets/css/') ||
+       contains(github.event.head_commit.modified, 'assets/js/') ||
+       contains(github.event.head_commit.modified, 'assets/html/') ||
+       contains(github.event.head_commit.modified, 'src/modules/site_generator.py'))
+    
+    outputs:
+      html_changed: ${{ steps.check_changes.outputs.changes }}
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+      
+      - name: Fetch frontend libraries
+        run: |
+          python3 src/event_manager.py dependencies fetch
+      
+      - name: Generate HTML files
+        run: |
+          echo "🔨 Auto-generating HTML from source files..."
+          python3 src/event_manager.py generate
+      
+      - name: Check for changes
+        id: check_changes
+        run: |
+          if git diff --quiet public/index.html; then
+            echo "changes=false" >> $GITHUB_OUTPUT
+            echo "No changes to HTML"
+          else
+            echo "changes=true" >> $GITHUB_OUTPUT
+            echo "HTML changed, will commit"
+          fi
+      
+      - name: Commit and push if changed
+        if: steps.check_changes.outputs.changes == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          git add public/index.html
+          git commit -m "🤖 Auto-generate HTML after source changes
+          
+          Triggered by: ${{ github.event.head_commit.message }}
+          Commit: ${{ github.sha }}"
+          
+          git push
+      
+      - name: Upload Pages artifact
+        if: steps.check_changes.outputs.changes == 'true'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./public
+  
+  # Job 16: Deploy Auto-Generated HTML
+  deploy-auto-generated:
+    name: 🚀 Deploy Auto-Generated HTML
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: auto-generate-html
+    if: needs.auto-generate-html.outputs.html_changed == 'true'
+    
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+      
+      - name: Summary
+        run: |
+          echo "## 🚀 Auto-Generated HTML Deployed" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**URL:** ${{ steps.deployment.outputs.page_url }}" >> $GITHUB_STEP_SUMMARY

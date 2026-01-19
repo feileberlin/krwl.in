@@ -1,3 +1,7 @@
+# ⚠️ DEPRECATED - This workflow has been consolidated into website-maintenance.yml
+# This file is kept for reference only and will not be executed by GitHub Actions
+# See: .github/workflows/website-maintenance.yml (Job 13: CI - Lint & Test)
+
 name: 🔍 Wishlist CI - Lint & Test
 
 # Non-destructive CI workflow for wishlist feature PRs
