@@ -14,7 +14,6 @@ All processing is done via GitHub Actions workflows triggered by repository_disp
 import os
 import sys
 import json
-import hashlib
 import logging
 import asyncio
 from pathlib import Path
@@ -168,6 +167,7 @@ class SimpleTelegramBot:
             await self._dispatch_to_github(
                 event_type='telegram_flyer_submission',
                 client_payload={
+                    'file_id': file_obj.file_id,  # Include file_id for workflow to download
                     'file_name': cache_filename,
                     'user_id': user.id,
                     'username': user.username or 'unknown',
@@ -311,7 +311,7 @@ class SimpleTelegramBot:
         
         try:
             # Run in executor to avoid blocking
-            loop = asyncio.get_event_loop()
+            loop = asyncio.get_running_loop()
             response = await loop.run_in_executor(
                 None,
                 lambda: requests.post(url, json=data, headers=headers, timeout=10)

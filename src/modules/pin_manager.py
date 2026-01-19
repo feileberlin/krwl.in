@@ -6,7 +6,7 @@ trusted organizers to publish events directly via Telegram without editorial rev
 """
 
 import hashlib
-import random
+import secrets
 import os
 from pathlib import Path
 from typing import Optional, Tuple
@@ -26,12 +26,12 @@ class PINManager:
     
     def generate_pin(self) -> str:
         """
-        Generate a random 4-digit PIN.
+        Generate a random 4-digit PIN using cryptographically secure random.
         
         Returns:
             4-digit PIN as string
         """
-        return f"{random.randint(0, 9999):04d}"
+        return f"{secrets.randbelow(10000):04d}"
     
     def compute_hash(self, pin: str) -> str:
         """

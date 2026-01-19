@@ -13,13 +13,13 @@ Usage:
 
 import sys
 import hashlib
-import random
+import secrets
 import argparse
 
 
 def generate_pin():
-    """Generate a random 4-digit PIN."""
-    return f"{random.randint(0, 9999):04d}"
+    """Generate a random 4-digit PIN using cryptographically secure random."""
+    return f"{secrets.randbelow(10000):04d}"
 
 
 def compute_hash(pin: str) -> str:

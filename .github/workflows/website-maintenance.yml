@@ -95,9 +95,6 @@ permissions:
   pages: write
   id-token: write
   issues: write
-  contents: write
-  pages: write
-  id-token: write
 
 # Prevent concurrent runs to avoid conflicts
 concurrency:
@@ -943,34 +940,70 @@ jobs:
         run: |
           # Get file info from payload or inputs
           if [ "${{ github.event_name }}" == "repository_dispatch" ]; then
+            FILE_ID="${{ github.event.client_payload.file_id }}"
             FILE_NAME="${{ github.event.client_payload.file_name }}"
             USER_ID="${{ github.event.client_payload.user_id }}"
             USERNAME="${{ github.event.client_payload.username }}"
             CAPTION="${{ github.event.client_payload.caption }}"
           else
-            FILE_NAME="${{ github.event.inputs.telegram_file_id }}"
+            FILE_ID="${{ github.event.inputs.telegram_file_id }}"
+            FILE_NAME=""
             USER_ID="${{ github.event.inputs.telegram_user_id }}"
             USERNAME="manual"
             CAPTION=""
           fi
           
-          echo "FILE_NAME=$FILE_NAME" >> $GITHUB_ENV
+          if [ -z "$FILE_ID" ]; then
+            echo "❌ No Telegram file_id provided in event payload or inputs."
+            exit 1
+          fi
+          
           echo "USER_ID=$USER_ID" >> $GITHUB_ENV
           echo "USERNAME=$USERNAME" >> $GITHUB_ENV
           echo "CAPTION=$CAPTION" >> $GITHUB_ENV
           
-          echo "Processing flyer: $FILE_NAME from user $USER_ID"
+          echo "Fetching flyer for file_id: $FILE_ID from user $USER_ID"
+          
+          # Ensure cache directory exists
+          mkdir -p .cache/telegram
+          
+          # Use Telegram Bot API to resolve file_path from file_id
+          API_URL="https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getFile?file_id=$FILE_ID"
+          FILE_PATH=$(curl -s "$API_URL" | python3 -c 'import sys, json; data = json.load(sys.stdin); print(data.get("result", {}).get("file_path", ""))' 2>/dev/null || echo "")
+          
+          if [ -z "$FILE_PATH" ]; then
+            echo "❌ Failed to resolve Telegram file_path for file_id: $FILE_ID"
+            exit 1
+          fi
+          
+          # Derive FILE_NAME from Telegram file_path if not explicitly provided
+          if [ -z "$FILE_NAME" ]; then
+            FILE_NAME="$(basename "$FILE_PATH")"
+            echo "Derived FILE_NAME from Telegram file_path: $FILE_NAME"
+          fi
+          
+          # Persist final FILE_NAME for downstream steps
+          echo "FILE_NAME=$FILE_NAME" >> $GITHUB_ENV
+          
+          DOWNLOAD_URL="https://api.telegram.org/file/bot${TELEGRAM_BOT_TOKEN}/$FILE_PATH"
+          echo "Downloading Telegram file from: $DOWNLOAD_URL"
+          if ! curl -s -L "$DOWNLOAD_URL" -o ".cache/telegram/$FILE_NAME"; then
+            echo "❌ Failed to download Telegram file to .cache/telegram/$FILE_NAME"
+            exit 1
+          fi
+          
+          echo "✅ Telegram file downloaded to .cache/telegram/$FILE_NAME"
       
       - name: Run Tesseract OCR
         id: ocr
         run: |
-          # Create cache directory
+          # Create cache directory (should already exist from previous step, but ensure it)
           mkdir -p .cache/telegram
           
-          # Check if file exists in cache (uploaded by bot)
+          # Check if file exists in cache (downloaded from Telegram in previous step)
           if [ ! -f ".cache/telegram/$FILE_NAME" ]; then
-            echo "❌ File not found in cache: $FILE_NAME"
-            echo "The bot should have uploaded this file before dispatching."
+            echo "❌ File not found at expected location: .cache/telegram/$FILE_NAME"
+            echo "This usually indicates a problem resolving or downloading the Telegram file."
             exit 1
           fi
           
@@ -997,49 +1030,68 @@ jobs:
       
       - name: Create draft event JSON
         id: create_draft
+        env:
+          USER_ID: ${{ env.USER_ID }}
+          USERNAME: ${{ env.USERNAME }}
+          FILE_NAME: ${{ env.FILE_NAME }}
+          CAPTION: ${{ env.CAPTION }}
+          OCR_TEXT: ${{ env.OCR_TEXT }}
         run: |
           TIMESTAMP=$(date -u '+%Y-%m-%d_%H-%M-%S')
           DRAFT_FILE="assets/json/pending_events_telegram_${USER_ID}_${TIMESTAMP}.json"
           
-          # Create draft event with OCR text
-          python3 -c "
+          # Create draft event with OCR text using environment variables (safer than inline)
+          python3 << 'PYCODE'
           import json
+          import os
+          import sys
           from datetime import datetime
           
+          user_id = os.environ.get("USER_ID", "")
+          ocr_text = os.environ.get("OCR_TEXT", "")
+          username = os.environ.get("USERNAME", "")
+          file_name = os.environ.get("FILE_NAME", "")
+          caption = os.environ.get("CAPTION", "")
+          timestamp = os.environ.get("TIMESTAMP", "")
+          
+          draft_file = os.environ.get("DRAFT_FILE", "")
+          
           draft = {
-            'id': 'telegram_flyer_${USER_ID}_${TIMESTAMP}',
-            'title': 'Telegram Flyer Submission',
-            'description': '''$OCR_TEXT''',
-            'teaser': 'Event submitted via Telegram flyer upload',
-            'location': {
-              'name': 'Hof',
-              'lat': 50.3167,
-              'lon': 11.9167,
-              'address_hidden': True
-            },
-            'start_time': datetime.now().isoformat(),
-            'end_time': None,
-            'url': None,
-            'source': 'telegram',
-            'scraped_at': datetime.now().isoformat(),
-            'status': 'pending',
-            'category': 'community',
-            'metadata': {
-              'telegram_user_id': '$USER_ID',
-              'telegram_username': '$USERNAME',
-              'telegram_file_name': '$FILE_NAME',
-              'telegram_caption': '''$CAPTION''',
-              'submitted_via': 'telegram_flyer_ocr',
-              'needs_review': True
-            }
+              'id': f'telegram_flyer_{user_id}_{timestamp}',
+              'title': 'Telegram Flyer Submission',
+              'description': ocr_text,
+              'teaser': 'Event submitted via Telegram flyer upload',
+              'location': {
+                  'name': 'Hof',
+                  'lat': 50.3167,
+                  'lon': 11.9167,
+                  'address_hidden': True
+              },
+              'start_time': datetime.now().isoformat(),
+              'end_time': None,
+              'url': None,
+              'source': 'telegram',
+              'scraped_at': datetime.now().isoformat(),
+              'status': 'pending',
+              'category': 'community',
+              'metadata': {
+                  'telegram_user_id': user_id,
+                  'telegram_username': username,
+                  'telegram_file_name': file_name,
+                  'telegram_caption': caption,
+                  'submitted_via': 'telegram_flyer_ocr',
+                  'needs_review': True
+              }
           }
           
-          with open('$DRAFT_FILE', 'w') as f:
-            json.dump(draft, f, indent=2)
+          with open(draft_file, 'w') as f:
+              json.dump(draft, f, indent=2)
           
-          print(f'Created draft: $DRAFT_FILE')
-          "
+          print(f'Created draft: {draft_file}')
+          PYCODE
           
+          echo "TIMESTAMP=$TIMESTAMP" >> $GITHUB_ENV
+          echo "DRAFT_FILE=$DRAFT_FILE" >> $GITHUB_ENV
           echo "draft_file=$DRAFT_FILE" >> $GITHUB_OUTPUT
           echo "✅ Draft event created: $DRAFT_FILE"
       
@@ -1198,10 +1250,13 @@ jobs:
             USERNAME="manual"
           fi
           
-          # Compute SHA256 hash of PIN
-          PIN_HASH=$(echo -n "$PIN" | sha256sum | awk '{print $1}')
+          # Strip all whitespace from PIN before hashing to match bot & docs behavior
+          PIN_STRIPPED="$(echo -n "$PIN" | tr -d '[:space:]')"
           
-          echo "Validating PIN (hash: ${PIN_HASH:0:8}...)"
+          # Compute SHA256 hash of stripped PIN
+          PIN_HASH=$(echo -n "$PIN_STRIPPED" | sha256sum | awk '{print $1}')
+          
+          echo "Validating organizer PIN..."
           
           # Check against stored hashes
           VALID=false
@@ -1224,16 +1279,14 @@ jobs:
       
       - name: Validate and publish event
         if: steps.validate_pin.outputs.valid == 'true'
+        env:
+          EVENT_JSON: ${{ github.event_name == 'repository_dispatch' && toJson(github.event.client_payload.event_data) || github.event.inputs.telegram_event_json }}
+          USER_ID: ${{ steps.validate_pin.outputs.user_id }}
+          USERNAME: ${{ steps.validate_pin.outputs.username }}
         run: |
-          if [ "${{ github.event_name }}" == "repository_dispatch" ]; then
-            EVENT_JSON='${{ toJson(github.event.client_payload.event_data) }}'
-          else
-            EVENT_JSON='${{ github.event.inputs.telegram_event_json }}'
-          fi
-          
           echo "Validating event JSON..."
           
-          # Validate JSON with jq
+          # Validate JSON with jq (EVENT_JSON comes from env)
           echo "$EVENT_JSON" | jq empty || {
             echo "❌ Invalid JSON"
             exit 1
@@ -1241,38 +1294,43 @@ jobs:
           
           echo "✅ JSON is valid"
           
-          # Add metadata to event
+          # Add metadata to event using jq (safer than inline Python with triple quotes)
           TIMESTAMP=$(date -u '+%Y-%m-%dT%H:%M:%SZ')
           
-          AUGMENTED_JSON=$(echo "$EVENT_JSON" | jq --arg ts "$TIMESTAMP" '. + {
+          AUGMENTED_JSON=$(echo "$EVENT_JSON" | jq --arg ts "$TIMESTAMP" --arg uid "$USER_ID" --arg uname "$USERNAME" '. + {
             "_comment": "Published by authorized organizer",
             "_published_via": "telegram_pin",
             "_published_at": $ts,
-            "_telegram_user_id": "${{ steps.validate_pin.outputs.user_id }}",
-            "_telegram_username": "${{ steps.validate_pin.outputs.username }}"
+            "_telegram_user_id": $uid,
+            "_telegram_username": $uname
           }')
           
           echo "Augmented event JSON:"
           echo "$AUGMENTED_JSON" | jq .
           
-          # Add to events.json
-          python3 -c "
+          # Write augmented JSON to temp file for safer Python processing
+          echo "$AUGMENTED_JSON" > /tmp/augmented_event.json
+          
+          # Add to events.json using Python with file input (no code injection risk)
+          python3 << 'PYCODE'
           import json
           
           # Load existing events
           with open('assets/json/events.json', 'r') as f:
-            data = json.load(f)
+              data = json.load(f)
           
-          # Add new event
-          new_event = json.loads('''$AUGMENTED_JSON''')
+          # Load new event from temp file (safer than inline)
+          with open('/tmp/augmented_event.json', 'r') as f:
+              new_event = json.load(f)
+          
           data['events'].append(new_event)
           
           # Save updated events
           with open('assets/json/events.json', 'w') as f:
-            json.dump(data, f, indent=2)
+              json.dump(data, f, indent=2)
           
           print('✅ Event added to events.json')
-          "
+          PYCODE
       
       - name: Commit published event
         if: steps.validate_pin.outputs.valid == 'true'
