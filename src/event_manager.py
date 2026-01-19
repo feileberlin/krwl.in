@@ -1793,15 +1793,26 @@ def cli_telegram_bot(base_path, config):
         import asyncio
         
         async def start_bot():
-            """Async wrapper for bot startup"""
+            """Async wrapper for bot startup with proper cleanup"""
             await bot.run()
         
         # Create a new event loop to avoid conflicts with existing loops
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
         try:
+            # Run bot until interrupted
             loop.run_until_complete(start_bot())
+        except KeyboardInterrupt:
+            # Graceful shutdown on Ctrl+C
+            print("\n\n👋 Stopping bot...")
         finally:
+            # Cancel any remaining tasks
+            pending = asyncio.all_tasks(loop)
+            for task in pending:
+                task.cancel()
+            # Wait for cancellations to complete
+            if pending:
+                loop.run_until_complete(asyncio.gather(*pending, return_exceptions=True))
             loop.close()
         
         return 0
@@ -1813,7 +1824,7 @@ def cli_telegram_bot(base_path, config):
         print("  • TELEGRAM_BOT_TOKEN environment variable is set")
         return 1
     except KeyboardInterrupt:
-        print("\n\n👋 Telegram bot stopped")
+        print("\n\n👋 Telegram bot stopped gracefully")
         return 0
     except Exception as e:
         print(f"❌ Error starting bot: {e}")

@@ -724,7 +724,12 @@ class TelegramBot:
         return handlers
     
     async def run(self):
-        """Run the bot (blocking)."""
+        """
+        Run the bot (blocking).
+        
+        This method manually manages the application lifecycle to avoid
+        conflicts with external event loop management in GitHub Actions/CI.
+        """
         if not self.telegram_config.get('enabled'):
             logger.warning("Telegram bot is disabled in config")
             return
@@ -738,9 +743,45 @@ class TelegramBot:
         for handler in self.build_handlers():
             self.application.add_handler(handler)
         
-        # Start bot
+        # Manually initialize and start the application
+        # This avoids conflicts with run_polling's internal loop management
         logger.info("Telegram bot is running. Press Ctrl+C to stop.")
-        await self.application.run_polling(allowed_updates=Update.ALL_TYPES)
+        
+        try:
+            # Initialize the application
+            await self.application.initialize()
+            await self.application.start()
+            
+            # Start polling for updates
+            await self.application.updater.start_polling(
+                allowed_updates=Update.ALL_TYPES
+            )
+            
+            # Keep the bot running until stopped
+            # This will run until KeyboardInterrupt or external stop
+            import asyncio
+            
+            # Use asyncio.sleep in a loop to allow for cancellation
+            while True:
+                await asyncio.sleep(1)  # Sleep in small intervals to allow cancellation
+            
+        except asyncio.CancelledError:
+            # Normal cancellation (e.g., from timeout or KeyboardInterrupt)
+            logger.info("Bot polling cancelled")
+        except Exception as e:
+            logger.error(f"Bot error: {e}")
+            raise
+        finally:
+            # Clean shutdown
+            logger.info("Shutting down bot...")
+            try:
+                if self.application.updater and self.application.updater.running:
+                    await self.application.updater.stop()
+                if self.application.running:
+                    await self.application.stop()
+                await self.application.shutdown()
+            except Exception as e:
+                logger.error(f"Error during shutdown: {e}")
     
 def main():
     """Standalone entry point for testing."""
@@ -757,6 +798,9 @@ def main():
         print("Enable it by setting 'telegram.enabled: true' and adding your bot token")
         sys.exit(1)
     
+    bot = None
+    loop = None
+    
     try:
         bot = TelegramBot(config, base_path)
         print("🤖 Starting Telegram bot...")
@@ -770,13 +814,26 @@ def main():
         asyncio.set_event_loop(loop)
         try:
             loop.run_until_complete(start_bot())
+        except KeyboardInterrupt:
+            # Graceful shutdown on Ctrl+C
+            print("\n\n👋 Stopping bot...")
         finally:
+            # Clean up pending tasks
+            pending = asyncio.all_tasks(loop)
+            for task in pending:
+                task.cancel()
+            # Wait for task cancellation
+            if pending:
+                loop.run_until_complete(asyncio.gather(*pending, return_exceptions=True))
             loop.close()
             
     except KeyboardInterrupt:
-        print("\n👋 Bot stopped")
+        print("\n👋 Bot stopped gracefully")
     except Exception as e:
+        logger.error(f"Bot error: {e}")
         print(f"❌ Error: {e}")
+        import traceback
+        traceback.print_exc()
         sys.exit(1)
 
 
