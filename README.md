@@ -93,6 +93,31 @@ Facebook sources in `config.json` should have `scan_posts: true`:
 
 **Note:** `ocr_enabled` defaults to `true` if not specified, so it's optional. Facebook scraping works without API credentials but may be limited by Facebook's page structure changes.
 
+## 🔍 PR Preview (KISS Approach)
+
+Want to test changes before merging? We use a **simple artifact-based preview** system!
+
+When you open a PR, GitHub Actions automatically:
+1. **Builds** the site in development mode
+2. **Uploads** as downloadable artifact (90-day retention)
+3. **Comments** on PR with download link
+
+**How to test:**
+```bash
+# Download artifact from PR comment link
+# Extract ZIP and either:
+cd public && python3 -m http.server 8000  # Local server
+# OR just open public/index.html in browser
+```
+
+**Why artifacts, not live URLs?**
+- ✅ KISS: No external services (Netlify, Vercel)
+- ✅ Simple: Just download and test
+- ✅ Private: Test locally, no external deployments
+- ✅ Free: Pure GitHub, no extra accounts
+
+👉 [Full PR Preview Documentation](docs/PR_PREVIEW.md)
+
 ## 📚 Documentation Philosophy
 
 **Keep It Simple, Stupid (KISS)**

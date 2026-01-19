@@ -1,0 +1,199 @@
+name: 🔍 PR Preview Build (KISS)
+
+# Simple PR preview using GitHub Actions artifacts
+# Build the site and upload as downloadable artifact - No deployment complexity!
+# Respects KISS: No external services, no tokens, just artifacts
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      # Trigger on changes that affect site generation
+      - 'assets/css/**'
+      - 'assets/js/**'
+      - 'assets/html/**'
+      - 'assets/json/**'
+      - 'config.json'
+      - 'src/**'
+      - '.github/workflows/pr-preview.yml'
+
+permissions:
+  contents: read
+  pull-requests: write  # For commenting on PR
+
+# Only one preview build per PR at a time
+concurrency:
+  group: "pr-preview-${{ github.event.pull_request.number }}"
+  cancel-in-progress: true
+
+jobs:
+  build-preview:
+    name: 🔨 Build PR Preview
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+      
+      - name: Fetch frontend libraries (Leaflet, fonts)
+        run: |
+          python3 src/event_manager.py dependencies fetch
+      
+      - name: Generate preview site
+        env:
+          # Force development mode for preview
+          ENVIRONMENT: development
+        run: |
+          echo "🔨 Building preview site in development mode..."
+          echo "   (includes demo events and DEV watermark)"
+          python3 src/event_manager.py generate
+          
+          # Add preview notice to HTML
+          PREVIEW_NOTICE="<!-- PR #${{ github.event.pull_request.number }} Preview Build -->"
+          sed -i "1i $PREVIEW_NOTICE" public/index.html
+          
+          echo "✓ Preview site built successfully"
+      
+      - name: Create preview info file
+        run: |
+          cat > public/PREVIEW_INFO.txt << 'EOF'
+          ========================================
+          PR PREVIEW BUILD
+          ========================================
+          
+          PR Number: #${{ github.event.pull_request.number }}
+          Branch: ${{ github.event.pull_request.head.ref }}
+          Commit: ${{ github.event.pull_request.head.sha }}
+          Author: ${{ github.event.pull_request.user.login }}
+          Built: $(date -u '+%Y-%m-%d %H:%M:%S UTC')
+          
+          ========================================
+          HOW TO TEST THIS PREVIEW
+          ========================================
+          
+          Option 1: Local Testing (Recommended)
+          -------------------------------------
+          1. Download the artifact from GitHub Actions
+          2. Extract the zip file
+          3. Open 'public/index.html' in your browser
+          
+          Option 2: Local Server
+          ----------------------
+          1. Download and extract the artifact
+          2. cd public
+          3. python3 -m http.server 8000
+          4. Open http://localhost:8000
+          
+          ========================================
+          NOTES
+          ========================================
+          
+          - Preview built in DEVELOPMENT mode
+          - Includes demo events (pink markers)
+          - Shows DEV watermark in UI
+          - Valid for 90 days (artifact retention)
+          
+          ========================================
+          EOF
+      
+      - name: Upload preview artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pr-${{ github.event.pull_request.number }}-preview
+          path: public/
+          retention-days: 90
+          compression-level: 9
+      
+      - name: Comment on PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const prNumber = context.issue.number;
+            const runId = context.runId;
+            const sha = context.payload.pull_request.head.sha.substring(0, 7);
+            
+            const comment = `## 🔍 PR Preview Built Successfully
+            
+            A preview of this PR has been generated and is available for download!
+            
+            ### 📦 Download Preview
+            
+            **Artifact:** \`pr-${prNumber}-preview\`
+            
+            👉 [Download Preview Artifact](https://github.com/${{ github.repository }}/actions/runs/${runId})
+            
+            ### 🚀 How to Test
+            
+            **Quick Test (Just open file):**
+            1. Download artifact from link above
+            2. Extract the zip file
+            3. Open \`public/index.html\` in your browser
+            
+            **Local Server (Better for testing):**
+            \`\`\`bash
+            # After extracting the artifact
+            cd public
+            python3 -m http.server 8000
+            # Open http://localhost:8000
+            \`\`\`
+            
+            ### ℹ️ Preview Details
+            
+            - **Mode:** Development (includes demo events)
+            - **Commit:** \`${sha}\`
+            - **Built:** ${new Date().toUTCString()}
+            - **Valid:** 90 days
+            
+            ### 🎯 What to Check
+            
+            - [ ] Map loads correctly with all markers
+            - [ ] Filters work as expected
+            - [ ] UI/UX changes display properly
+            - [ ] Mobile responsiveness (resize browser)
+            - [ ] No console errors (check browser DevTools)
+            
+            ---
+            
+            💡 **Tip:** Preview is built in development mode, so you'll see demo events (pink markers) and a DEV watermark. This is normal!
+            `;
+            
+            github.rest.issues.createComment({
+              issue_number: prNumber,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+      
+      - name: Summary
+        run: |
+          echo "## 🔍 PR Preview Build Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**PR:** #${{ github.event.pull_request.number }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Branch:** ${{ github.event.pull_request.head.ref }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Commit:** ${{ github.event.pull_request.head.sha }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Preview artifact uploaded successfully" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Artifact:** \`pr-${{ github.event.pull_request.number }}-preview\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Retention:** 90 days" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "---" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📥 How to Download" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "1. Go to the [Actions tab](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> $GITHUB_STEP_SUMMARY
+          echo "2. Scroll to 'Artifacts' section" >> $GITHUB_STEP_SUMMARY
+          echo "3. Download \`pr-${{ github.event.pull_request.number }}-preview\`" >> $GITHUB_STEP_SUMMARY
+          echo "4. Extract and open \`public/index.html\`" >> $GITHUB_STEP_SUMMARY
