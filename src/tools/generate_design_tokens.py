@@ -57,6 +57,51 @@ def convert_to_css_var_name(key: str) -> str:
     return key.replace('_', '-')
 
 
+def create_color_badge_url(hex_color: str) -> str:
+    """
+    Create a shields.io badge URL for color preview.
+    
+    Args:
+        hex_color: Hex color code (e.g., '#D689B8' or 'D689B8')
+    
+    Returns:
+        Shields.io badge URL for the color
+    """
+    # Remove '#' if present
+    color = hex_color.lstrip('#')
+    
+    # Create shields.io badge URL
+    # Format: https://img.shields.io/badge/[text]-[color]?style=flat-square
+    return f"https://img.shields.io/badge/%20-%20-{color}?style=flat-square"
+
+
+def is_hex_color(value: str) -> bool:
+    """
+    Check if a value is a hex color code.
+    
+    Args:
+        value: String to check
+    
+    Returns:
+        True if value is a hex color code
+    """
+    if not isinstance(value, str):
+        return False
+    
+    # Remove '#' if present
+    color = value.lstrip('#')
+    
+    # Check if it's a valid hex color (3 or 6 characters)
+    if len(color) not in [3, 6]:
+        return False
+    
+    try:
+        int(color, 16)
+        return True
+    except ValueError:
+        return False
+
+
 def generate_css_custom_properties(design: Dict) -> str:
     """Generate CSS custom properties from design tokens"""
     lines = [
@@ -79,8 +124,31 @@ def generate_css_custom_properties(design: Dict) -> str:
     if 'colors' in design:
         lines.append("  /* Colors */")
         for key, value in design['colors'].items():
+            # Skip keys that start with underscore (comments and previews)
+            if key.startswith('_'):
+                css_var = convert_to_css_var_name(key)
+                lines.append(f"  --color-{css_var}: {value};")
+                continue
+            
             css_var = convert_to_css_var_name(key)
+            
+            # Add the CSS variable
             lines.append(f"  --color-{css_var}: {value};")
+            
+            # Check if this is a hex color and add badge URL in comment
+            if is_hex_color(value):
+                badge_url = create_color_badge_url(value)
+                
+                # Check if there's a corresponding _preview key for description
+                preview_key = f"_preview_{key}"
+                if preview_key in design['colors']:
+                    preview_text = design['colors'][preview_key]
+                    # Remove hex code from preview text if it starts with it (avoid duplication)
+                    if preview_text.startswith(value):
+                        preview_text = preview_text[len(value):].strip(' -')
+                    lines.append(f"  /* {badge_url} {preview_text} */")
+                else:
+                    lines.append(f"  /* {badge_url} */")
         lines.append("")
     
     # Generate typography tokens
