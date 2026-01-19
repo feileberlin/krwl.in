@@ -102,3 +102,7 @@ data/*.json
 
 # Weather cache - regenerated hourly
 assets/json/weather_cache.json
+
+# Log files
+logs/
+*.log
