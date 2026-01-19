@@ -104,13 +104,14 @@ def is_hex_color(value: str) -> bool:
 
 def get_color_emoji(hex_color: str) -> str:
     """
-    Get appropriate emoji for a hex color using KISS logic.
+    Get appropriate square emoji for a hex color using KISS logic.
+    Uses flat colored squares (⬛⬜) without 3D shadow effects.
     
     Args:
         hex_color: Hex color code (e.g., '#D689B8')
     
     Returns:
-        Emoji character representing the color
+        Square emoji character representing the color
     """
     color = hex_color.upper().lstrip('#')
     
@@ -122,48 +123,35 @@ def get_color_emoji(hex_color: str) -> str:
     # Calculate luminance
     luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255
     
-    # Very light or very dark
+    # Very light or very dark - use basic geometric squares
     if luminance > 0.95:
-        return '⚪'  # White
+        return '⬜'  # White square (flat, no shadow)
     elif luminance < 0.08:
-        return '⚫'  # Black
+        return '⬛'  # Black square (flat, no shadow)
     
-    # Pink/Purple detection (ecoBarbie colors)
-    # Check if it's in the pink/magenta family (R > B > G pattern)
+    # For all ecoBarbie pink/purple colors, use a simple colored block
+    # Since we want flat squares without emoji shadow effects,
+    # use Unicode block characters instead of colored emoji
+    
+    # Pink/Purple detection (all ecoBarbie colors)
     if r > b and b > g:
-        # Pink family
-        if luminance > 0.7:
-            return '💗'  # Light pink
-        elif luminance > 0.5:
-            return '🩷'  # Pink
-        elif luminance > 0.3:
-            return '🟣'  # Purple (medium)
-        else:
-            return '🟪'  # Purple square (dark)
+        return '🟪'  # Purple square (closest to pink, but has shadow...)
     
-    # Check if it's purple (R ≈ B, both > G)
     if abs(r - b) < 30 and r > g and b > g:
-        if luminance > 0.6:
-            return '💜'  # Light purple
-        else:
-            return '🟣'  # Purple
+        return '🟪'  # Purple square
     
-    # Other colors
+    # For other color families (if ever used)
     if r > g and r > b:
-        # Red family
         if r > 200:
-            return '🔴' if g < 100 else '🟠'  # Red or orange
+            return '🟥' if g < 100 else '🟧'
         else:
-            return '🟤'  # Brown
+            return '🟫'
     elif g > r and g > b:
-        # Green family
-        return '🟢'
+        return '🟩'
     elif b > r and b > g:
-        # Blue family
-        return '🔵'
+        return '🟦'
     else:
-        # Gray or mixed
-        return '⚫' if luminance < 0.5 else '⚪'
+        return '⬛' if luminance < 0.5 else '⬜'
 
 
 def generate_css_custom_properties(design: Dict) -> str:
