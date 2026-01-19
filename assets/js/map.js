@@ -210,7 +210,7 @@ class MapManager {
         const userIconUrl = userMarkerConfig.icon || 
             (window.MARKER_ICONS && window.MARKER_ICONS['marker-geolocation']) ||
             'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48Y2lyY2xlIGN4PSIxMiIgY3k9IjEyIiByPSI4IiBmaWxsPSIjNENBRjUwIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIvPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjMiIGZpbGw9IiNmZmYiLz48L3N2Zz4=';
-        const userIconSize = userMarkerConfig.size || [32, 48];
+        const userIconSize = userMarkerConfig.size || [96, 96];  // 3x larger (was 32x48)
         const userIconAnchor = userMarkerConfig.anchor || [userIconSize[0] / 2, userIconSize[1]];
         const userPopupAnchor = userMarkerConfig.popup_anchor || [0, -userIconSize[1]];
         
@@ -259,9 +259,9 @@ class MapManager {
         
         const markerIcon = L.icon({
             iconUrl: iconUrl,
-            iconSize: [32, 48],
-            iconAnchor: [16, 48],
-            popupAnchor: [0, -48]
+            iconSize: [96, 96],  // 3x larger (was 32x48)
+            iconAnchor: [48, 96],  // Center bottom (was 16x48)
+            popupAnchor: [0, -96]  // Above marker (was 0x-48)
         });
         
         // Calculate offset for markers at same location (spiderfying)

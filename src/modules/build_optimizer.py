@@ -2,7 +2,7 @@
 Build Optimization Module
 
 Optimize builds with unused CSS removal, debug info stripping,
-and comment removal for production.
+comment removal, and unused marker removal for production.
 
 Features:
 - Unused CSS removal (HTML-based scanning)
@@ -10,6 +10,7 @@ Features:
 - Comment stripping
 - JSON minification
 - Build modes (inline-all, external-assets, hybrid)
+- Unused marker removal (based on event categories)
 
 Usage:
     from build_optimizer import BuildOptimizer
@@ -17,9 +18,11 @@ Usage:
     optimizer = BuildOptimizer(base_path)
     optimized_css = optimizer.remove_unused_css(css, html)
     clean_js = optimizer.remove_debug_info(js)
+    optimizer.optimize_markers()  # Remove unused marker SVG files
 """
 
 import re
+import json
 import logging
 from pathlib import Path
 from typing import Dict, List, Set, Optional, Tuple
@@ -51,7 +54,8 @@ class BuildOptimizer:
             'css_rules_removed': 0,
             'css_bytes_saved': 0,
             'debug_statements_removed': 0,
-            'comments_removed': 0
+            'comments_removed': 0,
+            'markers_removed': 0
         }
     
     def extract_css_selectors(self, css: str) -> Set[str]:
