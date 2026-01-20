@@ -68,6 +68,45 @@
     /* Touch action for mobile drag */
     touch-action: none;
     user-select: none;
+    /* Overflow visible to allow tail to extend beyond bubble */
+    overflow: visible;
+}
+
+/* CSS-based tail (triangular pointer) */
+.speech-bubble::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 15px 10px 0 10px;
+    border-color: var(--color-primary) transparent transparent transparent;
+    /* Position controlled by CSS custom properties set from JavaScript */
+    left: var(--tail-x, 50%);
+    top: var(--tail-y, 100%);
+    transform: translate(-50%, 0) rotate(var(--tail-angle, 0deg));
+    transform-origin: top center;
+    pointer-events: none;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+    z-index: -1;
+}
+
+/* Tail background fill (creates filled triangle) */
+.speech-bubble::before {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 13px 8px 0 8px;
+    border-color: rgba(13, 17, 23, 0.95) transparent transparent transparent;
+    /* Position controlled by CSS custom properties set from JavaScript */
+    left: var(--tail-x, 50%);
+    top: var(--tail-y, 100%);
+    transform: translate(-50%, -2px) rotate(var(--tail-angle, 0deg));
+    transform-origin: top center;
+    pointer-events: none;
+    z-index: -1;
 }
 
 /* Bookmarked bubble - different border color */
@@ -75,6 +114,15 @@
     border-color: var(--color-bookmark); /* Light/bright red border for bookmarked bubbles */
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5),
                 0 0 15px rgba(255, 179, 179, 0.4); /* Match border color in shadow */
+}
+
+/* Bookmarked bubble tail colors */
+.speech-bubble.bubble-is-bookmarked::after {
+    border-color: var(--color-bookmark) transparent transparent transparent;
+}
+
+.speech-bubble.bubble-is-bookmarked::before {
+    border-color: rgba(13, 17, 23, 0.95) transparent transparent transparent;
 }
 
 /* Change all text colors inside bookmarked bubble to match border */

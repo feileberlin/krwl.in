@@ -579,7 +579,7 @@ class SpeechBubbles {
 
     /**
      * Update connector coordinates between a marker and bubble.
-     * Draws two curved bezier paths (forked tail) that merge at circle around marker.
+     * Updates SVG connector paths and CSS-based bubble tail positioning.
      * @param {Object} entry - Bubble data entry.
      * @param {Object} bubbleRect - Bubble rectangle bounds.
      * @param {Object} markerPos - Marker position in container coordinates (anchor point).
@@ -656,6 +656,22 @@ class SpeechBubbles {
         if (connector.path) {
             connector.path.setAttribute('d', pathData);
             connector.path.style.opacity = isVisible ? '' : '0';
+        }
+        
+        // Update CSS-based tail on bubble element
+        if (entry.bubble) {
+            // Calculate tail position relative to bubble
+            const tailX = ((bubbleCenterPoint.x - bubbleRect.x) / bubbleRect.width) * 100;
+            const tailY = ((bubbleCenterPoint.y - bubbleRect.y) / bubbleRect.height) * 100;
+            
+            // Calculate angle for tail rotation (pointing toward marker)
+            const angleRad = Math.atan2(dy, dx);
+            const angleDeg = (angleRad * 180 / Math.PI) + 90; // +90 because tail points down by default
+            
+            // Set CSS custom properties for tail positioning
+            entry.bubble.style.setProperty('--tail-x', `${tailX}%`);
+            entry.bubble.style.setProperty('--tail-y', `${tailY}%`);
+            entry.bubble.style.setProperty('--tail-angle', `${angleDeg}deg`);
         }
     }
 
