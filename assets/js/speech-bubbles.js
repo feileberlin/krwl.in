@@ -42,6 +42,15 @@ const VARIATION_RANGE_X = 21;
 const SEED_MULTIPLIER_Y = 13;
 const VARIATION_RANGE_Y = 15;
 
+// Force-directed layout constants
+const REPULSION_FORCE = 0.8;          // Strength of repulsion between bubbles
+const REPULSION_RADIUS = 300;          // Distance at which bubbles start repelling
+const DAMPING = 0.7;                   // Velocity damping (prevents oscillation)
+const MIN_VELOCITY = 0.5;              // Stop moving if velocity below this
+const MAX_VELOCITY = 15;               // Cap velocity to prevent wild movements
+const ANIMATION_DURATION = 600;        // ms for collision resolution animation
+const COLLISION_CHECK_INTERVAL = 100;  // ms between collision checks
+
 class SpeechBubbles {
     constructor(config, storage) {
         this.config = config;
@@ -65,16 +74,32 @@ class SpeechBubbles {
             mapOffsetY: 0
         };
         
+        // Force-directed layout state
+        this.forceState = {
+            isRunning: false,
+            animationFrame: null,
+            checkInterval: null,
+            velocities: new Map(), // bubbleId -> {vx, vy}
+            lastPositions: new Map() // bubbleId -> {x, y}
+        };
+        
         // Bind drag handlers to preserve context
         this.handleDragStart = this.handleDragStart.bind(this);
         this.handleDragMove = this.handleDragMove.bind(this);
         this.handleDragEnd = this.handleDragEnd.bind(this);
+        
+        // Bind force-directed handlers
+        this.applyForces = this.applyForces.bind(this);
+        this.checkCollisions = this.checkCollisions.bind(this);
     }
     
     /**
      * Clear all speech bubbles from the map
      */
     clearSpeechBubbles() {
+        // Stop force-directed layout
+        this.stopForceDirectedLayout();
+        
         // Remove map move listener if exists
         if (this.map && this.moveHandler) {
             this.map.off('move', this.moveHandler);
@@ -150,6 +175,11 @@ class SpeechBubbles {
         this.moveHandler = () => this.updateBubblePositions();
         map.on('move', this.moveHandler);
         map.on('zoom', this.moveHandler);
+        
+        // Start force-directed layout for collision avoidance
+        if (eventItems.length > 1) {
+            this.startForceDirectedLayout();
+        }
     }
     
     /**
@@ -882,6 +912,235 @@ class SpeechBubbles {
     log(message, ...args) {
         if (this.config && this.config.debug) {
             console.log('[SpeechBubbles]', message, ...args);
+        }
+    }
+    
+    /**
+     * Start force-directed layout system for collision avoidance
+     */
+    startForceDirectedLayout() {
+        if (this.forceState.isRunning) return;
+        
+        this.forceState.isRunning = true;
+        
+        // Initialize velocities for all bubbles
+        this.speechBubbles.forEach(bubble => {
+            const bubbleId = bubble.dataset.bubbleId;
+            if (!this.forceState.velocities.has(bubbleId)) {
+                this.forceState.velocities.set(bubbleId, { vx: 0, vy: 0 });
+            }
+            if (!this.forceState.lastPositions.has(bubbleId)) {
+                const rect = bubble.getBoundingClientRect();
+                this.forceState.lastPositions.set(bubbleId, { x: rect.left, y: rect.top });
+            }
+        });
+        
+        // Start collision checking interval
+        this.forceState.checkInterval = setInterval(this.checkCollisions, COLLISION_CHECK_INTERVAL);
+        
+        this.log('Force-directed layout started');
+    }
+    
+    /**
+     * Stop force-directed layout system
+     */
+    stopForceDirectedLayout() {
+        if (!this.forceState.isRunning) return;
+        
+        this.forceState.isRunning = false;
+        
+        if (this.forceState.animationFrame) {
+            cancelAnimationFrame(this.forceState.animationFrame);
+            this.forceState.animationFrame = null;
+        }
+        
+        if (this.forceState.checkInterval) {
+            clearInterval(this.forceState.checkInterval);
+            this.forceState.checkInterval = null;
+        }
+        
+        this.log('Force-directed layout stopped');
+    }
+    
+    /**
+     * Check for collisions between bubbles and start force application if needed
+     */
+    checkCollisions() {
+        if (this.dragState.isDragging) return; // Don't interfere with drag
+        
+        let hasCollisions = false;
+        
+        // Check all pairs of bubbles for collisions
+        for (let i = 0; i < this.speechBubbles.length; i++) {
+            for (let j = i + 1; j < this.speechBubbles.length; j++) {
+                const bubble1 = this.speechBubbles[i];
+                const bubble2 = this.speechBubbles[j];
+                
+                if (this.bubblesCollide(bubble1, bubble2)) {
+                    hasCollisions = true;
+                    break;
+                }
+            }
+            if (hasCollisions) break;
+        }
+        
+        // Start animation loop if collisions detected and not already running
+        if (hasCollisions && !this.forceState.animationFrame) {
+            this.forceState.animationStartTime = performance.now();
+            this.applyForces();
+        }
+    }
+    
+    /**
+     * Check if two bubbles collide (including their tails)
+     * @param {HTMLElement} bubble1 - First bubble
+     * @param {HTMLElement} bubble2 - Second bubble
+     * @returns {boolean} True if bubbles collide
+     */
+    bubblesCollide(bubble1, bubble2) {
+        const rect1 = bubble1.getBoundingClientRect();
+        const rect2 = bubble2.getBoundingClientRect();
+        
+        // Add padding for tail clearance
+        const padding = 20; // Extra space for tails
+        
+        return !(
+            rect1.right + padding < rect2.left ||
+            rect1.left - padding > rect2.right ||
+            rect1.bottom + padding < rect2.top ||
+            rect1.top - padding > rect2.bottom
+        );
+    }
+    
+    /**
+     * Apply repulsion forces between overlapping bubbles
+     */
+    applyForces() {
+        const now = performance.now();
+        const elapsed = now - (this.forceState.animationStartTime || now);
+        
+        // Stop if animation duration exceeded
+        if (elapsed > ANIMATION_DURATION) {
+            this.forceState.animationFrame = null;
+            return;
+        }
+        
+        const forces = new Map(); // bubbleId -> {fx, fy}
+        
+        // Initialize forces to zero
+        this.speechBubbles.forEach(bubble => {
+            const bubbleId = bubble.dataset.bubbleId;
+            forces.set(bubbleId, { fx: 0, fy: 0 });
+        });
+        
+        // Calculate repulsion forces between all pairs
+        for (let i = 0; i < this.speechBubbles.length; i++) {
+            for (let j = i + 1; j < this.speechBubbles.length; j++) {
+                const bubble1 = this.speechBubbles[i];
+                const bubble2 = this.speechBubbles[j];
+                
+                const id1 = bubble1.dataset.bubbleId;
+                const id2 = bubble2.dataset.bubbleId;
+                
+                const rect1 = bubble1.getBoundingClientRect();
+                const rect2 = bubble2.getBoundingClientRect();
+                
+                // Calculate centers
+                const center1 = {
+                    x: rect1.left + rect1.width / 2,
+                    y: rect1.top + rect1.height / 2
+                };
+                const center2 = {
+                    x: rect2.left + rect2.width / 2,
+                    y: rect2.top + rect2.height / 2
+                };
+                
+                // Calculate distance between centers
+                const dx = center2.x - center1.x;
+                const dy = center2.y - center1.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                // Skip if too far apart
+                if (distance > REPULSION_RADIUS) continue;
+                
+                // Calculate repulsion force (inverse square law)
+                const force = distance > 0 ? REPULSION_FORCE * (REPULSION_RADIUS - distance) / distance : REPULSION_FORCE;
+                
+                // Apply force in opposite directions
+                const fx = (dx / distance) * force;
+                const fy = (dy / distance) * force;
+                
+                const force1 = forces.get(id1);
+                const force2 = forces.get(id2);
+                
+                force1.fx -= fx;
+                force1.fy -= fy;
+                force2.fx += fx;
+                force2.fy += fy;
+            }
+        }
+        
+        // Apply forces to update velocities and positions
+        let anyMovement = false;
+        
+        this.speechBubbles.forEach(bubble => {
+            const bubbleId = bubble.dataset.bubbleId;
+            const force = forces.get(bubbleId);
+            const velocity = this.forceState.velocities.get(bubbleId);
+            
+            // Update velocity with force and damping
+            velocity.vx = (velocity.vx + force.fx) * DAMPING;
+            velocity.vy = (velocity.vy + force.fy) * DAMPING;
+            
+            // Clamp velocity
+            const speed = Math.sqrt(velocity.vx * velocity.vx + velocity.vy * velocity.vy);
+            if (speed > MAX_VELOCITY) {
+                velocity.vx = (velocity.vx / speed) * MAX_VELOCITY;
+                velocity.vy = (velocity.vy / speed) * MAX_VELOCITY;
+            }
+            
+            // Skip if velocity too small
+            if (speed < MIN_VELOCITY) {
+                velocity.vx = 0;
+                velocity.vy = 0;
+                return;
+            }
+            
+            anyMovement = true;
+            
+            // Update position
+            const currentStyle = window.getComputedStyle(bubble);
+            const currentLeft = parseFloat(currentStyle.left) || 0;
+            const currentTop = parseFloat(currentStyle.top) || 0;
+            
+            let newLeft = currentLeft + velocity.vx;
+            let newTop = currentTop + velocity.vy;
+            
+            // Keep bubbles in viewport bounds
+            const container = bubble.parentElement;
+            const containerRect = container.getBoundingClientRect();
+            const filterBar = document.querySelector('.filter-bar');
+            const filterBarHeight = filterBar ? filterBar.offsetHeight + FILTER_BAR_PADDING : DEFAULT_FILTER_BAR_HEIGHT;
+            
+            newLeft = Math.max(BUBBLE_MARGIN, Math.min(newLeft, containerRect.width - BUBBLE_WIDTH - BUBBLE_MARGIN));
+            newTop = Math.max(filterBarHeight + BUBBLE_MARGIN, Math.min(newTop, containerRect.height - BUBBLE_HEIGHT - BUBBLE_MARGIN));
+            
+            // Apply new position
+            bubble.style.left = `${newLeft}px`;
+            bubble.style.top = `${newTop}px`;
+            
+            // Update connector line if exists
+            const bubbleDataEntry = this.bubbleData.find(bd => bd.bubble === bubble);
+            if (bubbleDataEntry && bubbleDataEntry.connector) {
+                this.updateConnectorLine(bubbleDataEntry.marker, bubble, bubbleDataEntry.connector);
+            }
+        });
+        
+        // Continue animation if there's still movement
+        if (anyMovement) {
+            this.forceState.animationFrame = requestAnimationFrame(this.applyForces);
+        } else {
+            this.forceState.animationFrame = null;
         }
     }
 }
