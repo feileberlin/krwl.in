@@ -629,16 +629,12 @@ class EventScraper:
             from .models import validate_event_data
             from .event_schema import EventSchema
             
-            # Add category using AI if not already present
-            if 'category' not in event_data or not event_data['category']:
-                # Initialize EventSchema with AI categorization
-                schema = EventSchema(self.config, self.base_path)
-                
-                # Infer category (uses AI if available)
-                event_data['category'] = schema._infer_category(
-                    event_data.get('title', ''),
-                    event_data.get('description', '')
-                )
+            # Initialize EventSchema with AI categorization
+            schema = EventSchema(self.config, self.base_path)
+            
+            # Apply full schema migration BEFORE validation
+            # This ensures all required fields (teaser, category, etc.) are generated
+            event_data = schema.migrate_event(event_data)
             
             # Validate event structure
             validated_event = validate_event_data(event_data)
