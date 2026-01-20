@@ -23,6 +23,11 @@ const MAX_POSITION_ATTEMPTS = 30;
 const GOLDEN_ANGLE = 2.399963229728653; // Golden ratio angle (≈137.5°) in radians
 const SPREAD_BASE = 1;                 // Avoid sqrt(0) spacing
 
+// Marker icon offset constants (for connector lines)
+// Category markers are 96x96px with anchor at [48, 96] (bottom-center)
+// Visual icon center is ~48px above the anchor point (at y=48 in the SVG)
+const MARKER_ICON_CENTER_OFFSET_Y = -48; // Negative = upward offset from anchor
+
 // Filter bar constants
 const FILTER_BAR_PADDING = 20;         // Extra padding below filter bar
 const DEFAULT_FILTER_BAR_HEIGHT = 60;  // Fallback if filter bar not found
@@ -562,15 +567,23 @@ class SpeechBubbles {
      * Update connector coordinates between a marker and bubble.
      * @param {Object} entry - Bubble data entry.
      * @param {Object} bubbleRect - Bubble rectangle bounds.
-     * @param {Object} markerPos - Marker position in container coordinates.
+     * @param {Object} markerPos - Marker position in container coordinates (anchor point).
      * @param {boolean} isVisible - Whether the bubble is visible.
      */
     updateConnectorLine(entry, bubbleRect, markerPos, isVisible) {
         const connector = entry.connector;
         if (!connector) return;
-        const endPoint = this.getClosestPointOnRect(markerPos, bubbleRect);
-        connector.setAttribute('x1', markerPos.x);
-        connector.setAttribute('y1', markerPos.y);
+        
+        // Adjust marker position to point to the visual icon center instead of anchor point
+        // Category markers have their icon centered ~48px above the bottom anchor
+        const markerIconCenter = {
+            x: markerPos.x,
+            y: markerPos.y + MARKER_ICON_CENTER_OFFSET_Y
+        };
+        
+        const endPoint = this.getClosestPointOnRect(markerIconCenter, bubbleRect);
+        connector.setAttribute('x1', markerIconCenter.x);
+        connector.setAttribute('y1', markerIconCenter.y);
         connector.setAttribute('x2', endPoint.x);
         connector.setAttribute('y2', endPoint.y);
         connector.style.opacity = isVisible ? '' : '0';
@@ -673,9 +686,11 @@ class SpeechBubbles {
         return markers.map(marker => {
             if (!this.isValidMarker(marker)) return null;
             const pos = map.latLngToContainerPoint(marker.getLatLng());
+            // Center the collision box around the visual icon center, not the anchor
+            const iconCenterY = pos.y + MARKER_ICON_CENTER_OFFSET_Y;
             return {
                 x: pos.x - MARKER_CLEARANCE,
-                y: pos.y - MARKER_CLEARANCE,
+                y: iconCenterY - MARKER_CLEARANCE,
                 width: MARKER_CLEARANCE * 2,
                 height: MARKER_CLEARANCE * 2
             };
