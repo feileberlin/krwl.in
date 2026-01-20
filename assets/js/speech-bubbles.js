@@ -539,8 +539,11 @@ class SpeechBubbles {
     }
 
     /**
-     * Create a connector line element between a marker and bubble.
-     * Creates a curved bezier path (tail-like) and a circle around the marker.
+     * Create SVG connector elements between a marker and its bubble.
+     * Builds the forked bezier connector path(s) and an (optionally invisible)
+     * boundary circle around the marker. The visual "tail" attached to the
+     * bubble itself is implemented via CSS pseudo-element, not by this
+     * function.
      * @param {Object} markerPos - Marker position in container coordinates.
      * @param {Object} bubbleRect - Bubble rectangle bounds.
      * @returns {Object|null} Connector elements (path and circle).
@@ -548,12 +551,12 @@ class SpeechBubbles {
     createConnectorLine(markerPos, bubbleRect) {
         if (!this.connectorLayer) return null;
         
-        // Create curved path (bezier) instead of straight line
+        // Create curved path (bezier) for SVG connectors
         const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
         path.classList.add('bubble-connector-path');
         this.connectorLayer.appendChild(path);
         
-        // Create circle around the marker icon
+        // Create invisible boundary circle around the marker icon
         const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
         circle.classList.add('bubble-connector-circle');
         circle.setAttribute('r', MARKER_CIRCLE_RADIUS);
@@ -610,6 +613,14 @@ class SpeechBubbles {
         const dx = markerIconCenter.x - bubbleCenterPoint.x;
         const dy = markerIconCenter.y - bubbleCenterPoint.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
+        
+        // Guard against zero or near-zero distance to avoid division by zero / NaN coordinates
+        if (distance < 0.01) {
+            // Too close - hide connectors
+            if (connector.path) connector.path.style.opacity = '0';
+            if (connector.circle) connector.circle.style.opacity = '0';
+            return;
+        }
         
         const circleEdgeX = markerIconCenter.x - (dx / distance) * CONNECTOR_STOP_DISTANCE;
         const circleEdgeY = markerIconCenter.y - (dy / distance) * CONNECTOR_STOP_DISTANCE;

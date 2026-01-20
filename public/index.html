@@ -1011,7 +1011,8 @@ html.js-enabled noscript {
     transform-origin: top center;
     pointer-events: none;
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
-    z-index: -1;
+    /* z-index: 1 to render above bubble background but below other UI */
+    z-index: 1;
 }
 
 /* Tail background fill (creates filled triangle) */
@@ -1029,7 +1030,8 @@ html.js-enabled noscript {
     transform: translate(-50%, -2px) rotate(var(--tail-angle, 0deg));
     transform-origin: top center;
     pointer-events: none;
-    z-index: -1;
+    /* z-index: 1 to render above bubble background */
+    z-index: 1;
 }
 
 /* Bookmarked bubble - different border color */
@@ -4203,7 +4205,7 @@ window.APP_CONFIG = {"debug": false, "app": {"environment": "ci"}, "map": {"defa
 window.__INLINE_EVENTS_DATA__ = { "events": [{"id": "html_frankenpost_-3959068800383208116", "title": "Kunst in Bayreuth - Werke der 1940er bis 1960er Jahre - aus den Sammlungen und Stiftungen im Kunstmuseum", "description": "Donnerstag,01.01.2026,", "location": {"name": "Kunstmuseum Bayreuth", "lat": 49.944, "lon": 11.5747, "address": "Maximilianstraße 33, 95444 Bayreuth"}, "start_time": "2026-01-01T18:00:00", "end_time": null, "url": "https://event.frankenpost.de/detail.php?event_id=3119599", "source": "https://event.frankenpost.de/detail.php?event_id=3119599", "scraped_at": "2026-01-01T13:27:18.685017", "status": "published", "published_at": "2026-01-01T13:42:00.700054", "category": "arts", "teaser": "Donnerstag,01.01."}, {"id": "html_frankenpost_4878466979842611893", "title": "Ausstellung zum Fotowettbewerb: Zeig mir deine Lebenswerte Stadt (bis 7. Januar 2026)", "description": "Donnerstag,01.01.2026,", "location": {"name": "RW21 Volkshochschule Bayreuth", "lat": 49.9454, "lon": 11.5771, "address": "Richard-Wagner-Str. 21, 95444 Bayreuth"}, "start_time": "2026-01-01T18:00:00", "end_time": null, "url": "https://event.frankenpost.de/detail.php?event_id=3202184", "source": "https://event.frankenpost.de/detail.php?event_id=3202184", "scraped_at": "2026-01-01T13:27:18.684482", "status": "published", "published_at": "2026-01-01T13:42:00.700226", "category": "arts", "teaser": "Donnerstag,01.01."}, {"id": "html_frankenpost_6710371282043762830", "title": "Führung durch die Wohnräume der Sommerresidenz der Markgräfin Caroline", "description": "Führung durch die Wohnräume der Sommerresidenz der Markgräfin Caroline am 01.01.2026 18:00", "location": {"name": "Schloss Carolinenruhe", "lat": 49.93047, "lon": 11.5674, "address": "Colmdorf 8, 95448 Bayreuth"}, "start_time": "2026-01-01T18:00:00", "end_time": null, "url": "https://event.frankenpost.de/detail.php?event_id=3185852", "source": "https://event.frankenpost.de/detail.php?event_id=3185852", "scraped_at": "2026-01-01T13:27:18.683791", "status": "published", "published_at": "2026-01-01T13:42:00.700343", "category": "palace", "teaser": "Führung durch die Wohnräume der Sommerresidenz der Markgräfin Caroline"}, {"id": "test_event_001", "title": "Test Community Gathering", "description": "A test event for approval flow testing", "location": {"name": "Test Venue Berlin", "lat": 52.52, "lon": 13.405, "address_hidden": true}, "start_time": "2026-01-15T19:00:00", "end_time": null, "url": "https://example.com/test-event", "source": "https://example.com/test-event", "scraped_at": "2026-01-01T14:45:00", "status": "published", "published_at": "2026-01-01T14:45:54.237616", "category": "community", "teaser": "A test event for approval flow testing"}] };
 window.MARKER_ICONS = {"marker-community": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA5NiA5NiIgd2lkdGg9Ijk2IiBoZWlnaHQ9Ijk2Ij4KICA8IS0tIEljb24tb25seSBtYXJrZXIgKG5vIGd5cm8gb3V0bGluZSkgLSAzeCBsYXJnZXIgLS0+CiAgCjwhLS0gRHJvcCBzaGFkb3cgZm9yIGRlcHRoIC0tPgogIDxlbGxpcHNlIGN4PSI0OC4wIiBjeT0iOTAiIHJ4PSIxOS4yIiByeT0iNi4wIiBmaWxsPSIjMDAwIiBvcGFjaXR5PSIwLjMiLz4KICAKICA8IS0tIEljb24gY29udGVudCBzY2FsZWQgM3ggYW5kIGNlbnRlcmVkIC0tPgogIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAuMCwgMy4wKSBzY2FsZSgzKSI+CjwhLS0gTHVjaWRlIGljb24gKHNjYWxlZCBhbmQgcG9zaXRpb25lZCkgLS0+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTYsIDE1KSBzY2FsZSgwLjUpIiBzdHJva2U9IiNENjg5QjgiIGZpbGw9Im5vbmUiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj4KICAgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0xMiwgLTEyKSI+CjxwYXRoIGQ9Ik0xNiAyMXYtMmE0IDQgMCAwIDAtNC00SDZhNCA0IDAgMCAwLTQgNHYyIiAvPgogIDxwYXRoIGQ9Ik0xNiAzLjEyOGE0IDQgMCAwIDEgMCA3Ljc0NCIgLz4KICA8cGF0aCBkPSJNMjIgMjF2LTJhNCA0IDAgMCAwLTMtMy44NyIgLz4KICA8Y2lyY2xlIGN4PSI5IiBjeT0iNyIgcj0iNCIgLz4KICAgIDwvZz4KICA8L2c+CiAgPC9nPgo8L3N2Zz4=", "marker-arts": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA5NiA5NiIgd2lkdGg9Ijk2IiBoZWlnaHQ9Ijk2Ij4KICA8IS0tIEljb24tb25seSBtYXJrZXIgKG5vIGd5cm8gb3V0bGluZSkgLSAzeCBsYXJnZXIgLS0+CiAgCjwhLS0gRHJvcCBzaGFkb3cgZm9yIGRlcHRoIC0tPgogIDxlbGxpcHNlIGN4PSI0OC4wIiBjeT0iOTAiIHJ4PSIxOS4yIiByeT0iNi4wIiBmaWxsPSIjMDAwIiBvcGFjaXR5PSIwLjMiLz4KICAKICA8IS0tIEljb24gY29udGVudCBzY2FsZWQgM3ggYW5kIGNlbnRlcmVkIC0tPgogIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAuMCwgMy4wKSBzY2FsZSgzKSI+CjwhLS0gTHVjaWRlIGljb24gKHNjYWxlZCBhbmQgcG9zaXRpb25lZCkgLS0+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTYsIDE1KSBzY2FsZSgwLjUpIiBzdHJva2U9IiNENjg5QjgiIGZpbGw9Im5vbmUiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj4KICAgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0xMiwgLTEyKSI+CjxwYXRoIGQ9Ik0xMiAyMmExIDEgMCAwIDEgMC0yMCAxMCA5IDAgMCAxIDEwIDkgNSA1IDAgMCAxLTUgNWgtMi4yNWExLjc1IDEuNzUgMCAwIDAtMS40IDIuOGwuMy40YTEuNzUgMS43NSAwIDAgMS0xLjQgMi44eiIgLz4KICA8Y2lyY2xlIGN4PSIxMy41IiBjeT0iNi41IiByPSIuNSIgZmlsbD0iY3VycmVudENvbG9yIiAvPgogIDxjaXJjbGUgY3g9IjE3LjUiIGN5PSIxMC41IiByPSIuNSIgZmlsbD0iY3VycmVudENvbG9yIiAvPgogIDxjaXJjbGUgY3g9IjYuNSIgY3k9IjEyLjUiIHI9Ii41IiBmaWxsPSJjdXJyZW50Q29sb3IiIC8+CiAgPGNpcmNsZSBjeD0iOC41IiBjeT0iNy41IiByPSIuNSIgZmlsbD0iY3VycmVudENvbG9yIiAvPgogICAgPC9nPgogIDwvZz4KICA8L2c+Cjwvc3ZnPg==", "marker-palace": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA5NiA5NiIgd2lkdGg9Ijk2IiBoZWlnaHQ9Ijk2Ij4KICA8IS0tIEljb24tb25seSBtYXJrZXIgKG5vIGd5cm8gb3V0bGluZSkgLSAzeCBsYXJnZXIgLS0+CiAgCjwhLS0gRHJvcCBzaGFkb3cgZm9yIGRlcHRoIC0tPgogIDxlbGxpcHNlIGN4PSI0OC4wIiBjeT0iOTAiIHJ4PSIxOS4yIiByeT0iNi4wIiBmaWxsPSIjMDAwIiBvcGFjaXR5PSIwLjMiLz4KICAKICA8IS0tIEljb24gY29udGVudCBzY2FsZWQgM3ggYW5kIGNlbnRlcmVkIC0tPgogIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAuMCwgMy4wKSBzY2FsZSgzKSI+CjwhLS0gTHVjaWRlIGljb24gKHNjYWxlZCBhbmQgcG9zaXRpb25lZCkgLS0+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTYsIDE1KSBzY2FsZSgwLjUpIiBzdHJva2U9IiNENjg5QjgiIGZpbGw9Im5vbmUiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj4KICAgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0xMiwgLTEyKSI+CjxwYXRoIGQ9Ik0xMS41NjIgMy4yNjZhLjUuNSAwIDAgMSAuODc2IDBMMTUuMzkgOC44N2ExIDEgMCAwIDAgMS41MTYuMjk0TDIxLjE4MyA1LjVhLjUuNSAwIDAgMSAuNzk4LjUxOWwtMi44MzQgMTAuMjQ2YTEgMSAwIDAgMS0uOTU2LjczNEg1LjgxYTEgMSAwIDAgMS0uOTU3LS43MzRMMi4wMiA2LjAyYS41LjUgMCAwIDEgLjc5OC0uNTE5bDQuMjc2IDMuNjY0YTEgMSAwIDAgMCAxLjUxNi0uMjk0eiIgLz4KICA8cGF0aCBkPSJNNSAyMWgxNCIgLz4KICAgIDwvZz4KICA8L2c+CiAgPC9nPgo8L3N2Zz4=", "marker-default": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA5NiA5NiIgd2lkdGg9Ijk2IiBoZWlnaHQ9Ijk2Ij4KICA8IS0tIEljb24tb25seSBtYXJrZXIgKG5vIGd5cm8gb3V0bGluZSkgLSAzeCBsYXJnZXIgLS0+CiAgCjwhLS0gRHJvcCBzaGFkb3cgZm9yIGRlcHRoIC0tPgogIDxlbGxpcHNlIGN4PSI0OC4wIiBjeT0iOTAiIHJ4PSIxOS4yIiByeT0iNi4wIiBmaWxsPSIjMDAwIiBvcGFjaXR5PSIwLjMiLz4KICAKICA8IS0tIEljb24gY29udGVudCBzY2FsZWQgM3ggYW5kIGNlbnRlcmVkIC0tPgogIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAuMCwgMy4wKSBzY2FsZSgzKSI+CjwhLS0gTHVjaWRlIGljb24gKHNjYWxlZCBhbmQgcG9zaXRpb25lZCkgLS0+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTYsIDE1KSBzY2FsZSgwLjUpIiBzdHJva2U9IiNENjg5QjgiIGZpbGw9Im5vbmUiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj4KICAgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0xMiwgLTEyKSI+CjxwYXRoIGQ9Ik0yMCAxMGMwIDQuOTkzLTUuNTM5IDEwLjE5My03LjM5OSAxMS43OTlhMSAxIDAgMCAxLTEuMjAyIDBDOS41MzkgMjAuMTkzIDQgMTQuOTkzIDQgMTBhOCA4IDAgMCAxIDE2IDAiIC8+CiAgPGNpcmNsZSBjeD0iMTIiIGN5PSIxMCIgcj0iMyIgLz4KICAgIDwvZz4KICA8L2c+CiAgPC9nPgo8L3N2Zz4=", "marker-geolocation": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA5NiA5NiIgd2lkdGg9Ijk2IiBoZWlnaHQ9Ijk2Ij4KICA8IS0tIEljb24tb25seSBtYXJrZXIgKG5vIGd5cm8gb3V0bGluZSkgLSAzeCBsYXJnZXIgLS0+CiAgCjwhLS0gRHJvcCBzaGFkb3cgZm9yIGRlcHRoIC0tPgogIDxlbGxpcHNlIGN4PSI0OC4wIiBjeT0iOTAiIHJ4PSIxOS4yIiByeT0iNi4wIiBmaWxsPSIjMDAwIiBvcGFjaXR5PSIwLjMiLz4KICAKICA8IS0tIEljb24gY29udGVudCBzY2FsZWQgM3ggYW5kIGNlbnRlcmVkIC0tPgogIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDAuMCwgMy4wKSBzY2FsZSgzKSI+CjwhLS0gTHVjaWRlIGljb24gKHNjYWxlZCBhbmQgcG9zaXRpb25lZCkgLS0+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMTYsIDE1KSBzY2FsZSgwLjUpIiBzdHJva2U9IiNENjg5QjgiIGZpbGw9Im5vbmUiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj4KICAgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0xMiwgLTEyKSI+CjxsaW5lIHgxPSIyIiB4Mj0iNSIgeTE9IjEyIiB5Mj0iMTIiIC8+CiAgPGxpbmUgeDE9IjE5IiB4Mj0iMjIiIHkxPSIxMiIgeTI9IjEyIiAvPgogIDxsaW5lIHgxPSIxMiIgeDI9IjEyIiB5MT0iMiIgeTI9IjUiIC8+CiAgPGxpbmUgeDE9IjEyIiB4Mj0iMTIiIHkxPSIxOSIgeTI9IjIyIiAvPgogIDxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjciIC8+CiAgICA8L2c+CiAgPC9nPgogIDwvZz4KPC9zdmc+"};
 window.DASHBOARD_ICONS = {};
-window.DEBUG_INFO = {"event_counts": {"published": 4, "pending": 1, "archived": 13, "total": 18}, "unverified_locations_count": 17, "environment": "ci", "cache_enabled": true, "cache_file_size": null, "deployment_time": "2026-01-20T04:33:08.216821", "git_commit": {"hash": "5559373", "author": "copilot-swe-agent[bot]", "date": "2026-01-20 04:32:40 +0000", "message": "Ensure tail stops at circle edge, doesn't touch marker icon"}, "html_sizes": {"total": 317113, "events_data": 2741, "translations": 0, "stylesheets": 92862, "scripts": 0, "marker_icons": 5809, "other": 215701}, "language": "de", "lint_results": {"passed": true, "error_count": 0, "warning_count": 2, "errors": [], "warnings": ["app_js: Found 11 console.log statements (consider removing for production)", "app_js: Found alert() usage (consider better UX)"], "structured_warnings": [{"message": "app_js: Found 11 console.log statements (consider removing for production)", "category": "general", "rule": "", "context": ""}, {"message": "app_js: Found alert() usage (consider better UX)", "category": "general", "rule": "", "context": ""}]}};
+window.DEBUG_INFO = {"event_counts": {"published": 4, "pending": 1, "archived": 13, "total": 18}, "unverified_locations_count": 17, "environment": "ci", "cache_enabled": true, "cache_file_size": null, "deployment_time": "2026-01-20T04:43:13.505051", "git_commit": {"hash": "7af366c", "author": "copilot-swe-agent[bot]", "date": "2026-01-20 04:33:28 +0000", "message": "Make circle around markers invisible (boundary only)"}, "html_sizes": {"total": 317762, "events_data": 2741, "translations": 0, "stylesheets": 92989, "scripts": 0, "marker_icons": 5809, "other": 216223}, "language": "de", "lint_results": {"passed": true, "error_count": 0, "warning_count": 2, "errors": [], "warnings": ["app_js: Found 11 console.log statements (consider removing for production)", "app_js: Found alert() usage (consider better UX)"], "structured_warnings": [{"message": "app_js: Found 11 console.log statements (consider removing for production)", "category": "general", "rule": "", "context": ""}, {"message": "app_js: Found alert() usage (consider better UX)", "category": "general", "rule": "", "context": ""}]}};
 
 
 /* Leaflet JS: Load from CDN at runtime */
@@ -6048,8 +6050,11 @@ class SpeechBubbles {
     }
 
     /**
-     * Create a connector line element between a marker and bubble.
-     * Creates a curved bezier path (tail-like) and a circle around the marker.
+     * Create SVG connector elements between a marker and its bubble.
+     * Builds the forked bezier connector path(s) and an (optionally invisible)
+     * boundary circle around the marker. The visual "tail" attached to the
+     * bubble itself is implemented via CSS pseudo-element, not by this
+     * function.
      * @param {Object} markerPos - Marker position in container coordinates.
      * @param {Object} bubbleRect - Bubble rectangle bounds.
      * @returns {Object|null} Connector elements (path and circle).
@@ -6057,12 +6062,12 @@ class SpeechBubbles {
     createConnectorLine(markerPos, bubbleRect) {
         if (!this.connectorLayer) return null;
         
-        // Create curved path (bezier) instead of straight line
+        // Create curved path (bezier) for SVG connectors
         const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
         path.classList.add('bubble-connector-path');
         this.connectorLayer.appendChild(path);
         
-        // Create circle around the marker icon
+        // Create invisible boundary circle around the marker icon
         const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
         circle.classList.add('bubble-connector-circle');
         circle.setAttribute('r', MARKER_CIRCLE_RADIUS);
@@ -6119,6 +6124,14 @@ class SpeechBubbles {
         const dx = markerIconCenter.x - bubbleCenterPoint.x;
         const dy = markerIconCenter.y - bubbleCenterPoint.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
+        
+        // Guard against zero or near-zero distance to avoid division by zero / NaN coordinates
+        if (distance < 0.01) {
+            // Too close - hide connectors
+            if (connector.path) connector.path.style.opacity = '0';
+            if (connector.circle) connector.circle.style.opacity = '0';
+            return;
+        }
         
         const circleEdgeX = markerIconCenter.x - (dx / distance) * CONNECTOR_STOP_DISTANCE;
         const circleEdgeY = markerIconCenter.y - (dy / distance) * CONNECTOR_STOP_DISTANCE;
