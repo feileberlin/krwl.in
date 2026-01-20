@@ -23,6 +23,14 @@ const MAX_POSITION_ATTEMPTS = 30;
 const GOLDEN_ANGLE = 2.399963229728653; // Golden ratio angle (≈137.5°) in radians
 const SPREAD_BASE = 1;                 // Avoid sqrt(0) spacing
 
+// Marker icon offset constants (for connector lines)
+// Category markers are 96x96px with anchor at [48, 96] (bottom-center)
+// Visual icon center is ~48px above the anchor point (at y=48 in the SVG)
+const MARKER_ICON_CENTER_OFFSET_Y = -48; // Negative = upward offset from anchor
+const MARKER_CIRCLE_RADIUS = 20; // Radius of circle around marker icon
+const CONNECTOR_STOP_DISTANCE = MARKER_CIRCLE_RADIUS + 2; // Stop connector before reaching circle
+const BEZIER_CONTROL_POINT_FACTOR = 0.4; // Control points at 40% of distance for smooth curves
+
 // Filter bar constants
 const FILTER_BAR_PADDING = 20;         // Extra padding below filter bar
 const DEFAULT_FILTER_BAR_HEIGHT = 60;  // Fallback if filter bar not found
@@ -33,6 +41,15 @@ const SEED_OFFSET = 11;
 const VARIATION_RANGE_X = 21;
 const SEED_MULTIPLIER_Y = 13;
 const VARIATION_RANGE_Y = 15;
+
+// Force-directed layout constants
+const REPULSION_FORCE = 0.8;          // Strength of repulsion between bubbles
+const REPULSION_RADIUS = 300;          // Distance at which bubbles start repelling
+const DAMPING = 0.7;                   // Velocity damping (prevents oscillation)
+const MIN_VELOCITY = 0.5;              // Stop moving if velocity below this
+const MAX_VELOCITY = 15;               // Cap velocity to prevent wild movements
+const ANIMATION_DURATION = 600;        // ms for collision resolution animation
+const COLLISION_CHECK_INTERVAL = 100;  // ms between collision checks
 
 class SpeechBubbles {
     constructor(config, storage) {
@@ -57,16 +74,32 @@ class SpeechBubbles {
             mapOffsetY: 0
         };
         
+        // Force-directed layout state
+        this.forceState = {
+            isRunning: false,
+            animationFrame: null,
+            checkInterval: null,
+            velocities: new Map(), // bubbleId -> {vx, vy}
+            lastPositions: new Map() // bubbleId -> {x, y}
+        };
+        
         // Bind drag handlers to preserve context
         this.handleDragStart = this.handleDragStart.bind(this);
         this.handleDragMove = this.handleDragMove.bind(this);
         this.handleDragEnd = this.handleDragEnd.bind(this);
+        
+        // Bind force-directed handlers
+        this.applyForces = this.applyForces.bind(this);
+        this.checkCollisions = this.checkCollisions.bind(this);
     }
     
     /**
      * Clear all speech bubbles from the map
      */
     clearSpeechBubbles() {
+        // Stop force-directed layout
+        this.stopForceDirectedLayout();
+        
         // Remove map move listener if exists
         if (this.map && this.moveHandler) {
             this.map.off('move', this.moveHandler);
@@ -142,6 +175,11 @@ class SpeechBubbles {
         this.moveHandler = () => this.updateBubblePositions();
         map.on('move', this.moveHandler);
         map.on('zoom', this.moveHandler);
+        
+        // Start force-directed layout for collision avoidance
+        if (eventItems.length > 1) {
+            this.startForceDirectedLayout();
+        }
     }
     
     /**
@@ -200,6 +238,7 @@ class SpeechBubbles {
         bubble.className = isBookmarked ? 'speech-bubble bubble-is-bookmarked' : 'speech-bubble';
         bubble.setAttribute('data-event-id', event.id);
         bubble.setAttribute('data-bubble-index', index);
+        bubble.dataset.bubbleId = event.id; // For force-directed layout tracking
         
         // Format start time
         const startTime = new Date(event.start_time);
@@ -531,18 +570,32 @@ class SpeechBubbles {
     }
 
     /**
-     * Create a connector line element between a marker and bubble.
+     * Create SVG connector elements between a marker and its bubble.
+     * Builds a single forked bezier connector path element (with two curves in
+     * its path data) and an (optionally invisible) boundary circle around the
+     * marker. The visual "tail" attached to the bubble itself is implemented
+     * via CSS pseudo-element, not by this function.
      * @param {Object} markerPos - Marker position in container coordinates.
      * @param {Object} bubbleRect - Bubble rectangle bounds.
-     * @returns {SVGLineElement|null} Connector line element.
+     * @returns {Object|null} Connector elements (path and circle).
      */
     createConnectorLine(markerPos, bubbleRect) {
         if (!this.connectorLayer) return null;
-        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-        line.classList.add('bubble-connector-line');
-        this.connectorLayer.appendChild(line);
-        this.updateConnectorLine({ connector: line }, bubbleRect, markerPos, true);
-        return line;
+        
+        // Create curved path (bezier) for SVG connectors
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.classList.add('bubble-connector-path');
+        this.connectorLayer.appendChild(path);
+        
+        // Create invisible boundary circle around the marker icon
+        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        circle.classList.add('bubble-connector-circle');
+        circle.setAttribute('r', MARKER_CIRCLE_RADIUS);
+        this.connectorLayer.appendChild(circle);
+        
+        const connector = { path, circle };
+        this.updateConnectorLine({ connector }, bubbleRect, markerPos, true);
+        return connector;
     }
 
     /**
@@ -560,20 +613,116 @@ class SpeechBubbles {
 
     /**
      * Update connector coordinates between a marker and bubble.
+     * Updates SVG connector paths and CSS-based bubble tail positioning.
      * @param {Object} entry - Bubble data entry.
      * @param {Object} bubbleRect - Bubble rectangle bounds.
-     * @param {Object} markerPos - Marker position in container coordinates.
+     * @param {Object} markerPos - Marker position in container coordinates (anchor point).
      * @param {boolean} isVisible - Whether the bubble is visible.
      */
     updateConnectorLine(entry, bubbleRect, markerPos, isVisible) {
         const connector = entry.connector;
         if (!connector) return;
-        const endPoint = this.getClosestPointOnRect(markerPos, bubbleRect);
-        connector.setAttribute('x1', markerPos.x);
-        connector.setAttribute('y1', markerPos.y);
-        connector.setAttribute('x2', endPoint.x);
-        connector.setAttribute('y2', endPoint.y);
-        connector.style.opacity = isVisible ? '' : '0';
+        
+        // Adjust marker position to point to the visual icon center instead of anchor point
+        // Category markers have their icon centered ~48px above the bottom anchor
+        const markerIconCenter = {
+            x: markerPos.x,
+            y: markerPos.y + MARKER_ICON_CENTER_OFFSET_Y
+        };
+        
+        // Update circle position around marker
+        if (connector.circle) {
+            connector.circle.setAttribute('cx', markerIconCenter.x);
+            connector.circle.setAttribute('cy', markerIconCenter.y);
+            connector.circle.style.opacity = isVisible ? '' : '0';
+        }
+        
+        // Get closest point on bubble rectangle as center reference
+        const bubbleCenterPoint = this.getClosestPointOnRect(markerIconCenter, bubbleRect);
+        
+        // Calculate endpoint on circle perimeter (where both paths merge)
+        const dx = markerIconCenter.x - bubbleCenterPoint.x;
+        const dy = markerIconCenter.y - bubbleCenterPoint.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        
+        // Guard against zero or near-zero distance to avoid division by zero / NaN coordinates
+        if (distance < 0.01) {
+            // Too close - hide connectors
+            if (connector.path) connector.path.style.opacity = '0';
+            if (connector.circle) connector.circle.style.opacity = '0';
+            return;
+        }
+        
+        const circleEdgeX = markerIconCenter.x - (dx / distance) * CONNECTOR_STOP_DISTANCE;
+        const circleEdgeY = markerIconCenter.y - (dy / distance) * CONNECTOR_STOP_DISTANCE;
+        
+        // Create TWO starting points at bottom of bubble (forked tail)
+        const forkSpacing = 12; // Distance between the two fork points
+        // Calculate perpendicular direction for fork spread
+        const perpX = -dy / distance;
+        const perpY = dx / distance;
+        
+        const startPoint1 = {
+            x: bubbleCenterPoint.x + perpX * forkSpacing,
+            y: bubbleCenterPoint.y + perpY * forkSpacing
+        };
+        
+        const startPoint2 = {
+            x: bubbleCenterPoint.x - perpX * forkSpacing,
+            y: bubbleCenterPoint.y - perpY * forkSpacing
+        };
+        
+        // Create two curved bezier paths that merge at the circle edge
+        const controlOffset = distance * BEZIER_CONTROL_POINT_FACTOR;
+        
+        // Path 1: from startPoint1 to circleEdge
+        const controlX1_1 = startPoint1.x + (dx / distance) * controlOffset;
+        const controlY1_1 = startPoint1.y + (dy / distance) * (controlOffset * 0.3);
+        const controlX1_2 = circleEdgeX - (dx / distance) * (controlOffset * 0.5);
+        const controlY1_2 = circleEdgeY - (dy / distance) * (controlOffset * 0.5);
+        
+        // Path 2: from startPoint2 to circleEdge (mirrors path 1)
+        const controlX2_1 = startPoint2.x + (dx / distance) * controlOffset;
+        const controlY2_1 = startPoint2.y + (dy / distance) * (controlOffset * 0.3);
+        const controlX2_2 = circleEdgeX - (dx / distance) * (controlOffset * 0.5);
+        const controlY2_2 = circleEdgeY - (dy / distance) * (controlOffset * 0.5);
+        
+        // Combine both paths into a single SVG path with two curves merging at one point
+        const pathData = `
+            M ${startPoint1.x},${startPoint1.y} 
+            C ${controlX1_1},${controlY1_1} ${controlX1_2},${controlY1_2} ${circleEdgeX},${circleEdgeY}
+            M ${startPoint2.x},${startPoint2.y} 
+            C ${controlX2_1},${controlY2_1} ${controlX2_2},${controlY2_2} ${circleEdgeX},${circleEdgeY}
+        `.trim();
+        
+        if (connector.path) {
+            connector.path.setAttribute('d', pathData);
+            connector.path.style.opacity = isVisible ? '' : '0';
+        }
+        
+        // Update CSS-based tail on bubble element
+        // The tail should point toward the circle edge (stopping point), not the icon center
+        // This creates the "comic book" effect where the tail doesn't touch the subject
+        if (entry.bubble) {
+            // Calculate position where tail should point to (circle edge, not icon center)
+            const tailTargetX = circleEdgeX;
+            const tailTargetY = circleEdgeY;
+            
+            // Calculate tail attachment point relative to bubble
+            const tailX = ((bubbleCenterPoint.x - bubbleRect.x) / bubbleRect.width) * 100;
+            const tailY = ((bubbleCenterPoint.y - bubbleRect.y) / bubbleRect.height) * 100;
+            
+            // Calculate angle for tail rotation (pointing toward circle edge, not icon)
+            const tailDx = tailTargetX - bubbleCenterPoint.x;
+            const tailDy = tailTargetY - bubbleCenterPoint.y;
+            const angleRad = Math.atan2(tailDy, tailDx);
+            const angleDeg = (angleRad * 180 / Math.PI) + 90; // +90 because tail points down by default
+            
+            // Set CSS custom properties for tail positioning
+            entry.bubble.style.setProperty('--tail-x', `${tailX}%`);
+            entry.bubble.style.setProperty('--tail-y', `${tailY}%`);
+            entry.bubble.style.setProperty('--tail-angle', `${angleDeg}deg`);
+        }
     }
 
     /**
@@ -673,9 +822,11 @@ class SpeechBubbles {
         return markers.map(marker => {
             if (!this.isValidMarker(marker)) return null;
             const pos = map.latLngToContainerPoint(marker.getLatLng());
+            // Adjust collision box y-coordinate to align with visual icon center, not the anchor, not the anchor
+            const iconCenterY = pos.y + MARKER_ICON_CENTER_OFFSET_Y;
             return {
                 x: pos.x - MARKER_CLEARANCE,
-                y: pos.y - MARKER_CLEARANCE,
+                y: iconCenterY - MARKER_CLEARANCE,
                 width: MARKER_CLEARANCE * 2,
                 height: MARKER_CLEARANCE * 2
             };
@@ -762,6 +913,254 @@ class SpeechBubbles {
     log(message, ...args) {
         if (this.config && this.config.debug) {
             console.log('[SpeechBubbles]', message, ...args);
+        }
+    }
+    
+    /**
+     * Start force-directed layout system for collision avoidance
+     */
+    startForceDirectedLayout() {
+        if (this.forceState.isRunning) return;
+        
+        this.forceState.isRunning = true;
+        
+        // Initialize velocities for all bubbles
+        this.speechBubbles.forEach(bubble => {
+            const bubbleId = bubble.dataset.bubbleId;
+            if (!this.forceState.velocities.has(bubbleId)) {
+                this.forceState.velocities.set(bubbleId, { vx: 0, vy: 0 });
+            }
+            if (!this.forceState.lastPositions.has(bubbleId)) {
+                const rect = bubble.getBoundingClientRect();
+                this.forceState.lastPositions.set(bubbleId, { x: rect.left, y: rect.top });
+            }
+        });
+        
+        // Start collision checking interval
+        this.forceState.checkInterval = setInterval(this.checkCollisions, COLLISION_CHECK_INTERVAL);
+        
+        this.log('Force-directed layout started');
+    }
+    
+    /**
+     * Stop force-directed layout system
+     */
+    stopForceDirectedLayout() {
+        if (!this.forceState.isRunning) return;
+        
+        this.forceState.isRunning = false;
+        
+        if (this.forceState.animationFrame) {
+            cancelAnimationFrame(this.forceState.animationFrame);
+            this.forceState.animationFrame = null;
+        }
+        
+        if (this.forceState.checkInterval) {
+            clearInterval(this.forceState.checkInterval);
+            this.forceState.checkInterval = null;
+        }
+        
+        // Clear stored velocities and positions to avoid stale bubble IDs accumulating
+        if (this.forceState.velocities && typeof this.forceState.velocities.clear === 'function') {
+            this.forceState.velocities.clear();
+        }
+        if (this.forceState.lastPositions && typeof this.forceState.lastPositions.clear === 'function') {
+            this.forceState.lastPositions.clear();
+        }
+        
+        this.log('Force-directed layout stopped');
+    }
+    
+    /**
+     * Check for collisions between bubbles and start force application if needed
+     */
+    checkCollisions() {
+        if (this.dragState.isDragging) return; // Don't interfere with drag
+        
+        let hasCollisions = false;
+        
+        // Check all pairs of bubbles for collisions
+        for (let i = 0; i < this.speechBubbles.length; i++) {
+            for (let j = i + 1; j < this.speechBubbles.length; j++) {
+                const bubble1 = this.speechBubbles[i];
+                const bubble2 = this.speechBubbles[j];
+                
+                if (this.bubblesCollide(bubble1, bubble2)) {
+                    hasCollisions = true;
+                    break;
+                }
+            }
+            if (hasCollisions) break;
+        }
+        
+        // Start animation loop if collisions detected and not already running
+        if (hasCollisions && !this.forceState.animationFrame) {
+            this.forceState.animationStartTime = performance.now();
+            this.applyForces();
+        }
+    }
+    
+    /**
+     * Check if two bubbles collide (including their tails)
+     * @param {HTMLElement} bubble1 - First bubble
+     * @param {HTMLElement} bubble2 - Second bubble
+     * @returns {boolean} True if bubbles collide
+     */
+    bubblesCollide(bubble1, bubble2) {
+        const rect1 = bubble1.getBoundingClientRect();
+        const rect2 = bubble2.getBoundingClientRect();
+        
+        // Add padding for tail clearance
+        const padding = 20; // Extra space for tails
+        
+        return !(
+            rect1.right + padding < rect2.left ||
+            rect1.left - padding > rect2.right ||
+            rect1.bottom + padding < rect2.top ||
+            rect1.top - padding > rect2.bottom
+        );
+    }
+    
+    /**
+     * Apply repulsion forces between overlapping bubbles
+     */
+    applyForces() {
+        const now = performance.now();
+        const elapsed = now - (this.forceState.animationStartTime || now);
+        
+        // Stop if animation duration exceeded
+        if (elapsed > ANIMATION_DURATION) {
+            this.forceState.animationFrame = null;
+            return;
+        }
+        
+        const forces = new Map(); // bubbleId -> {fx, fy}
+        
+        // Initialize forces to zero
+        this.speechBubbles.forEach(bubble => {
+            const bubbleId = bubble.dataset.bubbleId;
+            forces.set(bubbleId, { fx: 0, fy: 0 });
+        });
+        
+        // Cache bounding rects once per bubble to avoid repeated layout reads
+        const bubbleRects = this.speechBubbles.map(bubble => ({
+            bubble,
+            rect: bubble.getBoundingClientRect()
+        }));
+        
+        // Calculate repulsion forces between all pairs
+        for (let i = 0; i < bubbleRects.length; i++) {
+            for (let j = i + 1; j < bubbleRects.length; j++) {
+                const bubble1 = bubbleRects[i].bubble;
+                const bubble2 = bubbleRects[j].bubble;
+                
+                const id1 = bubble1.dataset.bubbleId;
+                const id2 = bubble2.dataset.bubbleId;
+                
+                const rect1 = bubbleRects[i].rect;
+                const rect2 = bubbleRects[j].rect;
+                
+                // Calculate centers
+                const center1 = {
+                    x: rect1.left + rect1.width / 2,
+                    y: rect1.top + rect1.height / 2
+                };
+                const center2 = {
+                    x: rect2.left + rect2.width / 2,
+                    y: rect2.top + rect2.height / 2
+                };
+                
+                // Calculate distance between centers
+                const dx = center2.x - center1.x;
+                const dy = center2.y - center1.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                // Skip if too far apart
+                if (distance > REPULSION_RADIUS) continue;
+                
+                // Calculate repulsion force (inverse square law)
+                const force = distance > 0 ? REPULSION_FORCE * (REPULSION_RADIUS - distance) / distance : REPULSION_FORCE;
+                
+                // Apply force in opposite directions
+                const fx = (dx / distance) * force;
+                const fy = (dy / distance) * force;
+                
+                const force1 = forces.get(id1);
+                const force2 = forces.get(id2);
+                if (!force1 || !force2) continue; // Skip if bubble IDs are invalid
+                
+                force1.fx -= fx;
+                force1.fy -= fy;
+                force2.fx += fx;
+                force2.fy += fy;
+            }
+        }
+        
+        // Apply forces to update velocities and positions
+        let anyMovement = false;
+        
+        this.speechBubbles.forEach(bubble => {
+            const bubbleId = bubble.dataset.bubbleId;
+            const force = forces.get(bubbleId);
+            if (!force) return; // Skip if force not calculated
+            const velocity = this.forceState.velocities.get(bubbleId);
+            if (!velocity) return; // Skip if velocity tracking not initialized
+            
+            // Update velocity with force and damping
+            velocity.vx = (velocity.vx + force.fx) * DAMPING;
+            velocity.vy = (velocity.vy + force.fy) * DAMPING;
+            
+            // Clamp velocity
+            const speed = Math.sqrt(velocity.vx * velocity.vx + velocity.vy * velocity.vy);
+            if (speed > MAX_VELOCITY) {
+                velocity.vx = (velocity.vx / speed) * MAX_VELOCITY;
+                velocity.vy = (velocity.vy / speed) * MAX_VELOCITY;
+            }
+            
+            // Skip if velocity too small
+            if (speed < MIN_VELOCITY) {
+                velocity.vx = 0;
+                velocity.vy = 0;
+                return;
+            }
+            
+            anyMovement = true;
+            
+            // Update position
+            const currentStyle = window.getComputedStyle(bubble);
+            const currentLeft = parseFloat(currentStyle.left) || 0;
+            const currentTop = parseFloat(currentStyle.top) || 0;
+            
+            let newLeft = currentLeft + velocity.vx;
+            let newTop = currentTop + velocity.vy;
+            
+            // Keep bubbles in viewport bounds
+            const container = bubble.parentElement;
+            const containerRect = container.getBoundingClientRect();
+            const filterBar = document.querySelector('.filter-bar');
+            const filterBarHeight = filterBar ? filterBar.offsetHeight + FILTER_BAR_PADDING : DEFAULT_FILTER_BAR_HEIGHT;
+            
+            newLeft = Math.max(BUBBLE_MARGIN, Math.min(newLeft, containerRect.width - BUBBLE_WIDTH - BUBBLE_MARGIN));
+            newTop = Math.max(filterBarHeight + BUBBLE_MARGIN, Math.min(newTop, containerRect.height - BUBBLE_HEIGHT - BUBBLE_MARGIN));
+            
+            // Apply new position
+            bubble.style.left = `${newLeft}px`;
+            bubble.style.top = `${newTop}px`;
+            
+            // Update connector line if exists
+            const bubbleDataEntry = this.bubbleData.find(bd => bd.bubble === bubble);
+            if (bubbleDataEntry && bubbleDataEntry.connector) {
+                const bubbleRect = bubble.getBoundingClientRect();
+                const markerPos = this.map.latLngToContainerPoint(bubbleDataEntry.marker.getLatLng());
+                this.updateConnectorLine(bubbleDataEntry, bubbleRect, markerPos, true);
+            }
+        });
+        
+        // Continue animation if there's still movement
+        if (anyMovement) {
+            this.forceState.animationFrame = requestAnimationFrame(this.applyForces);
+        } else {
+            this.forceState.animationFrame = null;
         }
     }
 }
