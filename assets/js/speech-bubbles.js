@@ -26,9 +26,10 @@ const SPREAD_BASE = 1;                 // Avoid sqrt(0) spacing
 // Marker icon offset constants (for connector lines)
 // Category markers are 96x96px with anchor at [48, 96] (bottom-center)
 // Visual icon center is ~48px above the anchor point (at y=48 in the SVG)
+// Lucide icons are ~36x36px scaled, with stroke-width: 2px → effective visual radius ~20-22px
 const MARKER_ICON_CENTER_OFFSET_Y = -48; // Negative = upward offset from anchor
-const MARKER_CIRCLE_RADIUS = 20; // Radius of circle around marker icon
-const CONNECTOR_STOP_DISTANCE = MARKER_CIRCLE_RADIUS + 2; // Stop connector before reaching circle
+const MARKER_CIRCLE_RADIUS = 24; // Radius of circle around marker icon (increased from 20 to prevent crossing)
+const CONNECTOR_STOP_DISTANCE = MARKER_CIRCLE_RADIUS + 4; // Stop connector 4px before circle edge (increased clearance)
 const BEZIER_CONTROL_POINT_FACTOR = 0.4; // Control points at 40% of distance for smooth curves
 
 // Filter bar constants
