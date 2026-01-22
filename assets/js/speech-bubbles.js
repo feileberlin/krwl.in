@@ -28,9 +28,9 @@ const SPREAD_BASE = 1;                 // Avoid sqrt(0) spacing
 // Visual icon center is ~48px above the anchor point (at y=48 in the SVG)
 // Lucide icons are ~36x36px scaled, with stroke-width: 2px → effective visual radius ~20-22px
 const MARKER_ICON_CENTER_OFFSET_Y = -48; // Negative = upward offset from anchor
-const MARKER_CIRCLE_RADIUS = 24; // Radius of circle around marker icon (increased from 20 to prevent crossing)
-const CONNECTOR_STOP_DISTANCE = MARKER_CIRCLE_RADIUS + 4; // Stop connector 4px before circle edge (increased clearance)
-const BEZIER_CONTROL_POINT_FACTOR = 0.4; // Control points at 40% of distance for smooth curves
+const MARKER_CIRCLE_RADIUS = 24; // Logical "protection" radius around marker icon; increased from 20px to give Bezier connectors more clearance and reduce crossings.
+const CONNECTOR_STOP_DISTANCE = MARKER_CIRCLE_RADIUS + 4; // Stop connector 4px outside circle edge (28px from marker center, increased clearance)
+const BEZIER_CONTROL_POINT_FACTOR = 0.4; // Control points at 40% of distance for smooth curves; tuned together with the clearance constants to mitigate (but not mathematically prevent) line/marker intersections.
 const CSS_TAIL_HEIGHT = 15; // Height of CSS tail triangle in pixels (must match CSS border-width)
 
 // Filter bar constants
@@ -730,24 +730,50 @@ class SpeechBubbles {
         // Create two curved bezier paths that merge at the circle edge
         const controlOffset = distance * BEZIER_CONTROL_POINT_FACTOR;
         
-        // CRITICAL FIX: Ensure second control point never enters marker boundary
-        // When bubble is dragged close to marker, prevent curve from crossing through icon
-        // Second control point must be well beyond the connector stop distance for safe clearance
-        // This ensures even with Bezier curve interpolation, path stays outside marker
-        const minControlOffset = CONNECTOR_STOP_DISTANCE + 8; // 28px + 8px margin = 36px minimum
+        // CRITICAL FIX: Keep second control point safely away from the marker boundary
+        // When the bubble is dragged close to the marker, bias the curve so it does not visually cross the icon
+        // Use at least the marker radius plus a small padding as a heuristic safe distance for the control point
+        const minControlOffset = MARKER_CIRCLE_RADIUS + 2; // Marker radius + 2px padding from marker center
         const secondControlOffset = Math.max(minControlOffset, controlOffset * 0.5);
         
+        // Calculate initial control point positions
         // Path 1: from startPoint1 to circleEdge
         const controlX1_1 = startPoint1.x + (dx / distance) * controlOffset;
         const controlY1_1 = startPoint1.y + (dy / distance) * (controlOffset * 0.3);
-        const controlX1_2 = markerIconCenter.x - (dx / distance) * secondControlOffset;
-        const controlY1_2 = markerIconCenter.y - (dy / distance) * secondControlOffset;
+        let controlX1_2 = markerIconCenter.x - (dx / distance) * secondControlOffset;
+        let controlY1_2 = markerIconCenter.y - (dy / distance) * secondControlOffset;
         
         // Path 2: from startPoint2 to circleEdge (mirrors path 1)
         const controlX2_1 = startPoint2.x + (dx / distance) * controlOffset;
         const controlY2_1 = startPoint2.y + (dy / distance) * (controlOffset * 0.3);
-        const controlX2_2 = markerIconCenter.x - (dx / distance) * secondControlOffset;
-        const controlY2_2 = markerIconCenter.y - (dy / distance) * secondControlOffset;
+        let controlX2_2 = markerIconCenter.x - (dx / distance) * secondControlOffset;
+        let controlY2_2 = markerIconCenter.y - (dy / distance) * secondControlOffset;
+        
+        // Additional safety: Ensure control points maintain minimum radial distance from marker center
+        // This addresses the mathematical issue that directional offset alone doesn't guarantee clearance
+        const minRadialDistance = MARKER_CIRCLE_RADIUS + 4; // Minimum distance control point must be from marker center
+        
+        // Check and correct control point 1_2 if too close to marker center
+        const radialDist1_2 = Math.sqrt(
+            Math.pow(controlX1_2 - markerIconCenter.x, 2) + 
+            Math.pow(controlY1_2 - markerIconCenter.y, 2)
+        );
+        if (radialDist1_2 < minRadialDistance) {
+            const scale = minRadialDistance / radialDist1_2;
+            controlX1_2 = markerIconCenter.x + (controlX1_2 - markerIconCenter.x) * scale;
+            controlY1_2 = markerIconCenter.y + (controlY1_2 - markerIconCenter.y) * scale;
+        }
+        
+        // Check and correct control point 2_2 if too close to marker center
+        const radialDist2_2 = Math.sqrt(
+            Math.pow(controlX2_2 - markerIconCenter.x, 2) + 
+            Math.pow(controlY2_2 - markerIconCenter.y, 2)
+        );
+        if (radialDist2_2 < minRadialDistance) {
+            const scale = minRadialDistance / radialDist2_2;
+            controlX2_2 = markerIconCenter.x + (controlX2_2 - markerIconCenter.x) * scale;
+            controlY2_2 = markerIconCenter.y + (controlY2_2 - markerIconCenter.y) * scale;
+        }
         
         // Combine both paths into a single SVG path with two curves merging at one point
         const pathData = `
