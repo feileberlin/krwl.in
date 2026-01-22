@@ -729,17 +729,23 @@ class SpeechBubbles {
         // Create two curved bezier paths that merge at the circle edge
         const controlOffset = distance * BEZIER_CONTROL_POINT_FACTOR;
         
+        // CRITICAL FIX: Ensure second control point never enters marker boundary
+        // When bubble is dragged close to marker, prevent curve from crossing through icon
+        // Second control point offset must be at least the marker radius to stay outside
+        const minControlOffset = MARKER_CIRCLE_RADIUS + 2; // Minimum safe distance from marker center
+        const secondControlOffset = Math.max(minControlOffset, controlOffset * 0.5);
+        
         // Path 1: from startPoint1 to circleEdge
         const controlX1_1 = startPoint1.x + (dx / distance) * controlOffset;
         const controlY1_1 = startPoint1.y + (dy / distance) * (controlOffset * 0.3);
-        const controlX1_2 = circleEdgeX - (dx / distance) * (controlOffset * 0.5);
-        const controlY1_2 = circleEdgeY - (dy / distance) * (controlOffset * 0.5);
+        const controlX1_2 = markerIconCenter.x - (dx / distance) * secondControlOffset;
+        const controlY1_2 = markerIconCenter.y - (dy / distance) * secondControlOffset;
         
         // Path 2: from startPoint2 to circleEdge (mirrors path 1)
         const controlX2_1 = startPoint2.x + (dx / distance) * controlOffset;
         const controlY2_1 = startPoint2.y + (dy / distance) * (controlOffset * 0.3);
-        const controlX2_2 = circleEdgeX - (dx / distance) * (controlOffset * 0.5);
-        const controlY2_2 = circleEdgeY - (dy / distance) * (controlOffset * 0.5);
+        const controlX2_2 = markerIconCenter.x - (dx / distance) * secondControlOffset;
+        const controlY2_2 = markerIconCenter.y - (dy / distance) * secondControlOffset;
         
         // Combine both paths into a single SVG path with two curves merging at one point
         const pathData = `
