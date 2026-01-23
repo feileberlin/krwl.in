@@ -317,7 +317,7 @@
     height: 20px;
     stroke: var(--color-text-secondary); /* Match other unbookmarked bubble elements */
     stroke-width: 2; /* Outlined by default */
-    fill: none; /* No fill when unbookmarked */
+    fill: none !important; /* No fill when unbookmarked - !important to override inline SVG */
     transition: stroke 0.2s ease, fill 0.2s ease, stroke-width 0.2s ease;
 }
 
@@ -329,9 +329,9 @@
 
 .bubble-bookmark.bookmarked i[data-lucide="heart"],
 .bubble-bookmark.bookmarked svg {
-    stroke: none; /* No stroke when bookmarked - KISS approach */
-    stroke-width: 0; /* Remove stroke completely */
-    fill: var(--color-bookmark); /* Filled with light/bright red when bookmarked */
+    stroke: none !important; /* No stroke when bookmarked - !important to override inline SVG */
+    stroke-width: 0 !important; /* Remove stroke completely */
+    fill: var(--color-bookmark) !important; /* Filled with light/bright red when bookmarked */
 }
 
 .bubble-bookmark.bookmarked {
