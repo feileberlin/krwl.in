@@ -42,6 +42,7 @@ class FilterDescriptionUI {
         this.updateTimeDescription(filters.timeFilter);
         this.updateDistanceDescription(filters.maxDistance);
         this.updateLocationDescription(filters, userLocation);
+        this.updateWeatherDescription();
     }
     
     /**
@@ -161,6 +162,33 @@ class FilterDescriptionUI {
         if (!selectedLoc) return 'from here';
         
         return `from ${selectedLoc.display_name}`;
+    }
+    
+    /**
+     * Update weather description (dresscode display)
+     */
+    updateWeatherDescription() {
+        const element = document.getElementById('filter-bar-weather');
+        if (!element) return;
+        
+        // Check if weather is enabled and should be displayed
+        if (!this.config?.weather?.enabled || !this.config?.weather?.display?.show_in_filter_bar) {
+            element.style.display = 'none';
+            return;
+        }
+        
+        // Get weather data from APP_CONFIG (embedded by backend)
+        const weatherData = window.APP_CONFIG?.weather?.data;
+        if (!weatherData || !weatherData.dresscode) {
+            element.style.display = 'none';
+            return;
+        }
+        
+        // Display dresscode with format: "wearing {dresscode}"
+        element.textContent = `wearing ${weatherData.dresscode}`;
+        element.style.display = '';  // Show the element
+        
+        this.log('Weather description updated:', weatherData.dresscode);
     }
     
     /**
