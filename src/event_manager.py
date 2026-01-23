@@ -303,6 +303,10 @@ COMMANDS:
                               - Builds HTML from templates with inlined assets
                               - Lints and validates content
                               - Outputs: public/index.html (self-contained)
+    generate-icons            Generate Lucide icons map from codebase usage
+                              - Scans JavaScript and HTML files for icon references
+                              - Creates src/modules/lucide_markers.py with icon SVGs
+                              - Auto-run in CI/CD before generate command
     update                    Update events data in existing site (fast)
     update-weather            Update weather data in existing site (fast, no rebuild)
     dependencies fetch        Fetch third-party dependencies
@@ -2001,6 +2005,17 @@ def _execute_command(args, base_path, config):
     if command == 'update-weather':
         generator = SiteGenerator(base_path)
         return 0 if generator.update_weather_data() else 1
+    
+    if command == 'generate-icons':
+        """Generate Lucide icons map from codebase usage."""
+        from modules.lucide_generator import generate_icon_map
+        try:
+            generate_icon_map(base_path)
+            print("✅ Lucide icons map generated successfully")
+            return 0
+        except Exception as e:
+            print(f"❌ Failed to generate icon map: {e}")
+            return 1
     
     if command == 'dependencies':
         return _execute_dependencies_command(args, base_path)
