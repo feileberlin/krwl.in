@@ -305,8 +305,12 @@ COMMANDS:
                               - Outputs: public/index.html (self-contained)
     generate-icons            Generate Lucide icons map from codebase usage
                               - Scans JavaScript and HTML files for icon references
-                              - Creates src/modules/lucide_markers.py with icon SVGs
+                              - Creates src/modules/lucide_markers.py with 3 icon maps
                               - Auto-run in CI/CD before generate command
+    generate-icons --map MAP  Regenerate specific icon map only
+                              - MAP: 'all' (default), 'marker', 'map', 'dashboard'
+                              - Or comma-separated: 'map,dashboard'
+                              - Example: generate-icons --map marker
     update                    Update events data in existing site (fast)
     update-weather            Update weather data in existing site (fast, no rebuild)
     dependencies fetch        Fetch third-party dependencies
@@ -2009,12 +2013,22 @@ def _execute_command(args, base_path, config):
     if command == 'generate-icons':
         """Generate Lucide icons map from codebase usage."""
         from modules.lucide_generator import generate_icon_map
+        
+        # Parse --map parameter for selective regeneration
+        regenerate_maps = 'all'
+        if args.args and '--map' in args.args:
+            map_idx = args.args.index('--map')
+            if map_idx + 1 < len(args.args):
+                regenerate_maps = args.args[map_idx + 1]
+        
         try:
-            generate_icon_map(base_path)
+            generate_icon_map(base_path, regenerate_maps=regenerate_maps)
             print("✅ Lucide icons map generated successfully")
             return 0
         except Exception as e:
             print(f"❌ Failed to generate icon map: {e}")
+            import traceback
+            traceback.print_exc()
             return 1
     
     if command == 'dependencies':

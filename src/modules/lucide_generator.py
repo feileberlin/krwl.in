@@ -114,18 +114,75 @@ def find_icon_usage(base_path: Path) -> Set[str]:
     return icons
 
 
-def generate_lucide_markers_module(icons: Set[str], output_path: Path) -> None:
+def generate_lucide_markers_module(icons: Set[str], output_path: Path, 
+                                   regenerate_maps: str = 'all') -> None:
     """
-    Generate src/modules/lucide_markers.py with icon map.
+    Generate src/modules/lucide_markers.py with icon maps.
     
     Args:
         icons: Set of icon names to include
         output_path: Path to output lucide_markers.py file
+        regenerate_maps: Which maps to regenerate ('all', 'marker', 'map', 'dashboard', or 'map,dashboard')
     """
+def generate_lucide_markers_module(icons: Set[str], output_path: Path, 
+                                   regenerate_maps: str = 'all') -> None:
+    """
+    Generate src/modules/lucide_markers.py with icon maps.
+    
+    Args:
+        icons: Set of icon names to include
+        output_path: Path to output lucide_markers.py file
+        regenerate_maps: Which maps to regenerate ('all', 'marker', 'map', 'dashboard', or 'map,dashboard')
+    """
+    # Parse which maps to regenerate
+    maps_to_regenerate = set(regenerate_maps.split(',')) if regenerate_maps != 'all' else {'marker', 'map', 'dashboard'}
+    
+    # Load existing file if doing partial regeneration
+    existing_marker_icons = {}
+    existing_map_icons = {}
+    existing_dashboard_icons = {}
+    
+    if regenerate_maps != 'all' and output_path.exists():
+        # Load existing icon maps from the file
+        try:
+            with open(output_path, 'r', encoding='utf-8') as f:
+                content = f.read()
+                
+            # Extract existing maps using regex
+            import re
+            
+            # Extract MAP_ICONS_MAP
+            map_match = re.search(r'MAP_ICONS_MAP = \{([^}]+)\}', content, re.DOTALL)
+            if map_match:
+                # Parse the dict entries
+                for match in re.finditer(r"'([^']+)':\s*'([^']+)'", map_match.group(1)):
+                    existing_map_icons[match.group(1)] = match.group(2).replace('\\"', '"')
+            
+            # Extract DASHBOARD_ICONS_MAP
+            dashboard_match = re.search(r'DASHBOARD_ICONS_MAP = \{([^}]+)\}', content, re.DOTALL)
+            if dashboard_match:
+                for match in re.finditer(r"'([^']+)':\s*'([^']+)'", dashboard_match.group(1)):
+                    existing_dashboard_icons[match.group(1)] = match.group(2).replace('\\"', '"')
+            
+            # Extract LUCIDE_MARKER_BASE64_MAP (if it has entries in the future)
+            marker_match = re.search(r'LUCIDE_MARKER_BASE64_MAP = \{([^}]+)\}', content, re.DOTALL)
+            if marker_match:
+                for match in re.finditer(r"'([^']+)':\s*'([^']+)'", marker_match.group(1)):
+                    existing_marker_icons[match.group(1)] = match.group(2).replace('\\"', '"')
+                    
+            print(f"📂 Loaded existing icon maps:")
+            print(f"   Map icons: {len(existing_map_icons)}")
+            print(f"   Dashboard icons: {len(existing_dashboard_icons)}")
+            print(f"   Marker icons: {len(existing_marker_icons)}")
+        except Exception as e:
+            print(f"⚠️  Could not load existing maps: {e}")
+            print("   Will regenerate all maps")
+            maps_to_regenerate = {'marker', 'map', 'dashboard'}
+    
     # Categorize icons into 3 groups
-    marker_icons = {}  # Category marker icons (marker-*)
-    map_icons = {}     # Map UI icons (used in speech bubbles, filters)
-    dashboard_icons = {}  # Dashboard/debug icons
+    marker_icons = existing_marker_icons.copy() if 'marker' not in maps_to_regenerate else {}
+    map_icons = existing_map_icons.copy() if 'map' not in maps_to_regenerate else {}
+    dashboard_icons = existing_dashboard_icons.copy() if 'dashboard' not in maps_to_regenerate else {}
     missing_icons = []
     
     # Icons used on the map/in speech bubbles
@@ -134,32 +191,36 @@ def generate_lucide_markers_module(icons: Set[str], output_path: Path) -> None:
         'check', 'edit-2', 'edit-3', 'trash-2', 'rotate-ccw'
     }
     
+    # Process icons based on what we're regenerating
     for icon in sorted(icons):
         if icon.startswith('marker-'):
-            # Category marker icons - these would be in LUCIDE_MARKER_BASE64_MAP
-            # but we don't have them in our embedded map yet
-            if icon in LUCIDE_SVG_MAP:
-                marker_icons[icon] = LUCIDE_SVG_MAP[icon]
-            else:
-                missing_icons.append(icon)
+            # Category marker icons
+            if 'marker' in maps_to_regenerate:
+                if icon in LUCIDE_SVG_MAP:
+                    marker_icons[icon] = LUCIDE_SVG_MAP[icon]
+                else:
+                    missing_icons.append(icon)
         elif icon in MAP_ICON_NAMES:
             # Map UI icons
-            if icon in LUCIDE_SVG_MAP:
-                map_icons[icon] = LUCIDE_SVG_MAP[icon]
-            else:
-                missing_icons.append(icon)
+            if 'map' in maps_to_regenerate:
+                if icon in LUCIDE_SVG_MAP:
+                    map_icons[icon] = LUCIDE_SVG_MAP[icon]
+                else:
+                    missing_icons.append(icon)
         else:
             # Dashboard/debug icons
-            if icon in LUCIDE_SVG_MAP:
-                dashboard_icons[icon] = LUCIDE_SVG_MAP[icon]
-            else:
-                missing_icons.append(icon)
+            if 'dashboard' in maps_to_regenerate:
+                if icon in LUCIDE_SVG_MAP:
+                    dashboard_icons[icon] = LUCIDE_SVG_MAP[icon]
+                else:
+                    missing_icons.append(icon)
     
     if missing_icons:
         for icon in missing_icons:
             print(f"⚠️  Warning: Icon '{icon}' not found in embedded map")
     
     # Generate Python module content
+    regenerated_info = ', '.join(sorted(maps_to_regenerate))
     module_content = f'''"""
 Lucide Icons for KRWL HOF
 =========================
@@ -180,7 +241,8 @@ This minimal subset includes only the icons actually used in the application
 to keep bundle size small (~3KB instead of ~531KB for the full library).
 
 AUTO-GENERATED by src/modules/lucide_generator.py
-DO NOT EDIT MANUALLY - Run: python3 src/event_manager.py generate-icons
+Regenerated maps: {regenerated_info}
+DO NOT EDIT MANUALLY - Run: python3 src/event_manager.py generate-icons [--map MAP_TYPE]
 """
 
 # ============================================================================
@@ -217,28 +279,41 @@ DASHBOARD_ICONS_MAP = {{
 # This map would contain Base64-encoded SVG strings for category markers
 # (e.g., music, sports, food categories). Currently empty - category markers
 # use custom SVG designs in assets/svg/marker-*.svg, not Lucide icons.
+# To add Lucide category markers, run: 
+#   python3 src/event_manager.py generate-icons --map marker
 
-LUCIDE_MARKER_BASE64_MAP = {}
+LUCIDE_MARKER_BASE64_MAP = {{
+'''
+    
+    # Add marker icon entries (if any)
+    for icon_name, svg_content in sorted(marker_icons.items()):
+        svg_escaped = svg_content.replace('"', '\\"')
+        module_content += f'    \'{icon_name}\': \'{svg_escaped}\',\n'
+    
+    module_content += '''}
 '''
     
     # Write to file
     output_path.write_text(module_content, encoding='utf-8')
     
     print(f"\n✅ Generated {output_path}")
+    print(f"   Regenerated: {regenerated_info}")
     print(f"   Map icons: {len(map_icons)} (speech bubbles, map UI)")
     print(f"   Dashboard icons: {len(dashboard_icons)} (debug, settings)")
-    print(f"   Marker icons: {len(marker_icons)} (category markers - custom SVG used)")
+    print(f"   Marker icons: {len(marker_icons)} (category markers)")
     if missing_icons:
-        print(f"   ⚠️  Missing icons: {len(missing_icons)} - {', '.join(sorted(set(missing_icons)))}")
+        unique_missing = sorted(set(missing_icons))
+        print(f"   ⚠️  Missing icons: {len(unique_missing)} - {', '.join(unique_missing)}")
     print(f"   Estimated size: ~{len(module_content) / 1024:.1f} KB")
 
 
-def generate_icon_map(base_path: Path = None) -> bool:
+def generate_icon_map(base_path: Path = None, regenerate_maps: str = 'all') -> bool:
     """
     Generate Lucide icons map from codebase usage.
     
     Args:
         base_path: Optional base path to repository root. If None, auto-detects.
+        regenerate_maps: Which maps to regenerate ('all', 'marker', 'map', 'dashboard', or 'map,dashboard')
         
     Returns:
         True if successful, False otherwise
@@ -250,6 +325,8 @@ def generate_icon_map(base_path: Path = None) -> bool:
     
     print(f"🔍 Scanning for Lucide icon usage...")
     print(f"   Base path: {base_path}")
+    if regenerate_maps != 'all':
+        print(f"   Regenerating: {regenerate_maps} map(s) only")
     
     # Find all icon usage
     icons = find_icon_usage(base_path)
@@ -261,7 +338,7 @@ def generate_icon_map(base_path: Path = None) -> bool:
     
     # Generate module
     output_path = base_path / 'src' / 'modules' / 'lucide_markers.py'
-    generate_lucide_markers_module(icons, output_path)
+    generate_lucide_markers_module(icons, output_path, regenerate_maps=regenerate_maps)
     
     print("\n✨ Done! Icon map generated successfully.")
     return True
