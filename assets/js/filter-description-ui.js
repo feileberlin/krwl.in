@@ -184,8 +184,8 @@ class FilterDescriptionUI {
             return;
         }
         
-        // Display dresscode with format: "wearing a {dresscode}"
-        element.textContent = `wearing a ${weatherData.dresscode}`;
+        // Display dresscode with format: "wearing a {dresscode}" (lowercase)
+        element.textContent = `wearing a ${weatherData.dresscode.toLowerCase()}`;
         element.style.display = '';  // Show the element
         
         this.log('Weather description updated:', weatherData.dresscode);
