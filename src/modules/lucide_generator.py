@@ -243,7 +243,7 @@ MAP_ICONS_MAP = {{
 # DASHBOARD ICONS MAP - Dashboard & Debug UI Icons
 # ============================================================================
 
-DASHBOARD_ICONS_MAP = {{
+DASHBOARD_ICONS_MAP = {
 '''
     
     # Add dashboard icon entries
@@ -262,7 +262,7 @@ DASHBOARD_ICONS_MAP = {{
 # To add Lucide category markers, run: 
 #   python3 src/event_manager.py generate-icons --map marker
 
-LUCIDE_MARKER_BASE64_MAP = {{
+LUCIDE_MARKER_BASE64_MAP = {
 '''
     
     # Add marker icon entries (if any)
