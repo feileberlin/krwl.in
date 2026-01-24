@@ -67,6 +67,12 @@ class EventsApp {
         this.DASHBOARD_EXPANSION_DURATION = 500;
         this.DASHBOARD_FADE_DURATION = 300;
         
+        // Weather popup constants
+        this.WEATHER_IFRAME_DELAY_MS = 3000;  // Delay before loading iframe (ms)
+        this.DEFAULT_WEATHER_LAT = 50.3167;   // Hof, Germany
+        this.DEFAULT_WEATHER_LON = 11.9167;   // Hof, Germany
+        this.weatherPopupInitialized = false; // Prevent duplicate event listeners
+        
         // Dashboard state
         this.dashboardLastFocusedElement = null;
         this.dashboardTrapFocus = null;
@@ -283,9 +289,9 @@ class EventsApp {
         // Setup weather popup click handler
         this.setupWeatherPopup(weatherChip);
         
-        // Lazy-load the wttr.in iframe after a delay (3 seconds)
+        // Lazy-load the wttr.in iframe after a delay
         // This prevents the iframe from impacting initial page load performance
-        setTimeout(() => this.loadWeatherIframe(), 3000);
+        setTimeout(() => this.loadWeatherIframe(), this.WEATHER_IFRAME_DELAY_MS);
         
         this.log('Weather displayed:', formatted);
     }
@@ -295,11 +301,17 @@ class EventsApp {
      * @param {HTMLElement} weatherChip - The weather chip button element
      */
     setupWeatherPopup(weatherChip) {
+        // Prevent duplicate initialization (guard against multiple calls)
+        if (this.weatherPopupInitialized) return;
+        
         const popup = document.getElementById('weather-popup');
         const closeBtn = document.getElementById('weather-popup-close');
         const backdrop = popup?.querySelector('.weather-popup-backdrop');
         
         if (!popup || !weatherChip) return;
+        
+        // Mark as initialized to prevent duplicate event listeners
+        this.weatherPopupInitialized = true;
         
         // Click weather chip to open popup
         weatherChip.addEventListener('click', (e) => {
@@ -317,7 +329,7 @@ class EventsApp {
             backdrop.addEventListener('click', () => this.closeWeatherPopup());
         }
         
-        // Escape key to close
+        // Escape key to close (added only once due to guard above)
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && !popup.classList.contains('hidden')) {
                 this.closeWeatherPopup();
@@ -343,7 +355,9 @@ class EventsApp {
         
         // Build wttr.in URL - use location name or coordinates
         // Format: ?FnT for narrow output, dark theme, transparent
-        const locationStr = location?.name || `${location?.lat || 50.3167},${location?.lon || 11.9167}`;
+        const lat = location?.lat || this.DEFAULT_WEATHER_LAT;
+        const lon = location?.lon || this.DEFAULT_WEATHER_LON;
+        const locationStr = location?.name || `${lat},${lon}`;
         const wttrUrl = `https://wttr.in/${encodeURIComponent(locationStr)}?FnT`;
         
         // Set iframe src (lazy load)
