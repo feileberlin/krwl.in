@@ -67,6 +67,11 @@ class EventsApp {
         this.DASHBOARD_EXPANSION_DURATION = 500;
         this.DASHBOARD_FADE_DURATION = 300;
         
+        // Weather popup state
+        this.weatherPopupInitialized = false; // Prevent duplicate event listeners
+        this.weatherIframeLoaded = false;     // Prevent loading iframe multiple times
+        this.weatherPopupFocusTrap = null;    // Focus trap for accessibility
+        
         // Dashboard state
         this.dashboardLastFocusedElement = null;
         this.dashboardTrapFocus = null;
@@ -275,11 +280,183 @@ class EventsApp {
         
         if (temperature) {
             weatherChip.setAttribute('data-temperature', temperature);
-            weatherChip.setAttribute('title', `${temperature} • ${formatted}`);
+            weatherChip.setAttribute('title', `${temperature} • ${formatted} • Click for full forecast`);
         }
         
         weatherChip.style.display = '';
+        
+        // Setup weather popup click handler (event listeners only)
+        this.setupWeatherPopup(weatherChip);
+        
         this.log('Weather displayed:', formatted);
+    }
+    
+    /**
+     * Setup weather popup click handlers
+     * @param {HTMLElement} weatherChip - The weather chip button element
+     */
+    setupWeatherPopup(weatherChip) {
+        // Prevent duplicate initialization (guard against multiple calls)
+        if (this.weatherPopupInitialized) return;
+        
+        const popup = document.getElementById('weather-popup');
+        const closeBtn = document.getElementById('weather-popup-close');
+        const backdrop = popup?.querySelector('.weather-popup-backdrop');
+        
+        if (!popup || !weatherChip) return;
+        
+        // Mark as initialized to prevent duplicate event listeners
+        this.weatherPopupInitialized = true;
+        
+        // Click weather chip to open popup
+        weatherChip.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.openWeatherPopup();
+        });
+        
+        // Close button
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => this.closeWeatherPopup());
+        }
+        
+        // Click backdrop to close
+        if (backdrop) {
+            backdrop.addEventListener('click', () => this.closeWeatherPopup());
+        }
+        
+        // Escape key to close (added only once due to guard above)
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !popup.classList.contains('hidden')) {
+                this.closeWeatherPopup();
+            }
+        });
+    }
+    
+    /**
+     * Load the wttr.in iframe when popup is first opened
+     * Only loads once per session for efficiency and privacy
+     */
+    loadWeatherIframe() {
+        // Guard: Only load iframe once
+        if (this.weatherIframeLoaded) return;
+        
+        const iframe = document.getElementById('weather-iframe');
+        if (!iframe) return;
+        
+        // Mark as loaded to prevent duplicate requests
+        this.weatherIframeLoaded = true;
+        
+        // Get location from weather config, fallback to map default center
+        const locations = this.config?.weather?.locations;
+        const location = locations?.[0];
+        const defaultCenter = this.config?.map?.default_center;
+        
+        // Build wttr.in URL - use location name or coordinates
+        // Format: ?FnT for narrow output, dark theme, transparent
+        const lat = location?.lat || defaultCenter?.lat || 50.3167;
+        const lon = location?.lon || defaultCenter?.lon || 11.9167;
+        const locationStr = location?.name || `${lat},${lon}`;
+        const wttrUrl = `https://wttr.in/${encodeURIComponent(locationStr)}?FnT`;
+        
+        // Set iframe src (lazy load on first popup open)
+        iframe.src = wttrUrl;
+        
+        this.log('Weather iframe loaded:', wttrUrl);
+    }
+    
+    /**
+     * Open the weather popup with focus trap
+     */
+    openWeatherPopup() {
+        const popup = document.getElementById('weather-popup');
+        const weatherChip = document.getElementById('filter-bar-weather');
+        
+        if (!popup) return;
+        
+        // Load iframe on first open (privacy-friendly: no request until user clicks)
+        this.loadWeatherIframe();
+        
+        popup.classList.remove('hidden');
+        weatherChip?.setAttribute('aria-expanded', 'true');
+        
+        // Setup focus trap for accessibility (WCAG 2.1 compliance)
+        this.setupWeatherPopupFocusTrap(popup);
+        
+        // Focus close button for accessibility
+        const closeBtn = document.getElementById('weather-popup-close');
+        if (closeBtn) {
+            closeBtn.focus();
+        }
+        
+        this.log('Weather popup opened');
+    }
+    
+    /**
+     * Setup focus trap to prevent focus from leaving the modal
+     * @param {HTMLElement} popup - The popup element
+     */
+    setupWeatherPopupFocusTrap(popup) {
+        const focusableElements = popup.querySelectorAll(
+            'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"]), iframe'
+        );
+        
+        // Guard: Need at least one focusable element
+        if (focusableElements.length === 0) return;
+        
+        const firstFocusable = focusableElements[0];
+        const lastFocusable = focusableElements[focusableElements.length - 1];
+        
+        // Remove any existing trap
+        if (this.weatherPopupFocusTrap) {
+            document.removeEventListener('keydown', this.weatherPopupFocusTrap);
+        }
+        
+        // Create focus trap handler
+        this.weatherPopupFocusTrap = (e) => {
+            if (e.key !== 'Tab') return;
+            
+            if (e.shiftKey) {
+                // Shift+Tab: if on first element, wrap to last
+                if (document.activeElement === firstFocusable) {
+                    e.preventDefault();
+                    lastFocusable.focus();
+                }
+            } else {
+                // Tab: if on last element, wrap to first
+                if (document.activeElement === lastFocusable) {
+                    e.preventDefault();
+                    firstFocusable.focus();
+                }
+            }
+        };
+        
+        document.addEventListener('keydown', this.weatherPopupFocusTrap);
+    }
+    
+    /**
+     * Close the weather popup and remove focus trap
+     */
+    closeWeatherPopup() {
+        const popup = document.getElementById('weather-popup');
+        const weatherChip = document.getElementById('filter-bar-weather');
+        
+        if (!popup) return;
+        
+        popup.classList.add('hidden');
+        weatherChip?.setAttribute('aria-expanded', 'false');
+        
+        // Remove focus trap
+        if (this.weatherPopupFocusTrap) {
+            document.removeEventListener('keydown', this.weatherPopupFocusTrap);
+            this.weatherPopupFocusTrap = null;
+        }
+        
+        // Return focus to weather chip
+        if (weatherChip) {
+            weatherChip.focus();
+        }
+        
+        this.log('Weather popup closed');
     }
     
     displayEvents() {

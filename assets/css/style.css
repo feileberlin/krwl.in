@@ -269,21 +269,26 @@ strong, b {
     text-shadow: 0 0 15px rgba(214, 137, 184, 0.8);
 }
 
-/* Weather chip - informational display (not a filter) */
+/* Weather chip - clickable button for weather forecast popup */
 #event-filter-bar .weather-chip {
-    cursor: help;  /* Help cursor indicates hovering shows more info */
+    cursor: pointer;
     opacity: 0.8;
     font-size: 0.85rem;
     color: var(--color-text-secondary);
     text-shadow: none;
     font-style: italic;  /* Italic to differentiate from filter buttons */
+    transition: opacity 0.2s ease, color 0.2s ease, text-shadow 0.2s ease;
 }
 
 #event-filter-bar .weather-chip:hover {
     opacity: 1;
     color: var(--color-text-primary);
     text-shadow: 0 0 10px rgba(214, 137, 184, 0.3);
-    /* Temperature shown in browser's native tooltip via title attribute */
+}
+
+#event-filter-bar .weather-chip:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
 }
 
 #event-filter-bar .filter-bar-logo:hover {
@@ -2244,4 +2249,93 @@ strong, b {
 }
 
 /* Speech bubble styles are now in assets/css/bubbles.css */
+
+/* Weather popup with wttr.in iframe */
+.weather-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.weather-popup.hidden {
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+}
+
+.weather-popup-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+
+.weather-popup-content {
+    position: relative;
+    background: var(--color-bg-secondary);
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    max-width: 95vw;
+    max-height: 90vh;
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+}
+
+.weather-popup-close {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    font-size: 24px;
+    line-height: 1;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease;
+}
+
+.weather-popup-close:hover {
+    background: rgba(214, 137, 184, 0.7);
+}
+
+.weather-popup-iframe-container {
+    width: 700px;
+    height: 450px;
+    max-width: 95vw;
+    max-height: 80vh;
+    background: var(--color-bg-primary);
+}
+
+.weather-popup-iframe-container iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: var(--color-bg-primary);
+}
+
+@media (max-width: 768px) {
+    .weather-popup-iframe-container {
+        width: 95vw;
+        height: 70vh;
+    }
+}
 
