@@ -838,6 +838,193 @@ python3 src/tools/generate_design_tokens.py
 - **Generated Output**: `assets/html/design-tokens.css` (auto-generated, do not edit)
 - **Usage**: All CSS files in `assets/css/*.css`
 
+### Speech Bubble Design Guidelines (CRITICAL)
+
+**This project uses authentic comic book-style speech bubbles with specific design requirements.**
+
+#### 🎯 Quick Reference - The Golden Rules
+
+**Remember: "ECO-BARBIE BORDERLESS UNIFIED"**
+
+1. **ECO**Barbie colors only (`#D689B8` spectrum)
+2. **BORDER**less design (no borders, plain fills)
+3. **UNIFIED** tail tip (single point, 15px gap)
+
+**The 3-Second Check:**
+- ✅ Colors from EcoBarbie palette? (`--color-*` variables)
+- ✅ No borders on bubble or tail?
+- ✅ Both curves meet at one tip point?
+- ✅ Shadow on parent element only? (`filter: drop-shadow`)
+
+If all YES → you're good! If any NO → review guidelines below.
+
+---
+
+#### Mandatory Design Rules
+
+1. **EcoBarbie Color Spectrum ONLY**
+   - **NEVER** use colors outside the EcoBarbie monochromatic palette
+   - Base color: `#D689B8` (EcoBarbie primary pink)
+   - All colors must be derived from this base using CSS variables
+
+2. **Required Color Palette** (from `config.json` → `design.colors`):
+   ```
+   - primary (#D689B8)      → Accent headlines, marker icons
+   - shade_50 (#6b445c)     → Body text (50% darker than primary)
+   - tint_50 (#eac0da)      → Bookmarked bubble backgrounds (50% lighter)
+   - White (#ffffff)        → Regular bubble backgrounds and tail fill
+   ```
+
+3. **Borderless Design**
+   - **NO borders** on speech bubbles or tails
+   - Plain color fill only - tail and bubble merge seamlessly
+   - Use `filter: drop-shadow()` for depth, never `border` or `box-shadow`
+
+4. **Unified Tail Tip**
+   - Both Bezier curves **MUST** converge to single tip point
+   - Tip points toward marker with 15px breathing room (`CONNECTOR_STOP_DISTANCE = MARKER_CIRCLE_RADIUS + 15`)
+   - Forms authentic triangular tail shape
+
+5. **Grouped Object Shadow**
+   - Use `filter: drop-shadow()` on parent `.speech-bubble` element
+   - **NEVER** use `box-shadow` (only applies to box, not pseudo-elements)
+   - Shadow must treat bubble + tail as one unified object
+   - No visible artifacts at bubble/tail intersection
+
+#### Technical Implementation
+
+**Connector/Tail Constants:**
+```javascript
+const MARKER_CIRCLE_RADIUS = 50;           // 50px radius for 200x200px marker
+const CONNECTOR_STOP_DISTANCE = MARKER_CIRCLE_RADIUS + 15;  // 65px (15px breathing room)
+```
+
+**Tail Geometry:**
+```javascript
+// Both forks converge to single tip point
+const tipX = markerIconCenter.x - (dx / distance) * CONNECTOR_STOP_DISTANCE;
+const tipY = markerIconCenter.y - (dy / distance) * CONNECTOR_STOP_DISTANCE;
+
+// Bezier curves from bubble edges to unified tip
+const pathData = `
+    M ${startPoint1.x},${startPoint1.y} 
+    C ${controlX1_1},${controlY1_1} ${controlX1_2},${controlY1_2} ${tipX},${tipY}
+    M ${startPoint2.x},${startPoint2.y} 
+    C ${controlX2_1},${controlY2_1} ${controlX2_2},${controlY2_2} ${tipX},${tipY}
+`.trim();
+```
+
+**CSS Shadow (Unified):**
+```css
+.speech-bubble {
+  /* ✅ CORRECT: filter applies to entire visual shape */
+  filter: drop-shadow(0 2px 12px rgba(0, 0, 0, 0.1));
+}
+
+.speech-bubble::after,
+.bubble-connector-fill {
+  /* ❌ WRONG: Never add separate shadows here */
+  /* box-shadow or filter here creates artifacts at intersection */
+}
+```
+
+#### Color Usage Examples
+
+**Regular bubble:**
+```css
+.speech-bubble {
+  background: var(--color-white);        /* White background */
+  color: var(--color-shade-50);          /* Dark text for contrast */
+}
+
+.speech-bubble h3 {
+  color: var(--color-primary);           /* EcoBarbie pink headlines */
+}
+```
+
+**Bookmarked bubble:**
+```css
+.speech-bubble.bubble-bookmark {
+  background: var(--color-tint-50);      /* Light pink background */
+  color: var(--color-shade-50);          /* Dark text (same as regular) */
+}
+```
+
+**Tail fill:**
+```css
+.bubble-connector-fill {
+  fill: var(--color-white);              /* Matches regular bubble */
+}
+
+.bubble-bookmark .bubble-connector-fill {
+  fill: var(--color-tint-50);            /* Matches bookmarked bubble */
+}
+```
+
+#### Anti-Patterns: What NOT to Do
+
+**❌ WRONG: Using non-EcoBarbie colors**
+```css
+.speech-bubble {
+  color: #1a1a2e;           /* ❌ Dark blue-gray - not in EcoBarbie spectrum */
+  background: #000000;      /* ❌ Pure black - not in EcoBarbie spectrum */
+}
+```
+
+**❌ WRONG: Adding borders**
+```css
+.speech-bubble {
+  border: 3px solid black;  /* ❌ Borders destroy seamless tail merge */
+}
+```
+
+**❌ WRONG: Separate shadows**
+```css
+.speech-bubble {
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);  /* ❌ Creates intersection artifacts */
+}
+.speech-bubble::after {
+  filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.1));  /* ❌ Separate shadow */
+}
+```
+
+**❌ WRONG: Multiple tip points**
+```javascript
+// ❌ Each fork has its own endpoint - creates forked look instead of pointed tail
+const circleEdge1X = markerIconCenter.x - (dx1 / dist1) * CONNECTOR_STOP_DISTANCE;
+const circleEdge2X = markerIconCenter.x - (dx2 / dist2) * CONNECTOR_STOP_DISTANCE;
+```
+
+#### Files Affected
+
+- **JavaScript**: `assets/js/speech-bubbles.js` - Tail geometry and tip calculation
+- **CSS**: `assets/css/bubbles.css` - Bubble styling, shadows, colors
+- **Generated**: `public/index.html` - Contains both JS and CSS inlined
+
+#### Why These Rules Exist
+
+1. **Brand Consistency**: EcoBarbie spectrum maintains cohesive visual identity
+2. **Authentic Comic Look**: Borderless design with unified tip matches professional comic books
+3. **Visual Quality**: Unified shadow eliminates artifacts at bubble/tail intersection
+4. **Seamless Merge**: Plain fills allow tail and bubble to appear as single object
+5. **User Experience**: 15px breathing room prevents visual collision with marker icons
+
+#### When Modifying Speech Bubbles
+
+**Always:**
+- Use EcoBarbie color variables from `config.json`
+- Maintain unified tail tip geometry
+- Apply shadow to parent element only
+- Test with bubbles in all positions (top, bottom, sides, diagonal)
+- Verify no intersection artifacts between bubble and tail
+
+**Never:**
+- Hardcode colors outside EcoBarbie spectrum
+- Add borders to bubbles or tails
+- Apply separate shadows to tail elements
+- Change tail to have multiple tip points
+- Reduce CONNECTOR_STOP_DISTANCE below 15px (breaks breathing room)
+
 ## Project Configuration
 
 ### Environment Detection (IMPORTANT)
