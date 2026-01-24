@@ -1384,8 +1384,8 @@
     },
     {
       "id": "subjective-day-api",
-      "name": "Subjective Day API (N\u00fcrnberger Uhr)",
-      "description": "API for calculating subjective time based on the historical N\u00fcrnberger Uhr (Nuremberg Clock) system. Available as both Python server API and client-side JavaScript for GitHub Pages hosting. Uses unequal hours where day is divided into 12 hours (sunrise to sunset) and night into 12 hours (sunset to sunrise).",
+      "name": "Subjective Day API (Nürnberger Uhr)",
+      "description": "API for calculating subjective time based on the historical Nürnberger Uhr (Nuremberg Clock) system. Available as both Python server API and client-side JavaScript for GitHub Pages hosting. Uses unequal hours where day is divided into 12 hours (sunrise to sunset) and night into 12 hours (sunset to sunrise).",
       "category": "backend",
       "implemented": true,
       "files": [
@@ -1401,6 +1401,24 @@
       "test_file": "tests/test_subjective_day.py",
       "test_instructions": "1. Run tests: python3 tests/test_subjective_day.py --verbose\n2. Start API server: python3 src/modules/subjective_day.py --serve\n3. Test endpoint: curl \"http://127.0.0.1:8080/api/subjective-time?lat=50.3167&lon=11.9167\"",
       "documentation": "See subjective_day.py module docstring for usage and historical background"
+    },
+    {
+      "id": "constellation-viewer-api",
+      "name": "Constellation Viewer API",
+      "description": "ASCII art constellation viewer with visibility information. Shows major constellations with historical context about medieval timekeeping using star positions. Includes Orion, Ursa Major, Ursa Minor (Polaris), Cassiopeia, Leo, Scorpius, Cygnus, and Pleiades. wttr.in-style API with plain text and JSON output.",
+      "category": "backend",
+      "implemented": true,
+      "files": [
+        "src/modules/constellations.py"
+      ],
+      "config_keys": [],
+      "dependencies": {
+        "python": []
+      },
+      "test_method": "run_custom_test",
+      "test_file": null,
+      "test_instructions": "1. Run demo: python3 src/modules/constellations.py\n2. Start API server: python3 src/modules/constellations.py --serve --port 8081\n3. Test endpoints: curl http://127.0.0.1:8081/orion | curl http://127.0.0.1:8081/:list",
+      "documentation": "See constellations.py module docstring for usage and historical context"
     }
   ]
 }
