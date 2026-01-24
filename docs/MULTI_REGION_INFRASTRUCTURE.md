@@ -6,7 +6,7 @@ KRWL HOF now supports **multiple regions** (cities) viewing the same event data 
 
 - `/hof` - Hof (Saale) view
 - `/nbg` - Nürnberg view  
-- `/bayreuth` - Bayreuth view
+- `/bth` - Bayreuth view
 - `/selb` - Selb view
 - `/rehau` - Rehau view
 
@@ -66,7 +66,7 @@ The regions configuration is located in `config.json` after the design section:
   "regions": {
     "hof": { ... },
     "nbg": { ... },
-    "bayreuth": { ... },
+    "bth": { ... },
     "selb": { ... },
     "rehau": { ... }
   },

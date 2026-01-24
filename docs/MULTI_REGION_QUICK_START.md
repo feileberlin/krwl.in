@@ -22,7 +22,7 @@ Single events.json → Multiple city views (Hof, Nürnberg, Bayreuth, etc.)
 - `/` → Redirects to `/hof` (default region)
 - `/hof` → Map centered on Hof (Saale)
 - `/nbg` → Map centered on Nürnberg
-- `/bayreuth` → Map centered on Bayreuth
+- `/bth` → Map centered on Bayreuth
 - `/selb` → Map centered on Selb
 - `/rehau` → Map centered on Rehau
 
@@ -65,7 +65,7 @@ base_path = Path(__file__).parent
 
 # Get all available regions
 regions = get_all_regions(base_path)
-print(regions.keys())  # ['hof', 'nbg', 'bayreuth', 'selb', 'rehau']
+print(regions.keys())  # ['hof', 'nbg', 'bth', 'selb', 'rehau']
 
 # Get config for specific region
 hof = get_region_config('hof', base_path)

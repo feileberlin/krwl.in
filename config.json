@@ -255,8 +255,8 @@
         }
       ]
     },
-    "bayreuth": {
-      "name": "bayreuth",
+    "bth": {
+      "name": "bth",
       "displayName": "Bayreuth",
       "center": {
         "lat": 49.9481,
