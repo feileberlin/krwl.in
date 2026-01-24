@@ -27,6 +27,7 @@ Future accounts can be added by adding new entries to config.json:
             "ocr_enabled": true,
             "max_days_ahead": 90,
             "category": "music",
+            "request_delay": 3,
             "default_location": {
                 "name": "Venue Name",
                 "lat": 50.3167,
@@ -41,7 +42,6 @@ from __future__ import annotations
 from typing import Dict, Any, List, Optional, TYPE_CHECKING
 from pathlib import Path
 from datetime import datetime, timedelta
-from urllib.parse import urljoin, urlparse
 import re
 import json
 import hashlib
@@ -64,7 +64,6 @@ except ImportError:
 # Import image analyzer for OCR-based flyer extraction
 try:
     from ...image_analyzer import ImageAnalyzer
-    from ...image_analyzer.ocr import extract_event_data_from_image, is_ocr_available
     IMAGE_ANALYZER_AVAILABLE = True
 except ImportError:
     IMAGE_ANALYZER_AVAILABLE = False
@@ -440,6 +439,8 @@ class InstagramSource(BaseSource):
                     posts.append(post)
                     
         except (KeyError, IndexError, TypeError):
+            # Expected when parsing Instagram's dynamic JSON structure
+            # which may have missing or differently structured data
             pass
         
         return posts
