@@ -19,10 +19,10 @@
   <div class="weather-popup-content">
     <button id="weather-popup-close" class="weather-popup-close" aria-label="Close weather forecast">&times;</button>
     <div class="weather-popup-iframe-container">
-      <!-- iframe src set by JavaScript after page load for performance -->
+      <!-- iframe src set by JavaScript when popup is first opened for privacy -->
       <iframe id="weather-iframe" 
               title="Weather forecast from wttr.in"
-              sandbox="allow-scripts allow-same-origin"
+              sandbox="allow-scripts"
               loading="lazy"
               referrerpolicy="no-referrer"></iframe>
     </div>

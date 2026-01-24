@@ -269,21 +269,26 @@ strong, b {
     text-shadow: 0 0 15px rgba(214, 137, 184, 0.8);
 }
 
-/* Weather chip - informational display (not a filter) */
+/* Weather chip - clickable button for weather forecast popup */
 #event-filter-bar .weather-chip {
-    cursor: help;  /* Help cursor indicates hovering shows more info */
+    cursor: pointer;
     opacity: 0.8;
     font-size: 0.85rem;
     color: var(--color-text-secondary);
     text-shadow: none;
     font-style: italic;  /* Italic to differentiate from filter buttons */
+    transition: opacity 0.2s ease, color 0.2s ease, text-shadow 0.2s ease;
 }
 
 #event-filter-bar .weather-chip:hover {
     opacity: 1;
     color: var(--color-text-primary);
     text-shadow: 0 0 10px rgba(214, 137, 184, 0.3);
-    /* Temperature shown in browser's native tooltip via title attribute */
+}
+
+#event-filter-bar .weather-chip:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
 }
 
 #event-filter-bar .filter-bar-logo:hover {
@@ -2317,25 +2322,14 @@ strong, b {
     height: 450px;
     max-width: 95vw;
     max-height: 80vh;
-    background: #1e1e2e;
+    background: var(--color-bg-primary);
 }
 
 .weather-popup-iframe-container iframe {
     width: 100%;
     height: 100%;
     border: none;
-    background: #1e1e2e;
-}
-
-/* Weather chip clickable styling */
-#event-filter-bar .weather-chip {
-    cursor: pointer;
-    transition: opacity 0.2s ease, color 0.2s ease, text-shadow 0.2s ease;
-}
-
-#event-filter-bar .weather-chip:focus {
-    outline: 2px solid var(--color-primary);
-    outline-offset: 2px;
+    background: var(--color-bg-primary);
 }
 
 @media (max-width: 768px) {

@@ -67,11 +67,10 @@ class EventsApp {
         this.DASHBOARD_EXPANSION_DURATION = 500;
         this.DASHBOARD_FADE_DURATION = 300;
         
-        // Weather popup constants
-        this.WEATHER_IFRAME_DELAY_MS = 3000;  // Delay before loading iframe (ms)
-        this.DEFAULT_WEATHER_LAT = 50.3167;   // Hof, Germany
-        this.DEFAULT_WEATHER_LON = 11.9167;   // Hof, Germany
+        // Weather popup state
         this.weatherPopupInitialized = false; // Prevent duplicate event listeners
+        this.weatherIframeLoaded = false;     // Prevent loading iframe multiple times
+        this.weatherPopupFocusTrap = null;    // Focus trap for accessibility
         
         // Dashboard state
         this.dashboardLastFocusedElement = null;
@@ -286,12 +285,8 @@ class EventsApp {
         
         weatherChip.style.display = '';
         
-        // Setup weather popup click handler
+        // Setup weather popup click handler (event listeners only)
         this.setupWeatherPopup(weatherChip);
-        
-        // Lazy-load the wttr.in iframe after a delay
-        // This prevents the iframe from impacting initial page load performance
-        setTimeout(() => this.loadWeatherIframe(), this.WEATHER_IFRAME_DELAY_MS);
         
         this.log('Weather displayed:', formatted);
     }
@@ -338,36 +333,39 @@ class EventsApp {
     }
     
     /**
-     * Lazy-load the wttr.in iframe after page load
-     * This ensures the iframe doesn't impact initial page load performance
+     * Load the wttr.in iframe when popup is first opened
+     * Only loads once per session for efficiency and privacy
      */
     loadWeatherIframe() {
+        // Guard: Only load iframe once
+        if (this.weatherIframeLoaded) return;
+        
         const iframe = document.getElementById('weather-iframe');
         if (!iframe) return;
         
-        // Get location from weather config
+        // Mark as loaded to prevent duplicate requests
+        this.weatherIframeLoaded = true;
+        
+        // Get location from weather config, fallback to map default center
         const locations = this.config?.weather?.locations;
         const location = locations?.[0];
-        
-        if (!location) {
-            this.log('No weather location configured, using default');
-        }
+        const defaultCenter = this.config?.map?.default_center;
         
         // Build wttr.in URL - use location name or coordinates
         // Format: ?FnT for narrow output, dark theme, transparent
-        const lat = location?.lat || this.DEFAULT_WEATHER_LAT;
-        const lon = location?.lon || this.DEFAULT_WEATHER_LON;
+        const lat = location?.lat || defaultCenter?.lat || 50.3167;
+        const lon = location?.lon || defaultCenter?.lon || 11.9167;
         const locationStr = location?.name || `${lat},${lon}`;
         const wttrUrl = `https://wttr.in/${encodeURIComponent(locationStr)}?FnT`;
         
-        // Set iframe src (lazy load)
+        // Set iframe src (lazy load on first popup open)
         iframe.src = wttrUrl;
         
         this.log('Weather iframe loaded:', wttrUrl);
     }
     
     /**
-     * Open the weather popup
+     * Open the weather popup with focus trap
      */
     openWeatherPopup() {
         const popup = document.getElementById('weather-popup');
@@ -375,8 +373,14 @@ class EventsApp {
         
         if (!popup) return;
         
+        // Load iframe on first open (privacy-friendly: no request until user clicks)
+        this.loadWeatherIframe();
+        
         popup.classList.remove('hidden');
         weatherChip?.setAttribute('aria-expanded', 'true');
+        
+        // Setup focus trap for accessibility (WCAG 2.1 compliance)
+        this.setupWeatherPopupFocusTrap(popup);
         
         // Focus close button for accessibility
         const closeBtn = document.getElementById('weather-popup-close');
@@ -388,7 +392,49 @@ class EventsApp {
     }
     
     /**
-     * Close the weather popup
+     * Setup focus trap to prevent focus from leaving the modal
+     * @param {HTMLElement} popup - The popup element
+     */
+    setupWeatherPopupFocusTrap(popup) {
+        const focusableElements = popup.querySelectorAll(
+            'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"]), iframe'
+        );
+        
+        // Guard: Need at least one focusable element
+        if (focusableElements.length === 0) return;
+        
+        const firstFocusable = focusableElements[0];
+        const lastFocusable = focusableElements[focusableElements.length - 1];
+        
+        // Remove any existing trap
+        if (this.weatherPopupFocusTrap) {
+            document.removeEventListener('keydown', this.weatherPopupFocusTrap);
+        }
+        
+        // Create focus trap handler
+        this.weatherPopupFocusTrap = (e) => {
+            if (e.key !== 'Tab') return;
+            
+            if (e.shiftKey) {
+                // Shift+Tab: if on first element, wrap to last
+                if (document.activeElement === firstFocusable) {
+                    e.preventDefault();
+                    lastFocusable.focus();
+                }
+            } else {
+                // Tab: if on last element, wrap to first
+                if (document.activeElement === lastFocusable) {
+                    e.preventDefault();
+                    firstFocusable.focus();
+                }
+            }
+        };
+        
+        document.addEventListener('keydown', this.weatherPopupFocusTrap);
+    }
+    
+    /**
+     * Close the weather popup and remove focus trap
      */
     closeWeatherPopup() {
         const popup = document.getElementById('weather-popup');
@@ -398,6 +444,12 @@ class EventsApp {
         
         popup.classList.add('hidden');
         weatherChip?.setAttribute('aria-expanded', 'false');
+        
+        // Remove focus trap
+        if (this.weatherPopupFocusTrap) {
+            document.removeEventListener('keydown', this.weatherPopupFocusTrap);
+            this.weatherPopupFocusTrap = null;
+        }
         
         // Return focus to weather chip
         if (weatherChip) {
