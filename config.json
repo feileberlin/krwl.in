@@ -198,7 +198,7 @@
       ]
     },
     "nbg": {
-      "name": "nuernberg",
+      "name": "nbg",
       "displayName": "Nürnberg",
       "center": {
         "lat": 49.4521,
@@ -265,7 +265,7 @@
       "zoom": 13,
       "boundingBox": {
         "north": 50.0,
-        "south": 49.9,
+        "south": 49.92,
         "east": 11.6,
         "west": 11.5
       },

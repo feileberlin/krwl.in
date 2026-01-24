@@ -11,21 +11,11 @@ All regions share the same events.json data file.
 URL path just centers map on different locations with region-specific settings.
 """
 
-import json
 import math
 from pathlib import Path
 from typing import Dict, Optional, List
 
-
-def load_config(base_path: Path) -> Dict:
-    """Load configuration from config.json"""
-    config_path = base_path / "config.json"
-    
-    try:
-        with open(config_path, 'r', encoding='utf-8') as f:
-            return json.load(f)
-    except Exception as e:
-        raise RuntimeError(f"Failed to load config: {e}")
+from .utils import load_config
 
 
 def get_all_regions(base_path: Path) -> Dict:
