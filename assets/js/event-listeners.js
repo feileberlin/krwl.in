@@ -322,7 +322,7 @@ class EventListeners {
             // Add disabled placeholder to show option exists but is unavailable
             ranges.push({
                 value: 'all',
-                label: '~~upcoming (all events)~~ (disabled for performance)',
+                label: 'upcoming (all events) (disabled for performance)',
                 timestamp: Infinity,
                 disabled: true
             });

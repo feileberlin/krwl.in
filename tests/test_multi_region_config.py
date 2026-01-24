@@ -278,6 +278,95 @@ class TestMultiRegionConfig:
         
         return all_valid
     
+    def test_region_distance_presets(self):
+        """Test that all regions have valid distance presets"""
+        print("  Testing: Region distance presets...")
+        
+        if 'regions' not in self.config:
+            return False
+        
+        regions = self.config['regions']
+        all_valid = True
+        
+        for region_id, region_config in regions.items():
+            # Check distancePresets exists
+            if 'distancePresets' not in region_config:
+                self.errors.append(f"Region '{region_id}' missing distancePresets")
+                all_valid = False
+                continue
+            
+            distance_presets = region_config['distancePresets']
+            
+            if not isinstance(distance_presets, list):
+                self.errors.append(f"Region '{region_id}' distancePresets is not a list")
+                all_valid = False
+                continue
+            
+            if len(distance_presets) == 0:
+                self.warnings.append(f"Region '{region_id}' has no distance presets")
+            
+            # Track preset IDs for uniqueness check
+            preset_ids = set()
+            
+            for i, preset in enumerate(distance_presets):
+                # Check required fields
+                if 'id' not in preset:
+                    self.errors.append(
+                        f"Region '{region_id}' distance preset {i} missing id"
+                    )
+                    all_valid = False
+                    continue
+                
+                preset_id = preset['id']
+                
+                # Check for duplicate IDs
+                if preset_id in preset_ids:
+                    self.errors.append(
+                        f"Region '{region_id}' has duplicate distance preset ID: {preset_id}"
+                    )
+                    all_valid = False
+                else:
+                    preset_ids.add(preset_id)
+                
+                if 'name' not in preset:
+                    self.errors.append(
+                        f"Region '{region_id}' distance preset '{preset_id}' missing name"
+                    )
+                    all_valid = False
+                elif not isinstance(preset['name'], dict):
+                    self.errors.append(
+                        f"Region '{region_id}' distance preset '{preset_id}' name is not a dict"
+                    )
+                    all_valid = False
+                else:
+                    # Check for language keys
+                    if 'de' not in preset['name']:
+                        self.errors.append(
+                            f"Region '{region_id}' distance preset '{preset_id}' missing German name"
+                        )
+                        all_valid = False
+                    if 'en' not in preset['name']:
+                        self.errors.append(
+                            f"Region '{region_id}' distance preset '{preset_id}' missing English name"
+                        )
+                        all_valid = False
+                
+                if 'distance_km' not in preset:
+                    self.errors.append(
+                        f"Region '{region_id}' distance preset '{preset_id}' missing distance_km"
+                    )
+                    all_valid = False
+                elif not isinstance(preset['distance_km'], (int, float)) or preset['distance_km'] <= 0:
+                    self.errors.append(
+                        f"Region '{region_id}' distance preset '{preset_id}' distance_km must be a positive number"
+                    )
+                    all_valid = False
+        
+        if all_valid:
+            print(f"    ✓ All region distance presets are valid")
+        
+        return all_valid
+    
     def test_backward_compatibility(self):
         """Test that existing config fields still work"""
         print("  Testing: Backward compatibility...")
@@ -322,6 +411,7 @@ class TestMultiRegionConfig:
             self.test_region_center_coordinates,
             self.test_region_bounding_boxes,
             self.test_region_custom_filters,
+            self.test_region_distance_presets,
         ]
         
         passed = 0

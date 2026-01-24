@@ -8,9 +8,7 @@ Allows adding, editing, listing, and removing regions without manual JSON editin
 import json
 import os
 from pathlib import Path
-from typing import Dict, Optional, List
 
-from .utils import load_config
 from .region_utils import (
     get_all_regions, 
     get_default_region,
@@ -47,12 +45,11 @@ class RegionTUI:
         print("-" * 70)
         print("1. List All Regions")
         print("2. Add New Region")
-        print("3. Edit Region")
-        print("4. Remove Region")
-        print("5. Set Default Region")
-        print("6. View Region Details")
-        print("7. Manage Custom Filters")
-        print("8. Back to Main Menu")
+        print("3. Remove Region")
+        print("4. Set Default Region")
+        print("5. View Region Details")
+        print("6. Manage Custom Filters")
+        print("7. Back to Main Menu")
         print("-" * 70)
         print()
     
@@ -442,24 +439,21 @@ class RegionTUI:
         """Main TUI loop"""
         while self.running:
             self.show_menu()
-            choice = input("Enter your choice (1-8): ").strip()
+            choice = input("Enter your choice (1-7): ").strip()
             
             if choice == '1':
                 self.list_regions()
             elif choice == '2':
                 self.add_region()
             elif choice == '3':
-                print("\n⚠️  Edit functionality: Please manually edit config.json")
-                input("\nPress Enter to continue...")
-            elif choice == '4':
                 self.remove_region()
-            elif choice == '5':
+            elif choice == '4':
                 self.set_default_region()
-            elif choice == '6':
+            elif choice == '5':
                 self.view_region_details()
-            elif choice == '7':
+            elif choice == '6':
                 self.manage_custom_filters()
-            elif choice == '8':
+            elif choice == '7':
                 self.running = False
             else:
                 print("\nInvalid choice. Please try again.")

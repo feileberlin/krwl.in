@@ -2594,16 +2594,16 @@ def _execute_command(args, base_path, config):
                             self.name_en = remaining_args[i + 1]
                             i += 2
                         elif remaining_args[i] == '--lat' and i + 1 < len(remaining_args):
-                            self.lat = remaining_args[i + 1]
+                            self.lat = float(remaining_args[i + 1])
                             i += 2
                         elif remaining_args[i] == '--lng' and i + 1 < len(remaining_args):
-                            self.lng = remaining_args[i + 1]
+                            self.lng = float(remaining_args[i + 1])
                             i += 2
                         elif remaining_args[i] == '--radius' and i + 1 < len(remaining_args):
-                            self.radius = remaining_args[i + 1]
+                            self.radius = float(remaining_args[i + 1])
                             i += 2
                         elif remaining_args[i] == '--zoom' and i + 1 < len(remaining_args):
-                            self.zoom = remaining_args[i + 1]
+                            self.zoom = int(remaining_args[i + 1])
                             i += 2
                         else:
                             i += 1

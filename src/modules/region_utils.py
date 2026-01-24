@@ -195,6 +195,25 @@ def get_custom_filters_for_region(region_name: str, base_path: Path) -> List[Dic
     return region_config.get('customFilters', [])
 
 
+def get_distance_presets_for_region(region_name: str, base_path: Path) -> List[Dict]:
+    """
+    Get distance filter presets for a region.
+    
+    Args:
+        region_name: Region ID
+        base_path: Base path of the project
+        
+    Returns:
+        List of distance preset dictionaries
+    """
+    region_config = get_region_config(region_name, base_path)
+    
+    if not region_config:
+        return []
+    
+    return region_config.get('distancePresets', [])
+
+
 def get_region_center(region_name: str, base_path: Path) -> Optional[Dict]:
     """
     Get map center coordinates for a region.

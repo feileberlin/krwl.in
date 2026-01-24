@@ -259,6 +259,35 @@ filters = get_custom_filters_for_region('hof', base_path)
 # ]
 ```
 
+### Distance Filter Presets
+
+Each region can define distance-based filter presets with friendly names and specific radius values:
+
+```python
+from src.modules.region_utils import get_distance_presets_for_region
+
+distance_presets = get_distance_presets_for_region('hof', base_path)
+# Returns: [
+#   {'id': 'nearby', 'name': {'de': 'In der Nähe', 'en': 'Nearby'}, 'distance_km': 1.0},
+#   {'id': 'city', 'name': {'de': 'Stadtgebiet', 'en': 'City Area'}, 'distance_km': 3.0},
+#   {'id': 'region', 'name': {'de': 'Region', 'en': 'Region'}, 'distance_km': 10.0},
+#   ...
+# ]
+```
+
+**Distance Preset Structure:**
+- `id` - Unique identifier within the region
+- `name` - Multilingual display name (German and English)
+- `distance_km` - Radius in kilometers
+
+**Differences from Custom Filters:**
+- **Custom Filters** define specific locations (neighborhoods, districts) with fixed center coordinates
+- **Distance Presets** define radius values that can be applied from any center point (e.g., user location, event location)
+
+Both features are region-specific to account for different city sizes and geographies:
+- Large cities (Nürnberg) have wider distance presets (up to 15 km metropolitan area)
+- Small cities (Selb, Rehau) have tighter distance presets (max 5 km)
+
 ## Adding a New Region
 
 To add a new region (e.g., Münchberg):
