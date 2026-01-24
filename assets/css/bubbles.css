@@ -22,14 +22,22 @@
     filter: drop-shadow(0 0 4px rgba(214, 137, 184, 0.6)); /* Matches --color-primary glow */
 }
 
-/* New curved path connector (tail-like) */
+/* Filled tail shape between connector lines (comic book style) */
+.bubble-connector-fill {
+    fill: #ffffff; /* White fill matching bubble background */
+    stroke: none;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+/* Connector path strokes (black borders for comic style) */
 .bubble-connector-path {
     fill: none;
-    stroke: var(--color-primary);
-    stroke-width: 2;
+    stroke: #000000; /* Black strokes for comic book borders */
+    stroke-width: 3;
     stroke-linecap: round;
-    opacity: 0.85;
-    filter: drop-shadow(0 0 4px rgba(214, 137, 184, 0.6));
+    opacity: 1;
+    filter: drop-shadow(2px 2px 0px rgba(0, 0, 0, 0.15)); /* Comic book shadow */
     transition: opacity 0.3s ease;
 }
 
@@ -46,15 +54,16 @@
 
 .speech-bubble {
     position: absolute;
-    background: rgba(13, 17, 23, 0.95);
-    backdrop-filter: blur(10px);
-    border: 2px solid var(--color-primary);
-    border-radius: 12px;
-    padding: 12px;
+    /* Comic book style: white background with bold black border */
+    background: #ffffff;
+    border: 3px solid #000000; /* Bold black outline - classic comic style */
+    border-radius: 20px; /* Very rounded for authentic comic look */
+    padding: 14px 16px; /* Slightly more padding for comic style */
     width: 220px;
     z-index: 1000;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5),
-                0 0 15px rgba(214, 137, 184, 0.4);
+    /* Comic book drop shadow - strong and defined */
+    box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.3), /* Offset shadow for depth */
+                0 2px 8px rgba(0, 0, 0, 0.15); /* Subtle soft shadow */
     cursor: grab;
     transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), 
                 box-shadow 0.3s ease, 
@@ -62,7 +71,9 @@
                 filter 0.3s ease;
     opacity: 0;
     pointer-events: auto;
-    font-size: 0.85rem;
+    font-size: 0.9rem;
+    font-weight: 500; /* Slightly bolder text for readability */
+    color: #000000; /* Black text on white background */
     /* Organic appearance */
     transform-origin: center;
     will-change: transform;
@@ -73,27 +84,26 @@
     overflow: visible;
 }
 
-/* CSS-based tail (triangular pointer) */
+/* CSS-based tail (triangular pointer) - Comic book style */
 .speech-bubble::after {
     content: '';
     position: absolute;
     width: 0;
     height: 0;
     border-style: solid;
-    border-width: calc(15px * var(--tail-scale, 1)) calc(10px * var(--tail-scale, 1)) 0 calc(10px * var(--tail-scale, 1));
-    border-color: var(--color-primary) transparent transparent transparent;
+    border-width: calc(16px * var(--tail-scale, 1)) calc(11px * var(--tail-scale, 1)) 0 calc(11px * var(--tail-scale, 1));
+    border-color: #000000 transparent transparent transparent; /* Black border */
     /* Position controlled by CSS custom properties set from JavaScript */
     left: var(--tail-x, 50%);
     top: var(--tail-y, 100%);
     transform: translate(-50%, 0) rotate(var(--tail-angle, 0deg));
     transform-origin: top center;
     pointer-events: none;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
-    /* z-index: 1 to render above bubble background but below other UI */
+    filter: drop-shadow(2px 2px 0px rgba(0, 0, 0, 0.2)); /* Comic book shadow */
     z-index: 1;
 }
 
-/* Tail background fill (creates filled triangle) */
+/* Tail background fill (creates white filled triangle) */
 .speech-bubble::before {
     content: '';
     position: absolute;
@@ -101,31 +111,31 @@
     height: 0;
     border-style: solid;
     border-width: calc(13px * var(--tail-scale, 1)) calc(8px * var(--tail-scale, 1)) 0 calc(8px * var(--tail-scale, 1));
-    border-color: rgba(13, 17, 23, 0.95) transparent transparent transparent;
+    border-color: #ffffff transparent transparent transparent; /* White fill */
     /* Position controlled by CSS custom properties set from JavaScript */
     left: var(--tail-x, 50%);
     top: var(--tail-y, 100%);
     transform: translate(-50%, -2px) rotate(var(--tail-angle, 0deg));
     transform-origin: top center;
     pointer-events: none;
-    /* z-index: 1 to render above bubble background */
     z-index: 1;
 }
 
-/* Bookmarked bubble - different border color */
+/* Bookmarked bubble - different color accent (comic style) */
 .speech-bubble.bubble-is-bookmarked {
-    border-color: var(--color-bookmark); /* Light/bright red border for bookmarked bubbles */
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5),
-                0 0 15px rgba(255, 179, 179, 0.4); /* Match border color in shadow */
+    border: 3px solid #FF0066; /* Bright pink/red border for bookmarked bubbles */
+    background: #FFF5F8; /* Slightly pink-tinted white background */
+    box-shadow: 4px 4px 0px rgba(255, 0, 102, 0.25), /* Colored shadow */
+                0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 /* Bookmarked bubble tail colors */
 .speech-bubble.bubble-is-bookmarked::after {
-    border-color: var(--color-bookmark) transparent transparent transparent;
+    border-color: #FF0066 transparent transparent transparent; /* Pink border */
 }
 
 .speech-bubble.bubble-is-bookmarked::before {
-    border-color: rgba(13, 17, 23, 0.95) transparent transparent transparent;
+    border-color: #FFF5F8 transparent transparent transparent; /* Pink-tinted fill */
 }
 
 /* Change all text colors inside bookmarked bubble to match border */
@@ -227,16 +237,18 @@
 
 /* Speech bubble headline - START TIME */
 .bubble-time-headline {
-    color: var(--color-primary);
+    color: #FF0066; /* Bright accent color for comic style */
     font-size: 1.1rem;
     font-weight: 700;
     margin-bottom: 4px;
     line-height: 1.2;
+    text-transform: uppercase; /* Comic book style uppercase */
+    letter-spacing: 0.5px;
 }
 
 /* Speech bubble date */
 .bubble-date {
-    color: var(--color-text-secondary);
+    color: #666666; /* Dark gray for readability on white */
     font-size: 0.75rem;
     margin-bottom: 8px;
     line-height: 1.2;
@@ -244,16 +256,16 @@
 
 /* Speech bubble title */
 .bubble-title {
-    color: var(--color-text-primary);
+    color: #000000; /* Black text for maximum readability */
     font-size: 0.9rem;
-    font-weight: 500;
+    font-weight: 600; /* Bolder for comic style */
     margin-bottom: 6px;
     line-height: 1.3;
 }
 
 /* Speech bubble location */
 .bubble-location {
-    color: var(--color-text-secondary);
+    color: #333333; /* Dark gray */
     font-size: 0.8rem;
     margin-bottom: 4px;
     line-height: 1.2;
@@ -274,7 +286,7 @@
 
 /* Speech bubble distance */
 .bubble-distance {
-    color: var(--color-text-tertiary);
+    color: #666666; /* Dark gray */
     font-size: 0.75rem;
     margin-bottom: 8px;
     line-height: 1.2;

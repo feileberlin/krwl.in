@@ -637,7 +637,12 @@ class SpeechBubbles {
     createConnectorLine(markerPos, bubbleRect) {
         if (!this.connectorLayer) return null;
         
-        // Create curved path (bezier) for SVG connectors
+        // Create filled tail shape (behind the stroke paths)
+        const fill = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        fill.classList.add('bubble-connector-fill');
+        this.connectorLayer.appendChild(fill);
+        
+        // Create curved path (bezier) for SVG connectors (strokes on top)
         const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
         path.classList.add('bubble-connector-path');
         this.connectorLayer.appendChild(path);
@@ -648,7 +653,7 @@ class SpeechBubbles {
         circle.setAttribute('r', MARKER_CIRCLE_RADIUS);
         this.connectorLayer.appendChild(circle);
         
-        const connector = { path, circle };
+        const connector = { path, circle, fill };
         this.updateConnectorLine({ connector }, bubbleRect, markerPos, true);
         return connector;
     }
@@ -789,6 +794,21 @@ class SpeechBubbles {
             const scale = minRadialDistance / radialDist2_2;
             controlX2_2 = markerIconCenter.x + (controlX2_2 - markerIconCenter.x) * scale;
             controlY2_2 = markerIconCenter.y + (controlY2_2 - markerIconCenter.y) * scale;
+        }
+        
+        // Create filled tail shape connecting the two fork paths
+        // This creates the solid colored area between the connector lines
+        const fillData = `
+            M ${startPoint1.x},${startPoint1.y}
+            C ${controlX1_1},${controlY1_1} ${controlX1_2},${controlY1_2} ${circleEdge1X},${circleEdge1Y}
+            L ${circleEdge2X},${circleEdge2Y}
+            C ${controlX2_2},${controlY2_2} ${controlX2_1},${controlY2_1} ${startPoint2.x},${startPoint2.y}
+            Z
+        `.trim();
+        
+        if (connector.fill) {
+            connector.fill.setAttribute('d', fillData);
+            connector.fill.style.opacity = isVisible ? '' : '0';
         }
         
         // Combine both paths into a single SVG path, each ending at its own circle edge point
