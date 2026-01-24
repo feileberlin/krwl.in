@@ -54,6 +54,7 @@ try:
     from modules.entity_operations import EntityOperationsCLI
     from modules.locations import LocationTUI, LocationCLI
     from modules.organizers import OrganizerTUI, OrganizerCLI
+    from modules.regions import RegionTUI, RegionCLI
 except ImportError as e:
     print(f"Warning: Failed to import entity modules: {e}")
     # Graceful degradation
@@ -62,6 +63,8 @@ except ImportError as e:
     LocationCLI = None
     OrganizerTUI = None
     OrganizerCLI = None
+    RegionTUI = None
+    RegionCLI = None
 
 
 class EventManagerTUI:
@@ -374,6 +377,20 @@ COMMANDS:
     organizers search QUERY   Search organizers by name
     organizers merge SOURCE_ID TARGET_ID  Merge two organizers
     organizers stats          Show organizer statistics
+    
+    regions                   Launch interactive region management TUI
+    regions list              List all configured regions
+    regions list --format json  Output regions as JSON
+    regions add --id REGION_ID --name "Display Name" --lat LAT --lng LNG [--zoom ZOOM]
+                              Add new region (all regions share events.json)
+    regions remove REGION_ID  Remove a region from configuration
+    regions view REGION_ID    View detailed region configuration
+    regions set-default REGION_ID  Set the default region
+    regions list-filters REGION_ID  List custom filters for a region
+    regions list-filters REGION_ID --format json  Output filters as JSON
+    regions add-filter REGION_ID --filter-id ID --name-de "German Name" --name-en "English Name" --lat LAT --lng LNG --radius RADIUS --zoom ZOOM
+                              Add custom location filter (neighborhood/district preset)
+    regions remove-filter REGION_ID FILTER_ID  Remove custom filter from region
     
     test                      Run all tests
     test --list               List available test categories and tests
@@ -2500,6 +2517,104 @@ def _execute_command(args, base_path, config):
         organizer_args = OrganizerArgs(args.args[0], args.args[1:] if len(args.args) > 1 else [])
         cli = OrganizerCLI(base_path)
         return cli.handle_command(organizer_args)
+    
+    if command == 'regions':
+        if RegionCLI is None:
+            print("Error: Region modules not available")
+            return 1
+        
+        if not args.args:
+            # Launch interactive TUI
+            if RegionTUI:
+                tui = RegionTUI(base_path)
+                tui.run()
+                return 0
+            else:
+                print("Error: Missing regions subcommand")
+                print("Usage: python3 event_manager.py regions [list|add|remove|view|set-default]")
+                return 1
+        
+        # Parse region CLI arguments
+        class RegionArgs:
+            def __init__(self, subcommand, remaining_args):
+                self.region_command = subcommand
+                # Parse based on subcommand
+                if subcommand == 'list':
+                    self.format = 'json' if '--format' in remaining_args and 'json' in remaining_args else 'text'
+                elif subcommand == 'add':
+                    # Parse --id, --name, --lat, --lng, --zoom
+                    self.region_id = None
+                    self.display_name = None
+                    self.lat = None
+                    self.lng = None
+                    self.zoom = 13
+                    i = 0
+                    while i < len(remaining_args):
+                        if remaining_args[i] == '--id' and i + 1 < len(remaining_args):
+                            self.region_id = remaining_args[i + 1]
+                            i += 2
+                        elif remaining_args[i] == '--name' and i + 1 < len(remaining_args):
+                            self.display_name = remaining_args[i + 1]
+                            i += 2
+                        elif remaining_args[i] == '--lat' and i + 1 < len(remaining_args):
+                            self.lat = float(remaining_args[i + 1])
+                            i += 2
+                        elif remaining_args[i] == '--lng' and i + 1 < len(remaining_args):
+                            self.lng = float(remaining_args[i + 1])
+                            i += 2
+                        elif remaining_args[i] == '--zoom' and i + 1 < len(remaining_args):
+                            self.zoom = int(remaining_args[i + 1])
+                            i += 2
+                        else:
+                            i += 1
+                elif subcommand in ['remove', 'view', 'set-default']:
+                    self.region_id = remaining_args[0] if remaining_args else None
+                elif subcommand == 'list-filters':
+                    self.region_id = remaining_args[0] if remaining_args else None
+                    self.format = 'json' if '--format' in remaining_args and 'json' in remaining_args else 'text'
+                elif subcommand == 'add-filter':
+                    # Parse: add-filter REGION_ID --filter-id ID --name-de NAME --name-en NAME --lat LAT --lng LNG --radius RADIUS --zoom ZOOM
+                    self.region_id = remaining_args[0] if remaining_args else None
+                    self.filter_id = None
+                    self.name_de = None
+                    self.name_en = None
+                    self.lat = None
+                    self.lng = None
+                    self.radius = None
+                    self.zoom = None
+                    i = 1  # Start after REGION_ID
+                    while i < len(remaining_args):
+                        if remaining_args[i] == '--filter-id' and i + 1 < len(remaining_args):
+                            self.filter_id = remaining_args[i + 1]
+                            i += 2
+                        elif remaining_args[i] == '--name-de' and i + 1 < len(remaining_args):
+                            self.name_de = remaining_args[i + 1]
+                            i += 2
+                        elif remaining_args[i] == '--name-en' and i + 1 < len(remaining_args):
+                            self.name_en = remaining_args[i + 1]
+                            i += 2
+                        elif remaining_args[i] == '--lat' and i + 1 < len(remaining_args):
+                            self.lat = float(remaining_args[i + 1])
+                            i += 2
+                        elif remaining_args[i] == '--lng' and i + 1 < len(remaining_args):
+                            self.lng = float(remaining_args[i + 1])
+                            i += 2
+                        elif remaining_args[i] == '--radius' and i + 1 < len(remaining_args):
+                            self.radius = float(remaining_args[i + 1])
+                            i += 2
+                        elif remaining_args[i] == '--zoom' and i + 1 < len(remaining_args):
+                            self.zoom = int(remaining_args[i + 1])
+                            i += 2
+                        else:
+                            i += 1
+                elif subcommand == 'remove-filter':
+                    # Parse: remove-filter REGION_ID FILTER_ID
+                    self.region_id = remaining_args[0] if len(remaining_args) > 0 else None
+                    self.filter_id = remaining_args[1] if len(remaining_args) > 1 else None
+        
+        region_args = RegionArgs(args.args[0], args.args[1:] if len(args.args) > 1 else [])
+        cli = RegionCLI(base_path)
+        return cli.handle_command(region_args)
     
     if command == 'telegram-bot':
         # Telegram bot command
