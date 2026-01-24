@@ -176,8 +176,8 @@
             "en": "Old Town"
           },
           "center": {
-            "lat": 50.3220,
-            "lng": 11.9150
+            "lat": 50.322,
+            "lng": 11.915
           },
           "radius": 1.0,
           "zoom": 15
@@ -234,8 +234,8 @@
             "en": "Gostenhof"
           },
           "center": {
-            "lat": 49.4580,
-            "lng": 11.0580
+            "lat": 49.458,
+            "lng": 11.058
           },
           "radius": 1.0,
           "zoom": 15
@@ -247,8 +247,8 @@
             "en": "South District"
           },
           "center": {
-            "lat": 49.4350,
-            "lng": 11.0800
+            "lat": 49.435,
+            "lng": 11.08
           },
           "radius": 1.5,
           "zoom": 14
