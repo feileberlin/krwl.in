@@ -11,10 +11,20 @@ Historical Background:
 - Hour length varies throughout the year (longer summer days, shorter winter days)
 - In Nuremberg's latitude, day hours range from ~42-45 min (winter) to ~77-80 min (summer)
 
-API Usage:
-- Local CLI: python3 src/event_manager.py subjective-time --lat 50.3167 --lon 11.9167
-- HTTP API: GET /api/subjective-time?lat=50.3167&lon=11.9167
-- Python: from src.modules.subjective_day import SubjectiveTime
+API Usage (wttr.in style):
+    curl localhost:8080/Berlin            # Plain text output
+    curl localhost:8080/50.3,11.9         # Coordinates
+    curl localhost:8080/munich?format=j   # JSON output
+    curl localhost:8080/hof?format=1      # One-line (for scripts)
+    curl localhost:8080/:help             # Help page
+
+Python Usage:
+    from src.modules.subjective_day import SubjectiveTime
+    uhr = SubjectiveTime(lat=50.3167, lon=11.9167)
+    result = uhr.get_subjective_day()
+
+Start Server:
+    python3 src/modules/subjective_day.py --serve --port 8080
 
 References:
 - https://de.wikipedia.org/wiki/Nürnberger_Uhr
@@ -518,12 +528,12 @@ def get_sunrise_sunset(lat: float, lon: float, dt: datetime = None) -> Dict[str,
 # Simple HTTP API server for local use
 def run_api_server(host: str = '127.0.0.1', port: int = 8080):
     """
-    Run a simple HTTP API server for subjective time.
+    Run a simple HTTP API server for subjective time (wttr.in style).
     
-    Endpoints:
-    - GET /api/subjective-time?lat=<lat>&lon=<lon>
-    - GET /api/sunrise-sunset?lat=<lat>&lon=<lon>
-    - GET /api/day-hours?lat=<lat>&lon=<lon>
+    Usage (curl-friendly):
+        curl localhost:8080/50.3,11.9          # Plain text output
+        curl localhost:8080/50.3,11.9?format=j # JSON output
+        curl localhost:8080/:help              # Show help
     
     Args:
         host: Host to bind to (default: 127.0.0.1 for local only)
@@ -533,72 +543,288 @@ def run_api_server(host: str = '127.0.0.1', port: int = 8080):
     import urllib.parse
     import json as json_module
     
+    # Known city coordinates for friendly URLs
+    KNOWN_CITIES = {
+        'hof': (50.3167, 11.9167),
+        'nuremberg': (49.4521, 11.0767),
+        'nürnberg': (49.4521, 11.0767),
+        'nuernberg': (49.4521, 11.0767),
+        'berlin': (52.5200, 13.4050),
+        'munich': (48.1351, 11.5820),
+        'münchen': (48.1351, 11.5820),
+        'muenchen': (48.1351, 11.5820),
+        'frankfurt': (50.1109, 8.6821),
+        'hamburg': (53.5511, 9.9937),
+        'cologne': (50.9375, 6.9603),
+        'köln': (50.9375, 6.9603),
+        'koeln': (50.9375, 6.9603),
+        'vienna': (48.2082, 16.3738),
+        'wien': (48.2082, 16.3738),
+        'zurich': (47.3769, 8.5417),
+        'zürich': (47.3769, 8.5417),
+        'prague': (50.0755, 14.4378),
+        'prag': (50.0755, 14.4378),
+        'amsterdam': (52.3676, 4.9041),
+        'paris': (48.8566, 2.3522),
+        'london': (51.5074, -0.1278),
+        'rome': (41.9028, 12.4964),
+        'rom': (41.9028, 12.4964),
+        'madrid': (40.4168, -3.7038),
+        'barcelona': (41.3851, 2.1734),
+        'new york': (40.7128, -74.0060),
+        'tokyo': (35.6762, 139.6503),
+        'sydney': (-33.8688, 151.2093),
+    }
+    
+    def get_help_text():
+        """Generate wttr.in-style help text."""
+        return f"""
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                    🕐 Subjective Day - Nürnberger Uhr API                     ║
+║                                                                               ║
+║  Usage: curl {host}:{port}/LOCATION                                             ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║                                                                               ║
+║  LOCATION can be:                                                             ║
+║    • City name:     curl {host}:{port}/Berlin                                   ║
+║    • Coordinates:   curl {host}:{port}/50.3,11.9                                ║
+║    • Default (Hof): curl {host}:{port}/                                         ║
+║                                                                               ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║  Output Formats:                                                              ║
+║    (default)       Plain text / ASCII art                                     ║
+║    ?format=j       JSON output                                                ║
+║    ?format=1       One-line output (for scripts)                              ║
+║    ?format=table   Hour table for the day                                     ║
+║                                                                               ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║  Examples:                                                                    ║
+║    curl {host}:{port}/nuremberg                                                 ║
+║    curl {host}:{port}/52.52,13.40                                               ║
+║    curl {host}:{port}/berlin?format=j                                           ║
+║    curl {host}:{port}/munich?format=1                                           ║
+║    curl {host}:{port}/hof?format=table                                          ║
+║                                                                               ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║  Special Pages:                                                               ║
+║    /:help          This help page                                             ║
+║    /:about         About the Nürnberger Uhr system                            ║
+║                                                                               ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║  Supported Cities:                                                            ║
+║    Hof, Nuremberg, Berlin, Munich, Frankfurt, Hamburg, Cologne                ║
+║    Vienna, Zurich, Prague, Amsterdam, Paris, London, Rome, Madrid             ║
+║    Barcelona, New York, Tokyo, Sydney  (or use coordinates)                   ║
+║                                                                               ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║  What is Nürnberger Uhr?                                                      ║
+║    A medieval timekeeping system where:                                       ║
+║    • Day (sunrise→sunset) is divided into 12 equal "day hours"                ║
+║    • Night (sunset→sunrise) is divided into 12 equal "night hours"            ║
+║    • Hour lengths vary seasonally (winter day hours ~45 min)                  ║
+║                                                                               ║
+║  Reference: https://de.wikipedia.org/wiki/Nürnberger_Uhr                      ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+"""
+
+    def get_about_text():
+        """Generate about page."""
+        return """
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                        🕐 About Nürnberger Uhr                                ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║                                                                               ║
+║  The Nürnberger Uhr (Nuremberg Clock) was a historical timekeeping system     ║
+║  used in Nuremberg and other Central European cities during medieval times.   ║
+║                                                                               ║
+║  Unlike modern 24-hour clocks with equal hours, this system used "temporal    ║
+║  hours" or "unequal hours" that varied with the seasons:                      ║
+║                                                                               ║
+║  📅 HOW IT WORKS:                                                             ║
+║                                                                               ║
+║    ☀️  DAY HOURS (1-12):                                                       ║
+║        The time from sunrise to sunset is divided into 12 equal parts.        ║
+║        In winter, day hours are SHORT (~45 minutes in Nuremberg)              ║
+║        In summer, day hours are LONG (~75 minutes in Nuremberg)               ║
+║                                                                               ║
+║    🌙 NIGHT HOURS (1-12):                                                      ║
+║        The time from sunset to sunrise is divided into 12 equal parts.        ║
+║        In winter, night hours are LONG (~75 minutes)                          ║
+║        In summer, night hours are SHORT (~45 minutes)                         ║
+║                                                                               ║
+║  📊 SEASONAL VARIATION (at Nuremberg's latitude):                             ║
+║                                                                               ║
+║    Winter Solstice (Dec 21):  Day hour ≈ 40 min, Night hour ≈ 80 min          ║
+║    Equinox (Mar/Sep 21):      Day hour ≈ 60 min, Night hour ≈ 60 min          ║
+║    Summer Solstice (Jun 21):  Day hour ≈ 80 min, Night hour ≈ 40 min          ║
+║                                                                               ║
+║  🏛️ HISTORICAL CONTEXT:                                                       ║
+║                                                                               ║
+║    This system was practical for medieval life:                               ║
+║    • Work hours aligned with daylight                                         ║
+║    • Church bells marked the canonical hours                                  ║
+║    • Sundials naturally showed temporal hours                                 ║
+║                                                                               ║
+║  📚 REFERENCES:                                                               ║
+║    • https://de.wikipedia.org/wiki/Nürnberger_Uhr                             ║
+║    • https://nuernberginfos.de/nuernberg-mix/nuernberger-uhr.php              ║
+║                                                                               ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+"""
+
+    def format_plain_text(result: dict, location_name: str) -> str:
+        """Format result as plain text ASCII art."""
+        period_icon = "☀️" if result['is_day'] else "🌙"
+        
+        return f"""
+┌───────────────────────────────────────────────────────────┐
+│  🕐 Subjective Time for {location_name:<32} │
+├───────────────────────────────────────────────────────────┤
+│                                                           │
+│     {period_icon}  {result['display_en']:<47} │
+│                                                           │
+│     Subjective Time:  {result['time_formatted']:>5} ({result['period_en']})                      │
+│                                                           │
+├───────────────────────────────────────────────────────────┤
+│  ☀️  Sunrise:  {result['sunrise']:<8}    🌅 Sunset:  {result['sunset']:<8}        │
+├───────────────────────────────────────────────────────────┤
+│  Day hour:   {result['day_hour_length_minutes']:>5.1f} min    Night hour:  {result['night_hour_length_minutes']:>5.1f} min     │
+├───────────────────────────────────────────────────────────┤
+│  📍 {result['location']['lat']:.4f}°N, {result['location']['lon']:.4f}°E                               │
+│  🕐 {result['timestamp'][:19]}                            │
+└───────────────────────────────────────────────────────────┘
+"""
+
+    def format_one_line(result: dict) -> str:
+        """Format result as one line for scripts."""
+        period = "day" if result['is_day'] else "night"
+        return f"{result['hour']}:{result['minute']:02d} {period} ({result['hour_length_minutes']:.1f}min/hr) | ☀️{result['sunrise']} 🌅{result['sunset']}\n"
+
+    def format_table(day_hours: dict, location_name: str) -> str:
+        """Format day hours as ASCII table."""
+        lines = [
+            f"┌─────────────────────────────────────────────────────────────────────┐",
+            f"│  🕐 Hour Table for {location_name:<47} │",
+            f"│     {day_hours['date']}  (☀️ {day_hours['sunrise']} → 🌅 {day_hours['sunset']})                          │",
+            f"├─────────────────────────────────────────────────────────────────────┤",
+            f"│  Hour │   Day Start  →  End    │  Night Start  →  End   │  Length  │",
+            f"├───────┼────────────────────────┼────────────────────────┼──────────┤",
+        ]
+        
+        for i in range(12):
+            dh = day_hours['day_hours'][i]
+            nh = day_hours['night_hours'][i]
+            lines.append(
+                f"│  {i+1:>2}   │  {dh['start'][:5]} → {dh['end'][:5]}      │  {nh['start'][:5]} → {nh['end'][:5]}       │  {dh['length_minutes']:>5.1f}m  │"
+            )
+        
+        lines.extend([
+            f"├───────┴────────────────────────┴────────────────────────┴──────────┤",
+            f"│  Day hour: {day_hours['day_hour_length_minutes']:.1f} min   │   Night hour: {day_hours['night_hour_length_minutes']:.1f} min                  │",
+            f"└─────────────────────────────────────────────────────────────────────┘",
+        ])
+        
+        return "\n".join(lines) + "\n"
+
+    def parse_location(path: str) -> Tuple[float, float, str]:
+        """Parse location from URL path. Returns (lat, lon, name)."""
+        # Remove leading slash
+        location = path.lstrip('/')
+        
+        # Handle empty path (default to Hof)
+        if not location or location == '/':
+            return 50.3167, 11.9167, "Hof, Germany"
+        
+        # Check for coordinates format: "lat,lon"
+        if ',' in location:
+            try:
+                parts = location.split(',')
+                lat = float(parts[0])
+                lon = float(parts[1])
+                return lat, lon, f"{lat:.4f}°N, {lon:.4f}°E"
+            except (ValueError, IndexError):
+                pass
+        
+        # Check for known city names
+        city_lower = location.lower().strip()
+        if city_lower in KNOWN_CITIES:
+            lat, lon = KNOWN_CITIES[city_lower]
+            return lat, lon, location.title()
+        
+        # Default to Hof if unknown
+        return 50.3167, 11.9167, f"{location} (unknown, using Hof)"
+
     class SubjectiveTimeHandler(http.server.BaseHTTPRequestHandler):
-        def _send_response(self, status_code: int, data: dict):
-            """Send JSON response with appropriate headers."""
+        def _send_text(self, status_code: int, text: str):
+            """Send plain text response."""
+            self.send_response(status_code)
+            self.send_header('Content-Type', 'text/plain; charset=utf-8')
+            self.send_header('Access-Control-Allow-Origin', '*')
+            self.end_headers()
+            self.wfile.write(text.encode('utf-8'))
+        
+        def _send_json(self, status_code: int, data: dict):
+            """Send JSON response."""
             self.send_response(status_code)
             self.send_header('Content-Type', 'application/json')
             self.send_header('Access-Control-Allow-Origin', '*')
-            self.send_header('Access-Control-Allow-Methods', 'GET, OPTIONS')
-            self.send_header('Access-Control-Allow-Headers', 'Content-Type')
             self.end_headers()
             self.wfile.write(json_module.dumps(data, indent=2).encode())
-        
-        def _send_error(self, status_code: int, message: str):
-            """Send error response."""
-            self._send_response(status_code, {'error': message})
         
         def do_GET(self):
             # Parse URL
             parsed = urllib.parse.urlparse(self.path)
             query = urllib.parse.parse_qs(parsed.query)
+            path = parsed.path
+            
+            # Get format parameter
+            fmt = query.get('format', [''])[0].lower()
             
             try:
-                # Get and validate coordinates from query params
-                try:
-                    lat = float(query.get('lat', [50.3167])[0])  # Default: Hof
-                    lon = float(query.get('lon', [11.9167])[0])
-                except (ValueError, TypeError):
-                    self._send_error(400, "Invalid coordinates: lat and lon must be numbers")
+                # Handle special pages
+                if path in ['/:help', '/help', '/:h']:
+                    self._send_text(200, get_help_text())
                     return
                 
-                # Validate coordinate ranges
+                if path in ['/:about', '/about']:
+                    self._send_text(200, get_about_text())
+                    return
+                
+                # Parse location from path
+                lat, lon, location_name = parse_location(path)
+                
+                # Validate coordinates
                 if not -90 <= lat <= 90:
-                    self._send_error(400, f"Invalid latitude: must be between -90 and 90, got {lat}")
+                    self._send_text(400, f"Error: Invalid latitude {lat} (must be -90 to 90)\n")
                     return
                 if not -180 <= lon <= 180:
-                    self._send_error(400, f"Invalid longitude: must be between -180 and 180, got {lon}")
+                    self._send_text(400, f"Error: Invalid longitude {lon} (must be -180 to 180)\n")
                     return
                 
+                # Calculate subjective time
                 uhr = SubjectiveTime(lat, lon)
                 
-                if parsed.path == '/api/subjective-time':
+                # Handle different formats
+                if fmt in ['j', 'json']:
                     result = uhr.get_subjective_day()
-                elif parsed.path == '/api/sunrise-sunset':
-                    result = uhr.get_sunrise_sunset()
-                    # Convert datetime objects to strings
-                    if result.get('sunrise'):
-                        result['sunrise'] = result['sunrise'].strftime('%H:%M:%S')
-                    if result.get('sunset'):
-                        result['sunset'] = result['sunset'].strftime('%H:%M:%S')
-                elif parsed.path == '/api/day-hours':
-                    result = uhr.get_full_day_hours()
-                elif parsed.path == '/api/health':
-                    result = {'status': 'ok', 'service': 'nuernberger-uhr'}
+                    self._send_json(200, result)
+                elif fmt in ['1', 'oneline', 'one']:
+                    result = uhr.get_subjective_day()
+                    self._send_text(200, format_one_line(result))
+                elif fmt in ['table', 't', 'hours']:
+                    day_hours = uhr.get_full_day_hours()
+                    self._send_text(200, format_table(day_hours, location_name))
                 else:
-                    self._send_error(404, 'Unknown endpoint. Available: /api/subjective-time, /api/sunrise-sunset, /api/day-hours, /api/health')
-                    return
-                
-                self._send_response(200, result)
+                    # Default: plain text ASCII art
+                    result = uhr.get_subjective_day()
+                    self._send_text(200, format_plain_text(result, location_name))
                 
             except ValueError as e:
-                # Validation errors (e.g., invalid coordinates)
-                self._send_error(400, str(e))
+                self._send_text(400, f"Error: {str(e)}\n")
             except Exception:
-                # Log internally but don't expose details to client
                 import traceback
                 traceback.print_exc()
-                self._send_error(500, "Internal server error")
+                self._send_text(500, "Error: Internal server error\n")
         
         def do_OPTIONS(self):
             """Handle CORS preflight requests."""
@@ -613,19 +839,24 @@ def run_api_server(host: str = '127.0.0.1', port: int = 8080):
             print(f"[{datetime.now().strftime('%H:%M:%S')}] {args[0]}")
     
     print(f"""
-╔═══════════════════════════════════════════════════════════════╗
-║              Nürnberger Uhr - Subjective Time API             ║
-╠═══════════════════════════════════════════════════════════════╣
-║  Server running at: http://{host}:{port}                        ║
-╠═══════════════════════════════════════════════════════════════╣
-║  Endpoints:                                                   ║
-║    GET /api/subjective-time?lat=50.3&lon=11.9                ║
-║    GET /api/sunrise-sunset?lat=50.3&lon=11.9                 ║
-║    GET /api/day-hours?lat=50.3&lon=11.9                      ║
-║    GET /api/health                                            ║
-╠═══════════════════════════════════════════════════════════════╣
-║  Press Ctrl+C to stop                                         ║
-╚═══════════════════════════════════════════════════════════════╝
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                    🕐 Subjective Day - Nürnberger Uhr API                     ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║  Server running at: http://{host}:{port}/                                        ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║  Usage (like wttr.in):                                                        ║
+║                                                                               ║
+║    curl {host}:{port}/                      # Default (Hof)                      ║
+║    curl {host}:{port}/Berlin                # City name                          ║
+║    curl {host}:{port}/52.52,13.40           # Coordinates                        ║
+║    curl {host}:{port}/munich?format=j       # JSON output                        ║
+║    curl {host}:{port}/hof?format=1          # One-line (for scripts)             ║
+║    curl {host}:{port}/nuremberg?format=table # Hour table                        ║
+║    curl {host}:{port}/:help                 # Help page                          ║
+║                                                                               ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║  Press Ctrl+C to stop                                                         ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
 """)
     
     server = http.server.HTTPServer((host, port), SubjectiveTimeHandler)
