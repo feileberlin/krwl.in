@@ -726,19 +726,38 @@ def run_api_server(host: str = '127.0.0.1', port: int = 8080):
 ║    ?format=j       JSON output                                                ║
 ║    ?format=1       One-line output (for scripts)                              ║
 ║    ?format=table   Hour table for the day                                     ║
+║    ?format=watch   ⌚ Smartwatch complication data (minimal JSON)             ║
+║                                                                               ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║  ⌚ SMARTWATCH APPS                                                           ║
+║    curl {host}:{port}/berlin?format=watch                                       ║
+║                                                                               ║
+║    Returns minimal JSON for watch complications:                              ║
+║    {{"hour":3,"period":"night","time":"3:16","canonical":"Tertia",...}}          ║
+║    Fields: hour, minute, period, icon, time, canonical, hr_len,               ║
+║            sunrise, sunset, to_sunrise/to_sunset, short, medium               ║
+║                                                                               ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║  📚 LEARNING & TOOLS                                                          ║
+║    /:learn         Tutorial on the Nürnberger Uhr system                      ║
+║    /:nocturnal     ⭐ Digital Nocturnal instrument (star clock)               ║
 ║                                                                               ║
 ╠═══════════════════════════════════════════════════════════════════════════════╣
 ║  Examples:                                                                    ║
 ║    curl {host}:{port}/nuremberg                                                 ║
 ║    curl {host}:{port}/52.52,13.40                                               ║
 ║    curl {host}:{port}/berlin?format=j                                           ║
-║    curl {host}:{port}/munich?format=1                                           ║
+║    curl {host}:{port}/munich?format=watch                                       ║
 ║    curl {host}:{port}/hof?format=table                                          ║
+║    curl {host}:{port}/:nocturnal                                                ║
+║    curl {host}:{port}/:learn                                                    ║
 ║                                                                               ║
 ╠═══════════════════════════════════════════════════════════════════════════════╣
 ║  Special Pages:                                                               ║
 ║    /:help          This help page                                             ║
 ║    /:about         About the Nürnberger Uhr system                            ║
+║    /:learn         📚 Tutorial & lessons (for learning)                       ║
+║    /:nocturnal     ⭐ Digital nocturnal instrument                            ║
 ║                                                                               ║
 ╠═══════════════════════════════════════════════════════════════════════════════╣
 ║  Supported Cities:                                                            ║
@@ -754,6 +773,233 @@ def run_api_server(host: str = '127.0.0.1', port: int = 8080):
 ║    • Hour lengths vary seasonally (winter day hours ~45 min)                  ║
 ║                                                                               ║
 ║  Reference: https://de.wikipedia.org/wiki/Nürnberger_Uhr                      ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+"""
+
+    def get_watch_data(result: dict) -> dict:
+        """
+        Generate minimal data for smartwatch apps.
+        
+        Designed for watch complications and small displays:
+        - Minimal data for efficient transfer
+        - Essential info only (hour, period, time remaining)
+        - Icon hints for watch face rendering
+        """
+        watch = {
+            'hour': result['hour'],
+            'minute': result.get('minute', 0),
+            'period': 'day' if result['is_day'] else 'night',
+            'icon': '☀️' if result['is_day'] else '🌙',
+            'time': result['time_formatted'],
+            'canonical': result.get('canonical_latin', ''),
+            'hr_len': round(result['hour_length_minutes']),
+            'sunrise': result['sunrise'],
+            'sunset': result['sunset'],
+        }
+        
+        # Add time remaining info
+        if result['is_day']:
+            watch['to_sunset'] = result.get('hours_until_sunset', 0)
+            watch['from_sunrise'] = result.get('hours_since_sunrise', 0)
+        else:
+            watch['to_sunrise'] = result.get('hours_until_sunrise', 0)
+        
+        # Complication-ready short strings
+        watch['short'] = f"{result['hour']}{'d' if result['is_day'] else 'n'}"
+        watch['medium'] = f"{result['time_formatted']} {'☀️' if result['is_day'] else '🌙'}"
+        
+        return watch
+    
+    def get_learn_text():
+        """Generate learning mode content for understanding the system."""
+        return """
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║              📚 LEARNING MODE - Nürnberger Uhr / Nocturnal                    ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║                                                                               ║
+║  🎯 WHAT IS THIS?                                                             ║
+║                                                                               ║
+║  Before mechanical clocks, people used a different time system:               ║
+║  • DAYLIGHT (sunrise → sunset) = 12 "day hours"                               ║
+║  • NIGHT (sunset → sunrise) = 12 "night hours"                                ║
+║                                                                               ║
+║  This means hour LENGTH changes with seasons!                                 ║
+║                                                                               ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║  📖 LESSON 1: Seasonal Hours                                                  ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║                                                                               ║
+║  WINTER (December):                                                           ║
+║    Day hours = SHORT (~40-45 minutes)                                         ║
+║    Night hours = LONG (~75-80 minutes)                                        ║
+║                                                                               ║
+║  SUMMER (June):                                                               ║
+║    Day hours = LONG (~75-80 minutes)                                          ║
+║    Night hours = SHORT (~40-45 minutes)                                       ║
+║                                                                               ║
+║  EQUINOX (March/September):                                                   ║
+║    Day hours = Night hours ≈ 60 minutes each                                  ║
+║                                                                               ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║  📖 LESSON 2: The Canonical Hours (Church Bells)                              ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║                                                                               ║
+║  Medieval bells rang at these times (still used in monasteries):              ║
+║                                                                               ║
+║  DAY HOURS:                                                                   ║
+║    1st Hour: PRIMA (Prime) .......... Sunrise - start of work day             ║
+║    3rd Hour: TERTIA (Terce) ......... Mid-morning prayer                      ║
+║    6th Hour: SEXTA (Sext) ........... Noon - midday rest                      ║
+║    9th Hour: NONA (None) ............ Afternoon (origin of "noon"!)           ║
+║   12th Hour: VESPER (Vespers) ....... Sunset - evening prayer                 ║
+║                                                                               ║
+║  NIGHT HOURS:                                                                 ║
+║    1st Hour: COMPLINE ............... Bedtime prayer                          ║
+║    6th Hour: MATINS ................. Midnight vigil (monks awake!)           ║
+║   12th Hour: LAUDS .................. Dawn praise (before sunrise)            ║
+║                                                                               ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║  📖 LESSON 3: The Nocturnal Instrument                                        ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║                                                                               ║
+║  Before clocks, how did people tell time at night?                            ║
+║                                                                               ║
+║  The NOCTURNAL was a handheld tool that used STARS:                           ║
+║                                                                               ║
+║         ⭐ POLARIS (North Star)                                                ║
+║              │                                                                ║
+║         ╭────┼────╮                                                           ║
+║        ╱     │     ╲   ← Big Dipper rotates around Polaris                    ║
+║       │  ▫  │  ▫   │                                                          ║
+║        ╲     │     ╱                                                          ║
+║         ╰────┼────╯                                                           ║
+║              │                                                                ║
+║                                                                               ║
+║  HOW IT WORKED:                                                               ║
+║    1. Align the instrument to Polaris (through center hole)                   ║
+║    2. Rotate arm to point at the "pointer stars" of Big Dipper                ║
+║    3. Read the hour from the scale                                            ║
+║                                                                               ║
+║  The stars rotate ~15° per hour, completing 360° in 24 hours!                 ║
+║                                                                               ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║  📖 LESSON 4: Reading the Stars                                               ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║                                                                               ║
+║  Medieval bell ringers used these patterns:                                   ║
+║                                                                               ║
+║  ORION (Winter):                                                              ║
+║    • Rising in the east = Early evening (1st-3rd night hour)                  ║
+║    • High in the south = Midnight (MATINS time)                               ║
+║    • Setting in the west = Dawn approaching (LAUDS time)                      ║
+║                                                                               ║
+║  URSA MAJOR (Big Dipper):                                                     ║
+║    • Always visible in northern sky                                           ║
+║    • Points to Polaris (North Star)                                           ║
+║    • Position indicates the night hour                                        ║
+║                                                                               ║
+║  PLEIADES (Seven Sisters):                                                    ║
+║    • Autumn rising = Harvest time                                             ║
+║    • Used for seasonal calendar                                               ║
+║                                                                               ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║  🎮 PRACTICE                                                                  ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║                                                                               ║
+║  Try these API calls to practice:                                             ║
+║                                                                               ║
+║    curl localhost:PORT/hof                # Your current subjective time      ║
+║    curl localhost:PORT/hof?format=table   # All 24 hours for today            ║
+║    curl localhost:PORT/hof?format=watch   # Watch complication data           ║
+║                                                                               ║
+║  Constellation viewer (separate server):                                      ║
+║    curl localhost:8081/orion              # See Orion pattern                 ║
+║    curl localhost:8081/ursa-major         # See Big Dipper                    ║
+║    curl localhost:8081/:list              # All constellations                ║
+║                                                                               ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║  💡 FUN FACT                                                                  ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║                                                                               ║
+║  The word "NOON" comes from Latin "NONA" (9th hour).                          ║
+║                                                                               ║
+║  Originally, noon was the 9th hour after sunrise (~3 PM in modern time).      ║
+║  Over centuries, the meaning shifted to midday (12 PM).                       ║
+║                                                                               ║
+║  This happened because monks moved the Nona prayer earlier so they            ║
+║  could eat their main meal sooner! 🍽️                                         ║
+║                                                                               ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+"""
+    
+    def get_nocturnal_text(lat: float = 50.3167, lon: float = 11.9167):
+        """Generate nocturnal instrument display."""
+        uhr = SubjectiveTime(lat, lon)
+        result = uhr.get_subjective_day()
+        
+        # Determine dial position (0-360 degrees based on time of night)
+        if not result['is_day']:
+            # Night time - calculate rotation
+            night_progress = (result['hour'] - 1 + result['minute'] / 60) / 12.0
+            rotation = int(night_progress * 360)
+        else:
+            rotation = 0
+        
+        # Generate dial visualization
+        pointer_positions = {
+            0: "   ▲   ", 30: "  ▲    ", 60: " ▲     ", 90: "▲      ",
+            120: "▲      ", 150: " ▲     ", 180: "  ▲    ", 210: "   ▲   ",
+            240: "    ▲  ", 270: "     ▲ ", 300: "      ▲", 330: "     ▲ "
+        }
+        nearest = min(pointer_positions.keys(), key=lambda x: abs(x - rotation))
+        pointer = pointer_positions[nearest]
+        
+        hour_display = f"{result['hour']}:{result['minute']:02d}"
+        period = "Night" if not result['is_day'] else "Day"
+        canonical = result.get('canonical_latin', '')
+        
+        return f"""
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                    ⭐ NOCTURNAL INSTRUMENT ⭐                                  ║
+║                     Digital Star Clock                                        ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║                                                                               ║
+║                           ✦ POLARIS ✦                                         ║
+║                               │                                               ║
+║                        ╭──────┼──────╮                                        ║
+║                       ╱   12  │  1    ╲                                       ║
+║                      │ 11    ─┼─    2  │                                      ║
+║                      │ 10    {pointer}   3  │                                 ║
+║                      │  9    ─┼─    4  │                                      ║
+║                       ╲   8   │  5    ╱                                       ║
+║                        ╰──────┼──────╯                                        ║
+║                               │                                               ║
+║                           ☆  ☆  ☆                                             ║
+║                        BIG DIPPER                                             ║
+║                        (pointer stars)                                        ║
+║                                                                               ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║                                                                               ║
+║     📍 Current Reading:                                                       ║
+║                                                                               ║
+║        ┌────────────────────────────────┐                                     ║
+║        │  {period:^5} Hour: {hour_display:^5}             │                   ║
+║        │  {canonical:^30} │                                                   ║
+║        └────────────────────────────────┘                                     ║
+║                                                                               ║
+║     ☀️  Sunrise: {result['sunrise']:<8}                                        ║
+║     🌅 Sunset:  {result['sunset']:<8}                                          ║
+║                                                                               ║
+╠═══════════════════════════════════════════════════════════════════════════════╣
+║  HOW TO USE A REAL NOCTURNAL:                                                 ║
+║                                                                               ║
+║  1. Hold instrument vertically at arm's length                                ║
+║  2. Look through center hole to sight Polaris                                 ║
+║  3. Rotate the arm to align with the "pointer stars"                          ║
+║     (two stars at end of Big Dipper that point to Polaris)                    ║
+║  4. Read the hour where the arm crosses the date ring                         ║
+║                                                                               ║
+║  The stars complete one full circle every 23h 56m (sidereal day)              ║
 ╚═══════════════════════════════════════════════════════════════════════════════╝
 """
 
@@ -940,6 +1186,22 @@ def run_api_server(host: str = '127.0.0.1', port: int = 8080):
                     self._send_text(200, get_about_text())
                     return
                 
+                if path in ['/:learn', '/learn', '/:tutorial']:
+                    self._send_text(200, get_learn_text())
+                    return
+                
+                if path in ['/:nocturnal', '/nocturnal', '/:stars']:
+                    # Parse optional location from query
+                    lat_param = query.get('lat', ['50.3167'])[0]
+                    lon_param = query.get('lon', ['11.9167'])[0]
+                    try:
+                        lat = float(lat_param)
+                        lon = float(lon_param)
+                    except ValueError:
+                        lat, lon = 50.3167, 11.9167
+                    self._send_text(200, get_nocturnal_text(lat, lon))
+                    return
+                
                 # Parse location from path
                 lat, lon, location_name = parse_location(path)
                 
@@ -964,6 +1226,11 @@ def run_api_server(host: str = '127.0.0.1', port: int = 8080):
                 elif fmt in ['table', 't', 'hours']:
                     day_hours = uhr.get_full_day_hours()
                     self._send_text(200, format_table(day_hours, location_name))
+                elif fmt in ['w', 'watch', 'complication']:
+                    # Smartwatch-optimized minimal JSON
+                    result = uhr.get_subjective_day()
+                    watch_data = get_watch_data(result)
+                    self._send_json(200, watch_data)
                 else:
                     # Default: plain text ASCII art
                     result = uhr.get_subjective_day()
