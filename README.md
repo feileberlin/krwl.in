@@ -18,6 +18,7 @@ A **grassroots, mobile-first** Progressive Web App (PWA) for discovering local c
 
 - 📱 **PWA**: Installable as native app on mobile and desktop
 - 🗺️ **Interactive Map**: Leaflet.js with event markers and clustering
+- 🏙️ **Multi-Region Support**: View events from different Franconian cities (Hof, Nürnberg, Bayreuth, Selb, Rehau)
 - 📍 **Geolocation Filtering**: Shows events within 5.0km radius
 - 🌅 **Time-based Filtering**: Shows events until next_sunrise
 - 🤖 **Telegram Bot**: Community event submissions via Telegram messenger
@@ -25,6 +26,34 @@ A **grassroots, mobile-first** Progressive Web App (PWA) for discovering local c
 - ♿ **Accessible**: WCAG 2.1 Level AA compliant
 - 📱 **Responsive**: Mobile-first design, works on all screen sizes
 - 🔄 **Auto-scraping**: Configurable event sources with automatic updates
+
+### 🏙️ Multi-Region Support
+
+KRWL HOF now supports viewing events from different Franconian cities! Each region has its own map center, zoom level, and custom neighborhood filters - all sharing the same event data.
+
+**Supported Regions:**
+- 🏛️ **Hof (Saale)** - Default region (50.3167°N, 11.9167°E)
+- 🏰 **Nürnberg** - Franconia's metropolis (49.4521°N, 11.0767°E)  
+- 🎭 **Bayreuth** - Festival city (49.9481°N, 11.5783°E)
+- 🏺 **Selb** - Porcelain city (50.1705°N, 12.1328°E)
+- 🏔️ **Rehau** - Mountain town (50.2489°N, 12.0364°E)
+
+**For Developers:**
+- See [`docs/MULTI_REGION_QUICK_START.md`](docs/MULTI_REGION_QUICK_START.md) for usage guide
+- See [`docs/MULTI_REGION_INFRASTRUCTURE.md`](docs/MULTI_REGION_INFRASTRUCTURE.md) for full documentation
+- Use `src/modules/region_utils.py` for programmatic access
+
+```python
+from src.modules.region_utils import get_region_config, haversine_distance
+
+# Get Nürnberg's configuration
+nbg_config = get_region_config('nbg', base_path)
+print(nbg_config['displayName'])  # "Nürnberg"
+
+# Calculate distance between cities
+distance = haversine_distance(11.9167, 50.3167, 11.0767, 49.4521)
+print(f"{distance:.1f} km")  # 113.4 km (Hof to Nürnberg)
+```
 
 ## 🚀 Quick Start for Developers
 
