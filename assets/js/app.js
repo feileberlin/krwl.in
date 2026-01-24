@@ -275,11 +275,122 @@ class EventsApp {
         
         if (temperature) {
             weatherChip.setAttribute('data-temperature', temperature);
-            weatherChip.setAttribute('title', `${temperature} • ${formatted}`);
+            weatherChip.setAttribute('title', `${temperature} • ${formatted} • Click for full forecast`);
         }
         
         weatherChip.style.display = '';
+        
+        // Setup weather popup click handler
+        this.setupWeatherPopup(weatherChip);
+        
+        // Lazy-load the wttr.in iframe after a delay (3 seconds)
+        // This prevents the iframe from impacting initial page load performance
+        setTimeout(() => this.loadWeatherIframe(), 3000);
+        
         this.log('Weather displayed:', formatted);
+    }
+    
+    /**
+     * Setup weather popup click handlers
+     * @param {HTMLElement} weatherChip - The weather chip button element
+     */
+    setupWeatherPopup(weatherChip) {
+        const popup = document.getElementById('weather-popup');
+        const closeBtn = document.getElementById('weather-popup-close');
+        const backdrop = popup?.querySelector('.weather-popup-backdrop');
+        
+        if (!popup || !weatherChip) return;
+        
+        // Click weather chip to open popup
+        weatherChip.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.openWeatherPopup();
+        });
+        
+        // Close button
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => this.closeWeatherPopup());
+        }
+        
+        // Click backdrop to close
+        if (backdrop) {
+            backdrop.addEventListener('click', () => this.closeWeatherPopup());
+        }
+        
+        // Escape key to close
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !popup.classList.contains('hidden')) {
+                this.closeWeatherPopup();
+            }
+        });
+    }
+    
+    /**
+     * Lazy-load the wttr.in iframe after page load
+     * This ensures the iframe doesn't impact initial page load performance
+     */
+    loadWeatherIframe() {
+        const iframe = document.getElementById('weather-iframe');
+        if (!iframe) return;
+        
+        // Get location from weather config
+        const locations = this.config?.weather?.locations;
+        const location = locations?.[0];
+        
+        if (!location) {
+            this.log('No weather location configured, using default');
+        }
+        
+        // Build wttr.in URL - use location name or coordinates
+        // Format: ?FnT for narrow output, dark theme, transparent
+        const locationStr = location?.name || `${location?.lat || 50.3167},${location?.lon || 11.9167}`;
+        const wttrUrl = `https://wttr.in/${encodeURIComponent(locationStr)}?FnT`;
+        
+        // Set iframe src (lazy load)
+        iframe.src = wttrUrl;
+        
+        this.log('Weather iframe loaded:', wttrUrl);
+    }
+    
+    /**
+     * Open the weather popup
+     */
+    openWeatherPopup() {
+        const popup = document.getElementById('weather-popup');
+        const weatherChip = document.getElementById('filter-bar-weather');
+        
+        if (!popup) return;
+        
+        popup.classList.remove('hidden');
+        weatherChip?.setAttribute('aria-expanded', 'true');
+        
+        // Focus close button for accessibility
+        const closeBtn = document.getElementById('weather-popup-close');
+        if (closeBtn) {
+            closeBtn.focus();
+        }
+        
+        this.log('Weather popup opened');
+    }
+    
+    /**
+     * Close the weather popup
+     */
+    closeWeatherPopup() {
+        const popup = document.getElementById('weather-popup');
+        const weatherChip = document.getElementById('filter-bar-weather');
+        
+        if (!popup) return;
+        
+        popup.classList.add('hidden');
+        weatherChip?.setAttribute('aria-expanded', 'false');
+        
+        // Return focus to weather chip
+        if (weatherChip) {
+            weatherChip.focus();
+        }
+        
+        this.log('Weather popup closed');
     }
     
     displayEvents() {
