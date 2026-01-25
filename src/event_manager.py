@@ -993,7 +993,6 @@ def cli_diagnose_scraping(base_path, config):
     http_ok = 0
     http_failed = 0
     
-    print()
     for source in sources:
         if not source.get('enabled', False):
             continue
@@ -1025,18 +1024,18 @@ def cli_diagnose_scraping(base_path, config):
             try:
                 import requests
                 response = requests.get(url, timeout=10, headers={
-                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
                 })
                 print(f"     ✓ HTTP: Status {response.status_code}")
                 http_ok += 1
             except requests.exceptions.Timeout:
                 print(f"     ✗ HTTP: Timeout (>10s)")
                 http_failed += 1
-            except requests.exceptions.ConnectionError as e:
+            except requests.exceptions.ConnectionError:
                 print(f"     ✗ HTTP: Connection failed")
                 http_failed += 1
             except Exception as e:
-                print(f"     ✗ HTTP: {type(e).__name__}")
+                print(f"     ✗ HTTP: {type(e).__name__}: {e}")
                 http_failed += 1
                 
         except socket.gaierror:
