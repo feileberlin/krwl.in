@@ -26,6 +26,7 @@ Workflows triggered manually via GitHub UI for on-demand operations.
 | [`editorial-workflow.yml`](#editorial-workflow) | Review & publish pending events |
 | [`maintenance.yml`](#maintenance) | Force rebuild, update deps, diagnostics |
 | [`telegram-bot-handler.yml`](#telegram-bot-handler) | Process Telegram bot events (repository_dispatch) |
+| [`delete-branches.yml`](#delete-branches) | Branch cleanup (manual, with safety confirmations) |
 
 ### **Tier 3: CI/CD & Quality** (pull_request + push)
 Workflows that validate code quality and provide PR previews.
@@ -36,12 +37,9 @@ Workflows that validate code quality and provide PR previews.
 | [`pr-preview.yml`](#pr-preview) | PRs | Build preview artifacts |
 | [`dependency-check.yml`](#dependency-check) | Weekly (Mondays) | Security audit & outdated packages |
 
-### **Utility Workflows** (Not Part of Three-Tier Architecture)
-Standalone workflows for specific maintenance tasks.
+**Total:** 11 workflows (3 in Tier 1, 5 in Tier 2, 3 in Tier 3)
 
-| Workflow | Category | Purpose |
-|----------|----------|---------|
-| [`delete-branches.yml`](#delete-branches) | **Utility** | One-time branch cleanup (manual, with confirmation) |
+
 
 ---
 
@@ -271,9 +269,7 @@ Repository (events.json, pending_events.json)
 ---
 
 ### <a name="delete-branches"></a>`delete-branches.yml`
-**Utility Workflow** (Not Part of Three-Tier Architecture)
-
-**Category:** Utility / Maintenance
+**Tier 2: Manual Operations**
 
 **Triggers:**
 - Manual only: `workflow_dispatch`
@@ -286,18 +282,13 @@ Repository (events.json, pending_events.json)
 1. **delete-branches** - Deletes all branches except `main`
 
 **Key Features:**
-- One-time cleanup task (not part of regular automation)
+- Manual operation for branch cleanup
 - Safety mechanisms:
   - Dry-run mode by default
-  - Explicit confirmation required
+  - Explicit confirmation required ("DELETE ALL BRANCHES")
   - Preserves `main` branch
 - Provides detailed summary of actions
-
-**Why Not in Three-Tier Architecture:**
-- Not core automation (doesn't need scheduling)
-- Not manual operation (too dangerous for frequent use)
-- Not CI/CD (doesn't validate code quality)
-- Special-purpose utility for one-time cleanup
+- Useful for periodic repository maintenance
 
 ---
 
@@ -421,16 +412,14 @@ If issues arise:
 2. Verify `editorial-workflow.yml` publishes events correctly
 3. Test `maintenance.yml` tasks (rebuild, dependencies, etc.)
 4. Simulate Telegram events for `telegram-bot-handler.yml`
+5. Test `delete-branches.yml` in dry-run mode
+6. Verify branch deletion confirmation mechanism works
+7. Test actual branch deletion on non-production repository
 
 ### Tier 3 (CI/CD)
 1. Create test PR to trigger `ci-tests.yml`
 2. Verify `pr-preview.yml` builds artifact and comments
 3. Wait for `dependency-check.yml` scheduled run (Monday)
-
-### Utility
-1. Test `delete-branches.yml` in dry-run mode
-2. Verify confirmation mechanism works
-3. Test actual deletion on non-production repository
 
 ---
 
@@ -458,8 +447,8 @@ A: GitHub will retry. Check the Actions tab for logs. Each workflow is isolated,
 **Q: How do I add a new workflow?**
 A: Determine which tier it belongs to, create the file, test it, and update this documentation.
 
-**Q: Why is `delete-branches.yml` not in the three-tier architecture?**
-A: It's a special-purpose utility workflow for one-time cleanup, not part of regular operations.
+**Q: Why is `delete-branches.yml` in Tier 2 if it's destructive?**
+A: While it deletes branches, it's still a manual operation (workflow_dispatch only) with robust safety mechanisms: dry-run by default, explicit confirmation required, and protection of the main branch. These safeguards make it suitable for Tier 2 manual operations.
 
 **Q: How does the Telegram bot integration work?**
 A: External bot (`telegram_bot_simple.py`) sends `repository_dispatch` events to `telegram-bot-handler.yml`. The bot handles most processing locally (OCR, PIN validation) and uses GitHub Actions as a fallback.
