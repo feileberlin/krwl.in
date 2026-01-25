@@ -293,6 +293,7 @@ COMMANDS:
     diagnose-scraping         Debug scraping issues - check network, DNS, and sources
     scrape-weather            Scrape weather for map center location (config: weather.enabled)
     scrape-weather --force    Force refresh weather data (bypass cache)
+    scrape-weather --strict   Fail on scraping errors (default: use cache as fallback)
     review                    Review pending events interactively
     publish EVENT_ID          Publish a specific pending event
     reject EVENT_ID           Reject a specific pending event
@@ -1124,8 +1125,21 @@ def cli_diagnose_scraping(base_path, config):
     return 0
 
 
-def cli_scrape_weather(base_path, config, force_refresh=False):
-    """CLI: Scrape current weather for the configured map center location"""
+def cli_scrape_weather(base_path, config, force_refresh=False, strict=False):
+    """
+    CLI: Scrape current weather for the configured map center location
+    
+    Args:
+        base_path: Base path to the repository
+        config: Configuration dictionary
+        force_refresh: Force refresh even if cache is valid
+        strict: If True, exit with code 1 on scraping failures (for local testing)
+                If False (default), use cache as fallback and only fail if no cache exists
+    
+    Exit Codes:
+        0: Success (fresh data OR valid cache exists)
+        1: Failure (only in strict mode OR when no cache exists)
+    """
     from modules.weather_scraper import WeatherScraper
     
     # Check if weather is enabled
@@ -1143,7 +1157,14 @@ def cli_scrape_weather(base_path, config, force_refresh=False):
     
     scraper = WeatherScraper(base_path, config)
     
-    # Scrape for configured location
+    # Check cache first (before attempting fresh scrape)
+    cached_weather = scraper._get_from_cache(
+        location_name=location_name,
+        lat=map_center.get('lat'),
+        lon=map_center.get('lon')
+    )
+    
+    # Attempt fresh scrape
     weather_data = scraper.get_weather(
         location_name=location_name,
         lat=map_center.get('lat'),
@@ -1151,15 +1172,40 @@ def cli_scrape_weather(base_path, config, force_refresh=False):
         force_refresh=force_refresh
     )
     
+    # Success - fresh data obtained
     if weather_data and weather_data.get('dresscode'):
         print(f"✓ Dresscode: {weather_data['dresscode']}")
         if weather_data.get('temperature'):
             print(f"  Temperature: {weather_data['temperature']}")
         print(f"  Cached until: ~{weather_data.get('timestamp', 'N/A')}")
         return 0
+    
+    # Fresh scraping failed - check if we have a fallback
+    if cached_weather and cached_weather.get('dresscode'):
+        print("⚠ Fresh weather scraping failed, but using cached data")
+        print(f"  Dresscode: {cached_weather['dresscode']} (from cache)")
+        if cached_weather.get('temperature'):
+            print(f"  Temperature: {cached_weather['temperature']}")
+        print(f"  Cached at: {cached_weather.get('timestamp', 'N/A')}")
+        
+        # In non-strict mode, this is acceptable (exit 0)
+        if not strict:
+            print("  ℹ️  CI mode: Using cached data is acceptable")
+            return 0
+        else:
+            print("  ⚠️  Strict mode: Fresh data required")
+            return 1
+    
+    # No fresh data and no cache - this is a problem
+    print("✗ Failed to fetch weather or no valid dresscode found")
+    print("  Weather scraping requires internet access")
+    
+    if not strict:
+        print("  ⚠️  CI mode: Gracefully continuing without weather data")
+        print("  ℹ️  To fail on scraping errors, use --strict flag")
+        return 0
     else:
-        print("✗ Failed to fetch weather or no valid dresscode found")
-        print("  Weather scraping requires internet access")
+        print("  ⚠️  Strict mode: Failing due to missing weather data")
         return 1
 
 
@@ -2397,7 +2443,8 @@ def _execute_command(args, base_path, config):
         return cli_diagnose_scraping(base_path, config)
     
     if command == 'scrape-weather':
-        return cli_scrape_weather(base_path, config, force_refresh='--force' in (args.args or []))
+        strict_mode = '--strict' in (args.args or [])
+        return cli_scrape_weather(base_path, config, force_refresh='--force' in (args.args or []), strict=strict_mode)
     
     if command == 'list':
         return cli_list_events(base_path)
