@@ -34,10 +34,10 @@ This means hour lengths vary seasonally:
 # Run as API server
 python3 src/subjective_day.py --serve --port 8080
 
-# API usage
-curl "http://localhost:8080/api/subjective-time?lat=50.3167&lon=11.9167"
+# API usage (wttr.in style)
 curl "http://localhost:8080/Nuremberg"
 curl "http://localhost:8080/50.3,11.9"
+curl "http://localhost:8080/Berlin?format=json"
 ```
 
 ### JavaScript
@@ -61,22 +61,27 @@ result = uhr.get_subjective_day()
 print(result['display'])  # "3. Stunde des Tages"
 ```
 
-## API Endpoints
+## API Endpoints (wttr.in style)
 
 | Endpoint | Description |
 |----------|-------------|
-| `GET /Berlin` | Subjective time for Berlin |
-| `GET /50.3,11.9` | Subjective time for coordinates |
+| `GET /` | Default location (Hof) |
+| `GET /Berlin` | City name lookup |
+| `GET /52.52,13.40` | Coordinates (lat,lon) |
+| `GET /munich?format=j` | JSON output |
+| `GET /hof?format=table` | Hour table for the day |
 | `GET /:help` | Help page |
 | `GET /:about` | Historical information |
-| `GET /api/subjective-time?lat=X&lon=Y` | JSON API |
+| `GET /:nocturnal` | Digital star clock |
 
 ### Output Formats
 
 Add `?format=` parameter:
-- `plain` (default) - Human readable text
+- `plain` (default) - Human readable ASCII art
 - `json` or `j` - JSON format
-- `watch` - Smartwatch format
+- `table` or `t` - Full day hour table
+- `1` or `oneline` - Single line (for scripts)
+- `watch` or `w` - Smartwatch format
 
 ## Project Structure
 
