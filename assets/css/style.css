@@ -650,10 +650,10 @@ strong, b {
     color: var(--color-ecobarbie-medium-tint); /* Barbie medium tint - visible on dark background */
 }
 
-/* Fill icons with solid color instead of stroke/outline */
+/* Lucide icons use stroke (not fill) - ensure they render correctly */
 .dashboard-section-icon svg {
-    fill: currentColor;
-    stroke: none;
+    stroke: currentColor;
+    fill: none;
 }
 
 .dashboard-section h3 {
@@ -673,10 +673,10 @@ strong, b {
     color: inherit;
 }
 
-/* Make all dashboard Lucide icons filled (not outlined) */
+/* Ensure all dashboard Lucide icons use stroke (Lucide's default rendering method) */
 .dashboard-content [data-lucide] svg {
-    fill: currentColor;
-    stroke: none;
+    stroke: currentColor;
+    fill: none;
 }
 
 .dashboard-section p {
