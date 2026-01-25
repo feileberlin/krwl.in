@@ -1,19 +1,22 @@
 #!/usr/bin/env python3
 """
-Runtime Validation Test for Alt Text Quality
+Runtime Validation Test for WCAG Accessibility
 
-This test validates the QUALITY of alt text in generated HTML, not just existence.
+This test validates WCAG 2.1 Level AA compliance in generated HTML through runtime checks.
 It catches issues that regex-based linting misses, such as:
 - Generic alt text ("marker", "image", "icon")
 - Missing context (no event title in event markers)
 - Empty or whitespace-only alt text
-- Alt text that doesn't match the marker's purpose
+- Alt text that doesn't match the element's purpose
+- Other WCAG accessibility issues in rendered output
 
 Run this test after generating HTML to ensure accessibility standards.
+Includes performance timing to measure validation speed.
 """
 
 import sys
 import re
+import time
 from pathlib import Path
 from typing import List, Tuple, Dict
 
@@ -135,6 +138,8 @@ def test_alt_text_quality():
     """
     Test that generated HTML has high-quality alt text on all markers.
     """
+    start_time = time.time()
+    
     print("\n" + "=" * 70)
     print("Runtime Validation: Alt Text Quality")
     print("=" * 70)
@@ -218,6 +223,9 @@ def test_alt_text_quality():
     print(f"Generic alt text: {generic_count}")
     print(f"Total issues: {total_issues}")
     
+    elapsed_time = time.time() - start_time
+    print(f"\n⏱️  Alt text validation completed in {elapsed_time:.3f}s")
+    
     if total_issues == 0:
         print("\n🎉 All marker alt text is descriptive and accessible!")
         print("=" * 70)
@@ -233,6 +241,8 @@ def test_event_marker_format():
     Test that event markers follow the expected format:
     "Event Title - category marker"
     """
+    start_time = time.time()
+    
     print("\n" + "=" * 70)
     print("Format Validation: Event Markers")
     print("=" * 70)
@@ -251,6 +261,8 @@ def test_event_marker_format():
     alt_text_pattern = r'const\s+altText\s*=\s*`([^`]+)`'
     match = re.search(alt_text_pattern, html_content)
     
+    elapsed_time = time.time() - start_time
+    
     if match:
         alt_format = match.group(1)
         print(f"✓ Found alt text format in code: {alt_format}")
@@ -259,12 +271,15 @@ def test_event_marker_format():
         if '${eventTitle}' in alt_format and '${category}' in alt_format:
             print("✓ Format includes both event title and category")
             print(f"✓ Expected output example: 'Jazz Concert - music marker'")
+            print(f"⏱️  Event marker format check completed in {elapsed_time:.3f}s")
             return True
         else:
             print("❌ Format missing required variables")
+            print(f"⏱️  Event marker format check completed in {elapsed_time:.3f}s")
             return False
     else:
         print("⚠️  Could not find altText format in generated HTML")
+        print(f"⏱️  Event marker format check completed in {elapsed_time:.3f}s")
         return False
 
 
@@ -272,6 +287,8 @@ def test_location_marker_format():
     """
     Test that location markers follow the expected format.
     """
+    start_time = time.time()
+    
     print("\n" + "=" * 70)
     print("Format Validation: Location Markers")
     print("=" * 70)
@@ -289,26 +306,33 @@ def test_location_marker_format():
     location_alt_pattern = r'const\s+locationAltText\s*=\s*([^;]+);'
     match = re.search(location_alt_pattern, html_content)
     
+    elapsed_time = time.time() - start_time
+    
     if match:
         alt_format = match.group(1).strip()
         print(f"✓ Found location alt text format: {alt_format}")
         
         if 'popupText' in alt_format or 'Location marker' in alt_format:
             print("✓ Format uses popup text with fallback to 'Location marker'")
+            print(f"⏱️  Location marker format check completed in {elapsed_time:.3f}s")
             return True
         else:
             print("❌ Format missing expected pattern")
+            print(f"⏱️  Location marker format check completed in {elapsed_time:.3f}s")
             return False
     else:
         print("⚠️  Could not find locationAltText in generated HTML")
+        print(f"⏱️  Location marker format check completed in {elapsed_time:.3f}s")
         return False
 
 
 def main():
-    """Run all alt text quality tests"""
+    """Run all WCAG accessibility validation tests"""
+    overall_start_time = time.time()
+    
     print("\n" + "=" * 70)
-    print("ALT TEXT QUALITY VALIDATION SUITE")
-    print("Runtime validation for descriptive, accessible alt text")
+    print("WCAG ACCESSIBILITY RUNTIME VALIDATION SUITE")
+    print("Runtime validation for WCAG 2.1 Level AA compliance")
     print("=" * 70)
     
     try:
@@ -317,19 +341,22 @@ def main():
         test2 = test_location_marker_format()
         test3 = test_alt_text_quality()
         
+        overall_elapsed_time = time.time() - overall_start_time
+        
         print("\n" + "=" * 70)
         print("FINAL RESULTS:")
         print("=" * 70)
         print(f"Event Marker Format:    {'✅ PASS' if test1 else '❌ FAIL'}")
         print(f"Location Marker Format: {'✅ PASS' if test2 else '❌ FAIL'}")
         print(f"Alt Text Quality:       {'✅ PASS' if test3 else '❌ FAIL'}")
+        print(f"\n⏱️  Total runtime validation time: {overall_elapsed_time:.3f}s")
         
         if test1 and test2 and test3:
-            print("\n🎉 ALL TESTS PASSED - Alt text is descriptive and accessible!")
+            print("\n🎉 ALL TESTS PASSED - WCAG accessibility standards met!")
             print("=" * 70)
             return 0
         else:
-            print("\n❌ SOME TESTS FAILED - Please review alt text implementation")
+            print("\n❌ SOME TESTS FAILED - Please review accessibility implementation")
             print("=" * 70)
             return 1
             

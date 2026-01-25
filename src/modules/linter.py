@@ -419,6 +419,9 @@ class Linter:
         Validate accessibility (a11y) issues in HTML.
         Checks WCAG 2.1 Level AA compliance where possible.
         """
+        import time
+        start_time = time.time()
+        
         result = LintResult()
         self.log("Linting accessibility (a11y)")
         
@@ -530,6 +533,10 @@ class Linter:
                 rule="WCAG 2.4.1",
                 context="Skip links allow keyboard users to bypass repetitive navigation and go directly to main content"
             )
+        
+        elapsed_time = time.time() - start_time
+        print(f"⏱️  Accessibility check completed in {elapsed_time:.3f}s")
+        self.log(f"Accessibility check took {elapsed_time:.3f} seconds")
         
         return result
     
