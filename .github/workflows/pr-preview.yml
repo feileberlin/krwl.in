@@ -45,7 +45,7 @@ jobs:
       - name: Checkout PR branch
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.ref }}
+          ref: ${{ github.event.pull_request.head.sha }}
       
       - name: Setup Python environment
         uses: ./.github/actions/setup-python-env

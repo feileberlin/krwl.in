@@ -97,17 +97,22 @@ jobs:
           echo "📸 Processing flyer from user: $USERNAME (ID: $USER_ID)"
           echo "File ID: $FILE_ID"
           
-          # TODO: Implement flyer OCR processing
-          # This would:
-          # 1. Download file from Telegram
-          # 2. Run OCR with Tesseract
-          # 3. Parse event data
-          # 4. Add to pending_events.json
+          # Note: Flyer OCR processing is handled by the external Telegram bot
+          # (telegram_bot_simple.py) which runs OCR locally if available, or
+          # dispatches to this workflow. Since the bot now handles OCR locally,
+          # this workflow acts as a fallback/legacy handler.
+          # 
+          # The bot caches files in .cache/telegram/ and processes them with
+          # the shared smart_scraper OCR infrastructure, then saves directly
+          # to pending_events.json.
           
           echo "## 📸 Flyer Processing Complete" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**User:** $USERNAME" >> $GITHUB_STEP_SUMMARY
           echo "**Time:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "ℹ️ Flyer OCR is handled by external bot (telegram_bot_simple.py)" >> $GITHUB_STEP_SUMMARY
+          echo "ℹ️ Events are saved directly to pending_events.json by the bot" >> $GITHUB_STEP_SUMMARY
       
       - name: Commit pending event
         run: |
@@ -168,9 +173,9 @@ jobs:
         if: github.event.inputs.test_mode != 'true'
         with:
           script: |
-            const username = '${{ github.event.client_payload.username }}';
-            const userId = '${{ github.event.client_payload.user_id }}';
-            const message = '${{ github.event.client_payload.message }}';
+            const username = ${{ toJson(github.event.client_payload.username) }};
+            const userId = ${{ toJson(github.event.client_payload.user_id) }};
+            const message = ${{ toJson(github.event.client_payload.message) }};
             
             await github.rest.issues.create({
               owner: context.repo.owner,
@@ -216,16 +221,21 @@ jobs:
           
           echo "📌 Processing PIN publishing from: $USERNAME (ID: $USER_ID)"
           
-          # TODO: Implement PIN validation and direct publishing
-          # This would:
-          # 1. Validate PIN against trusted organizers
-          # 2. Publish event directly (bypass pending queue)
-          # 3. Notify user of success/failure
+          # Note: PIN validation and direct publishing is handled by the external
+          # Telegram bot (telegram_bot_simple.py). The bot validates PINs against
+          # GitHub Secrets (ORGANIZER_PIN_HASH_1, etc.) and publishes events
+          # directly to events.json if the PIN is valid.
+          # 
+          # This workflow acts as a legacy fallback handler. The modern approach
+          # is for the bot to handle everything locally and only commit the result.
           
           echo "## 📌 PIN Publishing Complete" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**User:** $USERNAME" >> $GITHUB_STEP_SUMMARY
           echo "**Time:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "ℹ️ PIN validation is handled by external bot (telegram_bot_simple.py)" >> $GITHUB_STEP_SUMMARY
+          echo "ℹ️ Events are published directly to events.json by the bot" >> $GITHUB_STEP_SUMMARY
       
       - name: Commit published event
         run: |

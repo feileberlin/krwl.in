@@ -108,6 +108,12 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Pull latest changes
+        run: |
+          git pull --rebase origin main
       
       - name: Setup Python environment
         uses: ./.github/actions/setup-python-env
@@ -146,14 +152,19 @@ jobs:
         if: steps.check_enabled.outputs.enabled == 'True'
         id: check_changes
         run: |
-          git diff --exit-code assets/json/weather_cache.json || echo "changes=true" >> $GITHUB_OUTPUT
+          # Check for new, modified, or ignored files
+          if [ -n "$(git status --porcelain --ignored -- assets/json/weather_cache.json)" ]; then
+            echo "changes=true" >> $GITHUB_OUTPUT
+          else
+            echo "changes=false" >> $GITHUB_OUTPUT
+          fi
       
       - name: Commit changes
         if: steps.check_enabled.outputs.enabled == 'True' && steps.check_changes.outputs.changes == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add assets/json/weather_cache.json
+          git add -f assets/json/weather_cache.json
           git commit -m "🌤️ Manual weather scraping by ${{ github.actor }}"
           git push
           

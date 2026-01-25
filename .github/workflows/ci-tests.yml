@@ -43,7 +43,6 @@ on:
 
 permissions:
   contents: read
-  pull-requests: write  # Comment on PRs with test results
 
 concurrency:
   group: "ci-tests-${{ github.ref }}"
@@ -73,7 +72,7 @@ jobs:
       - name: Validate features.json
         run: |
           echo "✅ Validating features.json..."
-          python3 tests/verify_features.py --verbose
+          python3 src/modules/feature_verifier.py --verbose
           
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "✅ Feature registry validated" >> $GITHUB_STEP_SUMMARY
@@ -92,7 +91,7 @@ jobs:
       - name: Check Python syntax
         run: |
           echo "🔍 Checking Python syntax..."
-          python3 -m py_compile src/**/*.py || true
+          find src -name '*.py' -print0 | xargs -0 python3 -m py_compile
           
           echo "## 🔍 Linting Results" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
@@ -125,7 +124,7 @@ jobs:
       - name: Run feature verification
         run: |
           echo "🧪 Running feature verification..."
-          python3 tests/verify_features.py --verbose
+          python3 src/modules/feature_verifier.py --verbose
       
       - name: Run scraper tests
         run: |
@@ -168,7 +167,7 @@ jobs:
       - name: Run KISS checker
         run: |
           echo "💋 Checking KISS principle compliance..."
-          python3 tests/check_kiss.py --verbose || true
+          python3 src/modules/kiss_checker.py --verbose || true
           
           echo "## 💋 KISS Principle Check" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
