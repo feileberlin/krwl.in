@@ -9,7 +9,7 @@ name: 🤖 Event Scraping, Weather Updates & Site Deployment
 # - pr-preview.yml - PR preview builds
 # - wishlist-ci.yml - Linting and testing
 # - config-validation.yml - Configuration validation
-# - auto-generate-html.yml - Auto HTML generation
+# Note: Auto HTML generation now handled by full-rebuild job for all push events
 
 on:
   schedule:
@@ -1626,87 +1626,3 @@ jobs:
               repo: context.repo.repo,
               body: comment
             });
-  
-  # Job 15: Auto-Generate HTML (from auto-generate-html.yml)
-  auto-generate-html:
-    name: 🎨 Auto-Generate HTML from Source Files
-    runs-on: ubuntu-latest
-    needs: [validate-config, ci-lint-test]
-    if: |
-      always() &&
-      github.event_name == 'push' &&
-      github.ref == 'refs/heads/main' &&
-      (contains(github.event.head_commit.modified, 'assets/css/') ||
-       contains(github.event.head_commit.modified, 'assets/js/') ||
-       contains(github.event.head_commit.modified, 'assets/html/') ||
-       contains(github.event.head_commit.modified, 'src/modules/site_generator.py'))
-    
-    outputs:
-      html_changed: ${{ steps.check_changes.outputs.changes }}
-    
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-      
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.x'
-          cache: 'pip'
-      
-      - name: Install dependencies
-        run: |
-          pip install -r requirements.txt
-      
-      - name: Fetch frontend libraries
-        run: |
-          python3 src/event_manager.py dependencies fetch
-      
-      - name: Generate HTML files
-        run: |
-          echo "🔨 Auto-generating HTML from source files..."
-          python3 src/event_manager.py generate
-      
-      - name: Check if HTML was generated
-        id: check_changes
-        run: |
-          # Always deploy if HTML exists (public/index.html is gitignored, always generated fresh)
-          if [ -f public/index.html ]; then
-            echo "changes=true" >> $GITHUB_OUTPUT
-            echo "✓ HTML generated successfully, will deploy to GitHub Pages"
-          else
-            echo "changes=false" >> $GITHUB_OUTPUT
-            echo "❌ HTML generation failed"
-          fi
-      
-      # Note: We no longer commit public/index.html to git (it's gitignored)
-      # GitHub Pages deployment uses the artifact upload instead
-      
-      - name: Upload Pages artifact
-        if: steps.check_changes.outputs.changes == 'true'
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./public
-  
-  # Job 16: Deploy Auto-Generated HTML
-  deploy-auto-generated:
-    name: 🚀 Deploy Auto-Generated HTML
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: auto-generate-html
-    if: needs.auto-generate-html.outputs.html_changed == 'true'
-    
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
-      
-      - name: Summary
-        run: |
-          echo "## 🚀 Auto-Generated HTML Deployed" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**URL:** ${{ steps.deployment.outputs.page_url }}" >> $GITHUB_STEP_SUMMARY
