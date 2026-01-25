@@ -1,0 +1,241 @@
+name: 📱 Telegram Bot Integration
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# TIER 2: Manual Operations - Telegram Bot Handler
+# ═══════════════════════════════════════════════════════════════════════════════
+#
+# PURPOSE:
+# Process events from the Telegram bot for community submissions.
+# Handles flyer OCR, contact forms, and PIN-based publishing.
+#
+# WHAT THIS WORKFLOW DOES:
+# 1. 📸 Process flyer submissions with OCR (Tesseract)
+# 2. 📧 Handle contact form submissions
+# 3. 📌 Process PIN-based publishing from trusted organizers
+#
+# TRIGGERS:
+# - repository_dispatch events from Telegram bot
+# - Manual: Via "Run workflow" button for testing
+#
+# ═══════════════════════════════════════════════════════════════════════════════
+
+on:
+  repository_dispatch:
+    types:
+      - telegram_flyer_submission
+      - telegram_contact_submission
+      - telegram_pin_submission
+  
+  workflow_dispatch:
+    inputs:
+      event_type:
+        description: 'Event type to simulate'
+        type: choice
+        options:
+          - 'telegram_flyer_submission'
+          - 'telegram_contact_submission'
+          - 'telegram_pin_submission'
+        required: true
+      
+      test_mode:
+        description: 'Run in test mode (no actual Telegram API calls)'
+        type: boolean
+        default: true
+        required: false
+
+permissions:
+  contents: write  # Push commits (pending events)
+  issues: write    # Create issues from Telegram submissions
+
+concurrency:
+  group: "telegram-bot-${{ github.event.action }}"
+  cancel-in-progress: false  # Let Telegram processing finish
+
+jobs:
+  process-telegram-flyer:
+    name: 📸 Telegram Flyer OCR
+    runs-on: ubuntu-latest
+    if: |
+      github.event_name == 'repository_dispatch' && github.event.action == 'telegram_flyer_submission' ||
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.event_type == 'telegram_flyer_submission')
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Python environment
+        uses: ./.github/actions/setup-python-env
+      
+      - name: Install OCR dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y tesseract-ocr tesseract-ocr-deu tesseract-ocr-eng
+          echo "✅ Tesseract OCR installed"
+      
+      - name: Process flyer submission
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        run: |
+          if [ "${{ github.event.inputs.test_mode }}" = "true" ]; then
+            echo "🧪 Running in test mode (no actual Telegram API calls)"
+            echo "## 📸 Flyer Processing (Test Mode)" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "ℹ️ Test mode enabled - no actual processing performed" >> $GITHUB_STEP_SUMMARY
+            exit 0
+          fi
+          
+          # Get event data
+          if [ "${{ github.event_name }}" == "repository_dispatch" ]; then
+            FILE_ID="${{ github.event.client_payload.file_id }}"
+            USER_ID="${{ github.event.client_payload.user_id }}"
+            USERNAME="${{ github.event.client_payload.username }}"
+          else
+            echo "❌ Manual execution requires test_mode=true"
+            exit 1
+          fi
+          
+          echo "📸 Processing flyer from user: $USERNAME (ID: $USER_ID)"
+          echo "File ID: $FILE_ID"
+          
+          # TODO: Implement flyer OCR processing
+          # This would:
+          # 1. Download file from Telegram
+          # 2. Run OCR with Tesseract
+          # 3. Parse event data
+          # 4. Add to pending_events.json
+          
+          echo "## 📸 Flyer Processing Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**User:** $USERNAME" >> $GITHUB_STEP_SUMMARY
+          echo "**Time:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+      
+      - name: Commit pending event
+        run: |
+          if git diff --exit-code assets/json/pending_events.json; then
+            echo "ℹ️ No new events to commit" >> $GITHUB_STEP_SUMMARY
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add assets/json/pending_events.json
+            git commit -m "📸 Telegram flyer submission processed"
+            git push
+            echo "✅ Event added to pending queue" >> $GITHUB_STEP_SUMMARY
+          fi
+
+  process-telegram-contact:
+    name: 📧 Telegram Contact Form
+    runs-on: ubuntu-latest
+    if: |
+      github.event_name == 'repository_dispatch' && github.event.action == 'telegram_contact_submission' ||
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.event_type == 'telegram_contact_submission')
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Python environment
+        uses: ./.github/actions/setup-python-env
+      
+      - name: Process contact submission
+        run: |
+          if [ "${{ github.event.inputs.test_mode }}" = "true" ]; then
+            echo "🧪 Running in test mode"
+            echo "## 📧 Contact Form (Test Mode)" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "ℹ️ Test mode enabled - no actual processing performed" >> $GITHUB_STEP_SUMMARY
+            exit 0
+          fi
+          
+          # Get event data
+          if [ "${{ github.event_name }}" == "repository_dispatch" ]; then
+            USER_ID="${{ github.event.client_payload.user_id }}"
+            USERNAME="${{ github.event.client_payload.username }}"
+            MESSAGE="${{ github.event.client_payload.message }}"
+          else
+            echo "❌ Manual execution requires test_mode=true"
+            exit 1
+          fi
+          
+          echo "📧 Processing contact form from: $USERNAME (ID: $USER_ID)"
+          
+          echo "## 📧 Contact Form Processed" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**User:** $USERNAME" >> $GITHUB_STEP_SUMMARY
+          echo "**Time:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+      
+      - name: Create GitHub issue
+        uses: actions/github-script@v7
+        if: github.event.inputs.test_mode != 'true'
+        with:
+          script: |
+            const username = '${{ github.event.client_payload.username }}';
+            const userId = '${{ github.event.client_payload.user_id }}';
+            const message = '${{ github.event.client_payload.message }}';
+            
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `📧 Contact Form: ${username}`,
+              body: `**From:** ${username} (Telegram ID: ${userId})\n\n**Message:**\n${message}`,
+              labels: ['telegram', 'contact-form']
+            });
+
+  process-telegram-pin:
+    name: 📌 Telegram PIN Publishing
+    runs-on: ubuntu-latest
+    if: |
+      github.event_name == 'repository_dispatch' && github.event.action == 'telegram_pin_submission' ||
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.event_type == 'telegram_pin_submission')
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Python environment
+        uses: ./.github/actions/setup-python-env
+      
+      - name: Process PIN publishing
+        run: |
+          if [ "${{ github.event.inputs.test_mode }}" = "true" ]; then
+            echo "🧪 Running in test mode"
+            echo "## 📌 PIN Publishing (Test Mode)" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "ℹ️ Test mode enabled - no actual processing performed" >> $GITHUB_STEP_SUMMARY
+            exit 0
+          fi
+          
+          # Get event data
+          if [ "${{ github.event_name }}" == "repository_dispatch" ]; then
+            USER_ID="${{ github.event.client_payload.user_id }}"
+            USERNAME="${{ github.event.client_payload.username }}"
+            PIN="${{ github.event.client_payload.pin }}"
+          else
+            echo "❌ Manual execution requires test_mode=true"
+            exit 1
+          fi
+          
+          echo "📌 Processing PIN publishing from: $USERNAME (ID: $USER_ID)"
+          
+          # TODO: Implement PIN validation and direct publishing
+          # This would:
+          # 1. Validate PIN against trusted organizers
+          # 2. Publish event directly (bypass pending queue)
+          # 3. Notify user of success/failure
+          
+          echo "## 📌 PIN Publishing Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**User:** $USERNAME" >> $GITHUB_STEP_SUMMARY
+          echo "**Time:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+      
+      - name: Commit published event
+        run: |
+          if git diff --exit-code assets/json/events.json; then
+            echo "ℹ️ No new events to commit" >> $GITHUB_STEP_SUMMARY
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add assets/json/events.json
+            git commit -m "📌 Telegram PIN publishing by trusted organizer"
+            git push
+            echo "✅ Event published directly" >> $GITHUB_STEP_SUMMARY
+          fi

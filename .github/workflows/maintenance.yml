@@ -1,0 +1,156 @@
+name: 🔧 Site Maintenance & Diagnostics
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# TIER 2: Manual Operations - Maintenance Tasks
+# ═══════════════════════════════════════════════════════════════════════════════
+#
+# PURPOSE:
+# Perform manual maintenance tasks and diagnostics on the site.
+# Use for troubleshooting, updates, and system checks.
+#
+# WHAT THIS WORKFLOW DOES:
+# 1. 🔨 Force rebuild of static site
+# 2. 📦 Update third-party dependencies (Leaflet.js, etc.)
+# 3. ✅ Validate configuration files
+# 4. 🔍 Show scraper capabilities and diagnostics
+#
+# TRIGGERS:
+# - Manual only: Via "Run workflow" button
+#
+# ═══════════════════════════════════════════════════════════════════════════════
+
+on:
+  workflow_dispatch:
+    inputs:
+      task:
+        description: 'Maintenance task'
+        type: choice
+        options:
+          - 'force-rebuild'
+          - 'update-dependencies'
+          - 'validate-config'
+          - 'show-capabilities'
+        default: 'force-rebuild'
+        required: true
+      
+      trigger_deploy:
+        description: 'Deploy after task completion'
+        type: boolean
+        default: false
+        required: false
+
+permissions:
+  contents: write  # Push commits (rebuild artifacts, dependency updates)
+
+concurrency:
+  group: "maintenance"
+  cancel-in-progress: true  # Can cancel maintenance tasks
+
+jobs:
+  maintenance-task:
+    name: 🔧 ${{ github.event.inputs.task }}
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Python environment
+        uses: ./.github/actions/setup-python-env
+      
+      - name: Force rebuild site
+        if: github.event.inputs.task == 'force-rebuild'
+        run: |
+          echo "🔨 Force rebuilding static site..."
+          
+          # Fetch dependencies first
+          python3 src/event_manager.py dependencies fetch
+          
+          # Generate site
+          python3 src/event_manager.py generate
+          
+          echo "## 🔨 Force Rebuild Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Time:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+          echo "**Triggered by:** ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
+      
+      - name: Update dependencies
+        if: github.event.inputs.task == 'update-dependencies'
+        run: |
+          echo "📦 Updating third-party dependencies..."
+          
+          # Fetch latest versions
+          python3 src/event_manager.py dependencies fetch
+          
+          # Check what we have
+          python3 src/event_manager.py dependencies check
+          
+          echo "## 📦 Dependencies Updated" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Time:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+          echo "**Triggered by:** ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "ℹ️ Dependencies are cached in lib/ directory (gitignored)" >> $GITHUB_STEP_SUMMARY
+      
+      - name: Validate configuration
+        if: github.event.inputs.task == 'validate-config'
+        run: |
+          echo "✅ Validating configuration files..."
+          
+          # Run config validation
+          python3 scripts/validate_config.py
+          
+          echo "## ✅ Configuration Valid" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Time:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+          echo "**Validated by:** ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
+      
+      - name: Show capabilities
+        if: github.event.inputs.task == 'show-capabilities'
+        run: |
+          echo "🔍 Showing scraper capabilities..."
+          
+          # Get capabilities (human-readable format)
+          python3 src/event_manager.py scraper-info
+          
+          # Get capabilities as JSON for summary
+          CAPABILITIES=$(python3 src/event_manager.py scraper-info --json)
+          
+          echo "## 🔍 Scraper Capabilities" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo '```json' >> $GITHUB_STEP_SUMMARY
+          echo "$CAPABILITIES" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Time:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+          echo "**Checked by:** ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
+      
+      - name: Check for changes
+        id: check_changes
+        run: |
+          if git diff --exit-code; then
+            echo "changes=false" >> $GITHUB_OUTPUT
+          else
+            echo "changes=true" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Commit changes
+        if: steps.check_changes.outputs.changes == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "🔧 Maintenance: ${{ github.event.inputs.task }} by ${{ github.actor }}"
+          git push
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Changes committed and pushed" >> $GITHUB_STEP_SUMMARY
+          
+          if [ "${{ github.event.inputs.trigger_deploy }}" = "true" ]; then
+            echo "🚀 Deployment will be triggered automatically" >> $GITHUB_STEP_SUMMARY
+          fi
+      
+      - name: No changes
+        if: steps.check_changes.outputs.changes != 'true'
+        run: |
+          echo "ℹ️ No changes were made" >> $GITHUB_STEP_SUMMARY

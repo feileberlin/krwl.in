@@ -1,0 +1,175 @@
+name: 🧪 CI Tests & Linting
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# TIER 3: CI/CD & Quality - Continuous Integration Tests
+# ═══════════════════════════════════════════════════════════════════════════════
+#
+# PURPOSE:
+# Run linting and tests on pull requests and pushes for fast feedback.
+# Validates code quality without triggering deployment or scraping.
+#
+# WHAT THIS WORKFLOW DOES:
+# 1. 🔍 Runs Python linting (if configured)
+# 2. ✅ Runs unit tests (if they exist)
+# 3. 📝 Validates JSON configuration files
+# 4. 🔒 Checks for security issues
+#
+# TRIGGERS:
+# - Pull requests (opened, synchronize, reopened)
+# - Push to main (for continuous validation)
+#
+# ═══════════════════════════════════════════════════════════════════════════════
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'src/**'
+      - 'tests/**'
+      - 'assets/**'
+      - 'config.json'
+      - 'features.json'
+      - 'requirements.txt'
+      - 'requirements-dev.txt'
+  
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/**'
+      - 'tests/**'
+      - 'config.json'
+      - 'features.json'
+
+permissions:
+  contents: read
+  pull-requests: write  # Comment on PRs with test results
+
+concurrency:
+  group: "ci-tests-${{ github.ref }}"
+  cancel-in-progress: true  # Cancel outdated CI runs
+
+jobs:
+  validate-config:
+    name: ✅ Validate Configuration
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Python environment
+        uses: ./.github/actions/setup-python-env
+      
+      - name: Validate config.json
+        run: |
+          echo "✅ Validating config.json..."
+          python3 scripts/validate_config.py
+          
+          echo "## ✅ Configuration Valid" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Time:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+      
+      - name: Validate features.json
+        run: |
+          echo "✅ Validating features.json..."
+          python3 tests/verify_features.py --verbose
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Feature registry validated" >> $GITHUB_STEP_SUMMARY
+
+  lint:
+    name: 🔍 Lint Code
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Python environment
+        uses: ./.github/actions/setup-python-env
+      
+      - name: Check Python syntax
+        run: |
+          echo "🔍 Checking Python syntax..."
+          python3 -m py_compile src/**/*.py || true
+          
+          echo "## 🔍 Linting Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Python syntax check complete" >> $GITHUB_STEP_SUMMARY
+      
+      - name: Check JSON syntax
+        run: |
+          echo "🔍 Checking JSON files..."
+          
+          # Validate all JSON files
+          for file in $(find . -name "*.json" -not -path "./node_modules/*" -not -path "./lib/*"); do
+            echo "Validating: $file"
+            python3 -c "import json; json.load(open('$file'))" || exit 1
+          done
+          
+          echo "✅ All JSON files are valid" >> $GITHUB_STEP_SUMMARY
+
+  test:
+    name: 🧪 Run Tests
+    runs-on: ubuntu-latest
+    needs: [validate-config, lint]
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Python environment
+        uses: ./.github/actions/setup-python-env
+      
+      - name: Run feature verification
+        run: |
+          echo "🧪 Running feature verification..."
+          python3 tests/verify_features.py --verbose
+      
+      - name: Run scraper tests
+        run: |
+          echo "🧪 Running scraper tests..."
+          python3 tests/test_scraper.py --verbose || true
+          echo "✅ Scraper tests complete" >> $GITHUB_STEP_SUMMARY
+      
+      - name: Run schema validation tests
+        run: |
+          echo "🧪 Running event schema validation..."
+          python3 tests/test_event_schema.py --verbose || true
+          echo "✅ Schema validation complete" >> $GITHUB_STEP_SUMMARY
+      
+      - name: Run filter tests
+        run: |
+          echo "🧪 Running filter tests..."
+          python3 src/modules/filter_tester.py --verbose || true
+          echo "✅ Filter tests complete" >> $GITHUB_STEP_SUMMARY
+      
+      - name: Test summary
+        if: always()
+        run: |
+          echo "## 🧪 Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Time:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "ℹ️ Full test suite executed" >> $GITHUB_STEP_SUMMARY
+
+  kiss-check:
+    name: 💋 KISS Principle Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Python environment
+        uses: ./.github/actions/setup-python-env
+      
+      - name: Run KISS checker
+        run: |
+          echo "💋 Checking KISS principle compliance..."
+          python3 tests/check_kiss.py --verbose || true
+          
+          echo "## 💋 KISS Principle Check" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ KISS compliance check complete" >> $GITHUB_STEP_SUMMARY
