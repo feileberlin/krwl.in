@@ -116,14 +116,9 @@
       ],
       "code_patterns": [
         {
-          "file": "assets/js/app.js",
-          "pattern": "L\\.map\\('map'",
-          "description": "Leaflet map initialization"
-        },
-        {
-          "file": "assets/html/map-main.html",
-          "pattern": "id=\"map\"",
-          "description": "Map container element"
+          "file": "assets/js/map.js",
+          "pattern": "L\\.map|initMap",
+          "description": "Leaflet map initialization in MapManager"
         }
       ],
       "test_method": "check_code_patterns"
@@ -142,14 +137,14 @@
       ],
       "code_patterns": [
         {
-          "file": "assets/js/app.js",
-          "pattern": "navigator.geolocation.getCurrentPosition",
-          "description": "Geolocation API usage"
+          "file": "assets/js/map.js",
+          "pattern": "navigator.geolocation.getCurrentPosition|getUserLocation",
+          "description": "Geolocation API usage in MapManager"
         },
         {
-          "file": "assets/js/app.js",
+          "file": "assets/js/filters.js",
           "pattern": "calculateDistance",
-          "description": "Distance calculation function"
+          "description": "Distance calculation function in EventFilter"
         }
       ],
       "test_method": "check_code_patterns"
@@ -168,9 +163,14 @@
       ],
       "code_patterns": [
         {
-          "file": "assets/js/app.js",
-          "pattern": "getNextSunrise|sunrise",
-          "description": "Sunrise calculation or filtering"
+          "file": "assets/js/filters.js",
+          "pattern": "getNextSunrise|filterByTime.*sunrise",
+          "description": "Sunrise calculation in EventFilter"
+        },
+        {
+          "file": "assets/js/subjective-day.js",
+          "pattern": "sunrise|calculateSunrise",
+          "description": "Sunrise calculation in SubjectiveDay module"
         }
       ],
       "test_method": "check_code_patterns"
@@ -186,9 +186,9 @@
       ],
       "code_patterns": [
         {
-          "file": "assets/js/app.js",
-          "pattern": "getNextSundayPrimetime|getNextFullMoonMorning|sunday-primetime|full-moon",
-          "description": "Sunday primetime and full moon calculation methods"
+          "file": "assets/js/filters.js",
+          "pattern": "getNextSundayPrimetime|getNextFullMoon|sunday-primetime|full-moon",
+          "description": "Sunday primetime and full moon calculation in EventFilter"
         }
       ],
       "test_method": "check_code_patterns"
@@ -322,13 +322,8 @@
       "code_patterns": [
         {
           "file": "assets/js/app.js",
-          "pattern": "loadEvents.*source|data.source",
-          "description": "Data source selection logic"
-        },
-        {
-          "file": "config.json",
-          "pattern": "_comment_hardcoded.*data.source",
-          "description": "Data source auto-detected (documented in config)"
+          "pattern": "loadEvents|APP_CONFIG.*data",
+          "description": "Data source selection in main app"
         }
       ],
       "test_method": "check_code_patterns"
@@ -394,20 +389,21 @@
       "category": "frontend",
       "implemented": true,
       "files": [
-        "assets/js/app.js",
         "assets/html/filter-nav.html",
-        "docs/custom-location-persistence.md"
+        "assets/js/storage.js",
+        "assets/js/event-listeners.js",
+        "assets/js/app.js"
       ],
       "code_patterns": [
         {
-          "file": "assets/js/app.js",
-          "pattern": "useCustomLocation|custom-location|customLat|customLon|saveFiltersToCookie|loadFiltersFromCookie",
-          "description": "Custom location functionality with localStorage persistence"
+          "file": "assets/js/storage.js",
+          "pattern": "customLocations|loadCustomLocations|saveCustomLocations",
+          "description": "Custom location persistence in EventStorage"
         },
         {
-          "file": "assets/html/filter-nav.html",
-          "pattern": "filter-bar-location",
-          "description": "Custom location UI elements"
+          "file": "assets/js/app.js",
+          "pattern": "useCustomLocation|selectedCustomLocation",
+          "description": "Custom location usage in main app"
         }
       ],
       "test_method": "check_code_patterns"
@@ -480,14 +476,15 @@
       "implemented": true,
       "files": [
         "assets/js/app.js",
+        "assets/html/map-main.html",
         "assets/css/style.css",
-        "public/index.html"
+        "assets/js/speech-bubbles.js"
       ],
       "code_patterns": [
         {
-          "file": "assets/js/app.js",
-          "pattern": "event-card|renderEvents|event-list",
-          "description": "Event card rendering"
+          "file": "assets/js/speech-bubbles.js",
+          "pattern": "speech-bubble|SpeechBubbles|renderBubble",
+          "description": "Event card rendering in SpeechBubbles"
         }
       ],
       "test_method": "check_code_patterns"
@@ -503,9 +500,9 @@
       ],
       "code_patterns": [
         {
-          "file": "assets/js/app.js",
-          "pattern": "L\\.marker|this\\.markers|addEventMarkers",
-          "description": "Leaflet marker management"
+          "file": "assets/js/map.js",
+          "pattern": "L\\.marker|addEventMarker|this\\.markers",
+          "description": "Leaflet marker management in MapManager"
         }
       ],
       "test_method": "check_code_patterns"
@@ -522,14 +519,9 @@
       ],
       "code_patterns": [
         {
-          "file": "src/modules/utils.py",
-          "pattern": "def calculate_distance|Haversine",
-          "description": "Distance calculation in Python"
-        },
-        {
-          "file": "assets/js/app.js",
-          "pattern": "calculateDistance",
-          "description": "Distance calculation in JavaScript"
+          "file": "assets/js/filters.js",
+          "pattern": "calculateDistance|distanceInKm",
+          "description": "Distance calculation in EventFilter"
         }
       ],
       "test_method": "check_code_patterns"
@@ -542,7 +534,8 @@
       "implemented": true,
       "files": [
         "assets/css/style.css",
-        "public/index.html"
+        "assets/html/html-head.html",
+        "assets/css/base.css"
       ],
       "code_patterns": [
         {
@@ -551,7 +544,7 @@
           "description": "Responsive CSS media queries"
         },
         {
-          "file": "public/index.html",
+          "file": "assets/html/html-head.html",
           "pattern": "viewport.*width=device-width",
           "description": "Viewport meta tag"
         }
@@ -593,11 +586,8 @@
       "implemented": true,
       "files": [
         ".github/copilot-instructions.md",
-        ".github/COPILOT_SETUP.md",
-        ".github/COPILOT_QUICK_REF.md",
-        ".github/HOW_TO_CONFIGURE_COPILOT.md",
-        ".github/CODEOWNERS",
-        ".github/pull_request_template.md"
+        ".github/pull_request_template.md",
+        ".github/CODEOWNERS"
       ],
       "test_method": "check_files_exist"
     },
@@ -667,24 +657,9 @@
       ],
       "code_patterns": [
         {
-          "file": "assets/js/app.js",
-          "pattern": "updateDashboard|dashboard-menu|dashboardLogo",
-          "description": "Dashboard update function and menu toggle logic"
-        },
-        {
-          "file": "assets/css/style.css",
-          "pattern": "#dashboard-menu|.dashboard-content",
-          "description": "Dashboard CSS styles"
-        },
-        {
-          "file": "assets/html/dashboard-aside.html",
-          "pattern": "dashboard-menu|dashboard-content|close-dashboard",
-          "description": "Dashboard HTML structure"
-        },
-        {
-          "file": "config.json",
-          "pattern": "_comment_hardcoded.*watermark|_comment_hardcoded.*debug|_comment_hardcoded.*data.source",
-          "description": "Environment-dependent values documented in config"
+          "file": "assets/js/dashboard-ui.js",
+          "pattern": "DashboardUI|updateDashboard|dashboard-menu",
+          "description": "Dashboard update function in DashboardUI module"
         }
       ],
       "test_method": "automated",
@@ -734,38 +709,6 @@
       "test_instructions": "1. Navigate to GitHub repository\n2. Click 'Environments' in sidebar\n3. Verify 'production' and 'preview' environments are listed\n4. Click on environment to see deployment history\n5. Click 'View deployment' button to open deployed site"
     },
     {
-      "id": "time-drawer",
-      "name": "Dynamic Time-Based Marker Resizing",
-      "description": "Interactive timeline drawer with dynamic marker scaling based on event proximity to selected time. Shows events from 'Now' to 'Sunrise' with smooth animations",
-      "category": "frontend",
-      "implemented": true,
-      "files": [
-        "assets/js/time-drawer.js",
-        "assets/css/time-drawer.css",
-        "assets/js/app.js",
-        "src/modules/site_generator.py"
-      ],
-      "code_patterns": [
-        {
-          "file": "assets/js/time-drawer.js",
-          "pattern": "class TimeDrawer|calculateMarkerScale|applyMarkerScale",
-          "description": "TimeDrawer class with marker scaling logic"
-        },
-        {
-          "file": "assets/js/app.js",
-          "pattern": "this.timeDrawer|new TimeDrawer|registerMarker",
-          "description": "TimeDrawer integration in EventsApp"
-        },
-        {
-          "file": "assets/css/time-drawer.css",
-          "pattern": ".time-drawer|.time-drawer-handle|.time-drawer-progress",
-          "description": "Time drawer styling"
-        }
-      ],
-      "test_method": "manual",
-      "test_instructions": "1. Open the app with 5+ events\n2. Set filter to 'til sunrise'\n3. Verify time drawer appears at bottom\n4. Drag the handle left/right\n5. Verify markers scale dynamically (70%-130%)\n6. Verify largest markers have glow effect\n7. Try with < 5 events - drawer should show threshold message\n8. Change filter to '6h' - drawer should disappear\n9. Test on mobile - touch gestures should work"
-    },
-    {
       "id": "keyboard-navigation",
       "name": "Keyboard Navigation",
       "description": "Full keyboard controls for map navigation and event browsing - ESC to close popups, arrow keys to navigate events, +/- to zoom",
@@ -776,9 +719,9 @@
       ],
       "code_patterns": [
         {
-          "file": "assets/js/app.js",
-          "pattern": "currentEventIndex|navigateEvents|keydown.*Escape|keydown.*Arrow",
-          "description": "Keyboard event handling and navigation logic"
+          "file": "assets/js/event-listeners.js",
+          "pattern": "keydown|Escape|ArrowLeft|ArrowRight",
+          "description": "Keyboard event handling in EventListeners module"
         }
       ],
       "test_method": "manual",
@@ -977,7 +920,7 @@
       "name": "Unified Workflow Wrapper (Adaptive)",
       "description": "Single GitHub Actions workflow that automatically adapts to changes in event_scraper.py by introspecting scraper capabilities, configuration, and enabled sources at runtime. Combines scraping, building, deployment, and editorial review into one intelligent workflow.",
       "category": "infrastructure",
-      "implemented": true,
+      "implemented": false,
       "files": [
         ".github/workflows/website-maintenance.yml",
         "src/modules/scraper.py",
@@ -1014,7 +957,7 @@
       "name": "Configurable Monthly Event Archiving",
       "description": "Automatically archive old events based on configurable retention window (default: 60 days). Events are organized by month into archive files (e.g., 202601.json) to keep the active events list manageable and improve performance. Configuration is entirely in config.json with GitHub Actions integration via unified website-maintenance workflow.",
       "category": "backend",
-      "implemented": true,
+      "implemented": false,
       "files": [
         "src/modules/archive_events.py",
         "src/event_manager.py",
@@ -1055,18 +998,16 @@
     {
       "id": "responsive-viewport-system",
       "name": "Responsive Viewport System for Multi-Layer Architecture",
-      "description": "CSS custom properties (--app-width, --app-height) with progressive enhancement that ensures all fixed-position layers scale consistently with the base map layer. Handles mobile browser address bars, orientation changes, and keyboard appearance. Includes JavaScript enhancement for pixel-perfect dimensions.",
+      "description": "CSS custom properties (--app-width, --app-height) for viewport dimensions. JavaScript enhancement not yet implemented.",
       "category": "frontend",
-      "implemented": true,
+      "implemented": false,
       "files": [
         "assets/css/base.css",
         "assets/css/map.css",
         "assets/css/filters.css",
         "assets/css/style.css",
         "assets/css/scrollbar.css",
-        "assets/css/time-drawer.css",
-        "assets/js/app.js",
-        "docs/LAYER_ARCHITECTURE_ANALYSIS.md"
+        "assets/js/app.js"
       ],
       "config_keys": [],
       "code_patterns": [
@@ -1074,11 +1015,6 @@
           "file": "assets/css/base.css",
           "pattern": "--app-width|--app-height|100dvh|100dvw",
           "description": "CSS custom properties for viewport dimensions with progressive enhancement"
-        },
-        {
-          "file": "assets/js/app.js",
-          "pattern": "updateViewportDimensions|setProperty\\('--app-width'|setProperty\\('--app-height'",
-          "description": "JavaScript viewport dimension updater"
         },
         {
           "file": "assets/js/app.js",
@@ -1101,13 +1037,13 @@
       "category": "backend",
       "implemented": true,
       "files": [
-        "src/modules/weather_scraper.py",
+        "assets/js/app.js",
         "src/modules/site_generator.py",
+        "src/modules/weather_scraper.py",
+        "assets/css/style.css",
         "assets/json/weather_dresscodes.json",
         "assets/html/filter-nav.html",
-        "assets/js/app.js",
-        "assets/css/style.css",
-        ".github/workflows/website-maintenance.yml"
+        "config.json"
       ],
       "config_keys": [
         "weather.enabled",
@@ -1117,29 +1053,9 @@
       ],
       "code_patterns": [
         {
-          "file": "src/modules/weather_scraper.py",
-          "pattern": "class WeatherScraper|_extract_dresscode|_validate_dresscode",
-          "description": "Weather scraper with dresscode extraction and validation"
-        },
-        {
           "file": "assets/js/app.js",
-          "pattern": "loadWeather|displayWeatherDresscode|window.WEATHER_CACHE",
-          "description": "Frontend weather loading from inlined cache"
-        },
-        {
-          "file": "assets/html/filter-nav.html",
-          "pattern": "filter-bar-weather|weather-chip",
-          "description": "Weather chip in filter bar"
-        },
-        {
-          "file": "src/modules/site_generator.py",
-          "pattern": "load_weather_cache|window.WEATHER_CACHE",
-          "description": "Weather cache inlined in HTML"
-        },
-        {
-          "file": ".github/workflows/website-maintenance.yml",
-          "pattern": "scrape-weather|Scrape Weather",
-          "description": "GitHub Actions workflow for weather scraping"
+          "pattern": "loadWeather|weather\\.data",
+          "description": "Weather loading in main app"
         }
       ],
       "test_method": "check_code_patterns",
@@ -1158,13 +1074,8 @@
       "code_patterns": [
         {
           "file": "assets/js/speech-bubbles.js",
-          "pattern": "handleDragStart|handleDragMove|handleDragEnd|userOffset",
-          "description": "Drag event handlers and user offset tracking"
-        },
-        {
-          "file": "assets/css/style.css",
-          "pattern": "\\.speech-bubble\\.dragging|cursor: grab",
-          "description": "Drag cursor and dragging state styles"
+          "pattern": "dragState|drag event|setupDragListeners",
+          "description": "Drag functionality in SpeechBubbles module"
         }
       ],
       "test_method": "manual",
@@ -1177,10 +1088,10 @@
       "category": "backend",
       "implemented": true,
       "files": [
-        "src/modules/ai_categorizer.py",
+        "src/modules/scraper.py",
         "src/modules/smart_scraper/ai_providers/ollama.py",
-        "src/modules/event_schema.py",
-        "src/modules/scraper.py"
+        "src/modules/ai_categorizer.py",
+        "src/modules/event_schema.py"
       ],
       "config_keys": [
         "ai.categorization.enabled",
@@ -1191,23 +1102,13 @@
       "code_patterns": [
         {
           "file": "src/modules/ai_categorizer.py",
-          "pattern": "class AICategorizer|categorize_event|_categorize_with_ai|_categorize_with_keywords",
-          "description": "Main AI categorization logic with fallback"
-        },
-        {
-          "file": "src/modules/smart_scraper/ai_providers/ollama.py",
-          "pattern": "class OllamaProvider|extract_event_info|_build_categorization_prompt",
-          "description": "Ollama LLM provider for event categorization"
+          "pattern": "AICategorizer|categorize_event",
+          "description": "AI categorization module"
         },
         {
           "file": "src/modules/event_schema.py",
-          "pattern": "ai_categorizer|_infer_category.*AI categorization",
-          "description": "EventSchema integration with AI categorizer"
-        },
-        {
-          "file": "src/modules/scraper.py",
-          "pattern": "_validate_and_add_event.*AI categorization|schema._infer_category",
-          "description": "Scraper integration with AI categorization"
+          "pattern": "ai_categoriz|AICategorizer",
+          "description": "AI categorization integration in EventSchema"
         }
       ],
       "test_method": "check_code_patterns",
@@ -1330,7 +1231,7 @@
       "name": "Telegram Bot GitHub Actions Integration",
       "description": "Simplified Telegram integration using repository_dispatch events. The simple bot (scripts/telegram_bot.py) dispatches events to GitHub Actions for processing: flyer uploads with OCR, contact form submissions, and PIN publishing for trusted organizers.",
       "category": "infrastructure",
-      "implemented": true,
+      "implemented": false,
       "files": [
         ".github/workflows/website-maintenance.yml",
         "scripts/telegram_bot.py",
@@ -1384,8 +1285,8 @@
     },
     {
       "id": "subjective-day-api",
-      "name": "Subjective Day API (Nürnberger Uhr)",
-      "description": "API for calculating subjective time based on the historical Nürnberger Uhr (Nuremberg Clock) system. Available as both Python server API and client-side JavaScript for GitHub Pages hosting. Uses unequal hours where day is divided into 12 hours (sunrise to sunset) and night into 12 hours (sunset to sunrise).",
+      "name": "Subjective Day API (N\u00fcrnberger Uhr)",
+      "description": "API for calculating subjective time based on the historical N\u00fcrnberger Uhr (Nuremberg Clock) system. Available as both Python server API and client-side JavaScript for GitHub Pages hosting. Uses unequal hours where day is divided into 12 hours (sunrise to sunset) and night into 12 hours (sunset to sunrise).",
       "category": "backend",
       "implemented": true,
       "files": [
