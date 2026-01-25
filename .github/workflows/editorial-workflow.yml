@@ -1,0 +1,174 @@
+name: ✏️ Editorial Review & Publishing
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# TIER 2: Manual Operations - Editorial Workflow
+# ═══════════════════════════════════════════════════════════════════════════════
+#
+# PURPOSE:
+# Review, publish, and reject pending events through GitHub UI.
+# Provides content curation interface for event editors.
+#
+# WHAT THIS WORKFLOW DOES:
+# 1. ✏️ Reviews pending events awaiting approval
+# 2. ✅ Publishes approved events to the live site
+# 3. ❌ Rejects inappropriate or duplicate events
+# 4. 📦 Supports bulk operations with pattern matching
+#
+# TRIGGERS:
+# - Manual only: Via "Run workflow" button
+#
+# ═══════════════════════════════════════════════════════════════════════════════
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'Editorial action'
+        type: choice
+        options:
+          - 'list-pending'
+          - 'publish'
+          - 'reject'
+          - 'bulk-publish'
+          - 'bulk-reject'
+        default: 'list-pending'
+        required: true
+      
+      event_ids:
+        description: 'Event ID(s) or pattern (comma-separated for bulk, wildcards supported)'
+        type: string
+        required: false
+      
+      auto_deploy:
+        description: 'Automatically deploy after publishing'
+        type: boolean
+        default: true
+        required: false
+
+permissions:
+  contents: write  # Push commits (published/rejected events)
+
+concurrency:
+  group: "editorial-workflow"
+  cancel-in-progress: false  # Let editorial operations finish
+
+jobs:
+  editorial-action:
+    name: ✏️ ${{ github.event.inputs.action }}
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Python environment
+        uses: ./.github/actions/setup-python-env
+      
+      - name: List pending events
+        if: github.event.inputs.action == 'list-pending'
+        run: |
+          echo "📋 Listing pending events..."
+          python3 src/event_manager.py list-pending
+          
+          echo "## 📋 Pending Events" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Time:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+          echo "**Reviewed by:** ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
+      
+      - name: Publish event
+        if: github.event.inputs.action == 'publish'
+        run: |
+          if [ -z "${{ github.event.inputs.event_ids }}" ]; then
+            echo "❌ Error: event_ids is required for publish action" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi
+          
+          echo "✅ Publishing event: ${{ github.event.inputs.event_ids }}"
+          python3 src/event_manager.py publish "${{ github.event.inputs.event_ids }}"
+          
+          echo "## ✅ Event Published" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Event ID:** ${{ github.event.inputs.event_ids }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Published by:** ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Time:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+      
+      - name: Reject event
+        if: github.event.inputs.action == 'reject'
+        run: |
+          if [ -z "${{ github.event.inputs.event_ids }}" ]; then
+            echo "❌ Error: event_ids is required for reject action" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi
+          
+          echo "❌ Rejecting event: ${{ github.event.inputs.event_ids }}"
+          python3 src/event_manager.py reject "${{ github.event.inputs.event_ids }}"
+          
+          echo "## ❌ Event Rejected" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Event ID:** ${{ github.event.inputs.event_ids }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Rejected by:** ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Time:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+      
+      - name: Bulk publish events
+        if: github.event.inputs.action == 'bulk-publish'
+        run: |
+          if [ -z "${{ github.event.inputs.event_ids }}" ]; then
+            echo "❌ Error: event_ids is required for bulk-publish action" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi
+          
+          echo "✅ Bulk publishing events: ${{ github.event.inputs.event_ids }}"
+          python3 src/event_manager.py bulk-publish "${{ github.event.inputs.event_ids }}"
+          
+          echo "## ✅ Bulk Publish Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Pattern:** ${{ github.event.inputs.event_ids }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Published by:** ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Time:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+      
+      - name: Bulk reject events
+        if: github.event.inputs.action == 'bulk-reject'
+        run: |
+          if [ -z "${{ github.event.inputs.event_ids }}" ]; then
+            echo "❌ Error: event_ids is required for bulk-reject action" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi
+          
+          echo "❌ Bulk rejecting events: ${{ github.event.inputs.event_ids }}"
+          python3 src/event_manager.py bulk-reject "${{ github.event.inputs.event_ids }}"
+          
+          echo "## ❌ Bulk Reject Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Pattern:** ${{ github.event.inputs.event_ids }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Rejected by:** ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Time:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+      
+      - name: Check for changes
+        id: check_changes
+        run: |
+          if git diff --exit-code assets/json/; then
+            echo "changes=false" >> $GITHUB_OUTPUT
+          else
+            echo "changes=true" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Commit changes
+        if: steps.check_changes.outputs.changes == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add assets/json/
+          git commit -m "✏️ Editorial: ${{ github.event.inputs.action }} by ${{ github.actor }}"
+          git push
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Changes committed and pushed" >> $GITHUB_STEP_SUMMARY
+          
+          if [ "${{ github.event.inputs.auto_deploy }}" = "true" ]; then
+            echo "🚀 Deployment will be triggered automatically" >> $GITHUB_STEP_SUMMARY
+          fi
+      
+      - name: No changes
+        if: steps.check_changes.outputs.changes != 'true'
+        run: |
+          echo "ℹ️ No changes were made" >> $GITHUB_STEP_SUMMARY

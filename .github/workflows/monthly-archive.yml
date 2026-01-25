@@ -1,0 +1,96 @@
+name: 📦 Monthly Event Archiving
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# TIER 1: Core Automation - Monthly Archiving
+# ═══════════════════════════════════════════════════════════════════════════════
+#
+# PURPOSE:
+# Archive old events based on retention policy to keep the active list manageable.
+# Runs on the first day of each month.
+#
+# WHAT THIS WORKFLOW DOES:
+# 1. 📦 Archives events older than retention window (default: 60 days)
+# 2. 💾 Commits archived events to monthly archive files
+# 3. 🧹 Keeps active events list clean and performant
+#
+# TRIGGERS:
+# - Scheduled: First day of month at 02:00 UTC
+# - Manual: Via "Run workflow" button with dry-run option
+#
+# ═══════════════════════════════════════════════════════════════════════════════
+
+on:
+  schedule:
+    - cron: '0 2 1 * *'  # First day of month at 02:00 UTC
+  
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run mode (preview without making changes)'
+        type: boolean
+        default: true
+        required: false
+
+permissions:
+  contents: write  # Push commits (archived data)
+
+concurrency:
+  group: "monthly-archive"
+  cancel-in-progress: false  # Let running archives finish
+
+jobs:
+  archive-events:
+    name: 📦 Archive Old Events
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Python environment
+        uses: ./.github/actions/setup-python-env
+      
+      - name: Archive old events
+        run: |
+          echo "📦 Archiving old events..."
+          
+          DRY_RUN_FLAG=""
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+            DRY_RUN_FLAG="--dry-run"
+            echo "🔍 Running in DRY RUN mode (preview only)" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ Running in LIVE mode (will archive events)" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          python3 src/event_manager.py archive-monthly $DRY_RUN_FLAG
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 📦 Archiving Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Time:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+      
+      - name: Check for changes
+        if: github.event.inputs.dry_run != 'true'
+        id: check_changes
+        run: |
+          if git diff --exit-code assets/json/; then
+            echo "changes=false" >> $GITHUB_OUTPUT
+          else
+            echo "changes=true" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Commit changes
+        if: github.event.inputs.dry_run != 'true' && steps.check_changes.outputs.changes == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add assets/json/
+          git commit -m "📦 Monthly event archiving [automated]"
+          git push
+          
+          echo "✅ Archived events committed and pushed" >> $GITHUB_STEP_SUMMARY
+      
+      - name: No changes
+        if: github.event.inputs.dry_run != 'true' && steps.check_changes.outputs.changes != 'true'
+        run: |
+          echo "ℹ️ No events were archived (all events within retention window)" >> $GITHUB_STEP_SUMMARY

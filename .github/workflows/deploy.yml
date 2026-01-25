@@ -1,0 +1,87 @@
+name: 🚀 Deploy to Production
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# TIER 1: Core Automation - Deployment
+# ═══════════════════════════════════════════════════════════════════════════════
+#
+# PURPOSE:
+# Deploy the static site to GitHub Pages whenever changes are pushed to main.
+# Single responsibility: get code to production quickly and reliably.
+#
+# WHAT THIS WORKFLOW DOES:
+# 1. 🔨 Builds the static site (full rebuild)
+# 2. 📦 Creates deployment artifact
+# 3. 🚀 Deploys to GitHub Pages
+#
+# TRIGGERS:
+# - Push to main branch (all commits)
+# - Manual: Via "Run workflow" button
+#
+# ═══════════════════════════════════════════════════════════════════════════════
+
+on:
+  push:
+    branches:
+      - main
+  
+  workflow_dispatch:
+
+permissions:
+  contents: read       # Read repository
+  pages: write         # Deploy to GitHub Pages
+  id-token: write      # GitHub Pages deployment authentication
+
+concurrency:
+  group: "deploy-${{ github.ref }}"
+  cancel-in-progress: false  # Let running deployments finish
+
+jobs:
+  build:
+    name: 🔨 Build Static Site
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Python environment
+        uses: ./.github/actions/setup-python-env
+      
+      - name: Fetch dependencies
+        run: |
+          echo "📦 Fetching third-party dependencies..."
+          python3 src/event_manager.py dependencies fetch
+      
+      - name: Generate static site
+        run: |
+          echo "🔨 Generating static site..."
+          python3 src/event_manager.py generate
+          
+          echo "## 🔨 Build Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Time:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+      
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public/
+
+  deploy:
+    name: 🚀 Deploy to GitHub Pages
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+      
+      - name: Deployment summary
+        run: |
+          echo "## 🚀 Deployment Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**URL:** ${{ steps.deployment.outputs.page_url }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Time:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
