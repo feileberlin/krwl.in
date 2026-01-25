@@ -47,7 +47,7 @@ Found an interesting event? Save it for later with the **bookmark feature**:
 - **One-tap bookmarking**: Click the bookmark icon on any event to save it
 - **Highlighted bubbles**: Bookmarked events appear with a distinct pink background color
 - **Persistent storage**: Your bookmarks are saved locally and persist across sessions
-- **Maximum 15 bookmarks**: The oldest bookmark is removed when you exceed the limit
+- **Maximum 15 bookmarks**: When you add a 16th bookmark, the oldest one is automatically removed (FIFO)
 
 This works entirely offline using your browser's localStorage - no account needed!
 
@@ -58,7 +58,7 @@ The filter bar at the top lets you customize which events appear:
 | Filter | What It Does |
 |--------|-------------|
 | **Distance** | Slider to show events within 1-10km of your location |
-| **Time** | Show events happening "until sunrise", "next 24 hours", or "all upcoming" |
+| **Time** | Show events happening "until sunrise" (perfect for evening outings), "next 24 hours", or "all upcoming" |
 | **Category** | Filter by event type (music, sports, arts, food, etc.) |
 | **Location** | Use GPS location, pick a saved location, or set a custom point on the map |
 
