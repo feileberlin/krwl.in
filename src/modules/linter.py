@@ -419,6 +419,9 @@ class Linter:
         Validate accessibility (a11y) issues in HTML.
         Checks WCAG 2.1 Level AA compliance where possible.
         """
+        import time
+        start_time = time.time()
+        
         result = LintResult()
         self.log("Linting accessibility (a11y)")
         
@@ -440,6 +443,25 @@ class Linter:
         decorative_imgs = re.findall(r'<img[^>]*alt\s*=\s*["\']["\'][^>]*>', html_content, re.IGNORECASE)
         if decorative_imgs:
             self.log(f"Found {len(decorative_imgs)} images with empty alt (OK for decorative images)")
+        
+        # Check for generic/unhelpful alt text patterns (WCAG 1.1.1 quality check)
+        generic_alt_patterns = [
+            (r'alt\s*=\s*["\']marker["\']', "Generic alt text 'marker' - lacks context"),
+            (r'alt\s*=\s*["\']icon["\']', "Generic alt text 'icon' - lacks context"),
+            (r'alt\s*=\s*["\']image["\']', "Generic alt text 'image' - lacks context"),
+            (r'alt\s*=\s*["\']picture["\']', "Generic alt text 'picture' - lacks context"),
+            (r'alt\s*=\s*["\']\w+\s+event\s+marker["\']', "Generic event marker - missing event title (e.g., 'music event marker')"),
+        ]
+        
+        for pattern, warning_msg in generic_alt_patterns:
+            matches = re.findall(pattern, html_content, re.IGNORECASE)
+            for match in matches:
+                result.add_warning(
+                    f"{warning_msg} (WCAG 1.1.1 quality)",
+                    category="accessibility",
+                    rule="WCAG 1.1.1",
+                    context="Alt text should be descriptive and provide context, not just generic labels"
+                )
         
         # Check for links without text content
         link_matches = re.finditer(r'<a\s+[^>]*href\s*=\s*["\'][^"\']*["\'][^>]*>(.*?)</a>', html_content, re.IGNORECASE | re.DOTALL)
@@ -511,6 +533,10 @@ class Linter:
                 rule="WCAG 2.4.1",
                 context="Skip links allow keyboard users to bypass repetitive navigation and go directly to main content"
             )
+        
+        elapsed_time = time.time() - start_time
+        print(f"⏱️  Accessibility check completed in {elapsed_time:.3f}s")
+        self.log(f"Accessibility check took {elapsed_time:.3f} seconds")
         
         return result
     

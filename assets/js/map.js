@@ -214,8 +214,13 @@ class MapManager {
         const userIconAnchor = userMarkerConfig.anchor || [userIconSize[0] / 2, userIconSize[1]];
         const userPopupAnchor = userMarkerConfig.popup_anchor || [0, -userIconSize[1]];
         
-        const userIcon = L.icon({
-            iconUrl: userIconUrl,
+        // Create descriptive alt text for accessibility
+        const locationAltText = popupText || 'Location marker';
+        
+        // Use divIcon to allow HTML content with alt text (matches event markers pattern)
+        const userIcon = L.divIcon({
+            className: 'custom-location-marker-icon',
+            html: `<img src="${userIconUrl}" alt="${locationAltText}" style="width: ${userIconSize[0]}px; height: ${userIconSize[1]}px; display: block;" />`,
             iconSize: userIconSize,
             iconAnchor: userIconAnchor,
             popupAnchor: userPopupAnchor
@@ -257,10 +262,14 @@ class MapManager {
             window.MARKER_ICONS && window.MARKER_ICONS['marker-default'] ||
             'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBmaWxsPSIjRDY4OUI4IiBkPSJNMTIgMkM4LjEzIDIgNSA1LjEzIDUgOWMwIDUuMjUgNyAxMyA3IDEzczctNy43NSA3LTEzYzAtMy44Ny0zLjEzLTctNy03em0wIDkuNWMtMS4zOCAwLTIuNS0xLjEyLTIuNS0yLjVzMS4xMi0yLjUgMi41LTIuNSAyLjUgMS4xMiAyLjUgMi41LTEuMTIgMi41LTIuNSAyLjV6Ii8+PC9zdmc+';
         
+        // Create descriptive alt text for accessibility and debugging
+        const eventTitle = event.title ? event.title.substring(0, 30) : 'Event';
+        const altText = `${eventTitle} - ${category} marker`;
+        
         // Use divIcon to allow HTML content (time badge overlay)
         const markerIcon = L.divIcon({
             className: 'custom-marker-icon',
-            html: `<img src="${iconUrl}" alt="${category} event marker" style="width: 200px; height: 200px; display: block;" />`,
+            html: `<img src="${iconUrl}" alt="${altText}" style="width: 200px; height: 200px; display: block;" />`,
             iconSize: [200, 200],
             iconAnchor: [100, 200],  // Center bottom
             popupAnchor: [0, -200]  // Above marker
