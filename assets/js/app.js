@@ -71,6 +71,7 @@ class EventsApp {
         this.weatherPopupInitialized = false; // Prevent duplicate event listeners
         this.weatherIframeLoaded = false;     // Prevent loading iframe multiple times
         this.weatherPopupFocusTrap = null;    // Focus trap for accessibility
+        this.weatherPreloadTimer = null;      // Timer ID for preload cleanup
         
         // Dashboard state
         this.dashboardLastFocusedElement = null;
@@ -167,6 +168,9 @@ class EventsApp {
         
         // Mark app as ready
         this.markAppAsReady();
+        
+        // Preload weather iframe after a short delay for better UX
+        this.scheduleWeatherPreload();
     }
     
     markAppAsReady() {
@@ -179,6 +183,24 @@ class EventsApp {
             }
         }));
         this.log('App ready signal sent');
+    }
+    
+    /**
+     * Schedule weather iframe preload after page is fully loaded
+     * Preloads the iframe content in the background for instant popup display
+     */
+    scheduleWeatherPreload() {
+        // Only preload if weather is enabled
+        if (!this.config?.weather?.enabled) return;
+        
+        // Delay preload to prioritize main content loading (3 seconds after app ready)
+        const PRELOAD_DELAY = 3000;
+        
+        this.weatherPreloadTimer = setTimeout(() => {
+            this.weatherPreloadTimer = null;
+            this.log('Preloading weather iframe...');
+            this.loadWeatherIframe();
+        }, PRELOAD_DELAY);
     }
     
     showMainContent() {
@@ -333,8 +355,9 @@ class EventsApp {
     }
     
     /**
-     * Load the wttr.in iframe when popup is first opened
-     * Only loads once per session for efficiency and privacy
+     * Load the wttr.in iframe content
+     * Called either via preload (3s after app ready) or when popup is opened
+     * Only loads once per session for efficiency
      */
     loadWeatherIframe() {
         // Guard: Only load iframe once
@@ -358,7 +381,7 @@ class EventsApp {
         const locationStr = location?.name || `${lat},${lon}`;
         const wttrUrl = `https://wttr.in/${encodeURIComponent(locationStr)}?FnT`;
         
-        // Set iframe src (lazy load on first popup open)
+        // Set iframe src (preloaded in background for instant popup display)
         iframe.src = wttrUrl;
         
         this.log('Weather iframe loaded:', wttrUrl);
