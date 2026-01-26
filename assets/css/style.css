@@ -121,6 +121,197 @@ strong, b {
     filter: none !important;
 }
 
+/* ═══════════════════════════════════════════════════════════════════════════════
+   EVENT FLYERS - Small card-like flyers displayed directly on the map
+   No markers, no popups - just compact event information visible at a glance
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* Container for the flyer (Leaflet divIcon wrapper) */
+.event-flyer-container {
+    background: transparent !important;
+    border: none !important;
+}
+
+/* The actual flyer card */
+.event-flyer {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border-primary);
+    border-radius: 6px;
+    padding: 0;
+    min-width: 120px;
+    max-width: 160px;
+    box-shadow: 
+        var(--shadow-medium, 0 2px 8px rgba(0, 0, 0, 0.4)),
+        var(--shadow-glow-primary, 0 0 12px rgba(214, 137, 184, 0.3));
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    overflow: hidden;
+    font-family: var(--font-family-base, sans-serif);
+}
+
+.event-flyer:hover,
+.event-flyer:focus {
+    transform: scale(1.05);
+    box-shadow: 
+        var(--shadow-large, 0 4px 16px rgba(0, 0, 0, 0.5)),
+        0 0 20px var(--color-primary);
+    z-index: var(--z-layer-2-event-popups, 1000);
+}
+
+.event-flyer:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+/* Responsive adjustments for very small viewports */
+@media (max-width: 360px) {
+    .event-flyer {
+        min-width: 100px;
+        max-width: 140px;
+    }
+
+    .flyer-date-num {
+        font-size: 14px;
+    }
+
+    .flyer-title {
+        font-size: 10px;
+    }
+}
+
+/* Error state for invalid event data */
+.event-flyer-error {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-error, #954476);
+    color: var(--color-tint-100, #fff);
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 10px;
+    min-width: 80px;
+}
+
+/* Date section (left side) */
+.event-flyer-date {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover, #E8A5C8) 100%);
+    padding: 4px 8px;
+    min-width: 36px;
+}
+
+.flyer-day {
+    font-size: 9px;
+    font-weight: 600;
+    color: var(--color-tint-100, #fff);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    line-height: 1.2;
+}
+
+.flyer-date-num {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--color-tint-100, #fff);
+    line-height: 1.1;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Content section (right side) */
+.event-flyer-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 4px 8px;
+    flex: 1;
+    min-width: 0;  /* Allow text truncation */
+}
+
+.flyer-title {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--color-text-primary, #fff);
+    line-height: 1.3;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-bottom: 2px;
+}
+
+.flyer-time {
+    font-size: 10px;
+    color: var(--color-primary);
+    font-weight: 500;
+}
+
+/* Quartz-style time display (used when time filter is "til sunrise") */
+.event-flyer-quartz {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 48px;
+    padding: 6px 10px;
+}
+
+.flyer-quartz-time {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--color-tint-100, #fff);
+    font-family: var(--font-family-mono, 'Monaco', 'Courier New', monospace);
+    letter-spacing: 1px;
+    text-shadow: var(--shadow-small, 0 1px 2px rgba(0, 0, 0, 0.3));
+}
+
+/* Adjust content area in time mode (no duplicate time shown) */
+.event-flyer-time-mode .event-flyer-content {
+    padding: 6px 10px;
+}
+
+.event-flyer-time-mode .flyer-title {
+    font-size: 11px;
+    line-height: 1.4;
+    /* More space for title since no time below */
+    -webkit-line-clamp: 2;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    white-space: normal;
+}
+
+/* Bookmarked flyer styling */
+.event-flyer-bookmarked .event-flyer {
+    border-color: var(--color-primary);
+    background: var(--color-bg-tertiary, #191016);
+    box-shadow: 
+        var(--shadow-large, 0 2px 12px rgba(0, 0, 0, 0.5)),
+        0 0 16px var(--color-primary),
+        inset 0 0 0 1px var(--color-primary);
+}
+
+.event-flyer-bookmarked .event-flyer-date {
+    background: linear-gradient(135deg, var(--color-accent, #e07fba) 0%, var(--color-warning, #eb7dc0) 100%);
+}
+
+/* Category-specific accent colors using design tokens
+   All colors derived from ecoBarbie primary (#D689B8) for consistency */
+.event-flyer[data-category="arts"] .event-flyer-date {
+    background: linear-gradient(135deg, var(--color-shade-50, #6b445c) 0%, var(--color-primary) 100%);
+}
+
+.event-flyer[data-category="palace"] .event-flyer-date {
+    background: linear-gradient(135deg, var(--color-tone-50, #d6afc7) 0%, var(--color-primary-hover, #E8A5C8) 100%);
+}
+
+.event-flyer[data-category="community"] .event-flyer-date {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-tint-50, #eac0da) 100%);
+}
+
 /* Map fallback when Leaflet fails to load */
 .map-fallback {
     position: absolute;
