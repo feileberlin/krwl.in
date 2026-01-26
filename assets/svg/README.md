@@ -22,7 +22,7 @@ All markers are icon-only versions at 200x200px, using Lucide icons:
 
 ### Location Markers
 
-### Geolocation (`marker-geolocation.svg`)
+### Geolocation (`marker-lucide-geolocation.svg`)
 - **Icon**: Person silhouette
 - **Use**: "You are here" - user's current location
 - **Size**: 200x200px
@@ -51,7 +51,7 @@ All markers are icon-only versions at 200x200px, using Lucide icons:
 
 ## Event Category Markers
 
-### Default Event (`marker-default.svg`)
+### Default Event (`marker-lucide-default.svg`)
 
 - **Icon**: Circle with center dot
 - **Use**: Default event marker, all events
@@ -173,7 +173,7 @@ All markers are icon-only versions at 200x200px, using Lucide icons:
 ```javascript
 // Create custom terminal-style icon
 const terminalIcon = L.icon({
-    iconUrl: 'markers/marker-default.svg',
+    iconUrl: 'markers/marker-lucide-default.svg',
     iconSize: [32, 48],
     iconAnchor: [16, 48],
     popupAnchor: [0, -48]
@@ -188,7 +188,7 @@ const marker = L.marker([lat, lon], { icon: terminalIcon }).addTo(map);
 // Get marker for predefined locations
 function getLocationMarker(locationType) {
     const iconMap = {
-        'geolocation': 'markers/marker-geolocation.svg',
+        'geolocation': 'markers/marker-lucide-geolocation.svg',
         'main-station': 'markers/marker-main-station.svg',
         'city-center': 'markers/marker-city-center.svg',
         'mayors-office': 'markers/marker-mayors-office.svg'
@@ -217,7 +217,7 @@ function getEventMarker(category) {
         'on-stage': 'markers/marker-on-stage.svg',
         'pub-games': 'markers/marker-pub-games.svg',
         'festivals': 'markers/marker-festivals.svg',
-        'default': 'markers/marker-default.svg'
+        'default': 'markers/marker-lucide-default.svg'
     };
     
     const iconUrl = iconMap[category] || iconMap.default;

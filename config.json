@@ -1008,27 +1008,27 @@
         "description": "Swimming events"
       },
       "community": {
-        "marker": "marker-community",
+        "marker": "marker-lucide-community",
         "display_name": "Community",
         "description": "Community gatherings"
       },
       "social": {
-        "marker": "marker-community",
+        "marker": "marker-lucide-community",
         "display_name": "Social",
         "description": "Social events"
       },
       "meetup": {
-        "marker": "marker-community",
+        "marker": "marker-lucide-community",
         "display_name": "Meetup",
         "description": "Meetups and gatherings"
       },
       "arts": {
-        "marker": "marker-arts",
+        "marker": "marker-lucide-arts",
         "display_name": "Arts",
         "description": "Arts events"
       },
       "art": {
-        "marker": "marker-arts",
+        "marker": "marker-lucide-arts",
         "display_name": "Art",
         "description": "Art events"
       },
@@ -1103,7 +1103,7 @@
         "description": "Castle visits"
       },
       "palace": {
-        "marker": "marker-palace",
+        "marker": "marker-lucide-palace",
         "display_name": "Palace",
         "description": "Palace visits"
       },
@@ -1143,7 +1143,7 @@
         "description": "Archive visits"
       },
       "default": {
-        "marker": "marker-default",
+        "marker": "marker-lucide-default",
         "display_name": "Event",
         "description": "General event"
       }

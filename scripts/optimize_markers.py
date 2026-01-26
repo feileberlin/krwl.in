@@ -35,8 +35,8 @@ EVENT_FILES = [
 
 # Always keep these markers regardless of event categories
 ESSENTIAL_MARKERS = {
-    'marker-default',      # Fallback for unknown categories
-    'marker-geolocation'   # Used for user location
+    'marker-lucide-default',      # Fallback for unknown categories
+    'marker-lucide-geolocation'   # Used for user location
 }
 
 

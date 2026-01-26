@@ -208,7 +208,7 @@ class MapManager {
         // Get user marker config (use same icon for all reference locations)
         const userMarkerConfig = this.config.map.user_location_marker || {};
         const userIconUrl = userMarkerConfig.icon || 
-            (window.MARKER_ICONS && window.MARKER_ICONS['marker-geolocation']) ||
+            (window.MARKER_ICONS && window.MARKER_ICONS['marker-lucide-geolocation']) ||
             'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48Y2lyY2xlIGN4PSIxMiIgY3k9IjEyIiByPSI4IiBmaWxsPSIjNENBRjUwIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIvPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjMiIGZpbGw9IiNmZmYiLz48L3N2Zz4=';
         const userIconSize = userMarkerConfig.size || [200, 200];  // Match event marker size
         const userIconAnchor = userMarkerConfig.anchor || [userIconSize[0] / 2, userIconSize[1]];
@@ -259,7 +259,7 @@ class MapManager {
         // Fallback uses ecoBarbie color #D689B8 (same as SVG markers)
         const category = event.category || 'default';
         const iconUrl = window.MARKER_ICONS && window.MARKER_ICONS[`marker-${category}`] || 
-            window.MARKER_ICONS && window.MARKER_ICONS['marker-default'] ||
+            window.MARKER_ICONS && window.MARKER_ICONS['marker-lucide-default'] ||
             'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBmaWxsPSIjRDY4OUI4IiBkPSJNMTIgMkM4LjEzIDIgNSA1LjEzIDUgOWMwIDUuMjUgNyAxMyA3IDEzczctNy43NSA3LTEzYzAtMy44Ny0zLjEzLTctNy03em0wIDkuNWMtMS4zOCAwLTIuNS0xLjEyLTIuNS0yLjVzMS4xMi0yLjUgMi41LTIuNSAyLjUgMS4xMiAyLjUgMi41LTEuMTIgMi41LTIuNSAyLjV6Ii8+PC9zdmc+';
         
         // Create descriptive alt text for accessibility and debugging

@@ -1050,8 +1050,8 @@ class SiteGenerator:
             'marker-sports': {'icon': 'trophy', 'label': 'Sports'},
             'marker-sports-field': {'icon': 'ticket', 'label': 'Sports Fields'},
             'marker-swimming': {'icon': 'waves', 'label': 'Swimming'},
-            'marker-community': {'icon': 'users', 'label': 'Community'},
-            'marker-arts': {'icon': 'palette', 'label': 'Arts'},
+            'marker-lucide-community': {'icon': 'users', 'label': 'Community'},
+            'marker-lucide-arts': {'icon': 'palette', 'label': 'Arts'},
             'marker-museum': {'icon': 'landmark', 'label': 'Museums'},
             'marker-food': {'icon': 'utensils', 'label': 'Food/Dining'},
             'marker-church': {'icon': 'church', 'label': 'Religious'},
@@ -1060,14 +1060,14 @@ class SiteGenerator:
             'marker-monument': {'icon': 'pilcrow', 'label': 'Monuments'},
             'marker-tower': {'icon': 'triangle', 'label': 'Towers'},
             'marker-ruins': {'icon': 'blocks', 'label': 'Ruins'},
-            'marker-palace': {'icon': 'crown', 'label': 'Palaces'},
+            'marker-lucide-palace': {'icon': 'crown', 'label': 'Palaces'},
             'marker-park': {'icon': 'tree-pine', 'label': 'Parks/Nature'},
             'marker-parliament': {'icon': 'landmark', 'label': 'Government'},
             'marker-mayors-office': {'icon': 'building', 'label': 'City Hall'},
             'marker-library': {'icon': 'book-open', 'label': 'Libraries'},
             'marker-national-archive': {'icon': 'archive', 'label': 'Archives'},
-            'marker-default': {'icon': 'map-pin', 'label': 'Default/Fallback'},
-            'marker-geolocation': {'icon': 'locate', 'label': 'User Location'}
+            'marker-lucide-default': {'icon': 'map-pin', 'label': 'Default/Fallback'},
+            'marker-lucide-geolocation': {'icon': 'locate', 'label': 'User Location'}
         }
         
         # Add color and size settings
@@ -1110,8 +1110,8 @@ class SiteGenerator:
             'marker-sports',        # Sports & Fitness
             'marker-sports-field',  # Athletics
             'marker-swimming',      # Swimming
-            'marker-community',     # Community & Social Services
-            'marker-arts',          # Arts & Culture
+            'marker-lucide-community',     # Community & Social Services
+            'marker-lucide-arts',          # Arts & Culture
             'marker-museum',        # Exhibitions
             'marker-food',          # Food & Dining
             'marker-church',        # Religious
@@ -1120,14 +1120,14 @@ class SiteGenerator:
             'marker-monument',      # Heritage
             'marker-tower',         # Landmarks
             'marker-ruins',         # Ruins
-            'marker-palace',        # Palace
+            'marker-lucide-palace',        # Palace
             'marker-park',          # Parks & Nature
             'marker-parliament',    # Government
             'marker-mayors-office', # City Hall
             'marker-library',       # Libraries
             'marker-national-archive',  # Archives
-            'marker-default',       # Default fallback
-            'marker-geolocation'    # User location marker
+            'marker-lucide-default',       # Default fallback
+            'marker-lucide-geolocation'    # User location marker
         ]
         
         markers_dir = self.assets_dir / 'svg'
