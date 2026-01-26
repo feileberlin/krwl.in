@@ -483,37 +483,37 @@
     },
     {
       "id": "event-cards",
-      "name": "Event Card UI",
-      "description": "Event details displayed via Leaflet default popups on marker click",
+      "name": "Event Flyer Cards",
+      "description": "Compact event flyer cards displayed directly on the map with context-aware date/time display (calendar mode vs quartz time mode)",
       "category": "frontend",
       "implemented": true,
       "files": [
         "assets/js/map.js",
-        "assets/html/map-main.html"
+        "assets/css/style.css"
       ],
       "code_patterns": [
         {
           "file": "assets/js/map.js",
-          "pattern": "bindPopup|createEventPopupContent",
-          "description": "Event display in Leaflet popups"
+          "pattern": "createFlyerHtml|event-flyer",
+          "description": "Event flyer HTML generation with dual display modes"
         }
       ],
       "test_method": "check_code_patterns"
     },
     {
       "id": "map-markers",
-      "name": "Map Markers",
-      "description": "Interactive markers on the map for events and user location",
+      "name": "Map Flyers",
+      "description": "Interactive flyer cards on the map for events, with circular offset positioning for overlapping events at same location",
       "category": "frontend",
       "implemented": true,
       "files": [
-        "assets/js/app.js"
+        "assets/js/map.js"
       ],
       "code_patterns": [
         {
           "file": "assets/js/map.js",
-          "pattern": "L\\.marker|addEventMarker|createMarkerIcon",
-          "description": "Leaflet marker management in MapManager"
+          "pattern": "L\\.marker|addEventMarker|createFlyerHtml|FLYER_OFFSET",
+          "description": "Leaflet marker management with flyer divIcons in MapManager"
         }
       ],
       "test_method": "check_code_patterns"
