@@ -255,10 +255,10 @@ class MapManager {
     addEventMarker(event, onClick) {
         if (!this.map || !event.location) return null;
         
-        // Get marker icon based on category (uses SVG filename pattern: marker-{category})
+        // Get marker icon based on category (uses SVG filename pattern: marker-lucide-{category})
         // Fallback uses ecoBarbie color #D689B8 (same as SVG markers)
         const category = event.category || 'default';
-        const iconUrl = window.MARKER_ICONS && window.MARKER_ICONS[`marker-${category}`] || 
+        const iconUrl = window.MARKER_ICONS && window.MARKER_ICONS[`marker-lucide-${category}`] || 
             window.MARKER_ICONS && window.MARKER_ICONS['marker-lucide-default'] ||
             'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBmaWxsPSIjRDY4OUI4IiBkPSJNMTIgMkM4LjEzIDIgNSA1LjEzIDUgOWMwIDUuMjUgNyAxMyA3IDEzczctNy43NSA3LTEzYzAtMy44Ny0zLjEzLTctNy03em0wIDkuNWMtMS4zOCAwLTIuNS0xLjEyLTIuNS0yLjVzMS4xMi0yLjUgMi41LTIuNSAyLjUgMS4xMiAyLjUgMi41LTEuMTIgMi41LTIuNSAyLjV6Ii8+PC9zdmc+';
         
