@@ -329,9 +329,15 @@ class MapManager {
      */
     createFlyerHtml(event) {
         const startTime = new Date(event.start_time);
-        const timeStr = startTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        const hours = startTime.getHours().toString().padStart(2, '0');
+        const minutes = startTime.getMinutes().toString().padStart(2, '0');
+        const timeStr = `${hours}:${minutes}`;
         const dayStr = startTime.toLocaleDateString([], { weekday: 'short' });
         const dateNum = startTime.getDate();
+        
+        // Check time filter to decide display mode
+        const timeFilter = this.storage.getFilters().timeFilter || 'sunrise';
+        const isTimeMode = (timeFilter === 'sunrise');
         
         // Truncate title to fit in small flyer
         const title = event.title || 'Event';
@@ -341,18 +347,35 @@ class MapManager {
         const category = event.category || 'default';
         
         // Build compact flyer HTML (escape all dynamic content for XSS prevention)
-        return `
-            <div class="event-flyer" data-category="${this.escapeHtml(category)}" tabindex="0" role="button" aria-label="${this.escapeHtml(title)}">
-                <div class="event-flyer-date">
-                    <span class="flyer-day">${this.escapeHtml(dayStr)}</span>
-                    <span class="flyer-date-num">${dateNum}</span>
+        // When timeFilter is 'sunrise' (til sunrise), show quartz-style HH:MM
+        // Otherwise, show calendar-style day + date
+        if (isTimeMode) {
+            // Quartz-style time display
+            return `
+                <div class="event-flyer event-flyer-time-mode" data-category="${this.escapeHtml(category)}" tabindex="0" role="button" aria-label="${this.escapeHtml(title)}">
+                    <div class="event-flyer-date event-flyer-quartz">
+                        <span class="flyer-quartz-time">${this.escapeHtml(timeStr)}</span>
+                    </div>
+                    <div class="event-flyer-content">
+                        <div class="flyer-title">${this.escapeHtml(shortTitle)}</div>
+                    </div>
                 </div>
-                <div class="event-flyer-content">
-                    <div class="flyer-title">${this.escapeHtml(shortTitle)}</div>
-                    <div class="flyer-time">${this.escapeHtml(timeStr)}</div>
+            `.trim();
+        } else {
+            // Calendar-style day + date display
+            return `
+                <div class="event-flyer" data-category="${this.escapeHtml(category)}" tabindex="0" role="button" aria-label="${this.escapeHtml(title)}">
+                    <div class="event-flyer-date">
+                        <span class="flyer-day">${this.escapeHtml(dayStr)}</span>
+                        <span class="flyer-date-num">${dateNum}</span>
+                    </div>
+                    <div class="event-flyer-content">
+                        <div class="flyer-title">${this.escapeHtml(shortTitle)}</div>
+                        <div class="flyer-time">${this.escapeHtml(timeStr)}</div>
+                    </div>
                 </div>
-            </div>
-        `.trim();
+            `.trim();
+        }
     }
     
     /**

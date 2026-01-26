@@ -221,6 +221,40 @@ strong, b {
     font-weight: 500;
 }
 
+/* Quartz-style time display (used when time filter is "til sunrise") */
+.event-flyer-quartz {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 48px;
+    padding: 6px 10px;
+}
+
+.flyer-quartz-time {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--color-tint-100, #fff);
+    font-family: var(--font-family-mono, 'Monaco', 'Courier New', monospace);
+    letter-spacing: 1px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Adjust content area in time mode (no duplicate time shown) */
+.event-flyer-time-mode .event-flyer-content {
+    padding: 6px 10px;
+}
+
+.event-flyer-time-mode .flyer-title {
+    font-size: 11px;
+    line-height: 1.4;
+    /* More space for title since no time below */
+    -webkit-line-clamp: 2;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    white-space: normal;
+}
+
 /* Bookmarked flyer styling */
 .event-flyer-bookmarked .event-flyer {
     border-color: var(--color-primary);
