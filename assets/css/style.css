@@ -121,6 +121,136 @@ strong, b {
     filter: none !important;
 }
 
+/* ═══════════════════════════════════════════════════════════════════════════════
+   EVENT FLYERS - Small card-like flyers displayed directly on the map
+   No markers, no popups - just compact event information visible at a glance
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+/* Container for the flyer (Leaflet divIcon wrapper) */
+.event-flyer-container {
+    background: transparent !important;
+    border: none !important;
+}
+
+/* The actual flyer card */
+.event-flyer {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border-primary);
+    border-radius: 6px;
+    padding: 0;
+    min-width: 120px;
+    max-width: 160px;
+    box-shadow: 
+        0 2px 8px rgba(0, 0, 0, 0.4),
+        0 0 12px rgba(214, 137, 184, 0.2);
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    overflow: hidden;
+    font-family: var(--font-family-base, sans-serif);
+}
+
+.event-flyer:hover,
+.event-flyer:focus {
+    transform: scale(1.05);
+    box-shadow: 
+        0 4px 16px rgba(0, 0, 0, 0.5),
+        0 0 20px rgba(214, 137, 184, 0.4);
+    z-index: 1000 !important;
+}
+
+.event-flyer:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+/* Date section (left side) */
+.event-flyer-date {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover, #E8A5C8) 100%);
+    padding: 4px 8px;
+    min-width: 36px;
+}
+
+.flyer-day {
+    font-size: 9px;
+    font-weight: 600;
+    color: var(--color-tint-100, #fff);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    line-height: 1.2;
+}
+
+.flyer-date-num {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--color-tint-100, #fff);
+    line-height: 1.1;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Content section (right side) */
+.event-flyer-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 4px 8px;
+    flex: 1;
+    min-width: 0;  /* Allow text truncation */
+}
+
+.flyer-title {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--color-text-primary, #fff);
+    line-height: 1.3;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-bottom: 2px;
+}
+
+.flyer-time {
+    font-size: 10px;
+    color: var(--color-primary);
+    font-weight: 500;
+}
+
+/* Bookmarked flyer styling */
+.event-flyer-bookmarked .event-flyer {
+    border-color: var(--color-primary);
+    background: var(--color-bg-tertiary, #191016);
+}
+
+.event-flyer-bookmarked .event-flyer-date {
+    background: linear-gradient(135deg, var(--color-accent, #e07fba) 0%, var(--color-warning, #eb7dc0) 100%);
+}
+
+.event-flyer-bookmarked .event-flyer {
+    box-shadow: 
+        0 2px 12px rgba(0, 0, 0, 0.5),
+        0 0 16px rgba(214, 137, 184, 0.4),
+        inset 0 0 0 1px var(--color-primary);
+}
+
+/* Category-specific accent colors (optional, uses data-category attribute) */
+.event-flyer[data-category="arts"] .event-flyer-date {
+    background: linear-gradient(135deg, #C080B0 0%, #D689B8 100%);
+}
+
+.event-flyer[data-category="palace"] .event-flyer-date {
+    background: linear-gradient(135deg, #B87FAA 0%, #C88DB8 100%);
+}
+
+.event-flyer[data-category="community"] .event-flyer-date {
+    background: linear-gradient(135deg, #D090C0 0%, #E0A0D0 100%);
+}
+
 /* Map fallback when Leaflet fails to load */
 .map-fallback {
     position: absolute;

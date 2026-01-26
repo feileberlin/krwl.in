@@ -3,16 +3,21 @@
  * 
  * Handles all Leaflet.js map operations:
  * - Map initialization
- * - Marker management
+ * - Event flyer management (no markers, just small flyer cards)
  * - User location tracking
  * - Map bounds and zoom
  * 
  * KISS: Single responsibility - map management only
+ * 
+ * UI PHILOSOPHY: Small "flyers" displayed next to event locations on the map
+ * - No traditional markers (pins/icons)
+ * - No popups that need to be clicked
+ * - Events are immediately visible as compact cards
  */
 
-// Constants for marker spiderfying (offsetting markers at same location)
-const MARKER_OFFSET_RADIUS = 0.0003;  // ~30 meters offset for spiderfied markers
-const MARKER_OFFSET_ANGLE = 60;       // Degrees between each offset marker
+// Constants for flyer positioning (offsetting flyers at same location)
+const FLYER_OFFSET_RADIUS = 0.0005;   // ~50 meters offset for overlapping flyers
+const FLYER_OFFSET_ANGLE = 45;        // Degrees between each offset flyer
 const LOCATION_PRECISION = 4;         // Decimal places for location grouping (~11m precision)
 
 class MapManager {
@@ -20,10 +25,17 @@ class MapManager {
         this.config = config;
         this.storage = storage;
         this.map = null;
-        this.markers = [];
+        this.flyers = [];           // Event flyer elements (was: markers)
         this.userLocation = null;
-        this.locationCounts = {}; // Track markers at same location for offset
+        this.locationCounts = {};   // Track flyers at same location for offset
         this.referenceMarker = null; // Track the reference location marker (user/predefined/custom)
+    }
+    
+    /**
+     * Backward compatibility: return flyers as markers
+     */
+    get markers() {
+        return this.flyers;
     }
     
     /**
@@ -247,35 +259,28 @@ class MapManager {
     }
     
     /**
-     * Add event marker to map
+     * Add event flyer to map (replaces traditional markers)
+     * Creates a small card-like flyer positioned next to the event location
      * @param {Object} event - Event data
      * @param {Function} onClick - Click handler
-     * @returns {Object} Leaflet marker
+     * @returns {Object} Leaflet marker with flyer divIcon
      */
     addEventMarker(event, onClick) {
         if (!this.map || !event.location) return null;
         
-        // Get marker icon based on category (uses SVG filename pattern: marker-lucide-{category})
-        // Fallback uses ecoBarbie color #D689B8 (same as SVG markers)
-        const category = event.category || 'default';
-        const iconUrl = window.MARKER_ICONS && window.MARKER_ICONS[`marker-lucide-${category}`] || 
-            window.MARKER_ICONS && window.MARKER_ICONS['marker-lucide-default'] ||
-            'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBmaWxsPSIjRDY4OUI4IiBkPSJNMTIgMkM4LjEzIDIgNSA1LjEzIDUgOWMwIDUuMjUgNyAxMyA3IDEzczctNy43NSA3LTEzYzAtMy44Ny0zLjEzLTctNy03em0wIDkuNWMtMS4zOCAwLTIuNS0xLjEyLTIuNS0yLjVzMS4xMi0yLjUgMi41LTIuNSAyLjUgMS4xMiAyLjUgMi41LTEuMTIgMi41LTIuNSAyLjV6Ii8+PC9zdmc+';
+        // Create flyer HTML content
+        const flyerHtml = this.createFlyerHtml(event);
         
-        // Create descriptive alt text for accessibility and debugging
-        const eventTitle = event.title ? event.title.substring(0, 30) : 'Event';
-        const altText = `${eventTitle} - ${category} marker`;
-        
-        // Use divIcon to allow HTML content (time badge overlay)
-        const markerIcon = L.divIcon({
-            className: 'custom-marker-icon',
-            html: `<img src="${iconUrl}" alt="${altText}" style="width: 200px; height: 200px; display: block;" />`,
-            iconSize: [200, 200],
-            iconAnchor: [100, 200],  // Center bottom
-            popupAnchor: [0, -200]  // Above marker
+        // Use divIcon to create the flyer card
+        const flyerIcon = L.divIcon({
+            className: 'event-flyer-container',
+            html: flyerHtml,
+            iconSize: [140, 80],      // Compact flyer size
+            iconAnchor: [70, 40],     // Center of flyer
+            popupAnchor: [0, -40]     // Above flyer (not used, but keep for compatibility)
         });
         
-        // Calculate offset for markers at same location (spiderfying)
+        // Calculate offset for flyers at same location
         const locationKey = `${event.location.lat.toFixed(LOCATION_PRECISION)}_${event.location.lon.toFixed(LOCATION_PRECISION)}`;
         if (!this.locationCounts[locationKey]) {
             this.locationCounts[locationKey] = 0;
@@ -283,80 +288,71 @@ class MapManager {
         const offsetIndex = this.locationCounts[locationKey];
         this.locationCounts[locationKey]++;
         
-        // Apply circular offset if there are multiple markers at same location
+        // Apply offset if there are multiple flyers at same location
         let lat = event.location.lat;
         let lon = event.location.lon;
         if (offsetIndex > 0) {
-            const angle = (offsetIndex * MARKER_OFFSET_ANGLE) * (Math.PI / 180);
-            lat += MARKER_OFFSET_RADIUS * Math.cos(angle);
-            lon += MARKER_OFFSET_RADIUS * Math.sin(angle);
+            const angle = (offsetIndex * FLYER_OFFSET_ANGLE) * (Math.PI / 180);
+            lat += FLYER_OFFSET_RADIUS * Math.cos(angle);
+            lon += FLYER_OFFSET_RADIUS * Math.sin(angle);
         }
         
-        const marker = L.marker([lat, lon], {
-            icon: markerIcon,
+        const flyer = L.marker([lat, lon], {
+            icon: flyerIcon,
             customData: { id: event.id }
         }).addTo(this.map);
         
         // Add bookmark class if bookmarked
         if (this.storage.isBookmarked(event.id)) {
-            marker._icon.classList.add('bookmarked-marker');
+            flyer._icon.classList.add('event-flyer-bookmarked');
         }
         
-        // Add time badge to marker icon
-        this.addTimeBadgeToMarker(marker, event);
+        // Store event data on flyer (for backward compatibility)
+        flyer.eventData = event;
         
-        // Store event data on marker (for backward compatibility)
-        marker.eventData = event;
-        
-        // Bind Leaflet default popup with event details
-        const popupContent = this.createEventPopupContent(event);
-        marker.bindPopup(popupContent, {
-            maxWidth: 300,
-            className: 'event-popup'
-        });
-        
-        // Add click handler (still call onClick for detail panel, popup opens automatically)
+        // NO popups - flyers show all info directly
+        // Click opens detail panel only
         if (onClick) {
-            marker.on('click', () => onClick(event, marker));
+            flyer.on('click', () => onClick(event, flyer));
         }
         
-        this.markers.push(marker);
-        this.log('Marker added for event', event.title);
+        this.flyers.push(flyer);
+        this.log('Flyer added for event', event.title);
         
-        return marker;
+        return flyer;
     }
     
     /**
-     * Create HTML content for Leaflet default popup
+     * Create HTML content for event flyer card
      * @param {Object} event - Event data
-     * @returns {string} HTML content for popup
+     * @returns {string} HTML content for flyer
      */
-    createEventPopupContent(event) {
+    createFlyerHtml(event) {
         const startTime = new Date(event.start_time);
         const timeStr = startTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        const dateStr = startTime.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' });
+        const dayStr = startTime.toLocaleDateString([], { weekday: 'short' });
+        const dateNum = startTime.getDate();
         
-        const distanceStr = event.distance !== undefined 
-            ? `${event.distance.toFixed(1)} km` 
-            : '';
+        // Truncate title to fit in small flyer
+        const title = event.title || 'Event';
+        const shortTitle = title.length > 25 ? title.substring(0, 22) + '…' : title;
         
-        const locationName = event.location?.name || 'Unknown location';
-        const title = event.title || 'Untitled event';
+        // Category for styling
+        const category = event.category || 'default';
         
-        // Simple, clean popup content using Leaflet defaults
-        let html = `<div class="event-popup-content">`;
-        html += `<strong>${this.escapeHtml(title)}</strong><br>`;
-        html += `<small>${dateStr} · ${timeStr}</small><br>`;
-        html += `📍 ${this.escapeHtml(locationName)}`;
-        if (distanceStr) {
-            html += ` · ${distanceStr}`;
-        }
-        if (event.url) {
-            html += `<br><a href="${this.escapeHtml(event.url)}" target="_blank" rel="noopener">More info →</a>`;
-        }
-        html += `</div>`;
-        
-        return html;
+        // Build compact flyer HTML
+        return `
+            <div class="event-flyer" data-category="${this.escapeHtml(category)}" tabindex="0" role="button" aria-label="${this.escapeHtml(title)}">
+                <div class="event-flyer-date">
+                    <span class="flyer-day">${dayStr}</span>
+                    <span class="flyer-date-num">${dateNum}</span>
+                </div>
+                <div class="event-flyer-content">
+                    <div class="flyer-title">${this.escapeHtml(shortTitle)}</div>
+                    <div class="flyer-time">${timeStr}</div>
+                </div>
+            </div>
+        `.trim();
     }
     
     /**
@@ -372,86 +368,47 @@ class MapManager {
     }
     
     /**
-     * Add time badge to marker showing start time or day of month
-     * @param {Object} marker - Leaflet marker
-     * @param {Object} event - Event data
-     */
-    addTimeBadgeToMarker(marker, event) {
-        if (!marker._icon || !event.start_time) return;
-        
-        const startTime = new Date(event.start_time);
-        const timeFilter = this.storage.getFilters().timeFilter || 'sunrise';
-        
-        // Determine badge content:
-        // - If timeFilter is "sunrise" (til sunrise): show HH:MM
-        // - Otherwise: show day of month
-        let badgeText;
-        if (timeFilter === 'sunrise') {
-            // Show HH:MM format
-            const hours = startTime.getHours().toString().padStart(2, '0');
-            const minutes = startTime.getMinutes().toString().padStart(2, '0');
-            badgeText = `${hours}:${minutes}`;
-        } else {
-            // Show day of month
-            badgeText = startTime.getDate().toString();
-        }
-        
-        // Create badge element
-        const badge = document.createElement('div');
-        badge.className = 'marker-time-badge';
-        badge.textContent = badgeText;
-        
-        // Append to marker icon (divIcon allows this)
-        marker._icon.appendChild(badge);
-        
-        // Add tooltip to marker element for hover functionality
-        marker._icon.title = startTime.toLocaleString();
-        
-        this.log('Time badge added to marker', { badgeText, eventTitle: event.title });
-    }
-    
-    /**
-     * Update marker bookmark state
+     * Update flyer bookmark state
      * @param {string} eventId - Event ID
      * @param {boolean} isBookmarked - Whether event is bookmarked
      */
     updateMarkerBookmarkState(eventId, isBookmarked) {
-        this.markers.forEach(marker => {
-            if (marker.eventData && marker.eventData.id === eventId) {
+        this.flyers.forEach(flyer => {
+            if (flyer.eventData && flyer.eventData.id === eventId) {
                 if (isBookmarked) {
-                    marker._icon.classList.add('bookmarked-marker');
+                    flyer._icon.classList.add('event-flyer-bookmarked');
                 } else {
-                    marker._icon.classList.remove('bookmarked-marker');
+                    flyer._icon.classList.remove('event-flyer-bookmarked');
                 }
             }
         });
     }
     
     /**
-     * Clear all event markers from map
+     * Clear all event flyers from map
      */
     clearMarkers() {
-        for (let i = 0; i < this.markers.length; i++) {
-            this.markers[i].remove();
+        for (let i = 0; i < this.flyers.length; i++) {
+            this.flyers[i].remove();
         }
-        this.markers = [];
+        this.flyers = [];
         this.locationCounts = {}; // Reset location tracking for offset calculation
-        this.log('All markers cleared');
+        this.log('All flyers cleared');
     }
     
     /**
-     * Fit map bounds to show all markers
+     * Fit map bounds to show all flyers
      */
     fitMapToMarkers() {
-        if (this.markers.length === 0 || !this.map) {
+        if (this.flyers.length === 0 || !this.map) {
             return;
         }
         
         const bounds = L.latLngBounds();
         
-        // Add all marker positions to bounds
-        for (let i = 0; i < this.markers.length; i++) {
-            bounds.extend(this.markers[i].getLatLng());
+        // Add all flyer positions to bounds
+        for (let i = 0; i < this.flyers.length; i++) {
+            bounds.extend(this.flyers[i].getLatLng());
         }
         
         // Add user location to bounds if available
