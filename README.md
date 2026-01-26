@@ -27,6 +27,58 @@ A **grassroots, mobile-first** Progressive Web App (PWA) for discovering communi
 - 📱 **Responsive**: Mobile-first design, works on all screen sizes
 - 🔄 **Auto-scraping**: Configurable event sources with automatic updates
 
+### 🔍 Functionality Overview
+
+Here's how the main features work from a user's perspective:
+
+#### 🗺️ Interactive Map with Speech Bubbles
+
+When you open the app, you'll see an interactive map displaying local events as markers. Each event appears with a **comic book-style speech bubble** showing the event name, time, and location. The bubbles are designed with:
+- **Collision-aware positioning**: Bubbles automatically spread out to avoid overlapping
+- **Draggable bubbles**: You can drag bubbles to reposition them if needed
+- **Connector lines**: Visual lines connect each bubble to its marker on the map
+- **Smooth animations**: Bubbles follow their markers when you pan or zoom the map
+
+Click on any bubble to see full event details including description, category, and a link to the original source.
+
+#### 🔖 Bookmark Events
+
+Found an interesting event? Save it for later with the **bookmark feature**:
+- **One-tap bookmarking**: Click the bookmark icon on any event to save it
+- **Highlighted bubbles**: Bookmarked events appear with a distinct pink background color
+- **Persistent storage**: Your bookmarks are saved locally and persist across sessions
+- **Maximum 15 bookmarks**: When you add a 16th bookmark, the oldest one is automatically removed (FIFO)
+
+This works entirely offline using your browser's localStorage - no account needed!
+
+#### 📍 Smart Filtering
+
+The filter bar at the top lets you customize which events appear:
+
+| Filter | What It Does |
+|--------|-------------|
+| **Distance** | Slider to show events within 1-10km of your location |
+| **Time** | Show events happening "until sunrise" (perfect for evening outings), "next 24 hours", or "all upcoming" |
+| **Category** | Filter by event type (music, sports, arts, food, etc.) |
+| **Location** | Use GPS location, pick a saved location, or set a custom point on the map |
+
+Filters are combined intelligently - for example, you can see all music events within 3km happening before sunrise.
+
+#### 📱 Progressive Web App (PWA)
+
+The app works like a native mobile app:
+- **Install to home screen**: On mobile, you can add the app to your home screen for quick access
+- **Works offline**: Core functionality works without internet (using cached data)
+- **Fast loading**: Optimized for mobile networks
+- **Responsive design**: Works on phones, tablets, and desktops
+
+#### 🌐 Language Support (i18n)
+
+Switch between English and German with a single click:
+- **Dynamic translation**: All UI text updates instantly when you change language
+- **Localized dates/times**: Times display in local format (e.g., "Heute 20:00" vs "Today 8:00 PM")
+- **Event content**: Event descriptions remain in their original language
+
 ### 🏙️ Multi-Region Support
 
 KRWL HOF now supports viewing events from different Franconian cities! **URL path segment reads config variables (map center, zoom) to position the map** - all regions share the same event data.
