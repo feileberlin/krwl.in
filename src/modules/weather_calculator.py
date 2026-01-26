@@ -60,14 +60,16 @@ class WeatherCalculator:
                 if not weather:
                     continue
                 
-                # Extract feels-like temperature and rain
+                # Extract weather data
                 current = weather.get('current', {})
                 feels_like = current.get('apparent_temperature', current.get('temperature_2m', 15))
                 rain = current.get('rain', 0)
                 temp = current.get('temperature_2m', feels_like)
+                wind_speed = current.get('wind_speed_10m', 0)
+                weather_code = current.get('weather_code', 0)
                 
-                # Generate simple 3-word dresscode
-                dresscode = self._simple_dresscode(feels_like, rain)
+                # Generate simple 3-word dresscode with extreme weather detection
+                dresscode = self._simple_dresscode(feels_like, rain, wind_speed, weather_code)
                 
                 return {
                     'dresscode': dresscode,
@@ -99,7 +101,7 @@ class WeatherCalculator:
         params = {
             'latitude': lat,
             'longitude': lon,
-            'current': 'temperature_2m,apparent_temperature,rain',
+            'current': 'temperature_2m,apparent_temperature,rain,wind_speed_10m,weather_code',
             'timezone': 'auto'
         }
         
@@ -107,9 +109,28 @@ class WeatherCalculator:
         response.raise_for_status()
         return response.json()
     
-    def _simple_dresscode(self, feels_like, rain):
-        """Generate 3-word dresscode from feels-like temp and rain."""
-        # Rain takes priority
+    def _simple_dresscode(self, feels_like, rain, wind_speed=0, weather_code=0):
+        """Generate 3-word dresscode from feels-like temp, rain, and extreme conditions."""
+        # Extreme weather warnings (highest priority)
+        # Weather codes: 95-99=thunderstorm, 85-86=heavy snow, 75-77=heavy snow
+        severe_weather_codes = [75, 77, 85, 86, 95, 96, 99]
+        
+        if weather_code in severe_weather_codes:
+            return "better watch TV"  # Severe weather warning
+        
+        # Extreme cold (dangerous)
+        if feels_like < -15:
+            return "better watch TV"  # Extreme cold warning
+        
+        # Extreme heat (dangerous)
+        if feels_like > 35:
+            return "better watch TV"  # Extreme heat warning
+        
+        # Strong winds (dangerous)
+        if wind_speed > 60:  # >60 km/h
+            return "better watch TV"  # Strong wind warning
+        
+        # Rain takes priority (after extreme conditions)
         if rain > 0:
             if feels_like < 10:
                 return "warm rain jacket"
