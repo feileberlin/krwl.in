@@ -10,5 +10,7 @@
   <circle cx="17.5" cy="10.5" r=".5" fill="currentColor" />
   <circle cx="6.5" cy="12.5" r=".5" fill="currentColor" />
   <circle cx="8.5" cy="7.5" r=".5" fill="currentColor" />
+    </g>
+  </g>
   </g>
 </svg>
