@@ -3,20 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🗯️ Comic Style Speech Bubbles - 8 Directions Demo</title>
+    <title>🗯️ Comic Speech Bubbles - Single Path SVG</title>
     <style>
-        /* ═══════════════════════════════════════════════════════════════
-           DESIGN TOKENS - EcoBarbie Color Palette
-           ═══════════════════════════════════════════════════════════════ */
         :root {
             --color-primary: #D689B8;
             --color-shade-50: #6b445c;
-            --color-tint-50: #eac0da;
             --color-bg-primary: #0d1117;
             --color-bg-secondary: #161b22;
             --color-text-primary: #c9d1d9;
-            --bubble-bg: #ffffff;
-            --bubble-border: #333;
+            --bubble-fill: #ffffff;
+            --bubble-stroke: #333333;
+            --bubble-stroke-width: 3;
         }
 
         * {
@@ -46,16 +43,14 @@
             margin-bottom: 30px;
         }
 
-        /* ═══════════════════════════════════════════════════════════════
-           GRID LAYOUT - 3x3 for 8 Directions + Center Label
-           ═══════════════════════════════════════════════════════════════ */
+        /* Demo Container */
         .demo-container {
-            max-width: 900px;
+            max-width: 1000px;
             margin: 0 auto 40px;
             background: linear-gradient(180deg, #1a1f2e 0%, #0d1117 100%);
             border: 2px solid var(--color-primary);
             border-radius: 16px;
-            padding: 30px;
+            padding: 40px;
         }
 
         .direction-grid {
@@ -70,8 +65,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 160px;
-            position: relative;
+            min-height: 200px;
         }
 
         .grid-cell.center {
@@ -84,15 +78,16 @@
         .center-text {
             color: var(--color-primary);
             font-weight: bold;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             text-align: center;
         }
 
         .center-subtext {
             color: var(--color-shade-50);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             margin-top: 8px;
             text-align: center;
+            line-height: 1.6;
         }
 
         .direction-label {
@@ -100,253 +95,48 @@
             font-size: 0.7rem;
             font-weight: bold;
             text-transform: uppercase;
-            margin-top: 10px;
+            margin-top: 12px;
             opacity: 0.8;
         }
 
         /* ═══════════════════════════════════════════════════════════════
-           COMIC SPEECH BUBBLE - Base Style
-           Authentic comic book look with thick border
+           SVG SPEECH BUBBLES - Single Continuous Path
+           The entire bubble shape + tail is ONE path with stroke border
            ═══════════════════════════════════════════════════════════════ */
-        .speech-bubble {
-            position: relative;
-            background: var(--bubble-bg);
-            border: 3px solid var(--bubble-border);
-            border-radius: 20px;
-            padding: 12px 16px;
-            min-width: 120px;
-            max-width: 160px;
-            text-align: center;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--color-shade-50);
-            /* Unified shadow on bubble + tail */
+        .speech-bubble-svg {
             filter: drop-shadow(3px 3px 6px rgba(0, 0, 0, 0.3));
+            transition: transform 0.2s ease, filter 0.2s ease;
         }
 
-        .speech-bubble .event-time {
-            color: var(--color-primary);
-            font-size: 1rem;
-            font-weight: 700;
-            margin-bottom: 4px;
-        }
-
-        .speech-bubble .event-title {
-            font-size: 0.8rem;
-            line-height: 1.3;
-        }
-
-        /* ═══════════════════════════════════════════════════════════════
-           COMIC TAIL DIRECTIONS - 8 Fixed Positions
-           Using CSS border triangles for authentic comic look
-           
-           Direction Map:
-           ╔═════╦═════╦═════╗
-           ║ TL  ║  T  ║ TR  ║
-           ╠═════╬═════╬═════╣
-           ║  L  ║     ║  R  ║
-           ╠═════╬═════╬═════╣
-           ║ BL  ║  B  ║ BR  ║
-           ╚═════╩═════╩═════╝
-           ═══════════════════════════════════════════════════════════════ */
-
-        /* TAIL POINTING DOWN (bubble is above target) */
-        .speech-bubble.tail-bottom::after,
-        .speech-bubble.tail-bottom::before {
-            content: '';
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-        .speech-bubble.tail-bottom::after {
-            bottom: -20px;
-            border-left: 15px solid transparent;
-            border-right: 15px solid transparent;
-            border-top: 22px solid var(--bubble-bg);
-        }
-        .speech-bubble.tail-bottom::before {
-            bottom: -25px;
-            border-left: 18px solid transparent;
-            border-right: 18px solid transparent;
-            border-top: 26px solid var(--bubble-border);
-            z-index: -1;
-        }
-
-        /* TAIL POINTING UP (bubble is below target) */
-        .speech-bubble.tail-top::after,
-        .speech-bubble.tail-top::before {
-            content: '';
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-        .speech-bubble.tail-top::after {
-            top: -20px;
-            border-left: 15px solid transparent;
-            border-right: 15px solid transparent;
-            border-bottom: 22px solid var(--bubble-bg);
-        }
-        .speech-bubble.tail-top::before {
-            top: -25px;
-            border-left: 18px solid transparent;
-            border-right: 18px solid transparent;
-            border-bottom: 26px solid var(--bubble-border);
-            z-index: -1;
-        }
-
-        /* TAIL POINTING LEFT (bubble is right of target) */
-        .speech-bubble.tail-left::after,
-        .speech-bubble.tail-left::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-        .speech-bubble.tail-left::after {
-            left: -20px;
-            border-top: 15px solid transparent;
-            border-bottom: 15px solid transparent;
-            border-right: 22px solid var(--bubble-bg);
-        }
-        .speech-bubble.tail-left::before {
-            left: -25px;
-            border-top: 18px solid transparent;
-            border-bottom: 18px solid transparent;
-            border-right: 26px solid var(--bubble-border);
-            z-index: -1;
-        }
-
-        /* TAIL POINTING RIGHT (bubble is left of target) */
-        .speech-bubble.tail-right::after,
-        .speech-bubble.tail-right::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-        .speech-bubble.tail-right::after {
-            right: -20px;
-            border-top: 15px solid transparent;
-            border-bottom: 15px solid transparent;
-            border-left: 22px solid var(--bubble-bg);
-        }
-        .speech-bubble.tail-right::before {
-            right: -25px;
-            border-top: 18px solid transparent;
-            border-bottom: 18px solid transparent;
-            border-left: 26px solid var(--bubble-border);
-            z-index: -1;
-        }
-
-        /* TAIL POINTING BOTTOM-LEFT (bubble is top-right of target) */
-        .speech-bubble.tail-bottom-left::after,
-        .speech-bubble.tail-bottom-left::before {
-            content: '';
-            position: absolute;
-        }
-        .speech-bubble.tail-bottom-left::after {
-            bottom: -18px;
-            left: 20px;
-            border-left: 12px solid transparent;
-            border-right: 18px solid transparent;
-            border-top: 22px solid var(--bubble-bg);
-            transform: rotate(-30deg);
-        }
-        .speech-bubble.tail-bottom-left::before {
-            bottom: -23px;
-            left: 17px;
-            border-left: 15px solid transparent;
-            border-right: 21px solid transparent;
-            border-top: 26px solid var(--bubble-border);
-            transform: rotate(-30deg);
-            z-index: -1;
-        }
-
-        /* TAIL POINTING BOTTOM-RIGHT (bubble is top-left of target) */
-        .speech-bubble.tail-bottom-right::after,
-        .speech-bubble.tail-bottom-right::before {
-            content: '';
-            position: absolute;
-        }
-        .speech-bubble.tail-bottom-right::after {
-            bottom: -18px;
-            right: 20px;
-            border-left: 18px solid transparent;
-            border-right: 12px solid transparent;
-            border-top: 22px solid var(--bubble-bg);
-            transform: rotate(30deg);
-        }
-        .speech-bubble.tail-bottom-right::before {
-            bottom: -23px;
-            right: 17px;
-            border-left: 21px solid transparent;
-            border-right: 15px solid transparent;
-            border-top: 26px solid var(--bubble-border);
-            transform: rotate(30deg);
-            z-index: -1;
-        }
-
-        /* TAIL POINTING TOP-LEFT (bubble is bottom-right of target) */
-        .speech-bubble.tail-top-left::after,
-        .speech-bubble.tail-top-left::before {
-            content: '';
-            position: absolute;
-        }
-        .speech-bubble.tail-top-left::after {
-            top: -18px;
-            left: 20px;
-            border-left: 12px solid transparent;
-            border-right: 18px solid transparent;
-            border-bottom: 22px solid var(--bubble-bg);
-            transform: rotate(30deg);
-        }
-        .speech-bubble.tail-top-left::before {
-            top: -23px;
-            left: 17px;
-            border-left: 15px solid transparent;
-            border-right: 21px solid transparent;
-            border-bottom: 26px solid var(--bubble-border);
-            transform: rotate(30deg);
-            z-index: -1;
-        }
-
-        /* TAIL POINTING TOP-RIGHT (bubble is bottom-left of target) */
-        .speech-bubble.tail-top-right::after,
-        .speech-bubble.tail-top-right::before {
-            content: '';
-            position: absolute;
-        }
-        .speech-bubble.tail-top-right::after {
-            top: -18px;
-            right: 20px;
-            border-left: 18px solid transparent;
-            border-right: 12px solid transparent;
-            border-bottom: 22px solid var(--bubble-bg);
-            transform: rotate(-30deg);
-        }
-        .speech-bubble.tail-top-right::before {
-            top: -23px;
-            right: 17px;
-            border-left: 21px solid transparent;
-            border-right: 15px solid transparent;
-            border-bottom: 26px solid var(--bubble-border);
-            transform: rotate(-30deg);
-            z-index: -1;
-        }
-
-        /* ═══════════════════════════════════════════════════════════════
-           HOVER EFFECTS
-           ═══════════════════════════════════════════════════════════════ */
-        .speech-bubble:hover {
+        .speech-bubble-svg:hover {
             transform: scale(1.05);
             filter: drop-shadow(4px 4px 10px rgba(0, 0, 0, 0.4));
         }
 
-        /* ═══════════════════════════════════════════════════════════════
-           INFO SECTION
-           ═══════════════════════════════════════════════════════════════ */
+        .bubble-path {
+            fill: var(--bubble-fill);
+            stroke: var(--bubble-stroke);
+            stroke-width: var(--bubble-stroke-width);
+            stroke-linejoin: round;
+            stroke-linecap: round;
+        }
+
+        .bubble-text {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            font-size: 11px;
+            fill: var(--color-shade-50);
+            text-anchor: middle;
+        }
+
+        .bubble-title {
+            font-weight: 700;
+            font-size: 13px;
+            fill: var(--color-primary);
+        }
+
+        /* Info Section */
         .info-section {
-            max-width: 900px;
+            max-width: 1000px;
             margin: 0 auto;
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -393,7 +183,7 @@
         }
 
         .status-bar {
-            max-width: 900px;
+            max-width: 1000px;
             margin: 30px auto;
             background: #21262d;
             padding: 12px 20px;
@@ -402,120 +192,310 @@
             text-align: center;
             color: var(--color-primary);
         }
+
+        /* Code example */
+        .code-example {
+            max-width: 1000px;
+            margin: 30px auto;
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 20px;
+            overflow-x: auto;
+        }
+
+        .code-example h4 {
+            color: var(--color-primary);
+            margin-bottom: 12px;
+        }
+
+        .code-example pre {
+            color: #c9d1d9;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            white-space: pre-wrap;
+        }
+
+        .code-example .comment {
+            color: #8b949e;
+        }
+
+        .code-example .tag {
+            color: #7ee787;
+        }
+
+        .code-example .attr {
+            color: #79c0ff;
+        }
+
+        .code-example .value {
+            color: #a5d6ff;
+        }
     </style>
 </head>
 <body>
-    <h1>🗯️ Comic Style Speech Bubbles</h1>
-    <p class="subtitle">8 authentic comic tail directions with CSS border triangles</p>
+    <h1>🗯️ Comic Speech Bubbles</h1>
+    <p class="subtitle">Single continuous SVG path - bubble AND tail as one shape with unified border</p>
 
     <div class="demo-container">
         <div class="direction-grid">
             <!-- Row 1: Top-Left, Top, Top-Right -->
             <div class="grid-cell">
-                <div class="speech-bubble tail-bottom-right">
-                    <div class="event-time">↖ TL</div>
-                    <div class="event-title">Top-Left Tail</div>
-                </div>
-                <span class="direction-label">tail-bottom-right</span>
+                <!-- Tail pointing to bottom-right (bubble is top-left of target) -->
+                <svg class="speech-bubble-svg" width="160" height="120" viewBox="0 0 160 120">
+                    <path class="bubble-path" d="
+                        M 20 10 
+                        Q 10 10, 10 20
+                        L 10 70
+                        Q 10 80, 20 80
+                        L 100 80
+                        L 130 110
+                        L 115 80
+                        L 140 80
+                        Q 150 80, 150 70
+                        L 150 20
+                        Q 150 10, 140 10
+                        Z
+                    "/>
+                    <text class="bubble-text bubble-title" x="80" y="38">↖ TOP-LEFT</text>
+                    <text class="bubble-text" x="80" y="55">Tail → Bottom-Right</text>
+                </svg>
+                <span class="direction-label">tail-br</span>
             </div>
+            
             <div class="grid-cell">
-                <div class="speech-bubble tail-bottom">
-                    <div class="event-time">↑ TOP</div>
-                    <div class="event-title">Points Down</div>
-                </div>
+                <!-- Tail pointing down (bubble is above target) -->
+                <svg class="speech-bubble-svg" width="160" height="120" viewBox="0 0 160 120">
+                    <path class="bubble-path" d="
+                        M 20 10 
+                        Q 10 10, 10 20
+                        L 10 70
+                        Q 10 80, 20 80
+                        L 60 80
+                        L 80 110
+                        L 100 80
+                        L 140 80
+                        Q 150 80, 150 70
+                        L 150 20
+                        Q 150 10, 140 10
+                        Z
+                    "/>
+                    <text class="bubble-text bubble-title" x="80" y="38">↑ TOP</text>
+                    <text class="bubble-text" x="80" y="55">Tail → Down</text>
+                </svg>
                 <span class="direction-label">tail-bottom</span>
             </div>
+
             <div class="grid-cell">
-                <div class="speech-bubble tail-bottom-left">
-                    <div class="event-time">↗ TR</div>
-                    <div class="event-title">Top-Right Tail</div>
-                </div>
-                <span class="direction-label">tail-bottom-left</span>
+                <!-- Tail pointing to bottom-left (bubble is top-right of target) -->
+                <svg class="speech-bubble-svg" width="160" height="120" viewBox="0 0 160 120">
+                    <path class="bubble-path" d="
+                        M 20 10 
+                        Q 10 10, 10 20
+                        L 10 70
+                        Q 10 80, 20 80
+                        L 45 80
+                        L 30 110
+                        L 60 80
+                        L 140 80
+                        Q 150 80, 150 70
+                        L 150 20
+                        Q 150 10, 140 10
+                        Z
+                    "/>
+                    <text class="bubble-text bubble-title" x="80" y="38">↗ TOP-RIGHT</text>
+                    <text class="bubble-text" x="80" y="55">Tail → Bottom-Left</text>
+                </svg>
+                <span class="direction-label">tail-bl</span>
             </div>
 
-            <!-- Row 2: Left, Center (label), Right -->
+            <!-- Row 2: Left, Center, Right -->
             <div class="grid-cell">
-                <div class="speech-bubble tail-right">
-                    <div class="event-time">← LEFT</div>
-                    <div class="event-title">Points Right</div>
-                </div>
+                <!-- Tail pointing right (bubble is left of target) -->
+                <svg class="speech-bubble-svg" width="160" height="110" viewBox="0 0 160 110">
+                    <path class="bubble-path" d="
+                        M 20 10 
+                        Q 10 10, 10 20
+                        L 10 70
+                        Q 10 80, 20 80
+                        L 120 80
+                        Q 130 80, 130 70
+                        L 130 55
+                        L 155 50
+                        L 130 45
+                        L 130 20
+                        Q 130 10, 120 10
+                        Z
+                    "/>
+                    <text class="bubble-text bubble-title" x="70" y="38">← LEFT</text>
+                    <text class="bubble-text" x="70" y="55">Tail → Right</text>
+                </svg>
                 <span class="direction-label">tail-right</span>
             </div>
+
             <div class="grid-cell center">
-                <div class="center-text">8 DIRECTIONS</div>
+                <div class="center-text">SINGLE PATH</div>
                 <div class="center-subtext">
-                    \  |  /<br>
-                    —    —<br>
-                    /  |  \
+                    One continuous SVG path<br>
+                    draws bubble + tail together<br>
+                    with unified stroke border
                 </div>
             </div>
+
             <div class="grid-cell">
-                <div class="speech-bubble tail-left">
-                    <div class="event-time">→ RIGHT</div>
-                    <div class="event-title">Points Left</div>
-                </div>
+                <!-- Tail pointing left (bubble is right of target) -->
+                <svg class="speech-bubble-svg" width="160" height="110" viewBox="0 0 160 110">
+                    <path class="bubble-path" d="
+                        M 40 10 
+                        Q 30 10, 30 20
+                        L 30 45
+                        L 5 50
+                        L 30 55
+                        L 30 70
+                        Q 30 80, 40 80
+                        L 140 80
+                        Q 150 80, 150 70
+                        L 150 20
+                        Q 150 10, 140 10
+                        Z
+                    "/>
+                    <text class="bubble-text bubble-title" x="90" y="38">→ RIGHT</text>
+                    <text class="bubble-text" x="90" y="55">Tail → Left</text>
+                </svg>
                 <span class="direction-label">tail-left</span>
             </div>
 
             <!-- Row 3: Bottom-Left, Bottom, Bottom-Right -->
             <div class="grid-cell">
-                <div class="speech-bubble tail-top-right">
-                    <div class="event-time">↙ BL</div>
-                    <div class="event-title">Bottom-Left</div>
-                </div>
-                <span class="direction-label">tail-top-right</span>
+                <!-- Tail pointing to top-right (bubble is bottom-left of target) -->
+                <svg class="speech-bubble-svg" width="160" height="120" viewBox="0 0 160 120">
+                    <path class="bubble-path" d="
+                        M 20 40 
+                        Q 10 40, 10 50
+                        L 10 100
+                        Q 10 110, 20 110
+                        L 140 110
+                        Q 150 110, 150 100
+                        L 150 50
+                        Q 150 40, 140 40
+                        L 115 40
+                        L 130 10
+                        L 100 40
+                        Z
+                    "/>
+                    <text class="bubble-text bubble-title" x="80" y="68">↙ BOTTOM-LEFT</text>
+                    <text class="bubble-text" x="80" y="85">Tail → Top-Right</text>
+                </svg>
+                <span class="direction-label">tail-tr</span>
             </div>
+
             <div class="grid-cell">
-                <div class="speech-bubble tail-top">
-                    <div class="event-time">↓ BOTTOM</div>
-                    <div class="event-title">Points Up</div>
-                </div>
+                <!-- Tail pointing up (bubble is below target) -->
+                <svg class="speech-bubble-svg" width="160" height="120" viewBox="0 0 160 120">
+                    <path class="bubble-path" d="
+                        M 20 40 
+                        Q 10 40, 10 50
+                        L 10 100
+                        Q 10 110, 20 110
+                        L 140 110
+                        Q 150 110, 150 100
+                        L 150 50
+                        Q 150 40, 140 40
+                        L 100 40
+                        L 80 10
+                        L 60 40
+                        Z
+                    "/>
+                    <text class="bubble-text bubble-title" x="80" y="68">↓ BOTTOM</text>
+                    <text class="bubble-text" x="80" y="85">Tail → Up</text>
+                </svg>
                 <span class="direction-label">tail-top</span>
             </div>
+
             <div class="grid-cell">
-                <div class="speech-bubble tail-top-left">
-                    <div class="event-time">↘ BR</div>
-                    <div class="event-title">Bottom-Right</div>
-                </div>
-                <span class="direction-label">tail-top-left</span>
+                <!-- Tail pointing to top-left (bubble is bottom-right of target) -->
+                <svg class="speech-bubble-svg" width="160" height="120" viewBox="0 0 160 120">
+                    <path class="bubble-path" d="
+                        M 20 40 
+                        Q 10 40, 10 50
+                        L 10 100
+                        Q 10 110, 20 110
+                        L 140 110
+                        Q 150 110, 150 100
+                        L 150 50
+                        Q 150 40, 140 40
+                        L 60 40
+                        L 30 10
+                        L 45 40
+                        Z
+                    "/>
+                    <text class="bubble-text bubble-title" x="80" y="68">↘ BOTTOM-RIGHT</text>
+                    <text class="bubble-text" x="80" y="85">Tail → Top-Left</text>
+                </svg>
+                <span class="direction-label">tail-tl</span>
             </div>
         </div>
     </div>
 
     <div class="status-bar">
-        ✨ Authentic comic-style speech bubbles with 8 pre-defined tail directions
+        ✨ Single continuous SVG path with unified stroke border - authentic comic style!
+    </div>
+
+    <div class="code-example">
+        <h4>💡 SVG Path Structure</h4>
+        <pre><span class="comment">&lt;!-- Single path draws bubble + tail as one continuous shape --&gt;</span>
+<span class="tag">&lt;svg</span> <span class="attr">width</span>=<span class="value">"160"</span> <span class="attr">height</span>=<span class="value">"120"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;path</span> <span class="attr">d</span>=<span class="value">"
+    M 20 10              </span><span class="comment">&lt;!-- Start top-left corner --&gt;</span><span class="value">
+    Q 10 10, 10 20       </span><span class="comment">&lt;!-- Rounded corner (quadratic curve) --&gt;</span><span class="value">
+    L 10 70              </span><span class="comment">&lt;!-- Left edge --&gt;</span><span class="value">
+    Q 10 80, 20 80       </span><span class="comment">&lt;!-- Bottom-left corner --&gt;</span><span class="value">
+    L 60 80              </span><span class="comment">&lt;!-- Bottom edge to tail start --&gt;</span><span class="value">
+    L 80 110             </span><span class="comment">&lt;!-- ↓ TAIL TIP (points down) --&gt;</span><span class="value">
+    L 100 80             </span><span class="comment">&lt;!-- Return from tail --&gt;</span><span class="value">
+    L 140 80             </span><span class="comment">&lt;!-- Continue bottom edge --&gt;</span><span class="value">
+    Q 150 80, 150 70     </span><span class="comment">&lt;!-- Bottom-right corner --&gt;</span><span class="value">
+    L 150 20             </span><span class="comment">&lt;!-- Right edge --&gt;</span><span class="value">
+    Q 150 10, 140 10     </span><span class="comment">&lt;!-- Top-right corner --&gt;</span><span class="value">
+    Z                    </span><span class="comment">&lt;!-- Close path to start --&gt;</span><span class="value">
+  "</span>
+  <span class="attr">fill</span>=<span class="value">"white"</span>
+  <span class="attr">stroke</span>=<span class="value">"#333"</span>
+  <span class="attr">stroke-width</span>=<span class="value">"3"</span>
+  <span class="tag">/&gt;</span>
+<span class="tag">&lt;/svg&gt;</span></pre>
     </div>
 
     <div class="info-section">
         <div class="info-card">
             <h3>🎨 Authentic Comic Style</h3>
             <ul>
-                <li>Thick black border (3px)</li>
-                <li>White background with border</li>
-                <li>Sharp pointed triangle tails</li>
-                <li>8 fixed directions like classic comics</li>
-                <li>Unified drop-shadow on bubble + tail</li>
+                <li>Single continuous path for entire shape</li>
+                <li>Unified stroke border flows around bubble + tail</li>
+                <li>No separate elements or pseudo-elements</li>
+                <li>Smooth rounded corners with Q curves</li>
+                <li>Sharp pointed tail integrated into shape</li>
             </ul>
         </div>
 
         <div class="info-card">
-            <h3>⚙️ CSS Implementation</h3>
+            <h3>⚙️ SVG Implementation</h3>
             <ul>
-                <li><code>::before</code> for border outline</li>
-                <li><code>::after</code> for filled triangle</li>
-                <li>Border triangle technique</li>
-                <li>No JavaScript required</li>
-                <li>Pure CSS solution</li>
+                <li><code>M</code> - Move to start point</li>
+                <li><code>L</code> - Line to next point</li>
+                <li><code>Q</code> - Quadratic curve (rounded corners)</li>
+                <li><code>Z</code> - Close path back to start</li>
+                <li><code>stroke</code> - Single unified border</li>
             </ul>
         </div>
 
         <div class="info-card">
-            <h3>📐 Tail Classes</h3>
+            <h3>📐 8 Tail Directions</h3>
             <ul>
-                <li><code>.tail-top</code> - points up ↑</li>
-                <li><code>.tail-bottom</code> - points down ↓</li>
-                <li><code>.tail-left</code> - points left ←</li>
-                <li><code>.tail-right</code> - points right →</li>
+                <li>Top: tail points ↓ down</li>
+                <li>Bottom: tail points ↑ up</li>
+                <li>Left: tail points → right</li>
+                <li>Right: tail points ← left</li>
                 <li>+ 4 diagonal variants</li>
             </ul>
         </div>
