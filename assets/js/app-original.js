@@ -742,7 +742,7 @@ class EventsApp {
                         // Support customization from config or use default
                         const userMarkerConfig = this.config.map.user_location_marker || {};
                         const userIconUrl = userMarkerConfig.icon || 
-                            (window.MARKER_ICONS && window.MARKER_ICONS['marker-geolocation']) ||
+                            (window.MARKER_ICONS && window.MARKER_ICONS['marker-lucide-geolocation']) ||
                             'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48Y2lyY2xlIGN4PSIxMiIgY3k9IjEyIiByPSI4IiBmaWxsPSIjNENBRjUwIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIvPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjMiIGZpbGw9IiNmZmYiLz48L3N2Zz4=';
                         const userIconSize = userMarkerConfig.size || [32, 48];
                         const userIconAnchor = userMarkerConfig.anchor || [userIconSize[0] / 2, userIconSize[1]];
@@ -1652,15 +1652,15 @@ class EventsApp {
             'pool': 'marker-swimming',
             
             // Community & Social Services
-            'community': 'marker-community',
-            'social': 'marker-community',
-            'meetup': 'marker-community',
-            'gathering': 'marker-community',
-            'meeting': 'marker-community',
+            'community': 'marker-lucide-community',
+            'social': 'marker-lucide-community',
+            'meetup': 'marker-lucide-community',
+            'gathering': 'marker-lucide-community',
+            'meeting': 'marker-lucide-community',
             
             // Arts & Culture
-            'arts': 'marker-arts',
-            'art': 'marker-arts',
+            'arts': 'marker-lucide-arts',
+            'art': 'marker-lucide-arts',
             'exhibition': 'marker-museum',
             'gallery': 'marker-museum',
             'museum': 'marker-museum',
@@ -1685,7 +1685,7 @@ class EventsApp {
             'landmark': 'marker-tower',
             'ruins': 'marker-ruins',
             'castle': 'marker-castle',
-            'palace': 'marker-palace',
+            'palace': 'marker-lucide-palace',
             
             // Parks & Nature
             'park': 'marker-park',
@@ -1705,9 +1705,9 @@ class EventsApp {
             'books': 'marker-library',
             
             // Default fallback
-            'other': 'marker-default',
-            'general': 'marker-default',
-            'event': 'marker-default'
+            'other': 'marker-lucide-default',
+            'general': 'marker-lucide-default',
+            'event': 'marker-lucide-default'
         };
         
         const markerName = iconNameMap[category] || iconNameMap['other'];
@@ -1718,7 +1718,7 @@ class EventsApp {
         }
         
         // Fallback: try alternative marker names
-        const fallbackNames = ['marker-default', 'marker-community', 'marker-festivals'];
+        const fallbackNames = ['marker-lucide-default', 'marker-lucide-community', 'marker-festivals'];
         for (const name of fallbackNames) {
             if (window.MARKER_ICONS && window.MARKER_ICONS[name]) {
                 return window.MARKER_ICONS[name];

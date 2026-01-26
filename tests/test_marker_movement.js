@@ -34,7 +34,7 @@ global.L = {
 // Mock window object
 global.window = {
     MARKER_ICONS: {
-        'marker-geolocation': 'test-icon-url'
+        'marker-lucide-geolocation': 'test-icon-url'
     }
 };
 

@@ -5,7 +5,12 @@
   <g transform="translate(0.0, 6.25) scale(6.25)">
 <!-- Lucide icon (scaled and positioned) --><g transform="translate(16, 15) scale(0.5)" stroke="#D689B8" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
     <g transform="translate(-12, -12)">
-<path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" />
-  <circle cx="12" cy="10" r="3" />
+<path d="M12 22a1 1 0 0 1 0-20 10 9 0 0 1 10 9 5 5 0 0 1-5 5h-2.25a1.75 1.75 0 0 0-1.4 2.8l.3.4a1.75 1.75 0 0 1-1.4 2.8z" />
+  <circle cx="13.5" cy="6.5" r=".5" fill="currentColor" />
+  <circle cx="17.5" cy="10.5" r=".5" fill="currentColor" />
+  <circle cx="6.5" cy="12.5" r=".5" fill="currentColor" />
+  <circle cx="8.5" cy="7.5" r=".5" fill="currentColor" />
+    </g>
+  </g>
   </g>
 </svg>
