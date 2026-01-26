@@ -12,6 +12,7 @@ from urllib.parse import quote
 from datetime import datetime, timedelta
 from bs4 import BeautifulSoup
 import logging
+import time
 
 logger = logging.getLogger(__name__)
 
@@ -37,6 +38,10 @@ class WeatherScraper:
         self.timeout = weather_config.get('timeout', 10)
         self.user_agent = weather_config.get('user_agent', 
             'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36')
+        
+        # Retry config
+        self.max_retries = weather_config.get('max_retries', 3)
+        self.retry_delay_base = weather_config.get('retry_delay_base', 1.0)  # seconds
     
     def get_weather(self, location_name=None, lat=None, lon=None, force_refresh=False):
         """Get weather for location, using cache if available."""
@@ -56,50 +61,84 @@ class WeatherScraper:
         return weather_data
     
     def _scrape_weather(self, location_name, lat=None, lon=None):
-        """Scrape weather from MSN Weather using coordinates."""
-        try:
-            # Build URL using coordinates if provided, otherwise use location name
-            if lat is not None and lon is not None:
-                # Round coordinates to 4 decimal places for URL compatibility and caching consistency
-                lat_rounded = round(float(lat), 4)
-                lon_rounded = round(float(lon), 4)
-                # MSN Weather accepts "lat,lon" format in the location URL
-                url = f"https://www.msn.com/en-us/weather/forecast/in-{lat_rounded},{lon_rounded}"
-            elif location_name:
-                # Fallback to location name (URL-encoded)
-                encoded_location = quote(location_name)
-                url = f"https://www.msn.com/en-us/weather/forecast/in-{encoded_location}"
-            else:
-                # Default fallback
-                url = "https://www.msn.com/en-us/weather/forecast/in-Hof,Bavaria,Germany"
+        """Scrape weather from MSN Weather using coordinates with retry logic."""
+        last_error = None
+        
+        for attempt in range(self.max_retries):
+            try:
+                # Build URL using coordinates if provided, otherwise use location name
+                if lat is not None and lon is not None:
+                    # Round coordinates to 4 decimal places for URL compatibility and caching consistency
+                    lat_rounded = round(float(lat), 4)
+                    lon_rounded = round(float(lon), 4)
+                    # MSN Weather accepts "lat,lon" format in the location URL
+                    url = f"https://www.msn.com/en-us/weather/forecast/in-{lat_rounded},{lon_rounded}"
+                elif location_name:
+                    # Fallback to location name (URL-encoded)
+                    encoded_location = quote(location_name)
+                    url = f"https://www.msn.com/en-us/weather/forecast/in-{encoded_location}"
+                else:
+                    # Default fallback
+                    url = "https://www.msn.com/en-us/weather/forecast/in-Hof,Bavaria,Germany"
+                
+                if attempt > 0:
+                    logger.info(f"Retry attempt {attempt + 1}/{self.max_retries}")
+                
+                logger.debug(f"Fetching weather from: {url}")
+                
+                # Fetch page
+                response = requests.get(url, headers={'User-Agent': self.user_agent}, timeout=self.timeout)
+                response.raise_for_status()
+                
+                # Parse HTML
+                soup = BeautifulSoup(response.content, 'html.parser')
+                
+                # Extract dresscode
+                dresscode = self._extract_dresscode(soup)
+                if not dresscode or not self._is_valid_dresscode(dresscode):
+                    logger.warning(f"No valid dresscode found in response (attempt {attempt + 1}/{self.max_retries})")
+                    last_error = "invalid_dresscode"
+                    if attempt < self.max_retries - 1:
+                        delay = self.retry_delay_base * (2 ** attempt)
+                        time.sleep(delay)
+                        continue
+                    return None
+                
+                # Extract temperature (optional)
+                temperature = self._extract_temperature(soup)
+                
+                return {
+                    'dresscode': dresscode,
+                    'temperature': temperature,
+                    'location': location_name,
+                    'timestamp': datetime.now().isoformat()
+                }
+                
+            except requests.exceptions.Timeout as e:
+                last_error = f"timeout: {str(e)}"
+                logger.warning(f"Request timeout (attempt {attempt + 1}/{self.max_retries}): {e}")
+            except requests.exceptions.ConnectionError as e:
+                last_error = f"connection_error: {str(e)}"
+                logger.warning(f"Connection error (attempt {attempt + 1}/{self.max_retries}): {e}")
+            except requests.exceptions.HTTPError as e:
+                last_error = f"http_error: {str(e)}"
+                logger.warning(f"HTTP error (attempt {attempt + 1}/{self.max_retries}): {e}")
+            except requests.exceptions.RequestException as e:
+                last_error = f"request_error: {str(e)}"
+                logger.warning(f"Request failed (attempt {attempt + 1}/{self.max_retries}): {e}")
+            except Exception as e:
+                last_error = f"unexpected_error: {str(e)}"
+                logger.error(f"Unexpected error during weather scraping (attempt {attempt + 1}/{self.max_retries}): {e}")
             
-            logger.debug(f"Fetching weather from: {url}")
-            
-            # Fetch page
-            response = requests.get(url, headers={'User-Agent': self.user_agent}, timeout=self.timeout)
-            response.raise_for_status()
-            
-            # Parse HTML
-            soup = BeautifulSoup(response.content, 'html.parser')
-            
-            # Extract dresscode
-            dresscode = self._extract_dresscode(soup)
-            if not dresscode or not self._is_valid_dresscode(dresscode):
-                return None
-            
-            # Extract temperature (optional)
-            temperature = self._extract_temperature(soup)
-            
-            return {
-                'dresscode': dresscode,
-                'temperature': temperature,
-                'location': location_name,
-                'timestamp': datetime.now().isoformat()
-            }
-            
-        except Exception as e:
-            logger.error(f"Weather scraping failed: {e}")
-            return None
+            # Exponential backoff before retry (except on last attempt)
+            if attempt < self.max_retries - 1:
+                delay = self.retry_delay_base * (2 ** attempt)
+                logger.debug(f"Waiting {delay}s before retry...")
+                time.sleep(delay)
+        
+        # All retries exhausted
+        logger.error(f"Weather scraping failed after {self.max_retries} attempts. Last error: {last_error}")
+        return None
     
     def _extract_dresscode(self, soup):
         """Extract dresscode from page."""
