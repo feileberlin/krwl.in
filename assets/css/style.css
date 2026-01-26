@@ -225,17 +225,14 @@ strong, b {
 .event-flyer-bookmarked .event-flyer {
     border-color: var(--color-primary);
     background: var(--color-bg-tertiary, #191016);
-}
-
-.event-flyer-bookmarked .event-flyer-date {
-    background: linear-gradient(135deg, var(--color-accent, #e07fba) 0%, var(--color-warning, #eb7dc0) 100%);
-}
-
-.event-flyer-bookmarked .event-flyer {
     box-shadow: 
         0 2px 12px rgba(0, 0, 0, 0.5),
         0 0 16px rgba(214, 137, 184, 0.4),
         inset 0 0 0 1px var(--color-primary);
+}
+
+.event-flyer-bookmarked .event-flyer-date {
+    background: linear-gradient(135deg, var(--color-accent, #e07fba) 0%, var(--color-warning, #eb7dc0) 100%);
 }
 
 /* Category-specific accent colors (optional, uses data-category attribute) */

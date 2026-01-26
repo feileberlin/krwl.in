@@ -340,16 +340,16 @@ class MapManager {
         // Category for styling
         const category = event.category || 'default';
         
-        // Build compact flyer HTML
+        // Build compact flyer HTML (escape all dynamic content for XSS prevention)
         return `
             <div class="event-flyer" data-category="${this.escapeHtml(category)}" tabindex="0" role="button" aria-label="${this.escapeHtml(title)}">
                 <div class="event-flyer-date">
-                    <span class="flyer-day">${dayStr}</span>
-                    <span class="flyer-date-num">${dateNum}</span>
+                    <span class="flyer-day">${this.escapeHtml(dayStr)}</span>
+                    <span class="flyer-date-num">${this.escapeHtml(String(dateNum))}</span>
                 </div>
                 <div class="event-flyer-content">
                     <div class="flyer-title">${this.escapeHtml(shortTitle)}</div>
-                    <div class="flyer-time">${timeStr}</div>
+                    <div class="flyer-time">${this.escapeHtml(timeStr)}</div>
                 </div>
             </div>
         `.trim();
