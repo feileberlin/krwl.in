@@ -25,6 +25,19 @@ class EventListeners {
         this.setupLocationFilterListener();
         this.setupKeyboardShortcuts();
         this.setupOrientationHandler();
+        this.setupGlobalClickHandler();
+    }
+    
+    /**
+     * Setup global click handler to close dropdowns when clicking outside
+     */
+    setupGlobalClickHandler() {
+        document.addEventListener('click', (e) => {
+            // Close all dropdowns if click is outside filter bar and dropdown
+            if (!e.target.closest('#event-filter-bar') && !e.target.closest('.filter-bar-dropdown')) {
+                CustomDropdown.closeAll();
+            }
+        });
     }
     
     setupDashboardListeners() {
