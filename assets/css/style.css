@@ -235,17 +235,18 @@ strong, b {
     background: linear-gradient(135deg, var(--color-accent, #e07fba) 0%, var(--color-warning, #eb7dc0) 100%);
 }
 
-/* Category-specific accent colors (optional, uses data-category attribute) */
+/* Category-specific accent colors using design tokens
+   All colors derived from ecoBarbie primary (#D689B8) for consistency */
 .event-flyer[data-category="arts"] .event-flyer-date {
-    background: linear-gradient(135deg, #C080B0 0%, #D689B8 100%);
+    background: linear-gradient(135deg, var(--color-shade-50, #6b445c) 0%, var(--color-primary) 100%);
 }
 
 .event-flyer[data-category="palace"] .event-flyer-date {
-    background: linear-gradient(135deg, #B87FAA 0%, #C88DB8 100%);
+    background: linear-gradient(135deg, var(--color-tone-50, #d6afc7) 0%, var(--color-primary-hover, #E8A5C8) 100%);
 }
 
 .event-flyer[data-category="community"] .event-flyer-date {
-    background: linear-gradient(135deg, #D090C0 0%, #E0A0D0 100%);
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-tint-50, #eac0da) 100%);
 }
 
 /* Map fallback when Leaflet fails to load */

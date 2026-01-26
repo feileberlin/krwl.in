@@ -345,7 +345,7 @@ class MapManager {
             <div class="event-flyer" data-category="${this.escapeHtml(category)}" tabindex="0" role="button" aria-label="${this.escapeHtml(title)}">
                 <div class="event-flyer-date">
                     <span class="flyer-day">${this.escapeHtml(dayStr)}</span>
-                    <span class="flyer-date-num">${this.escapeHtml(String(dateNum))}</span>
+                    <span class="flyer-date-num">${dateNum}</span>
                 </div>
                 <div class="event-flyer-content">
                     <div class="flyer-title">${this.escapeHtml(shortTitle)}</div>
