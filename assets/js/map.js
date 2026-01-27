@@ -204,6 +204,7 @@ class MapManager {
     /**
      * Update or create the reference location marker
      * This marker shows the reference point used for distance filtering
+     * Now displayed as a card/flyer similar to event markers for better visibility
      * @param {number} lat - Latitude
      * @param {number} lon - Longitude
      * @param {string} popupText - Popup text (optional, default: 'Reference location')
@@ -217,34 +218,52 @@ class MapManager {
             this.referenceMarker = null;
         }
         
-        // Get user marker config (use same icon for all reference locations)
-        const userMarkerConfig = this.config.map.user_location_marker || {};
-        const userIconUrl = userMarkerConfig.icon || 
-            (window.MARKER_ICONS && window.MARKER_ICONS['marker-lucide-geolocation']) ||
-            'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48Y2lyY2xlIGN4PSIxMiIgY3k9IjEyIiByPSI4IiBmaWxsPSIjNENBRjUwIiBzdHJva2U9IiNmZmYiIHN0cm9rZS13aWR0aD0iMiIvPjxjaXJjbGUgY3g9IjEyIiBjeT0iMTIiIHI9IjMiIGZpbGw9IiNmZmYiLz48L3N2Zz4=';
-        const userIconSize = userMarkerConfig.size || [200, 200];  // Match event marker size
-        const userIconAnchor = userMarkerConfig.anchor || [userIconSize[0] / 2, userIconSize[1]];
-        const userPopupAnchor = userMarkerConfig.popup_anchor || [0, -userIconSize[1]];
+        // Create location card HTML (similar to event flyers)
+        const locationCardHtml = this.createLocationCardHtml(popupText);
         
-        // Create descriptive alt text for accessibility
-        const locationAltText = popupText || 'Location marker';
-        
-        // Use divIcon to allow HTML content with alt text (matches event markers pattern)
-        const userIcon = L.divIcon({
-            className: 'custom-location-marker-icon',
-            html: `<img src="${userIconUrl}" alt="${locationAltText}" style="width: ${userIconSize[0]}px; height: ${userIconSize[1]}px; display: block;" />`,
-            iconSize: userIconSize,
-            iconAnchor: userIconAnchor,
-            popupAnchor: userPopupAnchor
+        // Use divIcon to display as a card (matches event flyer pattern)
+        const locationIcon = L.divIcon({
+            className: 'location-flyer-container',
+            html: locationCardHtml,
+            iconSize: [140, 60],      // Compact card size
+            iconAnchor: [70, 30],     // Center of card
+            popupAnchor: [0, -30]     // Above card
         });
         
         // Create new reference marker
         this.referenceMarker = L.marker([lat, lon], {
-            icon: userIcon,
+            icon: locationIcon,
             zIndexOffset: 1000 // Keep reference marker above event markers
-        }).addTo(this.map).bindPopup(popupText);
+        }).addTo(this.map);
         
-        this.log('Reference marker updated', { lat, lon, popupText });
+        this.log('Reference marker updated as card', { lat, lon, popupText });
+    }
+    
+    /**
+     * Create HTML content for location card (similar to event flyer)
+     * @param {string} label - Label text (e.g., 'You are here', 'Custom location')
+     * @returns {string} HTML content for location card
+     */
+    createLocationCardHtml(label) {
+        const displayLabel = label || 'My Location';
+        const escapedLabel = this.escapeHtml(displayLabel);
+        
+        return `
+            <div class="location-flyer" role="img" aria-label="${escapedLabel}">
+                <div class="location-flyer-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="2" x2="5" y1="12" y2="12"></line>
+                        <line x1="19" x2="22" y1="12" y2="12"></line>
+                        <line x1="12" x2="12" y1="2" y2="5"></line>
+                        <line x1="12" x2="12" y1="19" y2="22"></line>
+                        <circle cx="12" cy="12" r="7"></circle>
+                    </svg>
+                </div>
+                <div class="location-flyer-content">
+                    <span class="location-flyer-label">${escapedLabel}</span>
+                </div>
+            </div>
+        `.trim();
     }
     
     /**

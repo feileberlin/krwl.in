@@ -312,6 +312,62 @@ strong, b {
     background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-tint-50, #eac0da) 100%);
 }
 
+/* ============================================================
+   Location Flyer Card - User's current location display
+   ============================================================ */
+.location-flyer-container {
+    background: transparent !important;
+    border: none !important;
+}
+
+.location-flyer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background: var(--color-primary);
+    border: 2px solid var(--color-tint-50, #eac0da);
+    border-radius: 20px;
+    padding: 6px 12px;
+    min-width: 100px;
+    max-width: 160px;
+    box-shadow: 
+        var(--shadow-medium, 0 2px 8px rgba(0, 0, 0, 0.4)),
+        0 0 16px var(--color-primary);
+    font-family: var(--font-family-base, sans-serif);
+    gap: 8px;
+}
+
+.location-flyer-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-tint-100, #fff);
+    flex-shrink: 0;
+}
+
+.location-flyer-icon svg {
+    width: 20px;
+    height: 20px;
+}
+
+.location-flyer-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0;
+}
+
+.location-flyer-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--color-tint-100, #fff);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
 /* Map fallback when Leaflet fails to load */
 .map-fallback {
     position: absolute;
