@@ -14,6 +14,7 @@ class TemplateEngine {
     
     /**
      * Process template events (dynamic event generation)
+     * Handles both template-based events and relative_time events.
      * @param {Array} events - Events to process
      * @param {Object} filterModule - EventFilter instance for time calculations
      * @returns {Array} Processed events
@@ -28,6 +29,10 @@ class TemplateEngine {
                 // Generate dynamic events from template
                 const generated = this.generateFromTemplate(event, filterModule);
                 processedEvents.push(...generated);
+            } else if (event.relative_time) {
+                // Process relative_time to update start_time and end_time dynamically
+                const processed = this.processRelativeTime(event, filterModule);
+                processedEvents.push(processed);
             } else {
                 // Regular event, no processing needed
                 processedEvents.push(event);
@@ -36,6 +41,73 @@ class TemplateEngine {
         
         this.log(`Processed ${events.length} events → ${processedEvents.length} events (with templates)`);
         return processedEvents;
+    }
+    
+    /**
+     * Process relative_time field to compute dynamic start/end times
+     * @param {Object} event - Event with relative_time specification
+     * @param {Object} filterModule - EventFilter instance for sunrise calculations
+     * @returns {Object} Event with updated start_time and end_time
+     */
+    processRelativeTime(event, filterModule) {
+        const processed = { ...event };
+        const rt = event.relative_time;
+        const now = new Date();
+        
+        // Time conversion constants
+        const MINUTE_MS = 60000;
+        const HOUR_MS = 3600000;
+        // Default fallback when sunrise cannot be calculated (6 hours from now)
+        const DEFAULT_SUNRISE_OFFSET_MS = 6 * HOUR_MS;
+        
+        if (rt.type === 'offset') {
+            // Offset-based: relative to current time
+            // Supports fractional hours (e.g., 1.5 = 1 hour 30 minutes)
+            let offsetMinutes = 0;
+            if (rt.hours) offsetMinutes += rt.hours * 60;
+            if (rt.minutes) offsetMinutes += rt.minutes;
+            
+            // Apply timezone offset if specified
+            if (rt.timezone_offset) {
+                const tzOffsetMinutes = rt.timezone_offset * 60;
+                const localOffset = now.getTimezoneOffset();
+                offsetMinutes += tzOffsetMinutes + localOffset;
+            }
+            
+            const startTime = new Date(now.getTime() + offsetMinutes * MINUTE_MS);
+            processed.start_time = startTime.toISOString();
+            
+            // Calculate end time from duration (supports fractional hours)
+            if (rt.duration_hours) {
+                const endTime = new Date(startTime.getTime() + rt.duration_hours * HOUR_MS);
+                processed.end_time = endTime.toISOString();
+            }
+            
+        } else if (rt.type === 'sunrise_relative') {
+            // Sunrise-relative: offset from next sunrise
+            const sunrise = filterModule ? filterModule.getNextSunrise() : new Date(now.getTime() + DEFAULT_SUNRISE_OFFSET_MS);
+            
+            // Calculate start time (supports fractional hours)
+            let startOffsetMinutes = 0;
+            if (rt.start_offset_hours) startOffsetMinutes += rt.start_offset_hours * 60;
+            if (rt.start_offset_minutes) startOffsetMinutes += rt.start_offset_minutes;
+            const startTime = new Date(sunrise.getTime() + startOffsetMinutes * MINUTE_MS);
+            processed.start_time = startTime.toISOString();
+            
+            // Calculate end time (supports fractional hours)
+            let endOffsetMinutes = 0;
+            if (rt.end_offset_hours) endOffsetMinutes += rt.end_offset_hours * 60;
+            if (rt.end_offset_minutes) endOffsetMinutes += rt.end_offset_minutes;
+            const endTime = new Date(sunrise.getTime() + endOffsetMinutes * MINUTE_MS);
+            processed.end_time = endTime.toISOString();
+        } else {
+            // Unknown relative_time type - log warning and return unmodified
+            this.log(`Unknown relative_time type: ${rt.type} for event ${event.id}`);
+            return processed;
+        }
+        
+        this.log(`Processed relative_time for ${event.id}: ${processed.start_time}`);
+        return processed;
     }
     
     /**
