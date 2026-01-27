@@ -1064,8 +1064,38 @@ strong, b {
     transform: translateY(-1px);
 }
 
-/* Common two-column grid for dashboard sections */
-#custom-locations-list,
+/* Two-column section layout (info left, content right) */
+.dashboard-section--two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    align-items: start;
+}
+
+.dashboard-section--two-col h3 {
+    margin-bottom: 0.5rem;
+}
+
+.dashboard-section--two-col p {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+@media (max-width: 480px) {
+    .dashboard-section--two-col {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Custom locations list - stacked rows in right column */
+#custom-locations-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+/* Common two-column grid for forms */
 .dashboard-form {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -1073,7 +1103,6 @@ strong, b {
 }
 
 @media (max-width: 480px) {
-    #custom-locations-list,
     .dashboard-form {
         grid-template-columns: 1fr;
     }
