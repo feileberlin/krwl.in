@@ -52,7 +52,13 @@ class DependencyChecker:
         return graph
     
     def analyze_js_dependencies(self) -> Dict[str, Dict]:
-        """Analyze JavaScript file dependencies"""
+        """
+        Analyze JavaScript file dependencies.
+        
+        Note: Uses regex patterns for basic analysis. For complex codebases,
+        consider using a proper JavaScript parser like esprima or acorn.
+        This is sufficient for our KISS-compliant vanilla JS codebase.
+        """
         js_dir = self.base_path / 'assets' / 'js'
         dependencies = {}
         
@@ -63,10 +69,12 @@ class DependencyChecker:
             with open(js_file, 'r', encoding='utf-8') as f:
                 content = f.read()
             
-            # Find class definitions
+            # Find class definitions (KISS: regex is sufficient for our simple classes)
+            # Matches: class ClassName { ... }
             classes = re.findall(r'class\s+(\w+)', content)
             
             # Find instantiations (new ClassName())
+            # Matches: new ClassName(args)
             instantiations = re.findall(r'new\s+(\w+)\(', content)
             
             # Remove duplicates
@@ -231,8 +239,8 @@ class DependencyChecker:
         circular = []
         
         def has_path(start: str, end: str, visited: Set[str] = None) -> bool:
-            if visited is None:
-                visited = set()
+            # Avoid mutable default argument
+            visited = visited or set()
             
             if start == end and visited:
                 return True
@@ -353,8 +361,20 @@ def main():
             print("  python3 src/modules/dependency_checker.py --validate")
             print()
     
+    except FileNotFoundError as e:
+        print(f"\n❌ File not found: {e}")
+        print("Make sure you're running from the project root directory.\n")
+        return 1
+    except json.JSONDecodeError as e:
+        print(f"\n❌ Invalid JSON in features.json: {e}\n")
+        return 1
+    except KeyError as e:
+        print(f"\n❌ Missing required key in features.json: {e}\n")
+        return 1
     except Exception as e:
-        print(f"\n❌ Error: {e}\n")
+        print(f"\n❌ Unexpected error: {e}\n")
+        import traceback
+        traceback.print_exc()
         return 1
     
     return 0
