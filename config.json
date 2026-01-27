@@ -935,18 +935,12 @@
     "predefined_locations": [
       {
         "name": "location.no1",
-        "lat": -90.0,
-        "lon": 0.0,
-        "display_name": "Geographic South Pole"
-      },
-      {
-        "name": "location.no2",
         "lat": -89.999,
         "lon": 45.0,
         "display_name": "Ceremonial South Pole Marker"
       },
       {
-        "name": "location.no3",
+        "name": "location.no2",
         "lat": -89.998,
         "lon": -90.0,
         "display_name": "Amundsen-Scott Station"
