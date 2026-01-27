@@ -1064,32 +1064,86 @@ strong, b {
     transform: translateY(-1px);
 }
 
-.custom-location-item {
-    background: var(--bg-tertiary);
-    padding: 0.8rem;
+/* Two-column section layout (info left, content right) */
+.dashboard-section--two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    align-items: start;
+}
+
+.dashboard-section--two-col h3 {
     margin-bottom: 0.5rem;
-    border-radius: var(--radius-medium);
-    border: 1px solid var(--border-secondary);
+}
+
+.dashboard-section--two-col p {
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+    margin: 0;
+}
+
+@media (max-width: 480px) {
+    .dashboard-section--two-col {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Custom locations list - stacked rows in right column */
+#custom-locations-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+/* Common two-column grid for forms */
+.dashboard-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+}
+
+@media (max-width: 480px) {
+    .dashboard-form {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Full-width elements in form grid */
+/* NOTE: Uses :has(), which requires modern browsers (Safari 15.4+, Chrome 105+, Firefox 121+) */
+.dashboard-form .form-group:has(textarea),
+.dashboard-form .form-group.form-group--full-width,
+.dashboard-form .form-actions,
+.dashboard-form .form-status {
+    grid-column: 1 / -1;
+}
+
+/* Grid item card style - used by locations and form groups */
+.custom-location-item,
+.dashboard-form .form-group {
+    background: var(--color-bg-tertiary);
+    padding: 0.6rem;
+    border-radius: var(--border-radius-medium);
+    border: 1px solid var(--color-border-secondary);
 }
 
 .custom-location-header {
-    display: flex;
-    align-items: center;
     margin-bottom: 0.3rem;
-    gap: 0.5rem;
 }
 
 .custom-location-name {
     font-weight: bold;
     color: var(--color-primary);
-    font-size: 0.95rem;
-    flex: 1;
-    min-width: 0; /* Allow text truncation if needed */
+    font-size: 0.85rem;
+}
+
+/* Hide action buttons - we use inline editing */
+.custom-location-actions {
+    display: none;
 }
 
 .custom-location-coords {
     font-size: 0.8rem;
-    color: var(--text-secondary);
+    color: var(--color-text-secondary);
     font-family: var(--font-family-mono);
 }
 
@@ -1097,14 +1151,14 @@ strong, b {
 .custom-location-coords--clickable {
     cursor: pointer;
     padding: 0.4rem 0.6rem;
-    border-radius: var(--radius-small);
+    border-radius: var(--border-radius-small);
     transition: all 0.2s;
-    background: var(--bg-secondary);
+    background: var(--color-bg-secondary);
     border: 1px solid transparent;
 }
 
 .custom-location-coords--clickable:hover {
-    background: var(--bg-tertiary);
+    background: var(--color-bg-tertiary);
     border-color: var(--color-primary);
     color: var(--color-primary);
 }
@@ -1115,52 +1169,47 @@ strong, b {
     box-shadow: 0 0 0 2px rgba(214, 137, 184, 0.15);
 }
 
-/* Edit mode coordinates container - same structure as view */
+/* Edit mode - reuse clickable coords styling, just add border */
 .custom-location-coords-edit {
     font-size: 0.8rem;
-    color: var(--text-secondary);
+    color: var(--color-text-secondary);
     font-family: var(--font-family-mono);
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: 0.3rem;
+    gap: 0.15rem;
     padding: 0.4rem 0.6rem;
+    background: var(--color-bg-secondary);
+    border-radius: var(--border-radius-small);
+    border: 1px solid var(--color-primary);
 }
 
-/* Inline coordinate inputs - minimal styling to blend with text */
+/* Inputs blend seamlessly */
 .custom-location-input--inline {
-    background: var(--tint-50); /* Light background */
-    border: 1px solid var(--border-secondary);
-    color: var(--shade-100); /* Darkest possible */
-    padding: 0.3rem 0.5rem;
-    border-radius: var(--radius-small);
-    font-size: 0.8rem;
-    font-family: var(--font-family-mono);
-    transition: all 0.2s;
-    width: auto;
-    min-width: 80px;
-    display: inline-block;
+    background: transparent;
+    border: none;
+    color: inherit;
+    padding: 0;
+    font: inherit;
+    width: 52px;
 }
 
 .custom-location-input--inline:focus {
     outline: none;
-    border-color: var(--color-primary);
-    background: var(--tint-50);
-    box-shadow: 0 0 0 2px rgba(214, 137, 184, 0.15);
 }
 
-.custom-location-input--inline:hover:not(:focus) {
-    border-color: var(--border-primary);
-}
-
-/* Inline save button */
+/* Tiny save button */
 .custom-location-btn--inline {
-    padding: 0.3rem 0.5rem;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    color: var(--color-primary);
     margin-left: 0.3rem;
-    min-width: auto;
 }
 
-.custom-location-actions {
-    display: none; /* Hide Edit buttons - edit mode is activated by clicking coordinates */
+.custom-location-btn--inline:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
 }
 
 .custom-location-btn {
@@ -1181,123 +1230,40 @@ strong, b {
     color: var(--color-primary);
 }
 
-/* Edit button - primary action (default styling) */
-.custom-location-btn--edit {
-    /* Uses default button styles */
-}
-
-/* Reset button - warning action (resets to config.json) */
+/* Reset button - warning action */
 .custom-location-btn--reset {
     color: var(--color-warning);
-    border-color: var(--border-primary);
 }
 
 .custom-location-btn--reset:hover {
     border-color: var(--color-warning);
     background: rgba(235, 125, 192, 0.1);
-    color: var(--color-warning);
 }
 
-/* Delete button - danger action (removes from localStorage) */
+/* Delete button - danger action */
 .custom-location-btn--delete {
     color: var(--color-error);
-    border-color: var(--border-primary);
 }
 
 .custom-location-btn--delete:hover {
     border-color: var(--color-error);
     background: rgba(149, 68, 118, 0.1);
-    color: var(--color-error);
-}
-
-/* Legacy class for backwards compatibility */
-.custom-location-btn.delete {
-    color: var(--color-error);
-}
-
-.custom-location-btn.delete:hover {
-    border-color: var(--color-error);
-    background: rgba(248, 81, 73, 0.1);
 }
 
 .custom-locations-empty {
     text-align: center;
     padding: 1.5rem;
-    color: var(--text-secondary);
-    font-size: 0.9rem;
+    color: var(--color-text-secondary);
 }
 
-/* Custom Location Edit Mode Styles */
-
-/* Edit state container */
-.custom-location-edit {
-    animation: fadeIn 0.2s ease-in;
-}
-
-.custom-location-view {
-    animation: fadeIn 0.2s ease-in;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-5px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Edit header */
-.custom-location-edit-header {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: var(--color-primary);
-    font-weight: 500;
-    font-size: 0.9rem;
-    margin-bottom: 0.8rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid var(--border-secondary);
-}
-
-/* Form layout */
-.custom-location-form {
-    display: flex;
-    flex-direction: column;
-    gap: 0.8rem;
-}
-
-.form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.3rem;
-}
-
-.form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr auto;
-    gap: 0.6rem;
-    align-items: end; /* Align button to bottom with inputs */
-}
-
-.form-group label {
-    font-size: 0.8rem;
-    color: var(--text-secondary);
-    font-weight: 500;
-}
-
-/* Input styling with EcoBarbie theme */
+/* Input styling */
 .custom-location-input {
-    background: var(--tint-50); /* Light background */
-    border: 1px solid var(--border-secondary);
-    color: var(--shade-100); /* Darkest possible */
+    background: var(--color-tint-50);
+    border: 1px solid var(--color-border-secondary);
+    color: var(--color-shade-100);
     padding: 0.5rem 0.7rem;
-    border-radius: var(--radius-small);
-    font-size: 0.85rem;
-    font-family: inherit;
-    transition: all 0.2s;
+    border-radius: var(--border-radius-small);
+    font: inherit;
 }
 
 /* Hide number input spinner buttons */
@@ -1315,12 +1281,12 @@ strong, b {
 .custom-location-input:focus {
     outline: none;
     border-color: var(--color-primary);
-    background: var(--tint-50); /* Keep light background on focus */
+    background: var(--color-tint-50); /* Keep light background on focus */
     box-shadow: 0 0 0 2px rgba(214, 137, 184, 0.15);
 }
 
 .custom-location-input:hover:not(:focus) {
-    border-color: var(--border-primary);
+    border-color: var(--color-border-primary);
 }
 
 /* Input error state */
@@ -1377,6 +1343,15 @@ strong, b {
     aspect-ratio: 1; /* Make it square */
 }
 
+/* Inline save button - override base save button styles for compact display */
+.custom-location-btn--save.custom-location-btn--inline {
+    padding: 0.25rem;
+    min-width: auto;
+    width: 24px;
+    height: 24px;
+    aspect-ratio: unset;
+}
+
 /* Cancel button - secondary action */
 .custom-location-btn--cancel {
     background: var(--bg-secondary);
@@ -1428,12 +1403,6 @@ strong, b {
 }
 
 /* Dashboard Forms - Contact & Flyer Upload */
-.dashboard-form {
-    display: flex;
-    flex-direction: column;
-    gap: 0.8rem;
-}
-
 .dashboard-input,
 .dashboard-textarea {
     background: var(--tint-50);
@@ -1443,7 +1412,6 @@ strong, b {
     border-radius: var(--radius-small);
     font-size: 0.85rem;
     font-family: inherit;
-    transition: all 0.2s;
     width: 100%;
 }
 
@@ -1456,8 +1424,6 @@ strong, b {
 .dashboard-textarea:focus {
     outline: none;
     border-color: var(--color-primary);
-    background: var(--tint-50);
-    box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-primary) 15%, transparent);
 }
 
 .dashboard-input:hover:not(:focus),
