@@ -173,3 +173,19 @@ def test_mobile_url_conversion():
         assert result == expected, f"Expected {expected}, got {result} for input {input_url}"
         # Ensure no double 'm.' prefix
         assert "m.m." not in result, f"Double 'm.' prefix found in {result}"
+
+
+def test_mobile_url_conversion_security():
+    """Ensure URL conversion uses proper hostname matching to prevent URL substring attacks."""
+    source = build_source()
+    
+    # Test that URLs with facebook.com in the path are NOT modified (security fix)
+    malicious_urls = [
+        ("https://evil.com/redirect?url=www.facebook.com/page", "https://evil.com/redirect?url=www.facebook.com/page"),
+        ("https://not-facebook.com/test", "https://not-facebook.com/test"),
+        ("https://example.com/www.facebook.com/", "https://example.com/www.facebook.com/"),
+    ]
+    
+    for input_url, expected in malicious_urls:
+        result = source._get_mobile_url(input_url)
+        assert result == expected, f"Security issue: URL was modified when it shouldn't be. Input: {input_url}, Result: {result}"
