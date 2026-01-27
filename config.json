@@ -877,8 +877,8 @@
   "_comment_map_identical": "MAP CONFIGURATION - Same in all environments",
   "map": {
     "default_center": {
-      "lat": 49.944,
-      "lon": 11.576
+      "lat": 50.3167,
+      "lon": 11.9167
     },
     "default_zoom": 13,
     "tile_provider": "https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png",

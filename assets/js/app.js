@@ -27,6 +27,9 @@ class EventsApp {
         // Get default config (will be replaced by utils module)
         this.config = window.APP_CONFIG || this.getDefaultConfig();
         
+        // Detect and apply region from URL path (e.g., /hof, /nbg, /bth)
+        this.applyRegionFromUrl();
+        
         // Initialize modules
         this.storage = new EventStorage(this.config);
         this.eventFilter = new EventFilter(this.config, this.storage);
@@ -89,6 +92,102 @@ class EventsApp {
         if (this.config && this.config.debug) {
             console.log('[KRWL]', message, ...args);
         }
+    }
+    
+    /**
+     * Detect region from URL path and apply region-specific settings.
+     * Supports paths like /hof, /nbg, /bth, /selb, /rehau
+     * Also checks sessionStorage for redirected paths from 404.html
+     * Handles both root (krwl.in/hof) and subdirectory (user.github.io/repo/hof) deployments
+     * Unknown regions redirect to South Pole with setup instructions
+     */
+    applyRegionFromUrl() {
+        // Check for redirected path from 404.html
+        let path = sessionStorage.getItem('spa_redirect_path');
+        if (path) {
+            sessionStorage.removeItem('spa_redirect_path');
+        } else {
+            path = window.location.pathname;
+        }
+        
+        // Extract region ID from the last segment of the path
+        // This handles both /hof and /repo/hof correctly
+        const segments = path.split('/').filter(Boolean);
+        const regionId = segments.length > 0 ? segments[segments.length - 1].toLowerCase() : '';
+        
+        if (!regionId || regionId === 'index.html') {
+            return; // No region specified, use defaults
+        }
+        
+        // Check if this region exists in config
+        const regions = this.config.regions || {};
+        const region = regions[regionId];
+        
+        if (!region) {
+            // Unknown region - redirect to South Pole with colony setup instructions
+            console.log(`[KRWL] Unknown region: ${regionId} - showing colony setup at South Pole`);
+            this.applyUnknownRegion(regionId);
+            return;
+        }
+        
+        console.log(`[KRWL] Applying region: ${regionId} (${region.displayName || region.name})`);
+        
+        // Apply region settings to config
+        if (region.center) {
+            this.config.map.default_center = {
+                lat: region.center.lat,
+                lon: region.center.lng || region.center.lon
+            };
+        }
+        if (region.zoom) {
+            this.config.map.default_zoom = region.zoom;
+        }
+        
+        // Store active region for reference
+        this.activeRegion = regionId;
+        this.activeRegionConfig = region;
+    }
+    
+    /**
+     * Handle unknown/unconfigured regions by showing South Pole with setup instructions
+     * @param {string} regionId - The unknown region ID from the URL
+     */
+    applyUnknownRegion(regionId) {
+        // South Pole coordinates for unknown regions
+        const SOUTH_POLE = { lat: -90, lon: 0 };
+        const ONE_YEAR_MS = 365 * 24 * 60 * 60 * 1000;
+        
+        // Set map center to South Pole
+        this.config.map.default_center = SOUTH_POLE;
+        this.config.map.default_zoom = 3;
+        
+        // Store unknown region info - used by injectColonySetupEvent()
+        this.activeRegion = regionId;
+        this.isUnknownRegion = true;
+        
+        // Add a special "colony setup" event that will be injected into the events list
+        // This replaces all normal events to focus attention on the setup instructions
+        this.colonySetupEvent = {
+            id: 'colony_setup_' + regionId,
+            title: `🏴 Start a new colony: "${regionId}"`,
+            description: `This region "${regionId}" is not yet configured. Want to bring KRWL to your area?\n\n` +
+                `🚀 Option 1: Clone the repository\n` +
+                `Fork https://github.com/feileberlin/krwl-hof and add your region to config.json\n\n` +
+                `📧 Option 2: Contact the editors\n` +
+                `Reach out to request "${regionId}" be added as a new region.\n\n` +
+                `🌍 Join the community and help map events in your area!`,
+            location: {
+                name: 'South Pole - Unclaimed Territory',
+                lat: SOUTH_POLE.lat,
+                lon: SOUTH_POLE.lon
+            },
+            start_time: new Date(Date.now() + ONE_YEAR_MS).toISOString(),
+            end_time: null,
+            url: 'https://github.com/feileberlin/krwl-hof',
+            source: 'system',
+            status: 'published',
+            category: 'community'
+        };
     }
     
     getDefaultConfig() {
@@ -242,6 +341,9 @@ class EventsApp {
                 window.__EVENTS_DATA__ = data;
                 this.log(`Loaded ${this.events.length} events from inline data`);
                 this.events = this.utils.processTemplateEvents(this.events, this.eventFilter);
+                
+                // Inject colony setup event for unknown regions
+                this.injectColonySetupEvent();
                 return;
             }
             
@@ -277,10 +379,26 @@ class EventsApp {
             }
             
             this.events = this.utils.processTemplateEvents(allEvents, this.eventFilter);
+            
+            // Inject colony setup event for unknown regions
+            this.injectColonySetupEvent();
+            
             this.updateDashboard();
         } catch (error) {
             console.error('Error loading events:', error);
             this.events = [];
+        }
+    }
+    
+    /**
+     * Inject colony setup event for unknown regions
+     * Clears normal events and shows only the setup instruction
+     */
+    injectColonySetupEvent() {
+        if (this.isUnknownRegion && this.colonySetupEvent) {
+            // For unknown regions, replace all events with just the colony setup event
+            this.events = [this.colonySetupEvent];
+            console.log(`[KRWL] Showing colony setup event for unknown region: ${this.activeRegion}`);
         }
     }
     
