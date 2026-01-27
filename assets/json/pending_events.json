@@ -1,4 +1,269 @@
 {
-  "pending_events": [],
-  "last_scraped": "2026-01-26T17:47:31.612371"
+  "pending_events": [
+    {
+      "id": "vhs_1b91ff6f31cf",
+      "title": "Interkultureller ChorChorprobenDo. 08.01.2026 19:00Ludwigstra\u00dfe 7, 95028 Hof",
+      "teaser": "Menschen unterschiedlicher Herkunft und unterschiedlichen Alters singen gemeinsam Lieder aus der ganzen Welt.",
+      "description": "Menschen unterschiedlicher Herkunft und unterschiedlichen Alters singen gemeinsam Lieder aus der ganzen Welt. Es geht nicht darum, ein \"Profi\" zu werden, sondern Musik als eine Sprache wahrzunehmen, die uns alle verbindet.\nUnter professioneller musikalischer Leitung entsteht ein interkultureller Chor, der sich regelm\u00e4\u00dfig an der VHS trifft.",
+      "location": {
+        "name": "VHS Hofer Land",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-02-03T18:00:14.473605",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/interkultureller-chor/chorproben-646-C-30AA929101",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/interkultureller-chor/chorproben-646-C-30AA929101",
+      "tags": []
+    },
+    {
+      "id": "vhs_9340151272aa",
+      "title": "Interkulturelles im Hofer LandWorkshopsMo. 12.01.2026 18:00Ludwigstra\u00dfe 7, 95028 Hof",
+      "teaser": "Im Workshop kommen Einheimische und Zugewanderte in geselliger Runde zusammen, um sich sprachlich und kulturell auszutauschen.",
+      "description": "Im Workshop kommen Einheimische und Zugewanderte in geselliger Runde zusammen, um sich sprachlich und kulturell auszutauschen. Es erwarten uns interkulturelle Begegnungen, neue Kontakte und spannende Gespr\u00e4che - ein Besuch lohnt sich auf jeden Fall und ist bei jedem Termin m\u00f6glich. N\u00e4here Infos bei Milica Zivkovic: 09282 7145 53, m.zivkovic@vhshoferland.de",
+      "location": {
+        "name": "VHS Hofer Land",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-02-03T18:00:14.474607",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/interkulturelles-im-hofer-land/workshops-646-C-30AA929100",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/interkulturelles-im-hofer-land/workshops-646-C-30AA929100",
+      "tags": []
+    },
+    {
+      "id": "vhs_c6b9c2294723",
+      "title": "Konversationskurs f\u00fcr ZuwanderinnenWorkshopDi. 13.01.2026 13:00Ludwigstra\u00dfe 7, 95028 Hof",
+      "teaser": "Sie m\u00f6chten die deutsche Sprache m\u00fcndlich \u00fcben aber Sie haben keine Gelegenheit zu sprechen? Dann ist dieser Kurs genau der richtige f\u00fcr Sie! In einer kleinen Gruppe und unter Frauen trainieren Sie ih...",
+      "description": "Sie m\u00f6chten die deutsche Sprache m\u00fcndlich \u00fcben aber Sie haben keine Gelegenheit zu sprechen? Dann ist dieser Kurs genau der richtige f\u00fcr Sie! In einer kleinen Gruppe und unter Frauen trainieren Sie ihre m\u00fcndliche Kommunikation. die Themen werden so gew\u00e4hlt, dass es Ihnen Spa\u00df macht. Sie ben\u00f6tigen nur Deutsch-Grundkenntnisse..",
+      "location": {
+        "name": "VHS Hofer Land",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-02-03T18:00:14.475254",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/konversationskurs-fuer-zuwanderinnen/workshop-646-C-30AA905053",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/konversationskurs-fuer-zuwanderinnen/workshop-646-C-30AA905053",
+      "tags": []
+    },
+    {
+      "id": "vhs_465d1fe3aaa9",
+      "title": "Training f\u00fcr den K\u00f6rper 1Fr. 16.01.2026 16:30Philipp-Wolfrum-Haus, Marktplatz 17, 95131 Schwarzenbach a.Wald",
+      "teaser": "Wollen Sie die Beweglichkeit und Dehnbarkeit sowie Gesundheit und Fitness des K\u00f6rpers verbessern? Daf\u00fcr gibt es verschiedene sanfte Trainingsmethoden mit leichtem Krafttraining, Ausdauertraining oder",
+      "description": "Wollen Sie die Beweglichkeit und Dehnbarkeit sowie Gesundheit und Fitness des K\u00f6rpers verbessern? Daf\u00fcr gibt es verschiedene sanfte Trainingsmethoden mit leichtem Krafttraining, Ausdauertraining oder Flexibilit\u00e4ts\u00fcbungen, die auch die Herz-Kreislauf-Funktion verbessern.\nLerne achtsam die Bewegungen in deinem K\u00f6rper wahrzunehmen \u2013 von den Armen, Schultern, Bauch und Beinen bis zum Fu\u00df.",
+      "location": {
+        "name": "VHS Hofer Land",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-02-03T18:00:14.475842",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/training-fuer-den-koerper-1-646-C-30SW502311",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/training-fuer-den-koerper-1-646-C-30SW502311",
+      "tags": []
+    },
+    {
+      "id": "vhs_49149eec8ed4",
+      "title": "Kommunikationstraining f\u00fcr ZuwanderinnenWorkshopMo. 19.01.2026 10:00VHS Naila",
+      "teaser": "Sie m\u00f6chten die deutsche Sprache m\u00fcndlich \u00fcben aber Sie haben keine Gelegenheit zu sprechen? Dann ist dieser Kurs genau der richtige f\u00fcr Sie! In einer kleinen Gruppe und unter Frauen trainieren Sie ih...",
+      "description": "Sie m\u00f6chten die deutsche Sprache m\u00fcndlich \u00fcben aber Sie haben keine Gelegenheit zu sprechen? Dann ist dieser Kurs genau der richtige f\u00fcr Sie! In einer kleinen Gruppe und unter Frauen trainieren Sie ihre m\u00fcndliche Kommunikation. Die Themen werden so gew\u00e4hlt, dass es Ihnen Spa\u00df macht. Sie ben\u00f6tigen nur Deutsch-Grundkenntnisse.",
+      "location": {
+        "name": "VHS Hofer Land",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-02-03T18:00:14.476446",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/kommunikationstraining-fuer-zuwanderinnen/workshop-646-C-30AA905052",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/kommunikationstraining-fuer-zuwanderinnen/workshop-646-C-30AA905052",
+      "tags": []
+    },
+    {
+      "id": "vhs_a2b58368cf43",
+      "title": "Kommunikationstraining f\u00fcr Zuwanderinnen 1WorkshopFr. 23.01.2026 10:00Ludwigstra\u00dfe 7, 95028 Hof",
+      "teaser": "Sie m\u00f6chten die deutsche Sprache m\u00fcndlich \u00fcben aber Sie haben keine Gelegenheit zu sprechen? Dann ist dieser Kurs genau der richtige f\u00fcr Sie! In einer kleinen Gruppe und unter Frauen trainieren Sie Ih...",
+      "description": "Sie m\u00f6chten die deutsche Sprache m\u00fcndlich \u00fcben aber Sie haben keine Gelegenheit zu sprechen? Dann ist dieser Kurs genau der richtige f\u00fcr Sie! In einer kleinen Gruppe und unter Frauen trainieren Sie Ihre m\u00fcndliche Kommunikation. Die Themen werden so gew\u00e4hlt, dass es Ihnen Spa\u00df macht. Sie ben\u00f6tigen nur Deutsch-Grundkenntnisse.",
+      "location": {
+        "name": "VHS Hofer Land",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-02-03T18:00:14.477020",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/kommunikationstraining-fuer-zuwanderinnen-1/workshop-646-C-30AA905047",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/kommunikationstraining-fuer-zuwanderinnen-1/workshop-646-C-30AA905047",
+      "tags": []
+    },
+    {
+      "id": "vhs_d980d5c5d7c1",
+      "title": "Fit in den Tag - Funktionelle Ganzk\u00f6rpergymnastikMi. 04.02.2026 09:30Turnhalle Berufsbildungswerk Hof, S\u00fcdring 96",
+      "teaser": "Wir beginnen mit einem Warm-up zu dynamischer Musik mit abwechslungsreichen Aerobic-Schrittkombinationen. Danach kr\u00e4ftigen und dehnen wir alle Muskelgruppen von Kopf bis Fu\u00df.",
+      "description": "Wir beginnen mit einem Warm-up zu dynamischer Musik mit abwechslungsreichen Aerobic-Schrittkombinationen. Danach kr\u00e4ftigen und dehnen wir alle Muskelgruppen von Kopf bis Fu\u00df. Koordinations-, Gleichgewichts- und Ged\u00e4chtnisschulung sind fester Bestandteil jeder Stunde. Beim anschl. Bodenteil werden R\u00fccken- und Bauchmuskel\u00fcbungen gesundheitsorientiert  trainiert,  Atem-, Dehn- und Entspannungs\u00fcbungen bilden den Abschluss der Stunde. Es kommen unterschiedliche Handger\u00e4te  zum Einsatz, um den Trainin",
+      "location": {
+        "name": "VHS Hofer Land",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-02-04T18:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/fit-in-den-tag-funktionelle-ganzkoerpergymnastik-646-C-30AH502263",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/fit-in-den-tag-funktionelle-ganzkoerpergymnastik-646-C-30AH502263",
+      "tags": []
+    },
+    {
+      "id": "vhs_e7c8853f2154",
+      "title": "Arbeitskultur in Deutschland verstehenWorkshop / MentorshipMi. 04.02.2026 13:00Ludwigstra\u00dfe 7, 95028 Hof",
+      "teaser": "Sie stehen kurz vor dem Beginn einer neuen T\u00e4tigkeit und m\u00f6chten sich mit den Verhaltensweisen vertraut machen, die in der Arbeitswelt in Deutschland erwartet werden.",
+      "description": "Sie stehen kurz vor dem Beginn einer neuen T\u00e4tigkeit und m\u00f6chten sich mit den Verhaltensweisen vertraut machen, die in der Arbeitswelt in Deutschland erwartet werden. Oder Sie sind derzeit auf der Suche nach einer neuen Stelle und m\u00f6chten sich f\u00fcr die sp\u00e4teren beruflichen Herausforderungen vorbereiten. In jedem Fall sind Sie bei uns richtig. Wir beantworten Ihre Fragen und vermitteln Ihnen f\u00fcr die deutsche Arbeitskultur erforderliche Kenntnisse. Danach k\u00f6nnen Sie von unserem Mentoring-Programm p",
+      "location": {
+        "name": "VHS Hofer Land",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-02-04T18:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/arbeitskultur-in-deutschland-verstehen/workshop-mentorship-646-C-30AA905046",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/arbeitskultur-in-deutschland-verstehen/workshop-mentorship-646-C-30AA905046",
+      "tags": []
+    },
+    {
+      "id": "vhs_6115892d9746",
+      "title": "WhatsApp \u2013 Vielseitige Funktionen f\u00fcr den AlltagMi. 04.02.2026 14:00Ludwigstra\u00dfe 7, 95028 Hof",
+      "teaser": "In diesem Kurs lernen Sie, wie Sie WhatsApp effektiv und vielseitig nutzen! Wir zeigen Ihnen, wie Sie Nachrichten und Sprachnachrichten senden, Umfragen erstellen und Fotos oder Videos teilen.",
+      "description": "In diesem Kurs lernen Sie, wie Sie WhatsApp effektiv und vielseitig nutzen! Wir zeigen Ihnen, wie Sie Nachrichten und Sprachnachrichten senden, Umfragen erstellen und Fotos oder Videos teilen. Entdecken Sie die M\u00f6glichkeiten der Gruppen- und Videotelefonie und erfahren Sie, wie Sie WhatsApp sicher und einfach im Alltag einsetzen k\u00f6nnen. Der Kurs richtet sich an Einsteiger\\innen, die alle Funktionen von WhatsApp kennenlernen und anwenden m\u00f6chten.",
+      "location": {
+        "name": "VHS Hofer Land",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-02-04T18:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/whatsapp-vielseitige-funktionen-fuer-den-alltag-646-C-29AH318106",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/whatsapp-vielseitige-funktionen-fuer-den-alltag-646-C-29AH318106",
+      "tags": []
+    },
+    {
+      "id": "vhs_42fff49d8a79",
+      "title": "\"zusammen digital\" - BeratungsthekeMi. 04.02.2026 14:00Ludwigstra\u00dfe 7, 95028 Hof",
+      "teaser": "\"zusammen digital\" - BeratungsthekeMi. 04.02.2026 14:00Ludwigstra\u00dfe 7, 95028 Hof am 04.02.",
+      "description": "\"zusammen digital\" - BeratungsthekeMi. 04.02.2026 14:00Ludwigstra\u00dfe 7, 95028 Hof am 04.02.2026 18:00",
+      "location": {
+        "name": "VHS Hofer Land",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-02-04T18:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/zusammen-digital-beratungstheke-646-C-29AA904230",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/zusammen-digital-beratungstheke-646-C-29AA904230",
+      "tags": []
+    },
+    {
+      "id": "vhs_0bf07f10a445",
+      "title": "VHS Lese-StammtischMi. 04.02.2026 15:00LU 3. Stock - Sitzecke, Ludwigstra\u00dfe 7",
+      "teaser": "B\u00fccher und Autor*innen \u2013 lassen Sie uns dar\u00fcber sprechen. Bringen Sie Ihr Lieblingsbuch mit oder h\u00f6ren Sie zu, wenn andere \u00fcber ihres berichten.",
+      "description": "B\u00fccher und Autor*innen \u2013 lassen Sie uns dar\u00fcber sprechen. Bringen Sie Ihr Lieblingsbuch mit oder h\u00f6ren Sie zu, wenn andere \u00fcber ihres berichten. Lassen Sie uns regelm\u00e4\u00dfig treffen und im Sinne des \u201eStammtisch-Gedanken\u201c Erfahrungen und Empfehlungen austauschen. Wir laden Sie herzlich ein, Teil der Gemeinschaft zu werden.",
+      "location": {
+        "name": "VHS Hofer Land",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-02-04T18:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/vhs-lese-stammtisch-646-C-30AA904109",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/vhs-lese-stammtisch-646-C-30AA904109",
+      "tags": []
+    },
+    {
+      "id": "vhs_660645dcfe90",
+      "title": "KI-Selfies: K\u00fcnstliche Intelligenz als FotografMi. 04.02.2026 17:00Online",
+      "teaser": "Mit K\u00fcnstlicher Intelligenz lassen sich beeindruckende realistische oder kreative Bilder von sich selbst erstellen ganz ohne professionelles Fotoshooting.",
+      "description": "Mit K\u00fcnstlicher Intelligenz lassen sich beeindruckende realistische oder kreative Bilder von sich selbst erstellen ganz ohne professionelles Fotoshooting. In diesem praxisnahen Workshop wird gezeigt, wie eine KI mit eigenen Fotos trainiert wird, um anschlie\u00dfend verschiedene hochwertige Portr\u00e4ts und kreative Bildvarianten zu generieren.",
+      "location": {
+        "name": "VHS Hofer Land",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-02-04T18:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/ki-selfies-kuenstliche-intelligenz-als-fotograf-646-C-29AH311133",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/ki-selfies-kuenstliche-intelligenz-als-fotograf-646-C-29AH311133",
+      "tags": []
+    }
+  ],
+  "last_scraped": "2026-01-27T03:32:35.871676"
 }
