@@ -1317,13 +1317,112 @@ All features must be documented in `features.json` with:
 - Implementation files
 - Config keys (if applicable)
 - Test method
+- **Dependencies** (`depends_on` field) - List of feature IDs this feature depends on
 
 **Validation**: Run `python3 src/modules/feature_verifier.py` to ensure registry matches codebase.
 
 When adding features:
 1. Implement the feature
-2. Add entry to `features.json`
+2. Add entry to `features.json` with `depends_on` field
 3. Run `python3 src/modules/feature_verifier.py --verbose` to validate
+4. Check impact with `python3 src/modules/dependency_checker.py --check-feature YOUR_FEATURE_ID`
+
+## Dependency Tracking System
+
+**Purpose**: Understand what code depends on what to prevent breaking changes.
+
+### Visual Dependency Maps
+
+See `DEPENDENCIES.md` for complete visual dependency maps showing:
+- Frontend module layers (utilities → domain → UI → app)
+- Backend module layers (config → models → logic → generation → CLI)
+- Module relationships and data flow
+- Impact analysis ("if I change X, what breaks?")
+
+### Dependency Checker Tool
+
+Use `src/modules/dependency_checker.py` to analyze dependencies:
+
+```bash
+# Check impact of changing a feature
+python3 src/modules/dependency_checker.py --check-feature interactive-map
+
+# Show complete dependency tree
+python3 src/modules/dependency_checker.py --show-tree
+
+# Validate all dependencies
+python3 src/modules/dependency_checker.py --validate
+
+# Analyze JavaScript dependencies
+python3 src/modules/dependency_checker.py --analyze-js
+
+# Analyze Python dependencies
+python3 src/modules/dependency_checker.py --analyze-py
+```
+
+### Impact Analysis Example
+
+```
+$ python3 src/modules/dependency_checker.py --check-feature interactive-map
+
+================================================================================
+  IMPACT ANALYSIS: Interactive Map (interactive-map)
+================================================================================
+
+📦 Feature Details:
+   Category: frontend
+   Files: assets/html/map-main.html, assets/js/app.js
+
+✅ No dependencies (standalone feature)
+
+⚠️  Changing this feature DIRECTLY affects:
+   • Geolocation Filtering (geolocation-filtering)
+   • Custom Location Override (custom-location)
+
+🔴 Changing this feature INDIRECTLY affects:
+   • Sunrise Filtering (sunrise-filtering)
+
+📊 Impact Score: 3
+   🔴 HIGH RISK - Many dependent features
+```
+
+### Before Making Changes
+
+**ALWAYS check dependencies:**
+1. Check `DEPENDENCIES.md` for visual map
+2. Run impact analysis: `python3 src/modules/dependency_checker.py --check-feature FEATURE_ID`
+3. Identify affected modules
+4. Plan minimal surgical changes
+5. Test all dependent modules after changes
+
+### Adding Dependencies to features.json
+
+When adding a new feature, include `depends_on` field:
+
+```json
+{
+  "id": "my-new-feature",
+  "name": "My New Feature",
+  "description": "What it does",
+  "category": "frontend",
+  "implemented": true,
+  "files": ["assets/js/my-feature.js"],
+  "depends_on": ["interactive-map", "event-storage"]
+}
+```
+
+### Quick Reference: Critical Dependencies
+
+| Module | Impact if Changed |
+|--------|-------------------|
+| `config.json` | 🔴 CRITICAL - Affects ALL modules |
+| `utils.py` | 🔴 CRITICAL - Affects most backend |
+| `app.js` | 🔴 CRITICAL - Affects all frontend |
+| `event_schema.py` | 🟠 HIGH - Affects data integrity |
+| `site_generator.py` | 🟠 HIGH - Affects deployment |
+| `map.js` | 🟠 HIGH - Affects map display |
+| `filters.js` | 🟠 HIGH - Affects search |
+| `storage.js` | 🟡 MEDIUM - Affects user data |
 
 ## Testing Requirements
 
