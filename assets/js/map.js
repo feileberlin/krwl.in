@@ -173,6 +173,8 @@ class MapManager {
                     
                     if (this.map) {
                         this.map.setView([this.userLocation.lat, this.userLocation.lon], 13);
+                        // Show location card even with fallback location
+                        this.addUserMarker();
                     }
                     
                     if (onError) onError(error);
@@ -185,6 +187,12 @@ class MapManager {
                 lat: defaultCenter.lat,
                 lon: defaultCenter.lon
             };
+            
+            // Show location card even when geolocation not supported
+            if (this.map) {
+                this.map.setView([this.userLocation.lat, this.userLocation.lon], 13);
+                this.addUserMarker();
+            }
             
             if (onError) onError(new Error('Geolocation not supported'));
         }
@@ -230,11 +238,11 @@ class MapManager {
             popupAnchor: [0, -30]     // Above card
         });
         
-        // Create new reference marker
+        // Create new reference marker with popup
         this.referenceMarker = L.marker([lat, lon], {
             icon: locationIcon,
             zIndexOffset: 1000 // Keep reference marker above event markers
-        }).addTo(this.map);
+        }).addTo(this.map).bindPopup(popupText);
         
         this.log('Reference marker updated as card', { lat, lon, popupText });
     }
@@ -249,8 +257,8 @@ class MapManager {
         const escapedLabel = this.escapeHtml(displayLabel);
         
         return `
-            <div class="location-flyer" role="img" aria-label="${escapedLabel}">
-                <div class="location-flyer-icon">
+            <div class="location-flyer" role="status" aria-label="${escapedLabel}">
+                <div class="location-flyer-icon" aria-hidden="true">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <line x1="2" x2="5" y1="12" y2="12"></line>
                         <line x1="19" x2="22" y1="12" y2="12"></line>
