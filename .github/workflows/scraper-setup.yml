@@ -1,0 +1,315 @@
+name: 🔧 Scraper Setup Tool - Process Configuration
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# SCRAPER SETUP TOOL - CI INTEGRATION
+# ═══════════════════════════════════════════════════════════════════════════════
+#
+# PURPOSE:
+# Process new scraper configurations created via the drag'n'drop setup tool.
+# Validates, tests, and optionally enables new scraper sources.
+#
+# WHAT THIS WORKFLOW DOES:
+# 1. 🔍 Validates uploaded scraper configuration files
+# 2. 🧪 Tests the scraper against the target URL
+# 3. ✅ Adds the source to config.json if tests pass
+# 4. 📊 Reports results back to the PR/issue
+#
+# TRIGGERS:
+# - When new configuration files are added to config/scraper_mappings/
+# - Manual workflow dispatch for testing
+#
+# ═══════════════════════════════════════════════════════════════════════════════
+
+on:
+  push:
+    paths:
+      - 'config/scraper_mappings/**_ci_config.json'
+    branches:
+      - main
+      - 'feature/**'
+  
+  pull_request:
+    paths:
+      - 'config/scraper_mappings/**_ci_config.json'
+  
+  workflow_dispatch:
+    inputs:
+      config_file:
+        description: 'Scraper config file to process (e.g., example_com_ci_config.json)'
+        type: string
+        required: false
+      test_only:
+        description: 'Only test, do not add to config.json'
+        type: boolean
+        default: true
+        required: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: "scraper-setup-${{ github.ref }}"
+  cancel-in-progress: true
+
+jobs:
+  validate-config:
+    name: 🔍 Validate Configuration
+    runs-on: ubuntu-latest
+    outputs:
+      config_files: ${{ steps.find_configs.outputs.files }}
+      has_new_configs: ${{ steps.find_configs.outputs.has_new }}
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      
+      - name: Find new/changed config files
+        id: find_configs
+        run: |
+          # Check for manually specified file
+          if [ -n "${{ github.event.inputs.config_file }}" ]; then
+            CONFIG_FILE="config/scraper_mappings/${{ github.event.inputs.config_file }}"
+            if [ -f "$CONFIG_FILE" ]; then
+              echo "files=$CONFIG_FILE" >> $GITHUB_OUTPUT
+              echo "has_new=true" >> $GITHUB_OUTPUT
+            else
+              echo "❌ Config file not found: $CONFIG_FILE" >> $GITHUB_STEP_SUMMARY
+              echo "has_new=false" >> $GITHUB_OUTPUT
+            fi
+            exit 0
+          fi
+          
+          # Find changed config files
+          if [ "${{ github.event_name }}" = "push" ]; then
+            CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD -- 'config/scraper_mappings/*_ci_config.json' 2>/dev/null || echo "")
+          elif [ "${{ github.event_name }}" = "pull_request" ]; then
+            CHANGED_FILES=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} -- 'config/scraper_mappings/*_ci_config.json' 2>/dev/null || echo "")
+          else
+            CHANGED_FILES=""
+          fi
+          
+          if [ -n "$CHANGED_FILES" ]; then
+            echo "files=$CHANGED_FILES" >> $GITHUB_OUTPUT
+            echo "has_new=true" >> $GITHUB_OUTPUT
+            echo "## 📄 New Scraper Configurations Found" >> $GITHUB_STEP_SUMMARY
+            echo "$CHANGED_FILES" | while read file; do
+              echo "- \`$file\`" >> $GITHUB_STEP_SUMMARY
+            done
+          else
+            echo "has_new=false" >> $GITHUB_OUTPUT
+            echo "ℹ️ No new scraper configurations found" >> $GITHUB_STEP_SUMMARY
+          fi
+      
+      - name: Validate JSON structure
+        if: steps.find_configs.outputs.has_new == 'true'
+        run: |
+          echo "## 🔍 Configuration Validation" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          for CONFIG_FILE in ${{ steps.find_configs.outputs.files }}; do
+            echo "Validating: $CONFIG_FILE"
+            
+            # Check if file exists and is valid JSON
+            if ! python3 -c "import json; json.load(open('$CONFIG_FILE'))"; then
+              echo "❌ Invalid JSON: \`$CONFIG_FILE\`" >> $GITHUB_STEP_SUMMARY
+              exit 1
+            fi
+            
+            # Validate required fields
+            python3 << EOF
+          import json
+          import sys
+
+          with open('$CONFIG_FILE') as f:
+              config = json.load(f)
+
+          errors = []
+
+          # Check structure
+          if 'source' not in config:
+              errors.append("Missing 'source' section")
+          else:
+              if not config['source'].get('name'):
+                  errors.append("Missing source name")
+              if not config['source'].get('url'):
+                  errors.append("Missing source URL")
+
+          if 'field_mappings' not in config:
+              errors.append("Missing 'field_mappings' section")
+          else:
+              required_fields = ['title', 'start_date', 'location_name']
+              for field in required_fields:
+                  if field not in config['field_mappings']:
+                      errors.append(f"Missing required field mapping: {field}")
+                  elif not config['field_mappings'][field].get('selector'):
+                      errors.append(f"Missing selector for required field: {field}")
+
+          if errors:
+              print("❌ Validation errors:")
+              for error in errors:
+                  print(f"  - {error}")
+              sys.exit(1)
+          else:
+              print("✅ Configuration valid!")
+          EOF
+            
+            echo "✅ Valid: \`$CONFIG_FILE\`" >> $GITHUB_STEP_SUMMARY
+          done
+
+  test-scraper:
+    name: 🧪 Test Scraper
+    runs-on: ubuntu-latest
+    needs: validate-config
+    if: needs.validate-config.outputs.has_new_configs == 'true'
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Python environment
+        uses: ./.github/actions/setup-python-env
+      
+      - name: Test scraper configurations
+        run: |
+          echo "## 🧪 Scraper Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          for CONFIG_FILE in ${{ needs.validate-config.outputs.config_files }}; do
+            echo "Testing scraper from: $CONFIG_FILE"
+            
+            # Run the scraper setup API to test the configuration
+            python3 << EOF
+          import json
+          import sys
+          sys.path.insert(0, 'src')
+
+          from modules.scraper_setup_api import ScraperSetupAPI
+          from pathlib import Path
+
+          # Load the configuration
+          with open('$CONFIG_FILE') as f:
+              config = json.load(f)
+
+          source_name = config['source']['name']
+          source_url = config['source']['url']
+
+          print(f"Testing scraper for: {source_name}")
+          print(f"URL: {source_url}")
+
+          # Initialize API and analyze URL
+          api = ScraperSetupAPI(Path('.'))
+          analysis = api.analyze_url(source_url)
+
+          if analysis['success']:
+              print(f"✅ URL accessible and analyzed")
+              
+              # Check if our selectors find elements
+              containers = analysis.get('detected_containers', [])
+              print(f"  - Found {len(containers)} event containers")
+              
+              suggestions = analysis.get('suggestions', {})
+              for field, mappings in config['field_mappings'].items():
+                  selector = mappings.get('selector', '')
+                  if selector in str(suggestions.get(field, [])):
+                      print(f"  - {field}: ✅ Selector matches")
+                  else:
+                      print(f"  - {field}: ⚠️ Selector not verified (may still work)")
+          else:
+              print(f"❌ Analysis failed: {analysis.get('error', 'Unknown error')}")
+              sys.exit(1)
+          EOF
+            
+            if [ $? -eq 0 ]; then
+              echo "✅ **$CONFIG_FILE** - Test passed" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "❌ **$CONFIG_FILE** - Test failed" >> $GITHUB_STEP_SUMMARY
+            fi
+          done
+
+  add-to-config:
+    name: ✅ Add Source to Config
+    runs-on: ubuntu-latest
+    needs: [validate-config, test-scraper]
+    if: |
+      needs.validate-config.outputs.has_new_configs == 'true' &&
+      github.event_name == 'push' &&
+      github.ref == 'refs/heads/main' &&
+      github.event.inputs.test_only != 'true'
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Add sources to config.json
+        run: |
+          echo "## ✅ Adding Sources to config.json" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          for CONFIG_FILE in ${{ needs.validate-config.outputs.config_files }}; do
+            python3 << EOF
+          import json
+          from pathlib import Path
+
+          # Load scraper config
+          with open('$CONFIG_FILE') as f:
+              scraper_config = json.load(f)
+
+          source_name = scraper_config['source']['name']
+          source_url = scraper_config['source']['url']
+
+          # Load main config
+          with open('config.json') as f:
+              main_config = json.load(f)
+
+          # Check if source already exists
+          existing_sources = main_config.get('scraping', {}).get('sources', [])
+          source_exists = any(s.get('name') == source_name for s in existing_sources)
+
+          if source_exists:
+              print(f"ℹ️ Source '{source_name}' already exists in config.json")
+          else:
+              # Add new source
+              new_source = {
+                  'name': source_name,
+                  'url': source_url,
+                  'type': 'html',
+                  'mapping_file': '$CONFIG_FILE',
+                  'enabled': True,
+                  'notes': 'Added via Scraper Setup Tool'
+              }
+              
+              if 'scraping' not in main_config:
+                  main_config['scraping'] = {'sources': []}
+              if 'sources' not in main_config['scraping']:
+                  main_config['scraping']['sources'] = []
+              
+              main_config['scraping']['sources'].append(new_source)
+              
+              # Save updated config
+              with open('config.json', 'w') as f:
+                  json.dump(main_config, f, indent=2)
+              
+              print(f"✅ Added source '{source_name}' to config.json")
+          EOF
+            
+            echo "- Added \`$(basename $CONFIG_FILE .json)\` to config.json" >> $GITHUB_STEP_SUMMARY
+          done
+      
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          if git diff --quiet config.json; then
+            echo "ℹ️ No changes to commit"
+          else
+            git add config.json
+            git commit -m "🔧 Add new scraper source(s) from setup tool"
+            git push
+            
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "✅ Changes committed and pushed!" >> $GITHUB_STEP_SUMMARY
+          fi
