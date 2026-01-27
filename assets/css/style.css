@@ -1064,20 +1064,31 @@ strong, b {
     transform: translateY(-1px);
 }
 
-/* Two-column grid for custom locations */
-#custom-locations-list {
+/* Common two-column grid for dashboard sections */
+#custom-locations-list,
+.dashboard-form {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 0.5rem;
 }
 
 @media (max-width: 480px) {
-    #custom-locations-list {
+    #custom-locations-list,
+    .dashboard-form {
         grid-template-columns: 1fr;
     }
 }
 
-.custom-location-item {
+/* Full-width elements in form grid */
+.dashboard-form .form-group:has(textarea),
+.dashboard-form .form-actions,
+.dashboard-form .form-status {
+    grid-column: 1 / -1;
+}
+
+/* Grid item card style - used by locations and form groups */
+.custom-location-item,
+.dashboard-form .form-group {
     background: var(--bg-tertiary);
     padding: 0.6rem;
     border-radius: var(--radius-medium);
@@ -1361,12 +1372,6 @@ strong, b {
 }
 
 /* Dashboard Forms - Contact & Flyer Upload */
-.dashboard-form {
-    display: flex;
-    flex-direction: column;
-    gap: 0.8rem;
-}
-
 .dashboard-input,
 .dashboard-textarea {
     background: var(--tint-50);
@@ -1376,7 +1381,6 @@ strong, b {
     border-radius: var(--radius-small);
     font-size: 0.85rem;
     font-family: inherit;
-    transition: all 0.2s;
     width: 100%;
 }
 
@@ -1389,8 +1393,6 @@ strong, b {
 .dashboard-textarea:focus {
     outline: none;
     border-color: var(--color-primary);
-    background: var(--tint-50);
-    box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-primary) 15%, transparent);
 }
 
 .dashboard-input:hover:not(:focus),
