@@ -20,6 +20,40 @@ from typing import Dict, List
 logger = logging.getLogger(__name__)
 
 
+def _parse_event_timestamp(event: Dict) -> datetime:
+    """
+    Parse event start_time to datetime object.
+    
+    Handles ISO format timestamps with or without 'Z' suffix.
+    Removes timezone info for naive datetime comparison.
+    
+    Args:
+        event: Event dictionary containing 'start_time' field
+        
+    Returns:
+        Timezone-naive datetime object, or None if parsing fails
+        
+    Raises:
+        ValueError: If timestamp format is invalid
+        AttributeError: If start_time field is missing
+    """
+    start_str = event.get('start_time')
+    if not start_str:
+        raise AttributeError("Event missing start_time field")
+    
+    # Handle ISO format with or without 'Z' suffix
+    if start_str.endswith('Z'):
+        start_str = start_str[:-1] + '+00:00'
+    
+    start_dt = datetime.fromisoformat(start_str)
+    
+    # Remove timezone info for comparison if present
+    if start_dt.tzinfo:
+        start_dt = start_dt.replace(tzinfo=None)
+    
+    return start_dt
+
+
 def generate_sunrise_feeds(base_path: Path) -> None:
     """
     Generate RSS feeds with events until next sunrise for each region.
@@ -73,6 +107,7 @@ def generate_sunrise_feeds(base_path: Path) -> None:
             
             if lat is None or lon is None:
                 logger.warning(f"Skipping region {region_id}: missing coordinates")
+                print(f"  ⚠️  Skipping region {region_id}: missing coordinates")
                 continue
             
             # Calculate next sunrise for this region
@@ -88,17 +123,8 @@ def generate_sunrise_feeds(base_path: Path) -> None:
                     continue
                 
                 try:
-                    # Parse event start time
-                    event_start_str = event['start_time']
-                    # Handle ISO format with or without 'Z' suffix
-                    if event_start_str.endswith('Z'):
-                        event_start_str = event_start_str[:-1] + '+00:00'
-                    
-                    event_start = datetime.fromisoformat(event_start_str)
-                    
-                    # Remove timezone info for comparison if present
-                    if event_start.tzinfo:
-                        event_start = event_start.replace(tzinfo=None)
+                    # Parse event start time using helper function
+                    event_start = _parse_event_timestamp(event)
                     
                     # Filter: events starting between now and next sunrise
                     if now < event_start <= next_sunrise:
@@ -106,6 +132,16 @@ def generate_sunrise_feeds(base_path: Path) -> None:
                 except (ValueError, AttributeError) as e:
                     logger.warning(f"Skipping event {event.get('id', 'unknown')}: invalid timestamp - {e}")
                     continue
+            
+            # Deduplicate events by ID (keep first occurrence)
+            seen_ids = set()
+            deduplicated_events = []
+            for event in sunrise_events:
+                event_id = event.get('id')
+                if event_id and event_id not in seen_ids:
+                    seen_ids.add(event_id)
+                    deduplicated_events.append(event)
+            sunrise_events = deduplicated_events
             
             # Generate RSS feed
             region_display_name = region_config.get('displayName', region_id)
@@ -213,16 +249,11 @@ def create_rss_feed(title: str, description: str, events: List[Dict],
         # Add time
         if event.get('start_time'):
             try:
-                start_str = event['start_time']
-                if start_str.endswith('Z'):
-                    start_str = start_str[:-1] + '+00:00'
-                start_dt = datetime.fromisoformat(start_str)
-                if start_dt.tzinfo:
-                    start_dt = start_dt.replace(tzinfo=None)
-                
+                start_dt = _parse_event_timestamp(event)
                 time_str = start_dt.strftime('%A, %B %d, %Y at %H:%M')
                 description_parts.append(f"\n\nTime: {time_str}")
             except (ValueError, AttributeError):
+                # Silently skip if timestamp parsing fails - event still included without time
                 pass
         
         description_text = '\n'.join(description_parts)
@@ -231,15 +262,10 @@ def create_rss_feed(title: str, description: str, events: List[Dict],
         # PubDate - event start time in RFC 822 format
         if event.get('start_time'):
             try:
-                start_str = event['start_time']
-                if start_str.endswith('Z'):
-                    start_str = start_str[:-1] + '+00:00'
-                start_dt = datetime.fromisoformat(start_str)
-                if start_dt.tzinfo:
-                    start_dt = start_dt.replace(tzinfo=None)
-                
+                start_dt = _parse_event_timestamp(event)
                 ET.SubElement(item, 'pubDate').text = _format_rfc822_date(start_dt)
             except (ValueError, AttributeError):
+                # Silently skip if timestamp parsing fails - item still valid without pubDate
                 pass
         
         # Category

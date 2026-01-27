@@ -2178,9 +2178,19 @@ window.DEBUG_INFO = {debug_info_json};'''
         try:
             from .rss_generator import generate_sunrise_feeds
             generate_sunrise_feeds(self.base_path)
+        except ImportError as e:
+            # Import errors are often configuration issues (missing module, etc.)
+            logger.error(f"RSS feed generation skipped: unable to import rss_generator: {e}")
+            print(f"\n⚠️  RSS feed generation skipped: unable to import rss_generator: {e}")
         except Exception as e:
+            # Runtime errors while generating feeds should not break builds
             logger.error(f"RSS feed generation failed: {e}")
             print(f"\n⚠️  RSS feed generation failed: {e}")
+            # In debug mode, show more details
+            if primary_config.get('debug', False):
+                import traceback
+                traceback.print_exc()
+
         
         print(f"\n✅ Static site generated successfully!")
         print(f"   Output: {output_file} ({len(html_de) / 1024:.1f} KB)")

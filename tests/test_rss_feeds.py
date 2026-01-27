@@ -7,12 +7,11 @@ import sys
 import unittest
 import xml.etree.ElementTree as ET
 from pathlib import Path
-from datetime import datetime
 
 # Add parent directory to path
 sys.path.insert(0, str(Path(__file__).parent.parent / 'src'))
 
-from modules.rss_generator import create_rss_feed, generate_sunrise_feeds
+from modules.rss_generator import create_rss_feed
 
 
 class TestRSSFeedGeneration(unittest.TestCase):
