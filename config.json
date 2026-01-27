@@ -148,7 +148,7 @@
         "lat": -90.0,
         "lng": 0.0
       },
-      "zoom": 3,
+      "zoom": 5,
       "boundingBox": {
         "north": -60.0,
         "south": -90.0,
@@ -924,10 +924,11 @@
   "map": {
     "default_center": {
       "lat": -90.0,
-      "lon": 0.0
+      "lon": 0.0,
+      "_comment": "Geographic South Pole - longitude is arbitrary here since all meridians converge at the pole"
     },
     "_comment_default_center": "Geographic South Pole, Antarctica - Fork the repo to add your local community!",
-    "default_zoom": 3,
+    "default_zoom": 5,
     "tile_provider": "https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png",
     "tile_provider_comment": "CartoDB Dark No Labels - Converted to monochromatic Barbie Red via CSS filters",
     "attribution": "&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors",
