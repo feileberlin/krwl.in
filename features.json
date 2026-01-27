@@ -1478,6 +1478,32 @@
       "test_instructions": "1. Generate feeds: python3 src/event_manager.py generate-feeds\n2. Check output: ls -lh assets/feeds/\n3. Validate XML: python3 -c 'import xml.etree.ElementTree as ET; ET.parse(\"assets/feeds/hof-til-sunrise.xml\")'\n4. Test in RSS reader: Add https://krwl.in/assets/feeds/hof-til-sunrise.xml to Feedly/NewsBlur\n5. Check HTML discovery: grep 'rss+xml' public/index.html",
       "documentation": "README.md section: 📡 RSS Feeds - Until Sunrise",
       "depends_on": []
+    },
+    {
+      "id": "scraper-setup-drag-drop",
+      "name": "Drag'n'Drop Scraper Setup Tool",
+      "description": "Visual web-based tool for configuring event scrapers by dragging data snippets from a webpage to schema fields. Non-technical editors can set up new scrapers without coding. Generates CI-compatible configuration files for GitHub Actions integration.",
+      "category": "frontend",
+      "implemented": true,
+      "files": [
+        "assets/js/scraper-setup-tool.js",
+        "assets/css/scraper-setup-tool.css",
+        "assets/html/scraper-setup-tool.html",
+        "src/modules/scraper_setup_api.py",
+        ".github/workflows/scraper-setup.yml"
+      ],
+      "config_keys": [],
+      "dependencies": {
+        "python": [
+          "requests>=2.31.0",
+          "beautifulsoup4>=4.12.0"
+        ]
+      },
+      "test_method": "check_files_exist",
+      "test_file": null,
+      "test_instructions": "1. Open the dashboard menu and scroll to 'Scraper Setup Tool' section\n2. Enter an event listing URL (e.g., https://example.com/events)\n3. Click 'Analyze' to fetch data snippets\n4. Drag data snippets to the schema field drop zones (title, location, date)\n5. Verify the preview shows mapped fields\n6. Click 'Export CI Configuration' to download JSON file\n7. Add the file to config/scraper_mappings/ and commit\n8. GitHub Actions workflow will validate and test the configuration\n9. Test backend: python3 src/modules/scraper_setup_api.py --analyze https://example.com",
+      "documentation": ".github/copilot-instructions.md - Scraper Setup Tool section",
+      "depends_on": ["event-scraping"]
     }
   ]
 }
