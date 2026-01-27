@@ -519,19 +519,19 @@
         }
       ]
     },
-    "rehau": {
-      "name": "rehau",
-      "displayName": "Rehau",
+    "rawetz": {
+      "name": "rawetz",
+      "displayName": "Marktredwitz",
       "center": {
-        "lat": 50.2489,
-        "lng": 12.0364
+        "lat": 50.0044,
+        "lng": 12.0859
       },
       "zoom": 13,
       "boundingBox": {
-        "north": 50.3,
-        "south": 50.2,
-        "east": 12.1,
-        "west": 11.9
+        "north": 50.05,
+        "south": 49.96,
+        "east": 12.15,
+        "west": 12.02
       },
       "dataSource": "events.json",
       "defaultLanguage": "de",
@@ -569,8 +569,8 @@
             "en": "Market Square"
           },
           "center": {
-            "lat": 50.2489,
-            "lng": 12.0364
+            "lat": 50.0044,
+            "lng": 12.0859
           },
           "radius": 0.8,
           "zoom": 15
@@ -937,13 +937,13 @@
         "name": "location.no1",
         "lat": -89.999,
         "lon": 45.0,
-        "display_name": "Ceremonial South Pole Marker"
+        "display_name": "🐧 Penguin HQ"
       },
       {
         "name": "location.no2",
         "lat": -89.998,
         "lon": -90.0,
-        "display_name": "Amundsen-Scott Station"
+        "display_name": "🧊 Ice Cube Bar"
       }
     ]
   },

@@ -76,7 +76,7 @@ class TestRouting:
         regions = self.config.get('regions', {})
         
         # These are the regions that should be configured
-        expected_regions = ['antarctica', 'hof', 'nbg', 'bth', 'selb', 'rehau']
+        expected_regions = ['antarctica', 'hof', 'nbg', 'bth', 'selb', 'rawetz']
         
         all_exist = True
         for region_id in expected_regions:

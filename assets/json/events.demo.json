@@ -3,7 +3,7 @@
     {
       "id": "demo_welcome_south_pole",
       "title": "🐧 Welcome to KRWL! Fork this repo to add YOUR community",
-      "description": "Welcome to KRWL Community Events! Visit us at: krwl.in/ (homepage) | krwl.in/antarctica (South Pole demo) | krwl.in/hof, /nbg, /bth, /selb, /rehau (German regions). Unknown regions redirect to 404. Fork https://github.com/feileberlin/krwl-hof to create your own community events platform!",
+      "description": "Welcome to KRWL Community Events! Visit us at: krwl.in/ (homepage) | krwl.in/antarctica (South Pole demo) | krwl.in/hof, /nbg, /bth, /selb, /rawetz (German regions). Unknown regions redirect to 404. Fork https://github.com/feileberlin/krwl-hof to create your own community events platform!",
       "location": {
         "name": "Geographic South Pole, Antarctica",
         "lat": -90.0,
