@@ -284,13 +284,30 @@ class FacebookSource(BaseSource):
     def _get_mobile_url(self, url: str) -> str:
         """Convert URL to mobile Facebook version.
         
+        Uses proper URL parsing to check the hostname, preventing
+        URL substring matching attacks.
+        
         Args:
             url: Original Facebook URL
             
         Returns:
             Mobile Facebook URL
         """
-        return url.replace('www.facebook.com', 'm.facebook.com').replace('facebook.com', 'm.facebook.com')
+        parsed = urlparse(url)
+        hostname = parsed.hostname or ''
+        
+        # Already mobile URL - return as is
+        if hostname == 'm.facebook.com':
+            return url
+        
+        # Replace www.facebook.com or facebook.com with m.facebook.com
+        if hostname == 'www.facebook.com':
+            return parsed._replace(netloc='m.facebook.com').geturl()
+        if hostname == 'facebook.com':
+            return parsed._replace(netloc='m.facebook.com').geturl()
+        
+        # Not a recognized Facebook URL - return as-is
+        return url
     
     def _get_page_url(self, url: str) -> str:
         """Convert event URLs to base page URLs for post scraping."""

@@ -152,3 +152,40 @@ def test_post_cache_skips_processed_posts(tmp_path):
     source.force_scan = True
     third_run = source._process_posts(posts)
     assert len(third_run) == 1
+
+
+def test_mobile_url_conversion():
+    """Ensure Facebook URLs are correctly converted to mobile versions without double 'm.' prefixes."""
+    source = build_source()
+    
+    # Test various URL formats
+    test_cases = [
+        # (input, expected)
+        ("https://www.facebook.com/TestPage", "https://m.facebook.com/TestPage"),
+        ("https://facebook.com/TestPage", "https://m.facebook.com/TestPage"),
+        ("https://m.facebook.com/TestPage", "https://m.facebook.com/TestPage"),  # Already mobile
+        ("https://www.facebook.com/people/Punk-in-Hof/100090512583516/", "https://m.facebook.com/people/Punk-in-Hof/100090512583516/"),
+        ("https://www.facebook.com/GaleriehausHof/events", "https://m.facebook.com/GaleriehausHof/events"),
+    ]
+    
+    for input_url, expected in test_cases:
+        result = source._get_mobile_url(input_url)
+        assert result == expected, f"Expected {expected}, got {result} for input {input_url}"
+        # Ensure no double 'm.' prefix
+        assert "m.m." not in result, f"Double 'm.' prefix found in {result}"
+
+
+def test_mobile_url_conversion_security():
+    """Ensure URL conversion uses proper hostname matching to prevent URL substring attacks."""
+    source = build_source()
+    
+    # Test that URLs with facebook.com in the path are NOT modified (security fix)
+    malicious_urls = [
+        ("https://evil.com/redirect?url=www.facebook.com/page", "https://evil.com/redirect?url=www.facebook.com/page"),
+        ("https://not-facebook.com/test", "https://not-facebook.com/test"),
+        ("https://example.com/www.facebook.com/", "https://example.com/www.facebook.com/"),
+    ]
+    
+    for input_url, expected in malicious_urls:
+        result = source._get_mobile_url(input_url)
+        assert result == expected, f"Security issue: URL was modified when it shouldn't be. Input: {input_url}, Result: {result}"
