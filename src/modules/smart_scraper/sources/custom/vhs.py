@@ -214,9 +214,9 @@ class VHSSource(BaseSource):
         
         return None
     
-    def _parse_concatenated_title(self, raw_title: str) -> Tuple[str, Optional[str], Optional[str]]:
+    def _parse_concatenated_title(self, raw_title: str) -> Tuple[str, Optional[str], Optional[str], Optional[str]]:
         """
-        Parse concatenated VHS title text to extract clean title, date, and location.
+        Parse concatenated VHS title text to extract clean title, date, time, and location.
         
         VHS listings often have titles in format:
         "[Course Title][Optional Type][Weekday. DD.MM.YYYY HH:MM][Location/Address]"
@@ -230,9 +230,10 @@ class VHSSource(BaseSource):
             raw_title: The concatenated title text from the HTML
             
         Returns:
-            Tuple of (clean_title, date_string, location_name)
+            Tuple of (clean_title, date_string, time_string, location_name)
             - clean_title: Title before the weekday abbreviation
             - date_string: Date in DD.MM.YYYY format (or None if not found)
+            - time_string: Time in HH:MM format (or None if not found)
             - location_name: Location after the time (or None if not found)
         """
         # Find the weekday pattern in the title
@@ -240,7 +241,7 @@ class VHSSource(BaseSource):
         
         if not match:
             # No date pattern found, return original title
-            return raw_title.strip(), None, None
+            return raw_title.strip(), None, None, None
         
         # Extract the title before the weekday pattern
         title_end_pos = match.start()
@@ -249,6 +250,9 @@ class VHSSource(BaseSource):
         # Extract the date portion
         date_string = match.group(2)  # DD.MM.YYYY
         
+        # Extract the time portion (HH:MM) - group 3 is optional
+        time_string = match.group(3)  # HH:MM or None
+        
         # Extract location: everything after the match (after time or date)
         location_start_pos = match.end()
         location_text = raw_title[location_start_pos:].strip()
@@ -256,7 +260,7 @@ class VHSSource(BaseSource):
         # Clean up the location text
         location_name = location_text if location_text else None
         
-        return clean_title, date_string, location_name
+        return clean_title, date_string, time_string, location_name
     
     def _parse_course(self, container) -> Optional[Dict[str, Any]]:
         """Parse course from HTML container."""
@@ -273,8 +277,8 @@ class VHSSource(BaseSource):
         if raw_title.lower() in ['kurse', 'veranstaltungen', 'termine']:
             return None
         
-        # Parse concatenated title to extract clean title, date, and location
-        clean_title, parsed_date, title_location = self._parse_concatenated_title(raw_title)
+        # Parse concatenated title to extract clean title, date, time, and location
+        clean_title, parsed_date, parsed_time, title_location = self._parse_concatenated_title(raw_title)
         
         # Use clean title (always non-empty since _parse_concatenated_title returns raw_title.strip() at minimum)
         title = clean_title
@@ -287,10 +291,39 @@ class VHSSource(BaseSource):
         link_elem = container.find('a', href=True)
         event_url = urljoin(self.url, link_elem['href']) if link_elem else self.url
         
-        # Extract date using shared utility, prefer parsed date from title
+        # Extract date and time, prefer parsed values from title
         if parsed_date:
-            # Use the date extracted from title
-            start_time = extract_date_from_text(parsed_date, default_hour=18)
+            # Parse the date components
+            try:
+                day, month, year = parsed_date.split('.')
+                day, month = int(day), int(month)
+                year = int(year)
+                # Handle 2-digit year
+                if year < 100:
+                    current_year = datetime.now().year
+                    current_century = (current_year // 100) * 100
+                    year = current_century + year
+                    if year > current_year + 50:
+                        year -= 100
+                
+                # Parse time if available, otherwise default to 18:00
+                if parsed_time:
+                    hour, minute = map(int, parsed_time.split(':'))
+                else:
+                    hour, minute = 18, 0
+                
+                # Validate date components
+                if 1 <= day <= 31 and 1 <= month <= 12:
+                    event_datetime = datetime(year, month, day, hour, minute)
+                    # Only use if in the future
+                    if event_datetime > datetime.now():
+                        start_time = event_datetime.isoformat()
+                    else:
+                        start_time = extract_date_from_text(parsed_date, default_hour=18)
+                else:
+                    start_time = extract_date_from_text(parsed_date, default_hour=18)
+            except (ValueError, TypeError):
+                start_time = extract_date_from_text(parsed_date, default_hour=18)
         else:
             # Fallback to container text
             date_text = container.get_text()

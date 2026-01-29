@@ -495,10 +495,11 @@ class TestVHSConcatenatedTitleParsing(unittest.TestCase):
         # Test case from the issue: title with date and location concatenated
         raw_title = "Interkultureller ChorChorprobenDo. 08.01.2026 19:00Ludwigstraße 7, 95028 Hof"
         
-        clean_title, date_string, location = scraper._parse_concatenated_title(raw_title)
+        clean_title, date_string, time_string, location = scraper._parse_concatenated_title(raw_title)
         
         self.assertEqual(clean_title, "Interkultureller ChorChorproben")
         self.assertEqual(date_string, "08.01.2026")
+        self.assertEqual(time_string, "19:00")
         self.assertEqual(location, "Ludwigstraße 7, 95028 Hof")
     
     def test_parse_concatenated_title_schwarzenbach(self):
@@ -510,10 +511,11 @@ class TestVHSConcatenatedTitleParsing(unittest.TestCase):
         
         raw_title = "Training für den Körper 1Fr. 16.01.2026 16:30Philipp-Wolfrum-Haus, Marktplatz 17, 95131 Schwarzenbach a.Wald"
         
-        clean_title, date_string, location = scraper._parse_concatenated_title(raw_title)
+        clean_title, date_string, time_string, location = scraper._parse_concatenated_title(raw_title)
         
         self.assertEqual(clean_title, "Training für den Körper 1")
         self.assertEqual(date_string, "16.01.2026")
+        self.assertEqual(time_string, "16:30")
         self.assertEqual(location, "Philipp-Wolfrum-Haus, Marktplatz 17, 95131 Schwarzenbach a.Wald")
     
     def test_parse_concatenated_title_online_location(self):
@@ -525,10 +527,11 @@ class TestVHSConcatenatedTitleParsing(unittest.TestCase):
         
         raw_title = "KI-Selfies: Künstliche Intelligenz als FotografMi. 04.02.2026 17:00Online"
         
-        clean_title, date_string, location = scraper._parse_concatenated_title(raw_title)
+        clean_title, date_string, time_string, location = scraper._parse_concatenated_title(raw_title)
         
         self.assertEqual(clean_title, "KI-Selfies: Künstliche Intelligenz als Fotograf")
         self.assertEqual(date_string, "04.02.2026")
+        self.assertEqual(time_string, "17:00")
         self.assertEqual(location, "Online")
     
     def test_parse_concatenated_title_vhs_naila(self):
@@ -540,10 +543,11 @@ class TestVHSConcatenatedTitleParsing(unittest.TestCase):
         
         raw_title = "Kommunikationstraining für ZuwanderinnenWorkshopMo. 19.01.2026 10:00VHS Naila"
         
-        clean_title, date_string, location = scraper._parse_concatenated_title(raw_title)
+        clean_title, date_string, time_string, location = scraper._parse_concatenated_title(raw_title)
         
         self.assertEqual(clean_title, "Kommunikationstraining für ZuwanderinnenWorkshop")
         self.assertEqual(date_string, "19.01.2026")
+        self.assertEqual(time_string, "10:00")
         self.assertEqual(location, "VHS Naila")
     
     def test_parse_concatenated_title_no_time(self):
@@ -555,10 +559,11 @@ class TestVHSConcatenatedTitleParsing(unittest.TestCase):
         
         raw_title = "Test KursDi. 15.02.2026Test Location"
         
-        clean_title, date_string, location = scraper._parse_concatenated_title(raw_title)
+        clean_title, date_string, time_string, location = scraper._parse_concatenated_title(raw_title)
         
         self.assertEqual(clean_title, "Test Kurs")
         self.assertEqual(date_string, "15.02.2026")
+        self.assertIsNone(time_string)
         self.assertEqual(location, "Test Location")
     
     def test_parse_concatenated_title_no_date_pattern(self):
@@ -570,10 +575,11 @@ class TestVHSConcatenatedTitleParsing(unittest.TestCase):
         
         raw_title = "Simple Course Title Without Date"
         
-        clean_title, date_string, location = scraper._parse_concatenated_title(raw_title)
+        clean_title, date_string, time_string, location = scraper._parse_concatenated_title(raw_title)
         
         self.assertEqual(clean_title, "Simple Course Title Without Date")
         self.assertIsNone(date_string)
+        self.assertIsNone(time_string)
         self.assertIsNone(location)
     
     def test_parse_concatenated_title_short_year(self):
@@ -585,10 +591,11 @@ class TestVHSConcatenatedTitleParsing(unittest.TestCase):
         
         raw_title = "Excel KursMi. 20.03.26 14:00Büro Zentrum"
         
-        clean_title, date_string, location = scraper._parse_concatenated_title(raw_title)
+        clean_title, date_string, time_string, location = scraper._parse_concatenated_title(raw_title)
         
         self.assertEqual(clean_title, "Excel Kurs")
         self.assertEqual(date_string, "20.03.26")
+        self.assertEqual(time_string, "14:00")
         self.assertEqual(location, "Büro Zentrum")
     
     def test_parse_concatenated_title_all_weekdays(self):
@@ -602,11 +609,33 @@ class TestVHSConcatenatedTitleParsing(unittest.TestCase):
         for weekday in weekdays:
             raw_title = f"Test Kurs{weekday} 15.02.2026 10:00Test Location"
             
-            clean_title, date_string, location = scraper._parse_concatenated_title(raw_title)
+            clean_title, date_string, time_string, location = scraper._parse_concatenated_title(raw_title)
             
             self.assertEqual(clean_title, "Test Kurs", f"Failed for weekday {weekday}")
             self.assertEqual(date_string, "15.02.2026", f"Failed for weekday {weekday}")
+            self.assertEqual(time_string, "10:00", f"Failed for weekday {weekday}")
             self.assertEqual(location, "Test Location", f"Failed for weekday {weekday}")
+    
+    def test_parse_course_preserves_time_from_title(self):
+        """Test that _parse_course preserves the HH:MM from concatenated title in start_time."""
+        if not self.available:
+            self.skipTest("VHSSource not available")
+        
+        html = '''
+        <div class="course-item">
+            <h3>Python KursFr. 15.02.2026 10:30Schulungszentrum Hof</h3>
+            <p>Learn Python basics</p>
+        </div>
+        '''
+        soup = self.BeautifulSoup(html, 'html.parser')
+        container = soup.find('div', class_='course-item')
+        
+        scraper = self._create_scraper()
+        event = scraper._parse_course(container)
+        
+        self.assertIsNotNone(event)
+        # Time should be 10:30, not the default 18:00
+        self.assertIn('T10:30', event['start_time'])
     
     def test_parse_course_uses_title_location_fallback(self):
         """Test that _parse_course uses location from title when not found in HTML."""
