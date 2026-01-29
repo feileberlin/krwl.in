@@ -214,7 +214,7 @@ class VHSSource(BaseSource):
         
         return None
     
-    def _parse_concatenated_title(self, raw_title: str) -> Tuple[str, Optional[str], Optional[str], Optional[str]]:
+    def _parse_concatenated_title(self, raw_title: str, match=None) -> Tuple[str, Optional[str], Optional[str], Optional[str]]:
         """
         Parse concatenated VHS title text to extract clean title, date, time, and location.
         
@@ -228,6 +228,7 @@ class VHSSource(BaseSource):
         
         Args:
             raw_title: The concatenated title text from the HTML
+            match: Optional precomputed regex match to avoid double search
             
         Returns:
             Tuple of (clean_title, date_string, time_string, location_name)
@@ -236,8 +237,9 @@ class VHSSource(BaseSource):
             - time_string: Time in HH:MM format (or None if not found)
             - location_name: Location after the time (or None if not found)
         """
-        # Find the weekday pattern in the title
-        match = WEEKDAY_DATE_TIME_PATTERN.search(raw_title)
+        # Use precomputed match if provided, otherwise search
+        if match is None:
+            match = WEEKDAY_DATE_TIME_PATTERN.search(raw_title)
         
         if not match:
             # No date pattern found, return original title
@@ -278,8 +280,9 @@ class VHSSource(BaseSource):
             return None
         
         # Only parse concatenated title if it contains the weekday+date pattern
-        if WEEKDAY_DATE_TIME_PATTERN.search(raw_title):
-            clean_title, parsed_date, parsed_time, title_location = self._parse_concatenated_title(raw_title)
+        pattern_match = WEEKDAY_DATE_TIME_PATTERN.search(raw_title)
+        if pattern_match:
+            clean_title, parsed_date, parsed_time, title_location = self._parse_concatenated_title(raw_title, match=pattern_match)
             title = clean_title
         else:
             # Not a concatenated title, use as-is
@@ -320,11 +323,8 @@ class VHSSource(BaseSource):
                 # Validate date components
                 if 1 <= day <= 31 and 1 <= month <= 12:
                     event_datetime = datetime(year, month, day, hour, minute)
-                    # Only use if in the future
-                    if event_datetime > datetime.now():
-                        start_time = event_datetime.isoformat()
-                    else:
-                        start_time = extract_date_from_text(parsed_date, default_hour=18)
+                    # Always use the parsed datetime; higher-level logic can decide about past events
+                    start_time = event_datetime.isoformat()
                 else:
                     start_time = extract_date_from_text(parsed_date, default_hour=18)
             except (ValueError, TypeError):
