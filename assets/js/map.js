@@ -60,6 +60,14 @@ class MapManager {
             return false;
         }
         
+        // If retrying after fallback was shown, clear fallback content
+        const container = document.getElementById(containerId);
+        if (container && this.isFallbackMode) {
+            container.innerHTML = ''; // Clear fallback HTML
+            this.isFallbackMode = false; // Reset fallback flag
+            this.log('Cleared fallback content, retrying map initialization');
+        }
+        
         const center = this.config.map.default_center;
         
         try {
