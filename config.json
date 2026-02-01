@@ -241,8 +241,8 @@
             "en": "🌋 Mount Erebus"
           },
           "center": {
-            "lat": -77.52972,
-            "lng": 167.15333
+            "lat": -77.5297,
+            "lng": 167.1533
           },
           "radius": 50.0,
           "zoom": 10
@@ -346,8 +346,8 @@
             "en": "Hof Main Station"
           },
           "center": {
-            "lat": 50.30806,
-            "lng": 11.92333
+            "lat": 50.3081,
+            "lng": 11.9233
           },
           "radius": 0.5,
           "zoom": 16
@@ -451,8 +451,8 @@
             "en": "Nuremberg Main Station"
           },
           "center": {
-            "lat": 49.44639,
-            "lng": 11.08194
+            "lat": 49.4464,
+            "lng": 11.0819
           },
           "radius": 0.5,
           "zoom": 16
@@ -557,7 +557,7 @@
           },
           "center": {
             "lat": 49.95,
-            "lng": 11.58028
+            "lng": 11.5803
           },
           "radius": 0.5,
           "zoom": 16
@@ -720,12 +720,12 @@
         {
           "id": "bahnhof",
           "name": {
-            "de": "Bahnhof Rehau",
-            "en": "Rehau Station"
+            "de": "Bahnhof Marktredwitz",
+            "en": "Marktredwitz Station"
           },
           "center": {
-            "lat": 50.2505,
-            "lng": 12.0326
+            "lat": 50.0033,
+            "lng": 12.0844
           },
           "radius": 0.5,
           "zoom": 16
@@ -856,6 +856,77 @@
           },
           "radius": 1.0,
           "zoom": 14
+        }
+      ]
+    },
+    "rehau": {
+      "name": "rehau",
+      "displayName": "Rehau",
+      "center": {
+        "lat": 50.2489,
+        "lng": 12.0364
+      },
+      "zoom": 13,
+      "boundingBox": {
+        "north": 50.28,
+        "south": 50.22,
+        "east": 12.08,
+        "west": 11.99
+      },
+      "dataSource": "events.json",
+      "defaultLanguage": "de",
+      "distancePresets": [
+        {
+          "id": "nearby",
+          "name": {
+            "de": "In der Nähe",
+            "en": "Nearby"
+          },
+          "distance_km": 0.5
+        },
+        {
+          "id": "citywide",
+          "name": {
+            "de": "Stadtgebiet",
+            "en": "City-wide"
+          },
+          "distance_km": 2.0
+        },
+        {
+          "id": "region",
+          "name": {
+            "de": "Region",
+            "en": "Region"
+          },
+          "distance_km": 5.0
+        }
+      ],
+      "customFilters": [
+        {
+          "id": "bahnhof",
+          "name": {
+            "de": "Bahnhof Rehau",
+            "en": "Rehau Station"
+          },
+          "center": {
+            "lat": 50.2505,
+            "lng": 12.0326
+          },
+          "radius": 0.5,
+          "zoom": 16
+        },
+        {
+          "id": "marktplatz",
+          "name": {
+            "de": "Marktplatz",
+            "en": "Market Square"
+          },
+          "center": {
+            "lat": 50.2489,
+            "lng": 12.0364
+          },
+          "radius": 0.8,
+          "zoom": 15
         }
       ]
     }
