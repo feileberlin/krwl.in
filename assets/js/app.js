@@ -128,7 +128,7 @@ class EventsApp {
                 if (antarcticaRegion.center) {
                     this.config.map.default_center = {
                         lat: antarcticaRegion.center.lat,
-                        lon: antarcticaRegion.center.lng || antarcticaRegion.center.lon
+                        lon: antarcticaRegion.center.lng !== undefined ? antarcticaRegion.center.lng : antarcticaRegion.center.lon
                     };
                 }
                 if (antarcticaRegion.zoom) {
@@ -168,7 +168,7 @@ class EventsApp {
         if (region.center) {
             this.config.map.default_center = {
                 lat: region.center.lat,
-                lon: region.center.lng || region.center.lon
+                lon: region.center.lng !== undefined ? region.center.lng : region.center.lon
             };
         }
         if (region.zoom) {
@@ -195,6 +195,15 @@ class EventsApp {
         // Store unknown region info
         this.activeRegion = 'atlantis';  // Force to atlantis
         this.isUnknownRegion = true;
+        
+        // Create minimal region config for Atlantis (prevents using Hof's custom locations)
+        this.activeRegionConfig = {
+            name: 'atlantis',
+            displayName: 'Atlantis (404)',
+            center: ATLANTIS,
+            zoom: 6,
+            customFilters: []  // Empty array - no custom locations for 404 page
+        };
         
         console.log(`[KRWL] Unknown region "${regionId}" → Redirecting to Atlantis (404)`);
         
