@@ -122,8 +122,8 @@ Your project has excellent docs:
 cat docs/adr/001-fallback-list-when-map-fails.md
 
 # Create new ADR when making significant architectural decision
-cp docs/adr/README.md docs/adr/004-your-decision.md
-# Edit, update index, commit
+cp docs/adr/template.md docs/adr/004-your-decision.md
+# Edit the new ADR, update docs/adr/README.md index, commit
 ```
 
 ### 4. Small, Focused PRs (Best Practice)

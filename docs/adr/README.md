@@ -65,11 +65,13 @@ Links to related ADRs or features.json entries.
 
 ## Creating New ADRs
 
-1. Copy the template above
+1. Copy the template: `cp docs/adr/template.md docs/adr/XXX-kebab-case-title.md`
 2. Number sequentially (next available: ADR-004)
-3. Save to `docs/adr/XXX-kebab-case-title.md`
-4. Update this index
+3. Fill in all sections with specific details
+4. Update this index (add link below)
 5. Link from relevant documentation (README, features.json, etc.)
+
+See [template.md](./template.md) for the complete ADR structure.
 
 ## ADR Lifecycle
 

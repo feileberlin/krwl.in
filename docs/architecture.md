@@ -70,7 +70,7 @@ graph TB
 
     subgraph "Frontend - Core"
         APP[app.js<br/>Main Orchestrator]
-        CONFIG_JS[config.js<br/>Environment Detection]
+        CONFIG_JS[APP_CONFIG & EventUtils<br/>Env Detection & Defaults]
         UTILS_JS[utils.js<br/>Helper Functions]
     end
 
@@ -256,15 +256,15 @@ graph LR
 
     subgraph "Layer 2: Domain Logic"
         STORAGE[storage.js<br/>LocalStorage]
-        FILTERS[filters.js<br/>FilterManager]
+        FILTERS[filters.js<br/>EventFilter]
         MAP[map.js<br/>MapManager]
     end
 
     subgraph "Layer 3: UI Components"
-        MARKERS[marker-icons.js]
-        BUBBLES[speech-bubbles.js]
-        CARDS[event-cards.js]
-        TIME_DRAWER[time-drawer.js]
+        MARKERS[Marker rendering<br/>in map.js]
+        BUBBLES[Event popups<br/>Leaflet native]
+        CARDS[Event display<br/>in app.js]
+        TIME_DRAWER[filter-description-ui.js]
         DASHBOARD[dashboard-ui.js]
     end
 

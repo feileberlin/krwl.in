@@ -173,15 +173,6 @@ ENHANCEMENTS = {
         ],
         "test_command": "python3 src/event_manager.py scrape-weather && python3 src/event_manager.py update-weather"
     },
-    "draggable-speech-bubbles": {
-        "used_by": [],
-        "breaks_if_missing": [
-            "Speech bubbles fixed in position",
-            "May overlap with other UI elements",
-            "Users cannot reposition event details"
-        ],
-        "test_command": "Open public/index.html, click marker, try dragging speech bubble"
-    },
     "telegram-bot": {
         "used_by": ["telegram-bot-github-actions"],
         "breaks_if_missing": [
@@ -189,7 +180,7 @@ ENHANCEMENTS = {
             "Cannot receive event submissions via Telegram",
             "Community engagement reduced"
         ],
-        "test_command": "python3 src/telegram_bot/bot.py --test"
+        "test_command": "python3 src/modules/telegram_bot_simple.py --help"
     },
     "event-archiving": {
         "used_by": [],
@@ -234,8 +225,12 @@ def enhance_features():
             feature['used_by'] = enhancement['used_by']
             feature['breaks_if_missing'] = enhancement['breaks_if_missing']
             
-            # Only override test_command if it doesn't exist or is generic
-            if 'test_command' not in feature or feature.get('test_method') in ['check_files_exist', 'check_code_patterns']:
+            # Only override test_command if it doesn't exist or is a placeholder
+            existing_cmd = feature.get('test_command')
+            if existing_cmd is None or (
+                isinstance(existing_cmd, str) 
+                and existing_cmd.startswith("Manual testing required")
+            ):
                 feature['test_command'] = enhancement['test_command']
             
             enhanced_count += 1

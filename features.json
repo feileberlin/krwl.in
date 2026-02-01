@@ -183,8 +183,7 @@
       "used_by": [
         "geolocation-filtering",
         "custom-location",
-        "map-markers",
-        "draggable-speech-bubbles"
+        "map-markers"
       ],
       "breaks_if_missing": [
         "No visual map display of events",
@@ -1534,11 +1533,9 @@
       "depends_on": [],
       "used_by": [],
       "breaks_if_missing": [
-        "Speech bubbles fixed in position",
-        "May overlap with other UI elements",
-        "Users cannot reposition event details"
+        "N/A - feature removed and replaced by Leaflet default popups"
       ],
-      "test_command": "Open public/index.html, click marker, try dragging speech bubble"
+      "test_command": "N/A - feature removed; no test required"
     },
     {
       "id": "ai-categorization",
@@ -1676,7 +1673,7 @@
         "Cannot receive event submissions via Telegram",
         "Community engagement reduced"
       ],
-      "test_command": "python3 src/telegram_bot/bot.py --test"
+      "test_command": "python3 src/modules/telegram_bot_simple.py --help"
     },
     {
       "id": "dashboard-contact-form",

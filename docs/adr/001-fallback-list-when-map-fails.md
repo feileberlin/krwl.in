@@ -78,14 +78,19 @@ We implemented a **fallback list view** that displays events in a scrollable lis
 
 ## Verification
 
-Test the fallback by:
-```javascript
-// In browser console, simulate Leaflet failure:
-window.L = undefined;
-// Then reload page - should see list view
-```
+Test the fallback by blocking Leaflet.js from loading:
 
-Or manually block CDN in browser DevTools → Network tab.
+**Method 1: Block CDN in DevTools**
+1. Open browser DevTools (F12)
+2. Go to Network tab
+3. Right-click on any request → "Block request domain"
+4. Add `unpkg.com` to blocked domains
+5. Reload page → should see fallback list view
+
+**Method 2: Simulate build without Leaflet**
+1. Edit `src/modules/site_generator.py` to skip Leaflet inlining temporarily
+2. Run `python3 src/event_manager.py generate`
+3. Open `public/index.html` → should fallback to list view
 
 ## References
 
