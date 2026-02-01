@@ -978,7 +978,7 @@
     "name": "KRWL> Events from here til sunrise",
     "_comment_name": "App name is auto-adjusted: adds '[DEV]' suffix in development mode",
     "description": "Community events scraper and viewer with geolocation filtering",
-    "environment": "auto-detected",
+    "environment": "auto",
     "_comment_environment": "This field is overridden at runtime based on actual environment detection",
     "repository": {
       "owner": "feileberlin",
