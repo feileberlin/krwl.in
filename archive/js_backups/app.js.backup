@@ -1,4 +1,4 @@
-// KRWL HOF Community Events App
+// KRWL> Events from here til sunrise
 // 
 // PERFORMANCE OPTIMIZATIONS:
 // - Debounced filter updates to reduce re-renders during slider drag
@@ -613,7 +613,7 @@ class EventsApp {
             this.log('Pending events count:', count);
             
             // Update browser title
-            const baseTitle = 'KRWL HOF - Community Events';
+            const baseTitle = 'KRWL> Events from here til sunrise';
             if (count > 0) {
                 document.title = '❗ ' + baseTitle;
             } else {

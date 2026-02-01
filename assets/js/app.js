@@ -10,7 +10,7 @@
 })();
 
 // ============================================================================
-// KRWL HOF Community Events App - KISS Refactored
+// KRWL> Events from here til sunrise - KISS Refactored
 // ============================================================================
 // 
 // This file coordinates modules and handles UI interactions.
@@ -790,7 +790,7 @@ class EventsApp {
             this.log('Pending events count:', count);
             
             // Update browser title
-            const baseTitle = 'KRWL HOF - Community Events';
+            const baseTitle = 'KRWL> Events from here til sunrise';
             if (count > 0) {
                 document.title = '❗ ' + baseTitle;
             } else {

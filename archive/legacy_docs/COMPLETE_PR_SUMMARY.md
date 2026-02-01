@@ -123,7 +123,7 @@ push:
 #### A) Comprehensive Header (40+ lines)
 ```yaml
 # ═══════════════════════════════════════════════════════════
-# KRWL HOF Community Events - Automated Workflow
+# KRWL> Events from here til sunrise - Automated Workflow
 # ═══════════════════════════════════════════════════════════
 #
 # PURPOSE:

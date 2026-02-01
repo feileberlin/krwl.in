@@ -15,7 +15,7 @@ src/
 
 ### event_manager.py
 
-KRWL HOF Community Events Manager
+KRWL> Events from here til sunrise
 A modular Python TUI for managing community events
 
 
