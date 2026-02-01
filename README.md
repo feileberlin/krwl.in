@@ -1,4 +1,4 @@
-# KRWL HOF Community Events
+# KRWL> Events from here til sunrise
 
 > Community events scraper and viewer with geolocation filtering
 
@@ -108,10 +108,10 @@ Switch between English and German with a single click:
 
 ### 🏙️ Multi-Region Support
 
-KRWL HOF now supports viewing events from different Franconian cities! **URL path segment reads config variables (map center, zoom) to position the map** - all regions share the same event data.
+KRWL> now supports viewing events from different Franconian cities! **URL path segment reads config variables (map center, zoom) to position the map** - all regions share the same event data.
 
 **Supported Regions:**
-- 🏛️ **Hof (Saale)** - Default region (50.3167°N, 11.9167°E)
+- 🏭 **Hof (Saale)** - Default region (50.3167°N, 11.9167°E)
 - 🏰 **Nürnberg** - Franconia's metropolis (49.4521°N, 11.0767°E)  
 - 🎭 **Bayreuth** - Festival city (49.9481°N, 11.5783°E)
 - 🏺 **Selb** - Porcelain city (50.1705°N, 12.1328°E)
@@ -204,7 +204,7 @@ One HTML page (`public/index.html`) serves all content, with client-side routing
 
 **Adding Your Own Region:**
 
-1. Fork the repository: `https://github.com/feileberlin/krwl-hof`
+1. Fork the repository: `https://github.com/feileberlin/krwl`
 2. Add your region to `config.json`:
    ```json
    "regions": {
@@ -232,8 +232,8 @@ Want to run it locally or contribute?
 
 ```bash
 # Clone the repository
-git clone https://github.com/feileberlin/krwl-hof.git
-cd krwl-hof
+git clone https://github.com/feileberlin/krwl.git
+cd krwl
 
 # Install system dependencies (for Facebook flyer OCR)
 # Ubuntu/Debian:
@@ -353,7 +353,7 @@ python3 src/event_manager.py --help       # Show all commands
 
 ```
 
-KRWL HOF Community Events Manager
+KRWL> Events from here til sunrise
 ==================================
 
 A modular Python TUI for managing community events with geolocation
@@ -522,7 +522,7 @@ DOCUMENTATION:
     (Main Menu → View Documentation)
 
 For more information, visit:
-    https://github.com/feileberlin/krwl-hof
+    https://github.com/feileberlin/krwl
 
 
 ```
@@ -534,7 +534,7 @@ All configuration lives in `config.json`:
 ```json
 {
   "app": {
-    "name": "KRWL HOF Community Events",
+    "name": "KRWL> Events from here til sunrise",
     "description": "Community events scraper and viewer with geolocation filtering"
   },
   "map": {
@@ -589,7 +589,7 @@ python3 src/modules/kiss_checker.py --verbose
 ## 📝 Project Structure
 
 ```
-krwl-hof/
+krwl/
 ├── config.json          # Unified configuration (auto-detects environment)
 ├── static/              # Only index.html
 │   └── index.html       # Main app (auto-generated, DO NOT EDIT)
@@ -856,7 +856,7 @@ Full configuration options in `config.json`:
       "_comment_rate_limit_per_user": "Max submissions per user per hour"
     },
     "messages": {
-      "welcome": "🎉 Welcome to KRWL HOF Events Bot!...",
+      "welcome": "🎉 Welcome to KRWL> Events Bot!...",
       "help": "📋 Available Commands:\n\n/submit - ..."
     }
   }
@@ -1114,13 +1114,13 @@ Found a security issue? Please report it privately via GitHub Security Advisorie
 
 ## 🙏 Acknowledgments
 
-Built with love for the Hof community. Special thanks to all the local venues and organizations sharing their event information.
+Built with love for the Hof/Saale community. Special thanks to all the local venues and organizations sharing their event information.
 
 ## 🔗 Links
 
 - **Live App**: [krwl.in](https://krwl.in)
-- **GitHub Repository**: [github.com/feileberlin/krwl-hof](https://github.com/feileberlin/krwl-hof)
-- **Report Issues**: [GitHub Issues](https://github.com/feileberlin/krwl-hof/issues)
+- **GitHub Repository**: [github.com/feileberlin/krwl](https://github.com/feileberlin/krwl)
+- **Report Issues**: [GitHub Issues](https://github.com/feileberlin/krwl/issues)
 
 ---
 
