@@ -159,6 +159,14 @@
       "defaultLanguage": "en",
       "distancePresets": [
         {
+          "id": "penguin_waddle",
+          "name": {
+            "de": "🐧 Pinguin-Watschel-Distanz",
+            "en": "🐧 Penguin Waddle Distance"
+          },
+          "distance_km": 0.5
+        },
+        {
           "id": "nearby",
           "name": {
             "de": "Beim Südpol",
@@ -167,18 +175,34 @@
           "distance_km": 1.0
         },
         {
+          "id": "snowmobile",
+          "name": {
+            "de": "🛷 Schneemobil-Reichweite",
+            "en": "🛷 Snowmobile Range"
+          },
+          "distance_km": 10.0
+        },
+        {
           "id": "station",
           "name": {
-            "de": "Forschungsstation",
-            "en": "Research Station"
+            "de": "🔬 Forschungsstation",
+            "en": "🔬 Research Station"
           },
           "distance_km": 50.0
         },
         {
+          "id": "helicopter",
+          "name": {
+            "de": "🚁 Hubschrauber-Flug",
+            "en": "🚁 Helicopter Flight"
+          },
+          "distance_km": 200.0
+        },
+        {
           "id": "continent",
           "name": {
-            "de": "Kontinent",
-            "en": "Continent"
+            "de": "🌍 Kontinent",
+            "en": "🌍 Continent"
           },
           "distance_km": 2000.0
         }
@@ -209,6 +233,58 @@
           },
           "radius": 0.5,
           "zoom": 8
+        },
+        {
+          "id": "mount_erebus",
+          "name": {
+            "de": "🌋 Mount Erebus",
+            "en": "🌋 Mount Erebus"
+          },
+          "center": {
+            "lat": -77.5297,
+            "lng": 167.1533
+          },
+          "radius": 50.0,
+          "zoom": 10
+        },
+        {
+          "id": "inexpressible_island",
+          "name": {
+            "de": "😰 Inexpressible Island",
+            "en": "😰 Inexpressible Island"
+          },
+          "center": {
+            "lat": -74.9,
+            "lng": 163.783
+          },
+          "radius": 10.0,
+          "zoom": 12
+        },
+        {
+          "id": "mcmurdo",
+          "name": {
+            "de": "🏘️ McMurdo Station (MacTown)",
+            "en": "🏘️ McMurdo Station (MacTown)"
+          },
+          "center": {
+            "lat": -77.846,
+            "lng": 166.676
+          },
+          "radius": 5.0,
+          "zoom": 13
+        },
+        {
+          "id": "chapel_snows",
+          "name": {
+            "de": "⛪ Chapel of the Snows",
+            "en": "⛪ Chapel of the Snows"
+          },
+          "center": {
+            "lat": -77.848,
+            "lng": 166.667
+          },
+          "radius": 1.0,
+          "zoom": 15
         }
       ]
     },
@@ -263,6 +339,19 @@
         }
       ],
       "customFilters": [
+        {
+          "id": "hauptbahnhof",
+          "name": {
+            "de": "Hauptbahnhof Hof",
+            "en": "Hof Main Station"
+          },
+          "center": {
+            "lat": 50.3081,
+            "lng": 11.9233
+          },
+          "radius": 0.5,
+          "zoom": 16
+        },
         {
           "id": "untreusee",
           "name": {
@@ -356,6 +445,19 @@
       ],
       "customFilters": [
         {
+          "id": "hauptbahnhof",
+          "name": {
+            "de": "Hauptbahnhof Nürnberg",
+            "en": "Nuremberg Main Station"
+          },
+          "center": {
+            "lat": 49.4464,
+            "lng": 11.0819
+          },
+          "radius": 0.5,
+          "zoom": 16
+        },
+        {
           "id": "altstadt",
           "name": {
             "de": "Altstadt",
@@ -375,8 +477,8 @@
             "en": "Gostenhof"
           },
           "center": {
-            "lat": 49.4580,
-            "lng": 11.0580
+            "lat": 49.458,
+            "lng": 11.058
           },
           "radius": 1.0,
           "zoom": 15
@@ -388,8 +490,8 @@
             "en": "South District"
           },
           "center": {
-            "lat": 49.4350,
-            "lng": 11.0800
+            "lat": 49.435,
+            "lng": 11.08
           },
           "radius": 1.5,
           "zoom": 14
@@ -447,6 +549,19 @@
         }
       ],
       "customFilters": [
+        {
+          "id": "hauptbahnhof",
+          "name": {
+            "de": "Hauptbahnhof Bayreuth",
+            "en": "Bayreuth Main Station"
+          },
+          "center": {
+            "lat": 49.95,
+            "lng": 11.5803
+          },
+          "radius": 0.5,
+          "zoom": 16
+        },
         {
           "id": "innenstadt",
           "name": {
@@ -532,6 +647,19 @@
       ],
       "customFilters": [
         {
+          "id": "bahnhof",
+          "name": {
+            "de": "Bahnhof Selb Stadt",
+            "en": "Selb Stadt Station"
+          },
+          "center": {
+            "lat": 50.1741,
+            "lng": 12.1264
+          },
+          "radius": 0.5,
+          "zoom": 16
+        },
+        {
           "id": "innenstadt",
           "name": {
             "de": "Innenstadt",
@@ -590,6 +718,19 @@
       ],
       "customFilters": [
         {
+          "id": "bahnhof",
+          "name": {
+            "de": "Bahnhof Marktredwitz",
+            "en": "Marktredwitz Station"
+          },
+          "center": {
+            "lat": 50.0033,
+            "lng": 12.0844
+          },
+          "radius": 0.5,
+          "zoom": 16
+        },
+        {
           "id": "marktplatz",
           "name": {
             "de": "Marktplatz",
@@ -598,6 +739,191 @@
           "center": {
             "lat": 50.0044,
             "lng": 12.0859
+          },
+          "radius": 0.8,
+          "zoom": 15
+        }
+      ]
+    },
+    "atlantis": {
+      "name": "atlantis",
+      "displayName": "Atlantis (Lost City)",
+      "_comment": "🌊 Humorous 404 region for unknown URLs - Dynamic error handler",
+      "center": {
+        "lat": 31.0,
+        "lng": -24.0
+      },
+      "zoom": 8,
+      "boundingBox": {
+        "north": 32.0,
+        "south": 30.0,
+        "east": -23.0,
+        "west": -25.0
+      },
+      "dataSource": "events.json",
+      "defaultLanguage": "en",
+      "distancePresets": [
+        {
+          "id": "bubble_swim",
+          "name": {
+            "de": "🫧 Blasen-Schwimm-Distanz",
+            "en": "🫧 Bubble Swimming Distance"
+          },
+          "distance_km": 0.2
+        },
+        {
+          "id": "nearby",
+          "name": {
+            "de": "🐠 Nahbereich",
+            "en": "🐠 Nearby"
+          },
+          "distance_km": 1.0
+        },
+        {
+          "id": "dolphin_ride",
+          "name": {
+            "de": "🐬 Delfin-Ritt",
+            "en": "🐬 Dolphin Ride"
+          },
+          "distance_km": 5.0
+        },
+        {
+          "id": "submarine",
+          "name": {
+            "de": "🚢 U-Boot-Reichweite",
+            "en": "🚢 Submarine Range"
+          },
+          "distance_km": 20.0
+        },
+        {
+          "id": "sunken_city",
+          "name": {
+            "de": "🏛️ Versunkene Stadt",
+            "en": "🏛️ Sunken City"
+          },
+          "distance_km": 50.0
+        }
+      ],
+      "customFilters": [
+        {
+          "id": "poseidon_palace",
+          "name": {
+            "de": "🔱 Poseidon-Palast",
+            "en": "🔱 Poseidon's Palace"
+          },
+          "center": {
+            "lat": 31.0,
+            "lng": -24.0
+          },
+          "radius": 2.0,
+          "zoom": 12
+        },
+        {
+          "id": "platos_academy",
+          "name": {
+            "de": "📚 Platons Akademie",
+            "en": "📚 Plato's Academy"
+          },
+          "center": {
+            "lat": 31.05,
+            "lng": -24.05
+          },
+          "radius": 1.0,
+          "zoom": 13
+        },
+        {
+          "id": "coral_gardens",
+          "name": {
+            "de": "🪸 Korallen-Gärten",
+            "en": "🪸 Coral Gardens"
+          },
+          "center": {
+            "lat": 31.02,
+            "lng": -23.98
+          },
+          "radius": 1.5,
+          "zoom": 13
+        },
+        {
+          "id": "sunken_marketplace",
+          "name": {
+            "de": "🏺 Versunkener Marktplatz",
+            "en": "🏺 Sunken Marketplace"
+          },
+          "center": {
+            "lat": 30.98,
+            "lng": -24.02
+          },
+          "radius": 1.0,
+          "zoom": 14
+        }
+      ]
+    },
+    "rehau": {
+      "name": "rehau",
+      "displayName": "Rehau",
+      "center": {
+        "lat": 50.2489,
+        "lng": 12.0364
+      },
+      "zoom": 13,
+      "boundingBox": {
+        "north": 50.28,
+        "south": 50.22,
+        "east": 12.08,
+        "west": 11.99
+      },
+      "dataSource": "events.json",
+      "defaultLanguage": "de",
+      "distancePresets": [
+        {
+          "id": "nearby",
+          "name": {
+            "de": "In der Nähe",
+            "en": "Nearby"
+          },
+          "distance_km": 0.5
+        },
+        {
+          "id": "citywide",
+          "name": {
+            "de": "Stadtgebiet",
+            "en": "City-wide"
+          },
+          "distance_km": 2.0
+        },
+        {
+          "id": "region",
+          "name": {
+            "de": "Region",
+            "en": "Region"
+          },
+          "distance_km": 5.0
+        }
+      ],
+      "customFilters": [
+        {
+          "id": "bahnhof",
+          "name": {
+            "de": "Bahnhof Rehau",
+            "en": "Rehau Station"
+          },
+          "center": {
+            "lat": 50.2505,
+            "lng": 12.0326
+          },
+          "radius": 0.5,
+          "zoom": 16
+        },
+        {
+          "id": "marktplatz",
+          "name": {
+            "de": "Marktplatz",
+            "en": "Market Square"
+          },
+          "center": {
+            "lat": 50.2489,
+            "lng": 12.0364
           },
           "radius": 0.8,
           "zoom": 15

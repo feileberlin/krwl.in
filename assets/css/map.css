@@ -99,3 +99,250 @@
     background: rgba(255, 255, 255, 0.4);
     border-radius: 2px 2px 0 0;
 }
+
+/* ========================================================================
+   CATEGORY MARKERS & POPUPS - Individual Category Icons
+   ======================================================================== */
+
+/* Category Icon Container (divIcon) */
+.category-icon-container {
+    background: transparent !important;
+    border: none !important;
+}
+
+/* Category Icon Marker - Individual Lucide Icons */
+.category-icon-marker {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    transition: transform 0.2s ease, filter 0.2s ease;
+    position: relative;
+}
+
+/* Category Icon (Lucide) - Large and colorful */
+.category-icon-marker .category-icon {
+    width: 40px;
+    height: 40px;
+    color: var(--color-primary);
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+    stroke-width: 2;
+}
+
+/* Icon hover effect */
+.category-icon-marker:hover {
+    transform: scale(1.2);
+}
+
+.category-icon-marker:hover .category-icon {
+    filter: drop-shadow(0 3px 6px rgba(214, 137, 184, 0.6));
+}
+
+/* Bookmarked marker style - different color */
+.marker-bookmarked .category-icon-marker .category-icon {
+    color: var(--color-bookmark);
+    filter: drop-shadow(0 2px 6px rgba(214, 137, 184, 0.5));
+}
+
+/* Legacy support for old class names */
+.category-marker-container {
+    background: transparent !important;
+    border: none !important;
+}
+
+.category-marker {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    position: relative;
+}
+
+.category-marker .marker-icon {
+    width: 40px;
+    height: 40px;
+    color: var(--color-primary);
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+}
+
+/* Event Popup Container */
+.leaflet-popup.event-popup {
+    margin-bottom: 20px;
+}
+
+.leaflet-popup.event-popup .leaflet-popup-content-wrapper {
+    background: rgba(17, 10, 14, 0.95); /* Semi-transparent dark background */
+    backdrop-filter: blur(10px);
+    border: 2px solid var(--color-primary);
+    border-radius: 12px;
+    padding: 0;
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.5),
+        0 0 0 1px rgba(214, 137, 184, 0.3);
+}
+
+.leaflet-popup.event-popup .leaflet-popup-content {
+    margin: 0;
+    min-width: 240px;
+}
+
+.leaflet-popup.event-popup .leaflet-popup-tip {
+    background: var(--color-bg-primary);
+    border: 2px solid var(--color-primary);
+    border-top: none;
+    border-right: none;
+}
+
+/* Popup Content */
+.event-popup-content {
+    padding: 16px;
+    color: var(--color-text-primary);
+    position: relative;
+}
+
+/* Time Display Section */
+.popup-time-display {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+    padding: 12px;
+    background: rgba(214, 137, 184, 0.1);
+    border-radius: 8px;
+    border: 1px solid var(--color-primary);
+}
+
+/* Time Mode (for "til sunrise" filter) - Large time display */
+.popup-time-mode .time-badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.time-badge .time-large {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--color-primary);
+    font-family: 'Courier New', monospace;
+    letter-spacing: 2px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Date Mode (for other filters) - Large date display */
+.popup-date-mode .date-badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.date-badge .date-large {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    text-align: center;
+}
+
+/* Popup Title */
+.popup-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--color-primary);
+    margin: 0 0 10px 0;
+    line-height: 1.3;
+}
+
+/* Popup Info Lines */
+.popup-location,
+.popup-distance {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: var(--color-text-secondary);
+    margin-bottom: 8px;
+}
+
+.popup-icon {
+    width: 16px;
+    height: 16px;
+    color: var(--color-primary);
+    flex-shrink: 0;
+}
+
+/* Bookmark Button */
+.popup-bookmark {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(214, 137, 184, 0.1);
+    border: 2px solid var(--color-primary);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.popup-bookmark:hover {
+    background: rgba(214, 137, 184, 0.2);
+    transform: scale(1.1);
+}
+
+.popup-bookmark .bookmark-icon {
+    width: 20px;
+    height: 20px;
+    color: var(--color-primary);
+    stroke-width: 2;
+    transition: all 0.3s ease;
+}
+
+/* Bookmarked state - filled heart */
+.popup-bookmark.bookmarked {
+    background: var(--color-bookmark);
+    border-color: var(--color-primary);
+}
+
+.popup-bookmark.bookmarked .bookmark-icon {
+    color: var(--color-primary);
+    fill: var(--color-primary);
+    stroke: var(--color-primary);
+}
+
+/* Bookmark button animation on click */
+.popup-bookmark:active {
+    transform: scale(0.95);
+}
+
+/* Popup error state */
+.popup-error {
+    padding: 16px;
+    color: var(--color-error);
+    font-size: 14px;
+    text-align: center;
+}
+
+/* Popup animations */
+@keyframes popupFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.leaflet-popup.event-popup {
+    animation: popupFadeIn 0.3s ease-out;
+}

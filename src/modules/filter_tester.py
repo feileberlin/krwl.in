@@ -255,8 +255,8 @@ class FilterTester:
         )
     
     def test_predefined_locations(self):
-        """Test predefined location handling"""
-        print("\n## Predefined Location Tests")
+        """Test predefined location handling (region-based customFilters)"""
+        print("\n## Custom Location Tests (Region-based)")
         
         # Load config
         config_file = self.repo_root / "config.json"
@@ -264,36 +264,57 @@ class FilterTester:
             with open(config_file, 'r') as f:
                 config = json.load(f)
             
-            predefined = config.get('map', {}).get('predefined_locations', [])
+            # Check region-based customFilters (new structure)
+            regions = config.get('regions', {})
             self.assert_test(
-                len(predefined) > 0,
-                "Predefined locations exist in config",
-                f"Found {len(predefined)} locations"
+                len(regions) > 0,
+                "Regions exist in config",
+                f"Found {len(regions)} regions"
             )
             
-            # Check structure
-            if predefined:
-                first = predefined[0]
-                has_required_fields = (
-                    'name' in first and
-                    'lat' in first and
-                    'lon' in first
-                )
+            # Check Hof region specifically (it should have customFilters with Hauptbahnhof)
+            if 'hof' in regions:
+                hof_filters = regions['hof'].get('customFilters', [])
                 self.assert_test(
-                    has_required_fields,
-                    "Predefined locations have required fields",
-                    "Must have: name, lat, lon"
+                    len(hof_filters) > 0,
+                    "Hof region has custom locations",
+                    f"Found {len(hof_filters)} locations"
                 )
                 
-                required_names = {"Hauptbahnhof Hof", "Sonnenplatz Hof"}
-                actual_names = {loc.get('display_name') for loc in predefined if loc.get('display_name')}
-                self.assert_test(
-                    required_names.issubset(actual_names),
-                    "Predefined locations include required defaults",
-                    f"Found: {sorted(actual_names)}"
-                )
+                # Check structure of first custom filter
+                if hof_filters:
+                    first = hof_filters[0]
+                    has_required_fields = (
+                        'id' in first and
+                        'name' in first and
+                        'center' in first and
+                        'lat' in first.get('center', {}) and
+                        'lng' in first.get('center', {})
+                    )
+                    self.assert_test(
+                        has_required_fields,
+                        "Custom locations have required fields",
+                        "Must have: id, name, center.lat, center.lng"
+                    )
+                    
+                    # Check that Hof has Hauptbahnhof and Sonnenplatz
+                    required_names = {"Hauptbahnhof Hof", "Sonnenplatz"}
+                    actual_names = {loc.get('name', {}).get('de') for loc in hof_filters}
+                    self.assert_test(
+                        required_names.issubset(actual_names),
+                        "Hof region includes required custom locations",
+                        f"Found: {sorted(actual_names)}"
+                    )
+            
+            # Check that all regions have at least some customFilters
+            regions_with_filters = sum(1 for r in regions.values() if r.get('customFilters'))
+            self.assert_test(
+                regions_with_filters >= 4,  # At least hof, nbg, bth, selb should have filters
+                "Multiple regions have custom locations configured",
+                f"{regions_with_filters}/{len(regions)} regions have customFilters"
+            )
         else:
-            self.log("Config file not found, skipping predefined location tests")
+            self.log("Config file not found, skipping custom location tests")
     
     def run_all_tests(self):
         """Run all test suites"""
