@@ -3,40 +3,42 @@
  * 
  * Handles all Leaflet.js map operations:
  * - Map initialization
- * - Event flyer management (no markers, just small flyer cards)
+ * - Event markers with category icons (using Lucide icon font only)
+ * - Auto-opening popups with event details
  * - User location tracking
  * - Map bounds and zoom
  * 
  * KISS: Single responsibility - map management only
  * 
- * UI PHILOSOPHY: Small "flyers" displayed next to event locations on the map
- * - No traditional markers (pins/icons)
- * - No popups that need to be clicked
- * - Events are immediately visible as compact cards
+ * UI PHILOSOPHY: Category markers with permanently open popups
+ * - Traditional markers with category-based Lucide icons
+ * - Popups open automatically showing event details
+ * - Smart time display: Clock for "til sunrise", Calendar for other filters
+ * - Heart bookmark button in each popup
  */
 
-// Constants for flyer positioning (offsetting flyers at same location)
-const FLYER_OFFSET_RADIUS = 0.0005;   // ~50 meters offset for overlapping flyers
-const FLYER_OFFSET_ANGLE = 45;        // Degrees between each offset flyer
-const LOCATION_PRECISION = 4;         // Decimal places for location grouping (~11m precision)
+// Constants for marker positioning (offsetting markers at same location)
+const MARKER_OFFSET_RADIUS = 0.0005;   // ~50 meters offset for overlapping markers
+const MARKER_OFFSET_ANGLE = 45;        // Degrees between each offset marker
+const LOCATION_PRECISION = 4;          // Decimal places for location grouping (~11m precision)
 
 class MapManager {
     constructor(config, storage) {
         this.config = config;
         this.storage = storage;
         this.map = null;
-        this.flyers = [];           // Event flyer elements (was: markers)
+        this.markers = [];          // Event markers with popups
         this.userLocation = null;
-        this.locationCounts = {};   // Track flyers at same location for offset
+        this.locationCounts = {};   // Track markers at same location for offset
         this.referenceMarker = null; // Track the reference location marker (user/predefined/custom)
         this.isFallbackMode = false; // Track if we're showing fallback event list
     }
     
     /**
-     * Backward compatibility: return flyers as markers
+     * Backward compatibility: return markers as flyers
      */
-    get markers() {
-        return this.flyers;
+    get flyers() {
+        return this.markers;
     }
     
     /**
@@ -343,28 +345,31 @@ class MapManager {
     }
     
     /**
-     * Add event flyer to map (replaces traditional markers)
-     * Creates a small card-like flyer positioned next to the event location
+     * Add event marker to map with category icon and permanently open popup
      * @param {Object} event - Event data
      * @param {Function} onClick - Click handler
-     * @returns {Object} Leaflet marker with flyer divIcon
+     * @returns {Object} Leaflet marker with icon and popup
      */
     addEventMarker(event, onClick) {
         if (!this.map || !event.location) return null;
         
-        // Create flyer HTML content
-        const flyerHtml = this.createFlyerHtml(event);
+        // Detect category if not present
+        const category = event.category || this.detectEventCategory(event);
+        event.category = category; // Store detected category
         
-        // Use divIcon to create the flyer card
-        const flyerIcon = L.divIcon({
-            className: 'event-flyer-container',
-            html: flyerHtml,
-            iconSize: [140, 80],      // Compact flyer size
-            iconAnchor: [70, 40],     // Center of flyer
-            popupAnchor: [0, -40]     // Above flyer (not used, but keep for compatibility)
+        // Get category-based icon
+        const iconUrl = this.getMarkerIconForCategory(category);
+        
+        // Create custom Leaflet icon with category styling
+        const customIcon = L.icon({
+            iconUrl: iconUrl,
+            iconSize: [40, 60],        // Classic marker size
+            iconAnchor: [20, 60],      // Bottom center of marker
+            popupAnchor: [0, -60],     // Above marker
+            className: this.storage.isBookmarked(event.id) ? 'marker-bookmarked' : 'marker-unbookmarked'
         });
         
-        // Calculate offset for flyers at same location
+        // Calculate offset for markers at same location
         const locationKey = `${event.location.lat.toFixed(LOCATION_PRECISION)}_${event.location.lon.toFixed(LOCATION_PRECISION)}`;
         if (!this.locationCounts[locationKey]) {
             this.locationCounts[locationKey] = 0;
@@ -372,116 +377,360 @@ class MapManager {
         const offsetIndex = this.locationCounts[locationKey];
         this.locationCounts[locationKey]++;
         
-        // Apply offset if there are multiple flyers at same location
+        // Apply offset if there are multiple markers at same location
         let lat = event.location.lat;
         let lon = event.location.lon;
         if (offsetIndex > 0) {
-            const angle = (offsetIndex * FLYER_OFFSET_ANGLE) * (Math.PI / 180);
-            lat += FLYER_OFFSET_RADIUS * Math.cos(angle);
-            lon += FLYER_OFFSET_RADIUS * Math.sin(angle);
+            const angle = (offsetIndex * MARKER_OFFSET_ANGLE) * (Math.PI / 180);
+            lat += MARKER_OFFSET_RADIUS * Math.cos(angle);
+            lon += MARKER_OFFSET_RADIUS * Math.sin(angle);
         }
         
-        const flyer = L.marker([lat, lon], {
-            icon: flyerIcon,
+        // Create marker with icon
+        const marker = L.marker([lat, lon], {
+            icon: customIcon,
             customData: { id: event.id }
         }).addTo(this.map);
         
-        // Add bookmark class if bookmarked
-        if (this.storage.isBookmarked(event.id)) {
-            flyer._icon.classList.add('event-flyer-bookmarked');
+        // Store event data on marker
+        marker.eventData = event;
+        
+        // Create popup content with time/date logic
+        const popupContent = this.createPopupContent(event);
+        
+        // Bind popup and open it immediately (permanently open)
+        marker.bindPopup(popupContent, {
+            closeButton: false,       // No close button - permanently open
+            autoClose: false,         // Don't close when clicking map
+            closeOnClick: false,      // Don't close when clicking marker
+            className: 'event-popup',
+            maxWidth: 280,
+            offset: [0, -5]           // Slight offset above marker
+        }).openPopup();
+        
+        // Handle popup interactions after it's added to DOM
+        setTimeout(() => {
+            this.setupPopupInteractions(marker, event, onClick);
+        }, 100);
+        
+        this.markers.push(marker);
+        this.log('Marker added with popup for event', event.title);
+        
+        return marker;
+    }
+    
+    /**
+     * Detect event category from title and description (using Lucide icon names)
+     * @param {Object} event - Event with title and description
+     * @returns {string} Category name matching Lucide icon
+     */
+    detectEventCategory(event) {
+        const text = `${event.title || ''} ${event.description || ''}`.toLowerCase();
+        
+        // Music & Performance
+        if (/\b(concert|musik|music|band|sänger|singer|dj|live.*music)\b/i.test(text)) return 'music';
+        if (/\b(theater|theatre|schauspiel|performance|show|comedy|stand.*up)\b/i.test(text)) return 'drama';
+        
+        // Arts & Culture
+        if (/\b(art|kunst|gallery|galerie|exhibition|ausstellung|museum)\b/i.test(text)) return 'palette';
+        if (/\b(film|kino|cinema|movie|screening)\b/i.test(text)) return 'film';
+        if (/\b(photo|foto|photography)\b/i.test(text)) return 'camera';
+        
+        // Food & Dining
+        if (/\b(food|essen|restaurant|dinner|lunch|culinary|küche|cooking)\b/i.test(text)) return 'utensils';
+        if (/\b(coffee|café|cafe|kaffee|breakfast)\b/i.test(text)) return 'coffee';
+        if (/\b(wine|beer|bier|wein|cocktail|bar|pub|drink)\b/i.test(text)) return 'wine';
+        
+        // Sports & Fitness
+        if (/\b(sport|fitness|yoga|gym|workout|training|exercise)\b/i.test(text)) return 'dumbbell';
+        if (/\b(football|soccer|fußball|basketball|tennis)\b/i.test(text)) return 'trophy';
+        if (/\b(run|running|lauf|marathon|jogging)\b/i.test(text)) return 'footprints';
+        
+        // Education & Workshop
+        if (/\b(workshop|seminar|kurs|course|class|lesson|training|schulung)\b/i.test(text)) return 'graduation-cap';
+        if (/\b(talk|vortrag|lecture|presentation|conference)\b/i.test(text)) return 'presentation';
+        if (/\b(book|buch|library|bibliothek|reading|lesung)\b/i.test(text)) return 'book-open';
+        
+        // Community & Social
+        if (/\b(meetup|meeting|stammtisch|networking|community|social)\b/i.test(text)) return 'users';
+        if (/\b(party|fest|festival|celebration|feier)\b/i.test(text)) return 'party-popper';
+        if (/\b(market|markt|bazaar|fair|messe)\b/i.test(text)) return 'shopping-bag';
+        
+        // Nature & Outdoor
+        if (/\b(park|garden|garten|nature|natur|outdoor|hike|wandern)\b/i.test(text)) return 'trees';
+        if (/\b(bike|fahrrad|cycling|radtour)\b/i.test(text)) return 'bike';
+        
+        // Technology
+        if (/\b(tech|technology|digital|coding|programming|hackathon)\b/i.test(text)) return 'laptop';
+        if (/\b(game|gaming|esport|videogame)\b/i.test(text)) return 'gamepad-2';
+        
+        // Kids & Family
+        if (/\b(kid|child|kinder|family|familie|baby)\b/i.test(text)) return 'baby';
+        
+        // Default fallback
+        return 'calendar';
+    }
+    
+    /**
+     * Get marker icon HTML using individual Lucide icons
+     * Each category shows its distinct icon directly without background shape
+     * Uses only icons available in MAP_ICONS_MAP and DASHBOARD_ICONS_MAP
+     * @param {string} category - Category name (maps to Lucide icon)
+     * @returns {Object} Leaflet divIcon with category-specific Lucide icon
+     */
+    getMarkerIconForCategory(category) {
+        // Map categories to available Lucide icon names
+        // Only use icons that exist in the minimal Lucide build
+        const iconMap = {
+            'music': 'activity',        // musical activity (wave pattern)
+            'drama': 'activity',
+            'palette': 'book-open',     // arts/creativity
+            'film': 'book-open',
+            'camera': 'book-open',
+            'utensils': 'map-pin',      // generic location marker
+            'coffee': 'map-pin',
+            'wine': 'map-pin',
+            'dumbbell': 'activity',     // sports activity
+            'trophy': 'activity',
+            'footprints': 'footprints', // available!
+            'graduation-cap': 'book-open', // education
+            'presentation': 'book-open',
+            'book-open': 'book-open',   // available!
+            'users': 'map-pin',         // community
+            'party-popper': 'activity',
+            'shopping-bag': 'map-pin',
+            'trees': 'map-pin',         // nature
+            'bike': 'footprints',       // movement
+            'laptop': 'book-text',      // available!
+            'gamepad-2': 'activity',
+            'baby': 'heart',            // available!
+            'calendar': 'map-pin'       // default
+        };
+        
+        const lucideIcon = iconMap[category] || 'map-pin';
+        
+        // Create div icon with just the Lucide icon (no background shape)
+        // Each category icon is visually distinct
+        const html = `
+            <div class="category-icon-marker" data-category="${category}">
+                <i data-lucide="${lucideIcon}" class="category-icon"></i>
+            </div>
+        `;
+        
+        return L.divIcon({
+            className: 'category-icon-container',
+            html: html,
+            iconSize: [40, 40],
+            iconAnchor: [20, 20],
+            popupAnchor: [0, -20]
+        });
+    }
+    
+    /**
+     * Create popup content HTML with smart time display
+     * Shows clock for "til sunrise", calendar for other filters
+     * @param {Object} event - Event data
+     * @returns {string} HTML content for popup
+     */
+    createPopupContent(event) {
+        if (!event || !event.start_time) {
+            return '<div class="popup-error">Invalid event</div>';
         }
         
-        // Store event data on flyer (for backward compatibility)
-        flyer.eventData = event;
+        const startTime = new Date(event.start_time);
+        if (isNaN(startTime.getTime())) {
+            return '<div class="popup-error">Invalid date</div>';
+        }
         
-        // NO popups - flyers show all info directly
-        // Click opens detail panel only
+        // Format time and date
+        const hours = startTime.getHours();
+        const minutes = startTime.getMinutes().toString().padStart(2, '0');
+        const timeStr = `${hours}:${minutes}`;
+        const dayStr = startTime.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' });
+        
+        // Get time filter from global app
+        const app = window.app || window.eventsApp;
+        const timeFilter = (app && app.filters && app.filters.timeFilter) || 'sunrise';
+        const isSunriseFilter = (timeFilter === 'sunrise');
+        
+        // Check if bookmarked
+        const isBookmarked = this.storage.isBookmarked(event.id);
+        const bookmarkClass = isBookmarked ? 'bookmarked' : '';
+        
+        // Truncate title
+        const title = event.title || 'Event';
+        const displayTitle = title.length > 50 ? title.substring(0, 47) + '…' : title;
+        
+        // Distance display
+        const distanceHtml = event.distance !== undefined 
+            ? `<div class="popup-distance">
+                 <i data-lucide="map-pin" class="popup-icon"></i>
+                 <span>${event.distance.toFixed(1)} km</span>
+               </div>`
+            : '';
+        
+        // Build popup HTML based on time filter
+        if (isSunriseFilter) {
+            // Show TIME with map-pin icon for "til sunrise" filter (since clock isn't available)
+            return `
+                <div class="event-popup-content">
+                    <div class="popup-time-display popup-time-mode">
+                        <div class="time-badge" title="${timeStr}">
+                            <span class="time-large">${this.escapeHtml(timeStr)}</span>
+                        </div>
+                    </div>
+                    <h3 class="popup-title">${this.escapeHtml(displayTitle)}</h3>
+                    <div class="popup-location">
+                        <i data-lucide="map-pin" class="popup-icon"></i>
+                        <span>${this.escapeHtml(event.location?.name || 'Unknown')}</span>
+                    </div>
+                    ${distanceHtml}
+                    <button class="popup-bookmark ${bookmarkClass}" data-event-id="${event.id}" title="Bookmark this event">
+                        <i data-lucide="heart" class="bookmark-icon"></i>
+                    </button>
+                </div>
+            `.trim();
+        } else {
+            // Show DATE for other filters
+            return `
+                <div class="event-popup-content">
+                    <div class="popup-time-display popup-date-mode">
+                        <div class="date-badge">
+                            <span class="date-large">${this.escapeHtml(dayStr)}</span>
+                        </div>
+                    </div>
+                    <h3 class="popup-title">${this.escapeHtml(displayTitle)}</h3>
+                    <div class="popup-location">
+                        <i data-lucide="map-pin" class="popup-icon"></i>
+                        <span>${this.escapeHtml(event.location?.name || 'Unknown')}</span>
+                    </div>
+                    ${distanceHtml}
+                    <button class="popup-bookmark ${bookmarkClass}" data-event-id="${event.id}" title="Bookmark this event">
+                        <i data-lucide="heart" class="bookmark-icon"></i>
+                    </button>
+                </div>
+            `.trim();
+        }
+    }
+    
+    /**
+     * Setup popup interactions (bookmark button, clicks)
+     * @param {Object} marker - Leaflet marker
+     * @param {Object} event - Event data
+     * @param {Function} onClick - Click handler for event details
+     */
+    setupPopupInteractions(marker, event, onClick) {
+        const popup = marker.getPopup();
+        if (!popup) return;
+        
+        const popupElement = popup.getElement();
+        if (!popupElement) return;
+        
+        // Initialize Lucide icons in popup
+        if (window.lucide && typeof window.lucide.createIcons === 'function') {
+            window.lucide.createIcons({ nameAttr: 'data-lucide' });
+        }
+        
+        // Handle bookmark button click
+        const bookmarkBtn = popupElement.querySelector('.popup-bookmark');
+        if (bookmarkBtn) {
+            bookmarkBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                
+                // Toggle bookmark
+                const isNowBookmarked = this.storage.toggleBookmark(event.id);
+                
+                // Update button appearance
+                bookmarkBtn.classList.toggle('bookmarked', isNowBookmarked);
+                
+                // Re-render icon (heart should fill when bookmarked)
+                if (window.lucide && typeof window.lucide.createIcons === 'function') {
+                    window.lucide.createIcons({ nameAttr: 'data-lucide' });
+                }
+                
+                this.log('Bookmark toggled', { eventId: event.id, bookmarked: isNowBookmarked });
+            });
+        }
+        
+        // Handle click on popup content to show full details
         if (onClick) {
-            flyer.on('click', () => onClick(event, flyer));
-            
-            // Add keyboard accessibility for Enter/Space key (WCAG 2.1.1)
-            const flyerElement = flyer._icon?.querySelector('.event-flyer');
-            if (flyerElement) {
-                flyerElement.addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        onClick(event, flyer);
+            const content = popupElement.querySelector('.event-popup-content');
+            if (content) {
+                content.addEventListener('click', (e) => {
+                    // Don't trigger if clicking bookmark button
+                    if (!e.target.closest('.popup-bookmark')) {
+                        onClick(event, marker);
                     }
                 });
             }
         }
-        
-        this.flyers.push(flyer);
-        this.log('Flyer added for event', event.title);
-        
-        return flyer;
     }
     
     /**
-     * Create HTML content for event flyer card
-     * @param {Object} event - Event data
-     * @returns {string} HTML content for flyer
+     * Clear all markers from map
+     */
+    clearMarkers() {
+        this.markers.forEach(marker => {
+            if (marker && marker.remove) {
+                marker.remove();
+            }
+        });
+        this.markers = [];
+        this.locationCounts = {}; // Reset offset tracking
+        this.log('All markers cleared');
+    }
+    
+    /**
+     * Fit map bounds to show all markers
+     */
+    fitMapToMarkers() {
+        if (!this.map || this.markers.length === 0) return;
+        
+        const group = L.featureGroup(this.markers);
+        this.map.fitBounds(group.getBounds().pad(0.1)); // 10% padding
+        
+        this.log('Map fitted to markers', { count: this.markers.length });
+    }
+    
+    /**
+     * DEPRECATED: Old flyer methods for backward compatibility
      */
     createFlyerHtml(event) {
-        // Defensive check: ensure we have a valid start_time before formatting
-        if (!event || !event.start_time) {
-            return `<div class="event-flyer event-flyer-error" role="alert">Invalid event</div>`;
+        // Legacy method - now creates popup content instead
+        return this.createPopupContent(event);
+    }
+    
+    clearFlyers() {
+        // Legacy method - now clears markers
+        return this.clearMarkers();
+    }
+    
+    /**
+     * Update marker bookmark state
+     * @param {string} eventId - Event ID
+     * @param {boolean} isBookmarked - New bookmark state
+     */
+    updateMarkerBookmarkState(eventId, isBookmarked) {
+        const marker = this.markers.find(m => m.eventData && m.eventData.id === eventId);
+        if (!marker) return;
+        
+        const popup = marker.getPopup();
+        if (!popup) return;
+        
+        const popupElement = popup.getElement();
+        if (!popupElement) return;
+        
+        const bookmarkBtn = popupElement.querySelector('.popup-bookmark');
+        if (bookmarkBtn) {
+            bookmarkBtn.classList.toggle('bookmarked', isBookmarked);
+            
+            // Re-render Lucide icon
+            if (window.lucide && typeof window.lucide.createIcons === 'function') {
+                window.lucide.createIcons({ nameAttr: 'data-lucide' });
+            }
         }
-
-        const startTime = new Date(event.start_time);
-        if (isNaN(startTime.getTime())) {
-            return `<div class="event-flyer event-flyer-error" role="alert">Invalid date</div>`;
-        }
-
-        const hours = startTime.getHours().toString().padStart(2, '0');
-        const minutes = startTime.getMinutes().toString().padStart(2, '0');
-        const timeStr = `${hours}:${minutes}`;
-        const dayStr = startTime.toLocaleDateString([], { weekday: 'short' });
-        const dateNum = startTime.getDate();
         
-        // Check time filter to decide display mode
-        // Access filters from the global app object (filters are managed by EventsApp, not storage)
-        const app = window.app || window.eventsApp;
-        const timeFilter = (app && app.filters && app.filters.timeFilter) || 'sunrise';
-        const isTimeMode = (timeFilter === 'sunrise');
-        
-        // Truncate title to fit in small flyer
-        const title = event.title || 'Event';
-        const shortTitle = title.length > 25 ? title.substring(0, 22) + '…' : title;
-        
-        // Category for styling
-        const category = event.category || 'default';
-        
-        // Build compact flyer HTML (escape all dynamic content for XSS prevention)
-        // When timeFilter is 'sunrise' (til sunrise), show quartz-style HH:MM
-        // Otherwise, show calendar-style day + date
-        if (isTimeMode) {
-            // Quartz-style time display
-            return `
-                <div class="event-flyer event-flyer-time-mode" data-category="${this.escapeHtml(category)}" tabindex="0" role="button" aria-label="${this.escapeHtml(title)}">
-                    <div class="event-flyer-date event-flyer-quartz">
-                        <span class="flyer-quartz-time">${this.escapeHtml(timeStr)}</span>
-                    </div>
-                    <div class="event-flyer-content">
-                        <div class="flyer-title">${this.escapeHtml(shortTitle)}</div>
-                    </div>
-                </div>
-            `.trim();
-        } else {
-            // Calendar-style day + date display
-            return `
-                <div class="event-flyer" data-category="${this.escapeHtml(category)}" tabindex="0" role="button" aria-label="${this.escapeHtml(title)}">
-                    <div class="event-flyer-date">
-                        <span class="flyer-day">${this.escapeHtml(dayStr)}</span>
-                        <span class="flyer-date-num">${this.escapeHtml(String(dateNum))}</span>
-                    </div>
-                    <div class="event-flyer-content">
-                        <div class="flyer-title">${this.escapeHtml(shortTitle)}</div>
-                        <div class="flyer-time">${this.escapeHtml(timeStr)}</div>
-                    </div>
-                </div>
-            `.trim();
-        }
+        this.log('Marker bookmark state updated', { eventId, isBookmarked });
     }
     
     /**
@@ -494,64 +743,6 @@ class MapManager {
         const div = document.createElement('div');
         div.textContent = text;
         return div.innerHTML;
-    }
-    
-    /**
-     * Update flyer bookmark state
-     * @param {string} eventId - Event ID
-     * @param {boolean} isBookmarked - Whether event is bookmarked
-     */
-    updateMarkerBookmarkState(eventId, isBookmarked) {
-        this.flyers.forEach(flyer => {
-            if (flyer.eventData && flyer.eventData.id === eventId) {
-                if (isBookmarked) {
-                    flyer._icon.classList.add('event-flyer-bookmarked');
-                } else {
-                    flyer._icon.classList.remove('event-flyer-bookmarked');
-                }
-            }
-        });
-    }
-    
-    /**
-     * Clear all event flyers from map
-     */
-    clearMarkers() {
-        for (let i = 0; i < this.flyers.length; i++) {
-            this.flyers[i].remove();
-        }
-        this.flyers = [];
-        this.locationCounts = {}; // Reset location tracking for offset calculation
-        this.log('All flyers cleared');
-    }
-    
-    /**
-     * Fit map bounds to show all flyers
-     */
-    fitMapToMarkers() {
-        if (this.flyers.length === 0 || !this.map) {
-            return;
-        }
-        
-        const bounds = L.latLngBounds();
-        
-        // Add all flyer positions to bounds
-        for (let i = 0; i < this.flyers.length; i++) {
-            bounds.extend(this.flyers[i].getLatLng());
-        }
-        
-        // Add user location to bounds if available
-        if (this.userLocation) {
-            bounds.extend([this.userLocation.lat, this.userLocation.lon]);
-        }
-        
-        // Fit map to bounds with padding
-        this.map.fitBounds(bounds, {
-            padding: [50, 50],
-            maxZoom: 15
-        });
-        
-        this.log('Map fitted to markers');
     }
     
     /**
