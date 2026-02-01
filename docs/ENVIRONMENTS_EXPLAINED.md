@@ -167,7 +167,7 @@ Just merge the PR and wait for the scheduled run.
 ```bash
 # On your computer
 git clone https://github.com/feileberlin/krwl.in.git
-cd krwl-hof
+cd krwl.in
 pip install -r requirements.txt
 python3 src/event_manager.py scrape
 

@@ -138,7 +138,7 @@ This audit was comprehensive and systematic:
 
 ## 🎖️ Conclusion
 
-The krwl-hof repository is in **excellent shape** regarding deprecated code:
+The krwl.in repository is in **excellent shape** regarding deprecated code:
 
 ### What Makes This Excellent?
 
@@ -180,7 +180,7 @@ The krwl-hof repository is in **excellent shape** regarding deprecated code:
 All audit documentation is in the repository root:
 
 ```
-krwl-hof/
+krwl.in/
 ├── DEPRECATED_CODE_SUMMARY.md      ← Start here (quick overview)
 ├── DEPRECATED_CODE_AUDIT.md        ← Complete analysis
 ├── DEPRECATED_CODE_ACTION_ITEMS.md ← Action plan
@@ -190,7 +190,7 @@ krwl-hof/
 Historical files are properly archived:
 
 ```
-krwl-hof/archive/
+krwl.in/archive/
 ├── js_backups/          ← 7 legacy JavaScript files
 ├── json_backups/        ← 2 JSON backups
 ├── legacy_docs/         ← 12 historical documents

@@ -8,13 +8,13 @@
 # Usage:
 #   ./sync-to-wiki.sh [wiki-repo-path]
 #
-# If you don't specify a path, we'll use /tmp/krwl-hof.wiki
+# If you don't specify a path, we'll use /tmp/krwl.in.wiki
 #
 
 set -e
 
 REPO_URL="https://github.com/feileberlin/krwl.in.wiki.git"
-WIKI_DIR="${1:-/tmp/krwl-hof.wiki}"
+WIKI_DIR="${1:-/tmp/krwl.in.wiki}"
 
 echo "🔄 Syncing KRWL HOF docs to GitHub Wiki..."
 echo ""

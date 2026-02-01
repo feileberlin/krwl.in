@@ -105,7 +105,7 @@ Edit `config.json`:
 
 ### Run Test Suite
 ```bash
-cd /path/to/krwl-hof
+cd /path/to/krwl.in
 python3 tests/test_ai_categorization.py
 ```
 
