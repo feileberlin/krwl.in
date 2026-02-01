@@ -1503,7 +1503,25 @@
       "test_file": null,
       "test_instructions": "1. Open the dashboard menu and scroll to 'Scraper Setup Tool' section\n2. Enter an event listing URL (e.g., https://example.com/events)\n3. Click 'Analyze' to fetch data snippets\n4. Drag data snippets to the schema field drop zones (title, location, date)\n5. Verify the preview shows mapped fields\n6. Click 'Export CI Configuration' to download JSON file\n7. Add the file to config/scraper_mappings/ and commit\n8. GitHub Actions workflow will validate and test the configuration\n9. Test backend: python3 src/modules/scraper_setup_api.py --analyze https://example.com",
       "documentation": ".github/copilot-instructions.md - Scraper Setup Tool section",
-      "depends_on": ["event-scraping"]
+      "depends_on": [
+        "event-scraping"
+      ]
+    },
+    {
+      "id": "cdn-asset-version-tracking",
+      "name": "CDN Asset Version Tracking",
+      "description": "Automatic version tracking and management for CDN assets (Leaflet.js, fonts) with SHA256 checksums, update detection, and local-first serving",
+      "category": "infrastructure",
+      "implemented": true,
+      "files": [
+        "src/modules/asset_manager.py",
+        "src/modules/site_generator.py",
+        "lib/versions.json",
+        "tests/test_asset_manager.py"
+      ],
+      "config_keys": [],
+      "test_method": "python3 tests/test_asset_manager.py",
+      "depends_on": []
     }
   ]
 }
