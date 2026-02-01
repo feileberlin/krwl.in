@@ -157,7 +157,7 @@ git ls-remote --heads origin | grep -v '^main$'
 ## 📁 File Structure
 
 ```
-krwl-hof/
+krwl.in/
 ├── .github/
 │   └── workflows/
 │       └── delete-branches.yml          # GitHub Actions workflow
@@ -226,6 +226,6 @@ The branch deletion workflow is **ready to use** when needed. All safety mechani
 ---
 
 **Created:** January 18, 2026  
-**Repository:** feileberlin/krwl-hof  
+**Repository:** feileberlin/krwl.in  
 **Branch:** copilot/delete-all-branches-except-main  
 **Status:** ✅ Complete and ready for review

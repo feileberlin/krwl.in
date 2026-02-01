@@ -1,6 +1,6 @@
 # KRWL HOF Feature Wishlist - Inspired by krawl.foundation
 
-> **Purpose**: This document outlines a prioritized wishlist of features to port from the krawl.foundation project into krwl-hof. Each feature includes effort estimates, implementation notes, test criteria, risks, and acceptance criteria to enable incremental development and review.
+> **Purpose**: This document outlines a prioritized wishlist of features to port from the krawl.foundation project into krwl.in. Each feature includes effort estimates, implementation notes, test criteria, risks, and acceptance criteria to enable incremental development and review.
 
 ## Table of Contents
 
@@ -14,7 +14,7 @@
 
 ## Overview
 
-The krawl.foundation project provides a comprehensive event aggregation and federation platform with advanced features. This wishlist identifies high-value features that align with krwl-hof's goals while maintaining the project's KISS (Keep It Simple, Stupid) principles.
+The krawl.foundation project provides a comprehensive event aggregation and federation platform with advanced features. This wishlist identifies high-value features that align with krwl.in's goals while maintaining the project's KISS (Keep It Simple, Stupid) principles.
 
 ### Design Principles
 
@@ -503,7 +503,7 @@ Complex features requiring significant infrastructure:
 
 **Acceptance Criteria**:
 - [ ] Events appear on Mastodon timeline
-- [ ] Users can follow krwl-hof actor
+- [ ] Users can follow krwl.in actor
 - [ ] Updates propagate to followers
 - [ ] Feature can be disabled via `config.json`
 

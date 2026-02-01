@@ -115,8 +115,8 @@ Want to run it locally or contribute?
 
 ```bash
 # Clone the repository
-git clone https://github.com/feileberlin/krwl-hof.git
-cd krwl-hof
+git clone https://github.com/feileberlin/krwl.in.git
+cd krwl.in
 
 # Install Python dependencies
 pip install -r requirements.txt
@@ -229,7 +229,7 @@ python3 scripts/check_kiss.py --verbose
 ## 📝 Project Structure
 
 ```
-krwl-hof/
+krwl.in/
 ├── config.json          # Unified configuration (auto-detects environment)
 ├── static/              # Only index.html
 │   └── index.html       # Main app (auto-generated, DO NOT EDIT)
@@ -531,8 +531,8 @@ Built with love for the Hof community. Special thanks to all the local venues an
 ## 🔗 Links
 
 - **Live App**: [krwl.in](https://krwl.in)
-- **GitHub Repository**: [github.com/feileberlin/krwl-hof](https://github.com/feileberlin/krwl-hof)
-- **Report Issues**: [GitHub Issues](https://github.com/feileberlin/krwl-hof/issues)
+- **GitHub Repository**: [github.com/feileberlin/krwl.in](https://github.com/feileberlin/krwl.in)
+- **Report Issues**: [GitHub Issues](https://github.com/feileberlin/krwl.in/issues)
 
 ---
 
@@ -561,7 +561,7 @@ def update_github_about(config):
         return False
     
     owner = 'feileberlin'
-    repo = 'krwl-hof'
+    repo = 'krwl.in'
     
     # Prepare description
     description = f"{config.get('app', {}).get('description', 'Community events viewer')}. Mobile-first PWA for discovering local events in Hof, Bavaria. Live at krwl.in"

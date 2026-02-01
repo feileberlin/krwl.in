@@ -235,4 +235,4 @@ If you encounter issues or have questions:
 
 **Last Updated:** January 2026  
 **Workflow Version:** 1.0.0  
-**Repository:** feileberlin/krwl-hof
+**Repository:** feileberlin/krwl.in

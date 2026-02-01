@@ -1,7 +1,7 @@
 # Deprecated Code Audit Report
 
 **Generated:** 2026-01-29  
-**Repository:** feileberlin/krwl-hof  
+**Repository:** feileberlin/krwl.in  
 **Purpose:** Comprehensive audit of deprecated code, legacy files, and obsolete features
 
 ---
@@ -479,7 +479,7 @@ No deprecated code poses immediate risk:
 
 ## 10. Conclusion
 
-The krwl-hof repository demonstrates **excellent deprecated code management**:
+The krwl.in repository demonstrates **excellent deprecated code management**:
 
 1. **Clear Documentation** - All deprecations documented in features.json
 2. **Proper Archiving** - Legacy code isolated in /archive directory

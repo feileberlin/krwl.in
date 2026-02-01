@@ -177,7 +177,7 @@ Live Deletion Mode (dry_run = false):
 
                             📁 FILE STRUCTURE
 
-krwl-hof/
+krwl.in/
 ├── .github/
 │   └── workflows/
 │       └── delete-branches.yml          ← Workflow definition

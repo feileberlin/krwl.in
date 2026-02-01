@@ -306,7 +306,7 @@ This roadmap breaks down the [WISHLIST_KRAWL_FOUNDATION.md](WISHLIST_KRAWL_FOUND
 - **Risk Level**: 🔴 High
 - **Acceptance Criteria**:
   - Events federate to Mastodon
-  - Users can follow krwl-hof actor
+  - Users can follow krwl.in actor
   - Updates propagate to followers
 
 ### Phase 3 Success Metrics

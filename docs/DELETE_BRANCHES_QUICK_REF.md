@@ -69,4 +69,4 @@ For detailed instructions, troubleshooting, and safety information:
 
 **Workflow File:** `.github/workflows/delete-branches.yml`  
 **Created:** January 2026  
-**Repository:** feileberlin/krwl-hof
+**Repository:** feileberlin/krwl.in
