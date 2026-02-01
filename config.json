@@ -264,6 +264,19 @@
       ],
       "customFilters": [
         {
+          "id": "hauptbahnhof",
+          "name": {
+            "de": "Hauptbahnhof Hof",
+            "en": "Hof Main Station"
+          },
+          "center": {
+            "lat": 50.30806,
+            "lng": 11.92333
+          },
+          "radius": 0.5,
+          "zoom": 16
+        },
+        {
           "id": "untreusee",
           "name": {
             "de": "Untreusee",
@@ -356,6 +369,19 @@
       ],
       "customFilters": [
         {
+          "id": "hauptbahnhof",
+          "name": {
+            "de": "Hauptbahnhof Nürnberg",
+            "en": "Nuremberg Main Station"
+          },
+          "center": {
+            "lat": 49.44639,
+            "lng": 11.08194
+          },
+          "radius": 0.5,
+          "zoom": 16
+        },
+        {
           "id": "altstadt",
           "name": {
             "de": "Altstadt",
@@ -375,8 +401,8 @@
             "en": "Gostenhof"
           },
           "center": {
-            "lat": 49.4580,
-            "lng": 11.0580
+            "lat": 49.458,
+            "lng": 11.058
           },
           "radius": 1.0,
           "zoom": 15
@@ -388,8 +414,8 @@
             "en": "South District"
           },
           "center": {
-            "lat": 49.4350,
-            "lng": 11.0800
+            "lat": 49.435,
+            "lng": 11.08
           },
           "radius": 1.5,
           "zoom": 14
@@ -447,6 +473,19 @@
         }
       ],
       "customFilters": [
+        {
+          "id": "hauptbahnhof",
+          "name": {
+            "de": "Hauptbahnhof Bayreuth",
+            "en": "Bayreuth Main Station"
+          },
+          "center": {
+            "lat": 49.95,
+            "lng": 11.58028
+          },
+          "radius": 0.5,
+          "zoom": 16
+        },
         {
           "id": "innenstadt",
           "name": {
@@ -532,6 +571,19 @@
       ],
       "customFilters": [
         {
+          "id": "bahnhof",
+          "name": {
+            "de": "Bahnhof Selb Stadt",
+            "en": "Selb Stadt Station"
+          },
+          "center": {
+            "lat": 50.1741,
+            "lng": 12.1264
+          },
+          "radius": 0.5,
+          "zoom": 16
+        },
+        {
           "id": "innenstadt",
           "name": {
             "de": "Innenstadt",
@@ -589,6 +641,19 @@
         }
       ],
       "customFilters": [
+        {
+          "id": "bahnhof",
+          "name": {
+            "de": "Bahnhof Rehau",
+            "en": "Rehau Station"
+          },
+          "center": {
+            "lat": 50.2505,
+            "lng": 12.0326
+          },
+          "radius": 0.5,
+          "zoom": 16
+        },
         {
           "id": "marktplatz",
           "name": {
