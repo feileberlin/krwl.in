@@ -128,7 +128,7 @@ class EventsApp {
                 if (antarcticaRegion.center) {
                     this.config.map.default_center = {
                         lat: antarcticaRegion.center.lat,
-                        lon: antarcticaRegion.center.lng || antarcticaRegion.center.lon
+                        lon: antarcticaRegion.center.lng !== undefined ? antarcticaRegion.center.lng : antarcticaRegion.center.lon
                     };
                 }
                 if (antarcticaRegion.zoom) {
@@ -168,7 +168,7 @@ class EventsApp {
         if (region.center) {
             this.config.map.default_center = {
                 lat: region.center.lat,
-                lon: region.center.lng || region.center.lon
+                lon: region.center.lng !== undefined ? region.center.lng : region.center.lon
             };
         }
         if (region.zoom) {

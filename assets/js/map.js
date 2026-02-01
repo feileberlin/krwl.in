@@ -440,7 +440,9 @@ class MapManager {
         const dateNum = startTime.getDate();
         
         // Check time filter to decide display mode
-        const timeFilter = this.storage.getFilters().timeFilter || 'sunrise';
+        // Access filters from the global app object (filters are managed by EventsApp, not storage)
+        const app = window.app || window.eventsApp;
+        const timeFilter = (app && app.filters && app.filters.timeFilter) || 'sunrise';
         const isTimeMode = (timeFilter === 'sunrise');
         
         // Truncate title to fit in small flyer
