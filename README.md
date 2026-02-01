@@ -323,6 +323,21 @@ All documentation lives in:
 
 No complex documentation systems. No wiki syncing. No auto-generated multi-file docs. Just code comments, CLI help, and this README.
 
+### 📖 Architecture & Decisions
+
+For deeper understanding of the codebase:
+
+- **[Architecture Overview](docs/architecture.md)** - Module dependency diagrams, data flow, system design
+- **[Architectural Decision Records (ADRs)](docs/adr/README.md)** - Why we made key design choices
+  - [ADR-001: Fallback List When Map Fails](docs/adr/001-fallback-list-when-map-fails.md)
+  - [ADR-002: Vanilla JS Over Frameworks](docs/adr/002-vanilla-js-over-frameworks.md)
+  - [ADR-003: Single Entry Point](docs/adr/003-single-entry-point.md)
+- **[Module Dependencies](DEPENDENCIES.md)** - Visual maps showing "what breaks if I change X"
+- **[Feature Registry](features.json)** - All features with dependencies and test methods
+- **[Copilot Instructions](.github/copilot-instructions.md)** - Guidelines for AI-assisted development
+
+**💡 Pro Tip**: Before making architectural changes, check the ADRs to understand the rationale behind current design decisions.
+
 ## 🛠️ CLI Usage
 
 ### Event Manager (Main Interface)

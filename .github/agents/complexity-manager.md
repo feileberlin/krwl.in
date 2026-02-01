@@ -69,11 +69,13 @@ Frontend (JavaScript)
 
 ### Dependency Rules
 
-**From features.json:**
-- Each feature has `depends_on` array
+**From features.json (Enhanced!):**
+- Each feature has `depends_on` array showing direct dependencies
+- **NEW**: `used_by` array shows reverse dependencies (what uses this feature)
+- **NEW**: `breaks_if_missing` array describes impact if feature is removed/broken
+- **NEW**: `test_command` provides specific test instructions for verification
 - Check `files` array to see what code implements the feature
 - Check `config_keys` to see what configuration affects it
-- Check `test_method` to know how to verify it works
 
 ### Example Dependency Analysis
 
@@ -82,46 +84,47 @@ Frontend (JavaScript)
 **Answer Process:**
 1. Check features.json for features with "files": ["src/modules/scraper.py"]
 2. Find features that `depend_on` those features
-3. List affected features: `facebook-flyer-ocr`, `editor-workflow`
-4. Recommend tests: `python3 src/event_manager.py scrape` + check pending queue
+3. **NEW**: Check `used_by` field for reverse dependencies
+4. **NEW**: Review `breaks_if_missing` to understand impact
+5. List affected features: `facebook-flyer-ocr`, `editor-workflow`, `ai-categorization`
+6. Run test: `python3 src/event_manager.py scrape && python3 tests/test_scraper.py --verbose`
 
 ## Strategies for Managing Complexity
 
-### 1. Good Documentation (Already Implemented! ✅)
+### 1. Good Documentation (Implemented! ✅)
 
 Your project has excellent docs:
 - `.github/copilot-instructions.md` - AI context and conventions
-- `features.json` - Feature registry with dependencies
+- `features.json` - Feature registry with dependencies (enhanced with `used_by`, `breaks_if_missing`, `test_command`)
 - `.github/agents/` - Specialized agent instructions
 - Python docstrings (PEP 257) - Near-code documentation
+- **NEW**: `docs/adr/` - Architectural Decision Records explaining WHY
+- **NEW**: `docs/architecture.md` - Visual dependency diagrams and system overview
 
-### 2. Self-Documenting Code (Already Implemented! ✅)
+### 2. Self-Documenting Code (Implemented! ✅)
 
 - Clear module names: `scraper.py`, `editor.py`, `site_generator.py`
 - Each file has purpose explanation at top
 - Functions have descriptive names and docstrings
 
-### 3. Architectural Decision Records (ADRs) - **RECOMMENDED**
+### 3. Architectural Decision Records (ADRs) - **IMPLEMENTED! ✅**
 
-**What:** Document WHY decisions were made, not just WHAT
+**Location:** `docs/adr/`
 
-**Example ADR:**
-```markdown
-# ADR 001: Use Fallback List When Map Fails
+**Active ADRs:**
+- [ADR-001: Fallback List When Map Fails](../../docs/adr/001-fallback-list-when-map-fails.md) - Progressive enhancement strategy
+- [ADR-002: Vanilla JS Over Frameworks](../../docs/adr/002-vanilla-js-over-frameworks.md) - KISS principle for frontend
+- [ADR-003: Single Entry Point](../../docs/adr/003-single-entry-point.md) - Unified CLI/TUI architecture
 
-## Context
-Map loading can fail due to network issues, blocked scripts, or browser incompatibility.
-
-## Decision
-Implement fallback list view that displays events without map if Leaflet.js fails to load.
-
-## Consequences
-- Positive: App remains functional even if map breaks
-- Negative: Need to maintain two display modes (map + list)
-- Files affected: app.js, map.js, filters.js
+**How to use ADRs:**
 ```
+# Read an ADR before making related changes
+cat docs/adr/001-fallback-list-when-map-fails.md
 
-**Location:** `docs/adr/` (create this directory)
+# Create new ADR when making significant architectural decision
+cp docs/adr/template.md docs/adr/004-your-decision.md
+# Edit the new ADR, update docs/adr/README.md index, commit
+```
 
 ### 4. Small, Focused PRs (Best Practice)
 
@@ -131,44 +134,70 @@ Each PR should:
 - Include before/after screenshots for UI changes
 - Update relevant entries in features.json if adding/modifying features
 
-### 5. Module Dependency Diagram - **TODO**
+### 5. Module Dependency Diagram - **IMPLEMENTED! ✅**
 
-**Visual map** showing what depends on what (proposed in your issue)
+**Location:** `docs/architecture.md`
 
-**Suggested tool:** Mermaid diagram in `docs/architecture.md`
+**Includes:**
+- Complete system architecture with Mermaid diagrams
+- Backend module dependency layers
+- Frontend module dependency layers
+- Event lifecycle sequence diagrams
+- Build process flowcharts
+- Critical path analysis
 
-```mermaid
-graph TD
-    A[event-scraping] --> B[facebook-flyer-ocr]
-    A --> C[editor-workflow]
-    C --> D[site-generator]
-    E[map.js] --> F[app.js]
-    G[filters.js] --> F
-    H[storage.js] --> F
+**Quick access:**
+```bash
+# View architecture docs
+cat docs/architecture.md
+
+# Or open in GitHub/IDE for rendered Mermaid diagrams
 ```
 
-### 6. Cleanup Backup Files - **TODO**
+### 6. Backup File Cleanup - **COMPLETED! ✅**
 
-Your project has backup files (app-old.js, app-original.js, etc.)
-- Archive them in a separate branch: `archive/legacy-backup`
-- Remove from main branch to reduce confusion
-- Document what each backup was for in commit message
+**Status:** Main branch is clean!
 
-### 7. Enhanced features.json - **IN PROGRESS**
+All backup files have been moved to `/archive` directory:
+- JavaScript backups: `archive/js_backups/` (app-old.js, app-original.js, etc.)
+- JSON backups: `archive/json_backups/`
+- Legacy docs: `archive/legacy_docs/`
+- Legacy images: `archive/legacy_images/`
 
-**Current state:** Basic `depends_on` field exists
-**Recommended additions:**
+**Documentation:** See [docs/BACKUP_CLEANUP_NOTES.md](../../docs/BACKUP_CLEANUP_NOTES.md) for full migration notes.
+
+**Verification:**
+```bash
+# Should return nothing (main branch is clean)
+find . -path ./archive -prune -o \( -name "*-old.*" -o -name "*-original.*" \) -type f -print
+```
+
+### 7. Enhanced features.json - **IMPLEMENTED! ✅**
+
+**Status:** 22 critical features fully enhanced, 43 with placeholder metadata
+
+**New fields added:**
+- `used_by`: Array of feature IDs that depend on this feature (reverse dependencies)
+- `breaks_if_missing`: Array of impact descriptions if feature is removed/broken
+- `test_command`: Specific command to verify feature works
+
+**Example enhanced feature:**
 ```json
 {
-  "id": "map-view",
-  "depends_on": ["leaflet-integration"],
-  "used_by": ["event-display", "geolocation-filter"],
-  "breaks_if_missing": ["Event map doesn't render", "Geolocation filter fails silently"],
-  "test_command": "python3 -m pytest tests/test_map_integration.py"
+  "id": "event-scraping",
+  "depends_on": [],
+  "used_by": ["facebook-flyer-ocr", "editor-workflow", "ai-categorization"],
+  "breaks_if_missing": [
+    "No events can be scraped from external sources",
+    "Pending event queue remains empty"
+  ],
+  "test_command": "python3 src/event_manager.py scrape && python3 tests/test_scraper.py --verbose"
 }
 ```
 
-### 8. Test Coverage - **TODO**
+**Enhancement script:** `scripts/enhance_features.py` for systematic updates.
+
+### 8. Test Coverage - **ONGOING**
 
 **Current state:** Some tests exist (`tests/test_ocr_availability.py`)
 **Recommended:**
@@ -207,16 +236,16 @@ When processing user feedback, this agent:
 ## Preventing Common Pitfalls
 
 ### ❌ Don't: Change a file without checking features.json
-### ✅ Do: Search features.json for that file first
+### ✅ Do: Search features.json for that file first, check `used_by` for impact
 
 ### ❌ Don't: Assume a module is independent
-### ✅ Do: Check `depends_on` and look for modules that might use it
+### ✅ Do: Check `depends_on`, `used_by`, and `breaks_if_missing` fields
 
 ### ❌ Don't: Make "quick fixes" without understanding context
-### ✅ Do: Ask this agent to explain dependencies first
+### ✅ Do: Read relevant ADRs and check architecture.md first
 
 ### ❌ Don't: Skip tests because "it's a small change"
-### ✅ Do: Run affected tests before committing
+### ✅ Do: Run `test_command` from features.json before committing
 
 ## Quick Reference Commands
 
@@ -264,15 +293,18 @@ After making code changes:
 - Loose coupling between modules
 - Well-defined interfaces
 
-### Dependency Graphs ⏳ (Partially implemented via features.json)
-- Visual diagrams showing module relationships
-- Automated tooling to detect circular dependencies
-- Documentation of data flow
+### Dependency Graphs ✅ (Implemented!)
+- Visual Mermaid diagrams in `docs/architecture.md`
+- Backend and frontend module layers documented
+- Data flow sequence diagrams
+- Build process flowcharts
+- Automated tooling via `src/modules/dependency_checker.py`
 
 ### Test Coverage ⏳ (In progress)
 - Tests catch breaking changes automatically
 - CI/CD runs tests on every PR
 - Coverage reports show untested code paths
+- Each feature has `test_command` in features.json
 
 ### Feature Flags 🔮 (Future enhancement)
 - Toggle features on/off independently
@@ -280,7 +312,9 @@ After making code changes:
 - Gradual rollout of risky changes
 
 ### Documentation 📚 (Excellent!)
-- Your features.json registry is a great start
+- features.json registry with enhanced dependency tracking
+- ADR system documenting architectural decisions
+- architecture.md with visual dependency maps
 - Copilot-instructions.md provides AI context
 - Agent files document workflows
 
@@ -307,13 +341,18 @@ After making code changes:
 
 ## Related Files
 
-- **features.json** - Feature registry (dependency source of truth)
+- **features.json** - Feature registry (dependency source of truth) with `used_by`, `breaks_if_missing`, `test_command` fields
+- **docs/architecture.md** - Visual dependency maps and system design (NEW!)
+- **docs/adr/** - Architectural Decision Records explaining WHY (NEW!)
+- **docs/BACKUP_CLEANUP_NOTES.md** - Backup file migration notes (NEW!)
+- **DEPENDENCIES.md** - Detailed module relationships
 - **.github/copilot-instructions.md** - Project conventions and architecture
 - **.github/agents/planning-agent.md** - For creating implementation plans
 - **.github/agents/implementation-agent.md** - For executing changes
 - **.github/agents/docs_agent.md** - For updating documentation
 - **docs/plans/** - Implementation plans with phases and tasks
 - **docs/notes/** - Implementation notes documenting completed work
+- **scripts/enhance_features.py** - Script to add dependency tracking to features.json (NEW!)
 
 ## Success Metrics
 
