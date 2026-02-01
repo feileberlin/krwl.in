@@ -474,38 +474,40 @@ class MapManager {
     /**
      * Get marker icon HTML using Lucide icons only
      * Creates a div icon with Lucide icon centered
+     * Uses only icons available in MAP_ICONS_MAP and DASHBOARD_ICONS_MAP
      * @param {string} category - Category name (maps to Lucide icon)
      * @returns {Object} Leaflet divIcon with Lucide icon
      */
     getMarkerIconForCategory(category) {
-        // Map categories to Lucide icon names
+        // Map categories to available Lucide icon names
+        // Only use icons that exist in the minimal Lucide build
         const iconMap = {
-            'music': 'music',
-            'drama': 'drama',
-            'palette': 'palette',
-            'film': 'film',
-            'camera': 'camera',
-            'utensils': 'utensils',
-            'coffee': 'coffee',
-            'wine': 'wine',
-            'dumbbell': 'dumbbell',
-            'trophy': 'trophy',
-            'footprints': 'footprints',
-            'graduation-cap': 'graduation-cap',
-            'presentation': 'presentation',
-            'book-open': 'book-open',
-            'users': 'users',
-            'party-popper': 'party-popper',
-            'shopping-bag': 'shopping-bag',
-            'trees': 'trees',
-            'bike': 'bike',
-            'laptop': 'laptop',
-            'gamepad-2': 'gamepad-2',
-            'baby': 'baby',
-            'calendar': 'calendar'
+            'music': 'activity',        // musical activity (wave pattern)
+            'drama': 'activity',
+            'palette': 'book-open',     // arts/creativity
+            'film': 'book-open',
+            'camera': 'book-open',
+            'utensils': 'map-pin',      // generic location marker
+            'coffee': 'map-pin',
+            'wine': 'map-pin',
+            'dumbbell': 'activity',     // sports activity
+            'trophy': 'activity',
+            'footprints': 'footprints', // available!
+            'graduation-cap': 'book-open', // education
+            'presentation': 'book-open',
+            'book-open': 'book-open',   // available!
+            'users': 'map-pin',         // community
+            'party-popper': 'activity',
+            'shopping-bag': 'map-pin',
+            'trees': 'map-pin',         // nature
+            'bike': 'footprints',       // movement
+            'laptop': 'book-text',      // available!
+            'gamepad-2': 'activity',
+            'baby': 'heart',            // available!
+            'calendar': 'map-pin'       // default
         };
         
-        const lucideIcon = iconMap[category] || 'calendar';
+        const lucideIcon = iconMap[category] || 'map-pin';
         
         // Create div icon with Lucide icon
         const html = `
@@ -568,13 +570,12 @@ class MapManager {
         
         // Build popup HTML based on time filter
         if (isSunriseFilter) {
-            // Show CLOCK icon for "til sunrise" filter
+            // Show TIME with map-pin icon for "til sunrise" filter (since clock isn't available)
             return `
                 <div class="event-popup-content">
-                    <div class="popup-time-display popup-clock-mode">
-                        <div class="quartz-clock" title="${timeStr}">
-                            <i data-lucide="clock" class="clock-icon"></i>
-                            <span class="clock-time">${this.escapeHtml(timeStr)}</span>
+                    <div class="popup-time-display popup-time-mode">
+                        <div class="time-badge" title="${timeStr}">
+                            <span class="time-large">${this.escapeHtml(timeStr)}</span>
                         </div>
                     </div>
                     <h3 class="popup-title">${this.escapeHtml(displayTitle)}</h3>
@@ -589,13 +590,12 @@ class MapManager {
                 </div>
             `.trim();
         } else {
-            // Show CALENDAR icon for other filters
+            // Show DATE for other filters
             return `
                 <div class="event-popup-content">
-                    <div class="popup-time-display popup-calendar-mode">
-                        <div class="calendar-badge">
-                            <i data-lucide="calendar" class="calendar-icon"></i>
-                            <span class="calendar-date">${this.escapeHtml(dayStr)}</span>
+                    <div class="popup-time-display popup-date-mode">
+                        <div class="date-badge">
+                            <span class="date-large">${this.escapeHtml(dayStr)}</span>
                         </div>
                     </div>
                     <h3 class="popup-title">${this.escapeHtml(displayTitle)}</h3>

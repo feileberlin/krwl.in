@@ -205,46 +205,33 @@
     border: 1px solid var(--color-primary);
 }
 
-/* Clock Mode (for "til sunrise" filter) */
-.popup-clock-mode .quartz-clock {
+/* Time Mode (for "til sunrise" filter) - Large time display */
+.popup-time-mode .time-badge {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 6px;
+    gap: 4px;
 }
 
-.quartz-clock .clock-icon {
-    width: 32px;
-    height: 32px;
-    color: var(--color-primary);
-    stroke-width: 2;
-}
-
-.quartz-clock .clock-time {
-    font-size: 20px;
+.time-badge .time-large {
+    font-size: 32px;
     font-weight: 700;
     color: var(--color-primary);
     font-family: 'Courier New', monospace;
-    letter-spacing: 1px;
+    letter-spacing: 2px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-/* Calendar Mode (for other filters) */
-.popup-calendar-mode .calendar-badge {
+/* Date Mode (for other filters) - Large date display */
+.popup-date-mode .date-badge {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 6px;
+    gap: 4px;
 }
 
-.calendar-badge .calendar-icon {
-    width: 32px;
-    height: 32px;
-    color: var(--color-primary);
-    stroke-width: 2;
-}
-
-.calendar-badge .calendar-date {
-    font-size: 14px;
+.date-badge .date-large {
+    font-size: 16px;
     font-weight: 600;
     color: var(--color-text-primary);
     text-align: center;
