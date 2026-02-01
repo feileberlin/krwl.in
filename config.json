@@ -209,6 +209,58 @@
           },
           "radius": 0.5,
           "zoom": 8
+        },
+        {
+          "id": "mount_erebus",
+          "name": {
+            "de": "🌋 Mount Erebus",
+            "en": "🌋 Mount Erebus"
+          },
+          "center": {
+            "lat": -77.52972,
+            "lng": 167.15333
+          },
+          "radius": 50.0,
+          "zoom": 10
+        },
+        {
+          "id": "inexpressible_island",
+          "name": {
+            "de": "😰 Inexpressible Island",
+            "en": "😰 Inexpressible Island"
+          },
+          "center": {
+            "lat": -74.9,
+            "lng": 163.783
+          },
+          "radius": 10.0,
+          "zoom": 12
+        },
+        {
+          "id": "mcmurdo",
+          "name": {
+            "de": "🏘️ McMurdo Station (MacTown)",
+            "en": "🏘️ McMurdo Station (MacTown)"
+          },
+          "center": {
+            "lat": -77.846,
+            "lng": 166.676
+          },
+          "radius": 5.0,
+          "zoom": 13
+        },
+        {
+          "id": "chapel_snows",
+          "name": {
+            "de": "⛪ Chapel of the Snows",
+            "en": "⛪ Chapel of the Snows"
+          },
+          "center": {
+            "lat": -77.848,
+            "lng": 166.667
+          },
+          "radius": 1.0,
+          "zoom": 15
         }
       ]
     },
