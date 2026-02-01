@@ -343,28 +343,31 @@ class MapManager {
     }
     
     /**
-     * Add event flyer to map (replaces traditional markers)
-     * Creates a small card-like flyer positioned next to the event location
+     * Add event marker to map with category icon and permanently open popup
      * @param {Object} event - Event data
      * @param {Function} onClick - Click handler
-     * @returns {Object} Leaflet marker with flyer divIcon
+     * @returns {Object} Leaflet marker with icon and popup
      */
     addEventMarker(event, onClick) {
         if (!this.map || !event.location) return null;
         
-        // Create flyer HTML content
-        const flyerHtml = this.createFlyerHtml(event);
+        // Detect category if not present
+        const category = event.category || this.detectEventCategory(event);
+        event.category = category; // Store detected category
         
-        // Use divIcon to create the flyer card
-        const flyerIcon = L.divIcon({
-            className: 'event-flyer-container',
-            html: flyerHtml,
-            iconSize: [140, 80],      // Compact flyer size
-            iconAnchor: [70, 40],     // Center of flyer
-            popupAnchor: [0, -40]     // Above flyer (not used, but keep for compatibility)
+        // Get category-based icon
+        const iconUrl = this.getMarkerIconForCategory(category);
+        
+        // Create custom Leaflet icon with category styling
+        const customIcon = L.icon({
+            iconUrl: iconUrl,
+            iconSize: [40, 60],        // Classic marker size
+            iconAnchor: [20, 60],      // Bottom center of marker
+            popupAnchor: [0, -60],     // Above marker
+            className: this.storage.isBookmarked(event.id) ? 'marker-bookmarked' : 'marker-unbookmarked'
         });
         
-        // Calculate offset for flyers at same location
+        // Calculate offset for markers at same location
         const locationKey = `${event.location.lat.toFixed(LOCATION_PRECISION)}_${event.location.lon.toFixed(LOCATION_PRECISION)}`;
         if (!this.locationCounts[locationKey]) {
             this.locationCounts[locationKey] = 0;
@@ -372,7 +375,7 @@ class MapManager {
         const offsetIndex = this.locationCounts[locationKey];
         this.locationCounts[locationKey]++;
         
-        // Apply offset if there are multiple flyers at same location
+        // Apply offset if there are multiple markers at same location
         let lat = event.location.lat;
         let lon = event.location.lon;
         if (offsetIndex > 0) {
@@ -381,40 +384,37 @@ class MapManager {
             lon += FLYER_OFFSET_RADIUS * Math.sin(angle);
         }
         
-        const flyer = L.marker([lat, lon], {
-            icon: flyerIcon,
+        // Create marker with icon
+        const marker = L.marker([lat, lon], {
+            icon: customIcon,
             customData: { id: event.id }
         }).addTo(this.map);
         
-        // Add bookmark class if bookmarked
-        if (this.storage.isBookmarked(event.id)) {
-            flyer._icon.classList.add('event-flyer-bookmarked');
-        }
+        // Store event data on marker
+        marker.eventData = event;
         
-        // Store event data on flyer (for backward compatibility)
-        flyer.eventData = event;
+        // Create popup content with time/date logic
+        const popupContent = this.createPopupContent(event);
         
-        // NO popups - flyers show all info directly
-        // Click opens detail panel only
-        if (onClick) {
-            flyer.on('click', () => onClick(event, flyer));
-            
-            // Add keyboard accessibility for Enter/Space key (WCAG 2.1.1)
-            const flyerElement = flyer._icon?.querySelector('.event-flyer');
-            if (flyerElement) {
-                flyerElement.addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        onClick(event, flyer);
-                    }
-                });
-            }
-        }
+        // Bind popup and open it immediately (permanently open)
+        marker.bindPopup(popupContent, {
+            closeButton: false,       // No close button - permanently open
+            autoClose: false,         // Don't close when clicking map
+            closeOnClick: false,      // Don't close when clicking marker
+            className: 'event-popup',
+            maxWidth: 280,
+            offset: [0, -5]           // Slight offset above marker
+        }).openPopup();
         
-        this.flyers.push(flyer);
-        this.log('Flyer added for event', event.title);
+        // Handle popup interactions after it's added to DOM
+        setTimeout(() => {
+            this.setupPopupInteractions(marker, event, onClick);
+        }, 100);
         
-        return flyer;
+        this.flyers.push(marker); // Keep as flyers for backward compatibility
+        this.log('Marker added with popup for event', event.title);
+        
+        return marker;
     }
     
     /**
