@@ -167,15 +167,23 @@ Try visiting an unconfigured region like `/berlin` or `/tokyo` - you'll be taken
 - 🐠 Clever hints about visiting Antarctica (/) or forking the repo
 - 🏛️ A lighthearted way to explain the app structure to curious visitors
 
-#### 3. 🗺️ **Production** - Real Regions (`/hof`, `/bayreuth`, `/nbg`)
-**Purpose:** Live event calendar for actual communities  
-**Location:** Actual city coordinates  
+#### 3. 🗺️ **Production** - Multiple Regional Entry Points
+**Purpose:** Live event calendars for actual communities  
+**Entry Points:** Each region has its own URL path  
 **Events:** Real scraped events from configured sources
 
-These are your production regions showing real community events. Examples:
+The SPA serves **multiple independent production regions**, each accessible via its own URL:
 - `/hof` - Hof (Saale) events
+- `/bth` - Bayreuth events  
 - `/nbg` - Nürnberg events
-- `/bayreuth` - Bayreuth events
+- `/selb` - Selb events
+- `/rawetz` - Rehau/Schwarzenbach/Wunsiedel events
+
+Each production region:
+- Has its own geographic center and zoom level
+- Shows only real scraped events (excludes Antarctica/Atlantis)
+- Uses the same SPA with different URL routing
+- Can be added by configuring new regions in `config.json`
 
 **How It Works (Single-Page App Architecture):**
 
@@ -186,13 +194,13 @@ One HTML page (`public/index.html`) serves all content, with client-side routing
    - Embeds ALL 167 events from three sources: `events.json`, `events.antarctica.json`, `events.atlantis.json`
 
 2. **Frontend** (`assets/js/app.js`):
-   - Detects URL path without page reload (e.g., `/hof`, `/`, `/unknown-region`)
+   - Detects URL path without page reload (e.g., `/hof`, `/bth`, `/nbg`, `/`, `/unknown-region`)
    - Filters events by `source` field client-side:
      - **Showcase** (`/` or `/antarctica`): Shows `source: "antarctica"` or `source: "demo"`
      - **Error-handling** (unknown regions): Shows `source: "atlantis"`
-     - **Production** (real regions): Shows all events EXCEPT antarctica/atlantis
+     - **Production** (`/hof`, `/bth`, `/nbg`, `/selb`, `/rawetz`): Shows all events EXCEPT antarctica/atlantis
 
-3. **No separate pages** - Everything happens in one page with JavaScript routing
+3. **Multiple entry points** - Each production region (`/hof`, `/bth`, etc.) is a separate entry point to the same SPA
 
 **Adding Your Own Region:**
 
