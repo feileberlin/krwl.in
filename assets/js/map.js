@@ -3,40 +3,42 @@
  * 
  * Handles all Leaflet.js map operations:
  * - Map initialization
- * - Event flyer management (no markers, just small flyer cards)
+ * - Event markers with category icons (using Lucide icon font only)
+ * - Auto-opening popups with event details
  * - User location tracking
  * - Map bounds and zoom
  * 
  * KISS: Single responsibility - map management only
  * 
- * UI PHILOSOPHY: Small "flyers" displayed next to event locations on the map
- * - No traditional markers (pins/icons)
- * - No popups that need to be clicked
- * - Events are immediately visible as compact cards
+ * UI PHILOSOPHY: Category markers with permanently open popups
+ * - Traditional markers with category-based Lucide icons
+ * - Popups open automatically showing event details
+ * - Smart time display: Clock for "til sunrise", Calendar for other filters
+ * - Heart bookmark button in each popup
  */
 
-// Constants for flyer positioning (offsetting flyers at same location)
-const FLYER_OFFSET_RADIUS = 0.0005;   // ~50 meters offset for overlapping flyers
-const FLYER_OFFSET_ANGLE = 45;        // Degrees between each offset flyer
-const LOCATION_PRECISION = 4;         // Decimal places for location grouping (~11m precision)
+// Constants for marker positioning (offsetting markers at same location)
+const MARKER_OFFSET_RADIUS = 0.0005;   // ~50 meters offset for overlapping markers
+const MARKER_OFFSET_ANGLE = 45;        // Degrees between each offset marker
+const LOCATION_PRECISION = 4;          // Decimal places for location grouping (~11m precision)
 
 class MapManager {
     constructor(config, storage) {
         this.config = config;
         this.storage = storage;
         this.map = null;
-        this.flyers = [];           // Event flyer elements (was: markers)
+        this.markers = [];          // Event markers with popups
         this.userLocation = null;
-        this.locationCounts = {};   // Track flyers at same location for offset
+        this.locationCounts = {};   // Track markers at same location for offset
         this.referenceMarker = null; // Track the reference location marker (user/predefined/custom)
         this.isFallbackMode = false; // Track if we're showing fallback event list
     }
     
     /**
-     * Backward compatibility: return flyers as markers
+     * Backward compatibility: return markers as flyers
      */
-    get markers() {
-        return this.flyers;
+    get flyers() {
+        return this.markers;
     }
     
     /**
@@ -379,9 +381,9 @@ class MapManager {
         let lat = event.location.lat;
         let lon = event.location.lon;
         if (offsetIndex > 0) {
-            const angle = (offsetIndex * FLYER_OFFSET_ANGLE) * (Math.PI / 180);
-            lat += FLYER_OFFSET_RADIUS * Math.cos(angle);
-            lon += FLYER_OFFSET_RADIUS * Math.sin(angle);
+            const angle = (offsetIndex * MARKER_OFFSET_ANGLE) * (Math.PI / 180);
+            lat += MARKER_OFFSET_RADIUS * Math.cos(angle);
+            lon += MARKER_OFFSET_RADIUS * Math.sin(angle);
         }
         
         // Create marker with icon
@@ -411,77 +413,323 @@ class MapManager {
             this.setupPopupInteractions(marker, event, onClick);
         }, 100);
         
-        this.flyers.push(marker); // Keep as flyers for backward compatibility
+        this.markers.push(marker);
         this.log('Marker added with popup for event', event.title);
         
         return marker;
     }
     
     /**
-     * Create HTML content for event flyer card
-     * @param {Object} event - Event data
-     * @returns {string} HTML content for flyer
+     * Detect event category from title and description (using Lucide icon names)
+     * @param {Object} event - Event with title and description
+     * @returns {string} Category name matching Lucide icon
      */
-    createFlyerHtml(event) {
-        // Defensive check: ensure we have a valid start_time before formatting
+    detectEventCategory(event) {
+        const text = `${event.title || ''} ${event.description || ''}`.toLowerCase();
+        
+        // Music & Performance
+        if (/\b(concert|musik|music|band|sänger|singer|dj|live.*music)\b/i.test(text)) return 'music';
+        if (/\b(theater|theatre|schauspiel|performance|show|comedy|stand.*up)\b/i.test(text)) return 'drama';
+        
+        // Arts & Culture
+        if (/\b(art|kunst|gallery|galerie|exhibition|ausstellung|museum)\b/i.test(text)) return 'palette';
+        if (/\b(film|kino|cinema|movie|screening)\b/i.test(text)) return 'film';
+        if (/\b(photo|foto|photography)\b/i.test(text)) return 'camera';
+        
+        // Food & Dining
+        if (/\b(food|essen|restaurant|dinner|lunch|culinary|küche|cooking)\b/i.test(text)) return 'utensils';
+        if (/\b(coffee|café|cafe|kaffee|breakfast)\b/i.test(text)) return 'coffee';
+        if (/\b(wine|beer|bier|wein|cocktail|bar|pub|drink)\b/i.test(text)) return 'wine';
+        
+        // Sports & Fitness
+        if (/\b(sport|fitness|yoga|gym|workout|training|exercise)\b/i.test(text)) return 'dumbbell';
+        if (/\b(football|soccer|fußball|basketball|tennis)\b/i.test(text)) return 'trophy';
+        if (/\b(run|running|lauf|marathon|jogging)\b/i.test(text)) return 'footprints';
+        
+        // Education & Workshop
+        if (/\b(workshop|seminar|kurs|course|class|lesson|training|schulung)\b/i.test(text)) return 'graduation-cap';
+        if (/\b(talk|vortrag|lecture|presentation|conference)\b/i.test(text)) return 'presentation';
+        if (/\b(book|buch|library|bibliothek|reading|lesung)\b/i.test(text)) return 'book-open';
+        
+        // Community & Social
+        if (/\b(meetup|meeting|stammtisch|networking|community|social)\b/i.test(text)) return 'users';
+        if (/\b(party|fest|festival|celebration|feier)\b/i.test(text)) return 'party-popper';
+        if (/\b(market|markt|bazaar|fair|messe)\b/i.test(text)) return 'shopping-bag';
+        
+        // Nature & Outdoor
+        if (/\b(park|garden|garten|nature|natur|outdoor|hike|wandern)\b/i.test(text)) return 'trees';
+        if (/\b(bike|fahrrad|cycling|radtour)\b/i.test(text)) return 'bike';
+        
+        // Technology
+        if (/\b(tech|technology|digital|coding|programming|hackathon)\b/i.test(text)) return 'laptop';
+        if (/\b(game|gaming|esport|videogame)\b/i.test(text)) return 'gamepad-2';
+        
+        // Kids & Family
+        if (/\b(kid|child|kinder|family|familie|baby)\b/i.test(text)) return 'baby';
+        
+        // Default fallback
+        return 'calendar';
+    }
+    
+    /**
+     * Get marker icon HTML using Lucide icons only
+     * Creates a div icon with Lucide icon centered
+     * @param {string} category - Category name (maps to Lucide icon)
+     * @returns {Object} Leaflet divIcon with Lucide icon
+     */
+    getMarkerIconForCategory(category) {
+        // Map categories to Lucide icon names
+        const iconMap = {
+            'music': 'music',
+            'drama': 'drama',
+            'palette': 'palette',
+            'film': 'film',
+            'camera': 'camera',
+            'utensils': 'utensils',
+            'coffee': 'coffee',
+            'wine': 'wine',
+            'dumbbell': 'dumbbell',
+            'trophy': 'trophy',
+            'footprints': 'footprints',
+            'graduation-cap': 'graduation-cap',
+            'presentation': 'presentation',
+            'book-open': 'book-open',
+            'users': 'users',
+            'party-popper': 'party-popper',
+            'shopping-bag': 'shopping-bag',
+            'trees': 'trees',
+            'bike': 'bike',
+            'laptop': 'laptop',
+            'gamepad-2': 'gamepad-2',
+            'baby': 'baby',
+            'calendar': 'calendar'
+        };
+        
+        const lucideIcon = iconMap[category] || 'calendar';
+        
+        // Create div icon with Lucide icon
+        const html = `
+            <div class="category-marker" data-category="${category}">
+                <i data-lucide="${lucideIcon}" class="marker-icon"></i>
+            </div>
+        `;
+        
+        return L.divIcon({
+            className: 'category-marker-container',
+            html: html,
+            iconSize: [48, 48],
+            iconAnchor: [24, 48],
+            popupAnchor: [0, -48]
+        });
+    }
+    
+    /**
+     * Create popup content HTML with smart time display
+     * Shows clock for "til sunrise", calendar for other filters
+     * @param {Object} event - Event data
+     * @returns {string} HTML content for popup
+     */
+    createPopupContent(event) {
         if (!event || !event.start_time) {
-            return `<div class="event-flyer event-flyer-error" role="alert">Invalid event</div>`;
+            return '<div class="popup-error">Invalid event</div>';
         }
-
+        
         const startTime = new Date(event.start_time);
         if (isNaN(startTime.getTime())) {
-            return `<div class="event-flyer event-flyer-error" role="alert">Invalid date</div>`;
+            return '<div class="popup-error">Invalid date</div>';
         }
-
-        const hours = startTime.getHours().toString().padStart(2, '0');
+        
+        // Format time and date
+        const hours = startTime.getHours();
         const minutes = startTime.getMinutes().toString().padStart(2, '0');
         const timeStr = `${hours}:${minutes}`;
-        const dayStr = startTime.toLocaleDateString([], { weekday: 'short' });
-        const dateNum = startTime.getDate();
+        const dayStr = startTime.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' });
         
-        // Check time filter to decide display mode
-        // Access filters from the global app object (filters are managed by EventsApp, not storage)
+        // Get time filter from global app
         const app = window.app || window.eventsApp;
         const timeFilter = (app && app.filters && app.filters.timeFilter) || 'sunrise';
-        const isTimeMode = (timeFilter === 'sunrise');
+        const isSunriseFilter = (timeFilter === 'sunrise');
         
-        // Truncate title to fit in small flyer
+        // Check if bookmarked
+        const isBookmarked = this.storage.isBookmarked(event.id);
+        const bookmarkClass = isBookmarked ? 'bookmarked' : '';
+        
+        // Truncate title
         const title = event.title || 'Event';
-        const shortTitle = title.length > 25 ? title.substring(0, 22) + '…' : title;
+        const displayTitle = title.length > 50 ? title.substring(0, 47) + '…' : title;
         
-        // Category for styling
-        const category = event.category || 'default';
+        // Distance display
+        const distanceHtml = event.distance !== undefined 
+            ? `<div class="popup-distance">
+                 <i data-lucide="map-pin" class="popup-icon"></i>
+                 <span>${event.distance.toFixed(1)} km</span>
+               </div>`
+            : '';
         
-        // Build compact flyer HTML (escape all dynamic content for XSS prevention)
-        // When timeFilter is 'sunrise' (til sunrise), show quartz-style HH:MM
-        // Otherwise, show calendar-style day + date
-        if (isTimeMode) {
-            // Quartz-style time display
+        // Build popup HTML based on time filter
+        if (isSunriseFilter) {
+            // Show CLOCK icon for "til sunrise" filter
             return `
-                <div class="event-flyer event-flyer-time-mode" data-category="${this.escapeHtml(category)}" tabindex="0" role="button" aria-label="${this.escapeHtml(title)}">
-                    <div class="event-flyer-date event-flyer-quartz">
-                        <span class="flyer-quartz-time">${this.escapeHtml(timeStr)}</span>
+                <div class="event-popup-content">
+                    <div class="popup-time-display popup-clock-mode">
+                        <div class="quartz-clock" title="${timeStr}">
+                            <i data-lucide="clock" class="clock-icon"></i>
+                            <span class="clock-time">${this.escapeHtml(timeStr)}</span>
+                        </div>
                     </div>
-                    <div class="event-flyer-content">
-                        <div class="flyer-title">${this.escapeHtml(shortTitle)}</div>
+                    <h3 class="popup-title">${this.escapeHtml(displayTitle)}</h3>
+                    <div class="popup-location">
+                        <i data-lucide="map-pin" class="popup-icon"></i>
+                        <span>${this.escapeHtml(event.location?.name || 'Unknown')}</span>
                     </div>
+                    ${distanceHtml}
+                    <button class="popup-bookmark ${bookmarkClass}" data-event-id="${event.id}" title="Bookmark this event">
+                        <i data-lucide="heart" class="bookmark-icon"></i>
+                    </button>
                 </div>
             `.trim();
         } else {
-            // Calendar-style day + date display
+            // Show CALENDAR icon for other filters
             return `
-                <div class="event-flyer" data-category="${this.escapeHtml(category)}" tabindex="0" role="button" aria-label="${this.escapeHtml(title)}">
-                    <div class="event-flyer-date">
-                        <span class="flyer-day">${this.escapeHtml(dayStr)}</span>
-                        <span class="flyer-date-num">${this.escapeHtml(String(dateNum))}</span>
+                <div class="event-popup-content">
+                    <div class="popup-time-display popup-calendar-mode">
+                        <div class="calendar-badge">
+                            <i data-lucide="calendar" class="calendar-icon"></i>
+                            <span class="calendar-date">${this.escapeHtml(dayStr)}</span>
+                        </div>
                     </div>
-                    <div class="event-flyer-content">
-                        <div class="flyer-title">${this.escapeHtml(shortTitle)}</div>
-                        <div class="flyer-time">${this.escapeHtml(timeStr)}</div>
+                    <h3 class="popup-title">${this.escapeHtml(displayTitle)}</h3>
+                    <div class="popup-location">
+                        <i data-lucide="map-pin" class="popup-icon"></i>
+                        <span>${this.escapeHtml(event.location?.name || 'Unknown')}</span>
                     </div>
+                    ${distanceHtml}
+                    <button class="popup-bookmark ${bookmarkClass}" data-event-id="${event.id}" title="Bookmark this event">
+                        <i data-lucide="heart" class="bookmark-icon"></i>
+                    </button>
                 </div>
             `.trim();
         }
+    }
+    
+    /**
+     * Setup popup interactions (bookmark button, clicks)
+     * @param {Object} marker - Leaflet marker
+     * @param {Object} event - Event data
+     * @param {Function} onClick - Click handler for event details
+     */
+    setupPopupInteractions(marker, event, onClick) {
+        const popup = marker.getPopup();
+        if (!popup) return;
+        
+        const popupElement = popup.getElement();
+        if (!popupElement) return;
+        
+        // Initialize Lucide icons in popup
+        if (window.lucide && typeof window.lucide.createIcons === 'function') {
+            window.lucide.createIcons({ nameAttr: 'data-lucide' });
+        }
+        
+        // Handle bookmark button click
+        const bookmarkBtn = popupElement.querySelector('.popup-bookmark');
+        if (bookmarkBtn) {
+            bookmarkBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                
+                // Toggle bookmark
+                const isNowBookmarked = this.storage.toggleBookmark(event.id);
+                
+                // Update button appearance
+                bookmarkBtn.classList.toggle('bookmarked', isNowBookmarked);
+                
+                // Re-render icon (heart should fill when bookmarked)
+                if (window.lucide && typeof window.lucide.createIcons === 'function') {
+                    window.lucide.createIcons({ nameAttr: 'data-lucide' });
+                }
+                
+                this.log('Bookmark toggled', { eventId: event.id, bookmarked: isNowBookmarked });
+            });
+        }
+        
+        // Handle click on popup content to show full details
+        if (onClick) {
+            const content = popupElement.querySelector('.event-popup-content');
+            if (content) {
+                content.addEventListener('click', (e) => {
+                    // Don't trigger if clicking bookmark button
+                    if (!e.target.closest('.popup-bookmark')) {
+                        onClick(event, marker);
+                    }
+                });
+            }
+        }
+    }
+    
+    /**
+     * Clear all markers from map
+     */
+    clearMarkers() {
+        this.markers.forEach(marker => {
+            if (marker && marker.remove) {
+                marker.remove();
+            }
+        });
+        this.markers = [];
+        this.locationCounts = {}; // Reset offset tracking
+        this.log('All markers cleared');
+    }
+    
+    /**
+     * Fit map bounds to show all markers
+     */
+    fitMapToMarkers() {
+        if (!this.map || this.markers.length === 0) return;
+        
+        const group = L.featureGroup(this.markers);
+        this.map.fitBounds(group.getBounds().pad(0.1)); // 10% padding
+        
+        this.log('Map fitted to markers', { count: this.markers.length });
+    }
+    
+    /**
+     * DEPRECATED: Old flyer methods for backward compatibility
+     */
+    createFlyerHtml(event) {
+        // Legacy method - now creates popup content instead
+        return this.createPopupContent(event);
+    }
+    
+    clearFlyers() {
+        // Legacy method - now clears markers
+        return this.clearMarkers();
+    }
+    
+    /**
+     * Update marker bookmark state
+     * @param {string} eventId - Event ID
+     * @param {boolean} isBookmarked - New bookmark state
+     */
+    updateMarkerBookmarkState(eventId, isBookmarked) {
+        const marker = this.markers.find(m => m.eventData && m.eventData.id === eventId);
+        if (!marker) return;
+        
+        const popup = marker.getPopup();
+        if (!popup) return;
+        
+        const popupElement = popup.getElement();
+        if (!popupElement) return;
+        
+        const bookmarkBtn = popupElement.querySelector('.popup-bookmark');
+        if (bookmarkBtn) {
+            bookmarkBtn.classList.toggle('bookmarked', isBookmarked);
+            
+            // Re-render Lucide icon
+            if (window.lucide && typeof window.lucide.createIcons === 'function') {
+                window.lucide.createIcons({ nameAttr: 'data-lucide' });
+            }
+        }
+        
+        this.log('Marker bookmark state updated', { eventId, isBookmarked });
     }
     
     /**
@@ -494,64 +742,6 @@ class MapManager {
         const div = document.createElement('div');
         div.textContent = text;
         return div.innerHTML;
-    }
-    
-    /**
-     * Update flyer bookmark state
-     * @param {string} eventId - Event ID
-     * @param {boolean} isBookmarked - Whether event is bookmarked
-     */
-    updateMarkerBookmarkState(eventId, isBookmarked) {
-        this.flyers.forEach(flyer => {
-            if (flyer.eventData && flyer.eventData.id === eventId) {
-                if (isBookmarked) {
-                    flyer._icon.classList.add('event-flyer-bookmarked');
-                } else {
-                    flyer._icon.classList.remove('event-flyer-bookmarked');
-                }
-            }
-        });
-    }
-    
-    /**
-     * Clear all event flyers from map
-     */
-    clearMarkers() {
-        for (let i = 0; i < this.flyers.length; i++) {
-            this.flyers[i].remove();
-        }
-        this.flyers = [];
-        this.locationCounts = {}; // Reset location tracking for offset calculation
-        this.log('All flyers cleared');
-    }
-    
-    /**
-     * Fit map bounds to show all flyers
-     */
-    fitMapToMarkers() {
-        if (this.flyers.length === 0 || !this.map) {
-            return;
-        }
-        
-        const bounds = L.latLngBounds();
-        
-        // Add all flyer positions to bounds
-        for (let i = 0; i < this.flyers.length; i++) {
-            bounds.extend(this.flyers[i].getLatLng());
-        }
-        
-        // Add user location to bounds if available
-        if (this.userLocation) {
-            bounds.extend([this.userLocation.lat, this.userLocation.lon]);
-        }
-        
-        // Fit map to bounds with padding
-        this.map.fitBounds(bounds, {
-            padding: [50, 50],
-            maxZoom: 15
-        });
-        
-        this.log('Map fitted to markers');
     }
     
     /**
