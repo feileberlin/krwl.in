@@ -2375,7 +2375,29 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/freecad-1-0-2-aufbaukurs-646-C-30AH319051",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/freecad-1-0-2-aufbaukurs-646-C-30AH319051",
       "tags": []
+    },
+    {
+      "id": "vhs_999940829a3c",
+      "title": "Gitarre spielend lernen",
+      "teaser": "Gitarre spielend lernen kann jede(r)! \nF\u00fcr den Kurs sind keine Vorkenntnisse erforderlich. Spielend werden Sie lernen, bekannte Lieder mit der Gitarre zu begleiten.",
+      "description": "Gitarre spielend lernen kann jede(r)! \nF\u00fcr den Kurs sind keine Vorkenntnisse erforderlich. Spielend werden Sie lernen, bekannte Lieder mit der Gitarre zu begleiten. Gitarren k\u00f6nnen ausgeliehen werden, solange der Vorrat reicht.",
+      "location": {
+        "name": "B\u00fcrgerhaus",
+        "address": "Bahnhofstra\u00dfe 2, 95145 Oberkotzau",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-02-24T19:45:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/gitarre-spielend-lernen-646-C-30OB601101",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/gitarre-spielend-lernen-646-C-30OB601101",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-02-05T03:47:22.406719"
+  "last_scraped": "2026-02-05T15:14:25.863363"
 }
