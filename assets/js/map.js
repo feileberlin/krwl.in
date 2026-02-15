@@ -725,6 +725,10 @@ class MapManager {
         
         // Remove and reset marker cluster group if it exists
         if (this.markerClusterGroup) {
+            // Explicitly clear all layers to ensure event listeners and references are released
+            if (typeof this.markerClusterGroup.clearLayers === 'function') {
+                this.markerClusterGroup.clearLayers();
+            }
             this.map.removeLayer(this.markerClusterGroup);
             this.markerClusterGroup = null;
         }
@@ -788,8 +792,12 @@ class MapManager {
             return true;
         }
         
-        if (events.length >= 20 && uniqueLocations <= events.length / 3) {
-            this.log(`Clustering enabled: High density (${events.length} events, ${uniqueLocations} locations)`);
+        // Use configured density ratio (default: 0.33 = one third)
+        const densityRatio = clusterConfig.density_ratio || 0.33;
+        const densityThreshold = events.length * densityRatio;
+        
+        if (events.length >= 20 && uniqueLocations <= densityThreshold) {
+            this.log(`Clustering enabled: High density (${events.length} events, ${uniqueLocations} locations, threshold: ${densityThreshold.toFixed(1)})`);
             return true;
         }
         
@@ -823,7 +831,7 @@ class MapManager {
         switch (pattern) {
             case 'spiral':
                 // Archimedean spiral: r = a + b*θ
-                const angle = index * 137.5; // Golden angle in degrees for optimal packing
+                const angle = index * 137.508; // Golden angle (360° × (1 - 1/φ)) for optimal packing
                 const radius = Math.min(spacing * Math.sqrt(index), maxSpread);
                 const rad = (angle * Math.PI) / 180;
                 lat += radius * Math.cos(rad);
@@ -878,14 +886,18 @@ class MapManager {
         // Calculate cluster radius based on zoom level and filter settings
         // Tighter clustering for distance filters (users want compact view)
         // Looser clustering for category/time filters (users exploring)
-        let clusterRadius = MAX_CLUSTER_RADIUS;
+        const configMaxRadius = clusterConfig.max_radius || MAX_CLUSTER_RADIUS;
+        const configMinRadius = clusterConfig.min_radius || MIN_CLUSTER_RADIUS;
+        const distanceThreshold = clusterConfig.distance_filter_threshold_km || 5;
         
-        if (filters.maxDistance && filters.maxDistance <= 5) {
+        let clusterRadius = configMaxRadius;
+        
+        if (filters.maxDistance && filters.maxDistance <= distanceThreshold) {
             // Tight distance filter = smaller clusters (more detail)
-            clusterRadius = MIN_CLUSTER_RADIUS;
+            clusterRadius = configMinRadius;
         } else if (filters.category && filters.category !== 'all') {
             // Category filter = medium clusters (focused view)
-            clusterRadius = (MIN_CLUSTER_RADIUS + MAX_CLUSTER_RADIUS) / 2;
+            clusterRadius = (configMinRadius + configMaxRadius) / 2;
         }
         
         // Create cluster group with custom icon
@@ -908,9 +920,10 @@ class MapManager {
                 });
                 
                 // Determine dominant category (most events)
-                const dominantCategory = Object.keys(categories).reduce((a, b) => 
-                    categories[a] > categories[b] ? a : b
-                );
+                const categoryKeys = Object.keys(categories);
+                const dominantCategory = categoryKeys.length > 0
+                    ? categoryKeys.reduce((a, b) => (categories[a] > categories[b] ? a : b))
+                    : 'other';
                 
                 // Size based on count
                 let size = 'small';

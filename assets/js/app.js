@@ -783,15 +783,25 @@ class EventsApp {
             markers.push(marker);
         });
         
-        // Add cluster group to map if clustering is enabled
-        if (shouldCluster && this.mapManager.markerClusterGroup) {
+        // Add cluster group to map if clustering is enabled and not already present
+        if (
+            shouldCluster &&
+            this.mapManager.markerClusterGroup &&
+            !this.mapManager.map.hasLayer(this.mapManager.markerClusterGroup)
+        ) {
             this.mapManager.map.addLayer(this.mapManager.markerClusterGroup);
         }
         
         // Fit map to show all markers (works with both clustered and non-clustered)
         if (shouldCluster && this.mapManager.markerClusterGroup) {
-            // For clustered view, fit to cluster bounds
-            this.mapManager.map.fitBounds(this.mapManager.markerClusterGroup.getBounds().pad(0.1));
+            // For clustered view, fit to cluster bounds (only if bounds are valid)
+            const clusterBounds = this.mapManager.markerClusterGroup.getBounds();
+            if (clusterBounds && typeof clusterBounds.isValid === 'function' && clusterBounds.isValid()) {
+                this.mapManager.map.fitBounds(clusterBounds.pad(0.1));
+            } else {
+                // Fallback: if cluster bounds are invalid (e.g., no markers), use marker-based fitting
+                this.mapManager.fitMapToMarkers();
+            }
         } else {
             // For non-clustered view, fit to individual markers
             this.mapManager.fitMapToMarkers();
