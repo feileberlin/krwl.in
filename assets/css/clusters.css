@@ -3,6 +3,7 @@
  * 
  * Custom styling for Leaflet.markercluster plugin
  * Integrates with ecoBarbie design system
+ * Supports category icons with count badges
  */
 
 /* Cluster markers - circular design with ecoBarbie colors */
@@ -15,6 +16,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
     transition: all 0.3s ease;
 }
 
@@ -24,7 +26,40 @@
     cursor: pointer;
 }
 
-/* Cluster count text */
+/* Cluster icon container (for category icon) */
+.marker-cluster-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.cluster-category-icon {
+    width: 20px;
+    height: 20px;
+    color: var(--color-white);
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+}
+
+/* Count badge (overlays on cluster) */
+.marker-cluster-count-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: var(--color-shade-50);
+    color: var(--color-white);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 10px;
+    min-width: 18px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    line-height: 1.2;
+}
+
+/* Cluster count text (legacy, kept for backward compatibility) */
 .marker-cluster-count {
     color: var(--color-white);
     font-size: 14px;
@@ -38,8 +73,14 @@
     height: 40px;
 }
 
-.marker-cluster-small .marker-cluster-count {
-    font-size: 12px;
+.marker-cluster-small .cluster-category-icon {
+    width: 18px;
+    height: 18px;
+}
+
+.marker-cluster-small .marker-cluster-count-badge {
+    font-size: 10px;
+    padding: 1px 5px;
 }
 
 .marker-cluster-medium {
@@ -47,8 +88,14 @@
     height: 50px;
 }
 
-.marker-cluster-medium .marker-cluster-count {
-    font-size: 14px;
+.marker-cluster-medium .cluster-category-icon {
+    width: 22px;
+    height: 22px;
+}
+
+.marker-cluster-medium .marker-cluster-count-badge {
+    font-size: 12px;
+    padding: 2px 6px;
 }
 
 .marker-cluster-large {
@@ -56,9 +103,15 @@
     height: 60px;
 }
 
-.marker-cluster-large .marker-cluster-count {
-    font-size: 16px;
+.marker-cluster-large .cluster-category-icon {
+    width: 26px;
+    height: 26px;
+}
+
+.marker-cluster-large .marker-cluster-count-badge {
+    font-size: 13px;
     font-weight: 800;
+    padding: 3px 7px;
 }
 
 /* Category-aware cluster styling */

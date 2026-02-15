@@ -1031,7 +1031,7 @@ class MapManager {
             showCoverageOnHover: false,
             zoomToBoundsOnClick: true,
             
-            // Custom cluster icon showing event count for this category
+            // Custom cluster icon showing category icon + event count
             iconCreateFunction: (cluster) => {
                 const count = cluster.getChildCount();
                 
@@ -1040,11 +1040,48 @@ class MapManager {
                 if (count >= 100) size = 'large';
                 else if (count >= 10) size = 'medium';
                 
-                // Single category cluster (since we're grouping by category)
+                // Get category icon mapping (same as getMarkerIconForCategory)
+                const iconMap = {
+                    'music': 'activity',
+                    'drama': 'activity',
+                    'palette': 'book-open',
+                    'film': 'book-open',
+                    'camera': 'book-open',
+                    'utensils': 'map-pin',
+                    'coffee': 'map-pin',
+                    'wine': 'map-pin',
+                    'dumbbell': 'activity',
+                    'trophy': 'activity',
+                    'footprints': 'footprints',
+                    'graduation-cap': 'book-open',
+                    'presentation': 'book-open',
+                    'book-open': 'book-open',
+                    'users': 'map-pin',
+                    'party-popper': 'activity',
+                    'shopping-bag': 'map-pin',
+                    'trees': 'map-pin',
+                    'bike': 'footprints',
+                    'laptop': 'book-text',
+                    'gamepad-2': 'activity',
+                    'baby': 'heart',
+                    'calendar': 'map-pin'
+                };
+                
+                const lucideIcon = iconMap[category] || 'map-pin';
+                
+                // Single category cluster - show category icon + count
                 const categoryClass = `category-${category}`;
                 
+                // Create HTML with category icon and count badge
+                const iconHtml = `
+                    <div class="marker-cluster-icon">
+                        <i data-lucide="${lucideIcon}" class="cluster-category-icon"></i>
+                    </div>
+                    <div class="marker-cluster-count-badge">${count}</div>
+                `;
+                
                 return L.divIcon({
-                    html: `<div class="marker-cluster-count">${count}</div>`,
+                    html: iconHtml,
                     className: `marker-cluster marker-cluster-${size} ${categoryClass}`,
                     iconSize: L.point(40, 40)
                 });
