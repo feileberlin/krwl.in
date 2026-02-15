@@ -8,7 +8,6 @@ Run this before committing to ensure no clutter files are introduced.
 Usage:
     python3 scripts/check_repository_cleanliness.py
     python3 scripts/check_repository_cleanliness.py --strict
-    python3 scripts/check_repository_cleanliness.py --fix
 
 Exit codes:
     0 - Repository is clean
@@ -51,6 +50,9 @@ BACKUP_PATTERN_EXCEPTIONS = [
 ]
 
 # Summary/implementation file patterns (should be in docs/notes or docs/plans)
+# Note: These patterns use ^ anchor for filename-only matching (not full paths).
+# This is correct since we check root directory files using REPO_ROOT.iterdir()
+# which only returns direct children (basenames), not subdirectories.
 SUMMARY_PATTERNS = [
     r'.*_SUMMARY\.md$',
     r'.*_IMPLEMENTATION\.md$',

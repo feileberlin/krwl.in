@@ -188,14 +188,21 @@ jobs:
       - name: Run cleanliness checker
         run: |
           echo "🧹 Checking repository cleanliness..."
-          python3 scripts/check_repository_cleanliness.py --strict
-          
-          echo "## 🧹 Repository Cleanliness" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "✅ No backup files, clutter, or misplaced files detected" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**What was checked:**" >> $GITHUB_STEP_SUMMARY
-          echo "- No backup files (\`*-old.*\`, \`*.backup\`, etc.)" >> $GITHUB_STEP_SUMMARY
-          echo "- No summary files in root directory" >> $GITHUB_STEP_SUMMARY
-          echo "- No temporary files in repository" >> $GITHUB_STEP_SUMMARY
-          echo "- All markdown files properly placed" >> $GITHUB_STEP_SUMMARY
+          if python3 scripts/check_repository_cleanliness.py --strict; then
+            echo "## 🧹 Repository Cleanliness" >> "$GITHUB_STEP_SUMMARY"
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+            echo "✅ No backup files, clutter, or misplaced files detected" >> "$GITHUB_STEP_SUMMARY"
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+            echo "**What was checked:**" >> "$GITHUB_STEP_SUMMARY"
+            echo "- No backup files (\`*-old.*\`, \`*.backup\`, etc.)" >> "$GITHUB_STEP_SUMMARY"
+            echo "- No summary files in root directory" >> "$GITHUB_STEP_SUMMARY"
+            echo "- No temporary files in repository" >> "$GITHUB_STEP_SUMMARY"
+            echo "- All markdown files properly placed" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "## 🧹 Repository Cleanliness" >> "$GITHUB_STEP_SUMMARY"
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+            echo "❌ Repository cleanliness check failed" >> "$GITHUB_STEP_SUMMARY"
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+            echo "See step logs for details about files that violated cleanliness rules." >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
