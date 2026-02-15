@@ -933,6 +933,8 @@
   },
   "defaultRegion": "antarctica",
   "_comment_defaultRegion": "Which region to use when no URL path specified (e.g., visiting root /)",
+  "defaultLanguage": "de",
+  "_comment_defaultLanguage": "Default language for the app when no region-specific language is set",
   "supportedLanguages": [
     "de",
     "en",
