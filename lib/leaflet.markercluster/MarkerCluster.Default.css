@@ -1,0 +1,63 @@
+.marker-cluster-small {
+	/* Default background color removed to allow custom theme (ecoBarbie) to style clusters. */
+	}
+.marker-cluster-small div {
+	/* Default inner background color removed to avoid conflicting with clusters.css. */
+	}
+
+.marker-cluster-medium {
+	/* Default background color removed to allow custom theme (ecoBarbie) to style clusters. */
+	}
+.marker-cluster-medium div {
+	/* Default inner background color removed to avoid conflicting with clusters.css. */
+	}
+
+.marker-cluster-large {
+	/* Default background color removed to allow custom theme (ecoBarbie) to style clusters. */
+	}
+.marker-cluster-large div {
+	/* Default inner background color removed to avoid conflicting with clusters.css. */
+	}
+
+	/* IE 6-8 fallback colors (neutralized to prevent overriding custom theme) */
+.leaflet-oldie .marker-cluster-small {
+	/* background-color removed */
+	}
+.leaflet-oldie .marker-cluster-small div {
+	/* background-color removed */
+	}
+
+.leaflet-oldie .marker-cluster-medium {
+	/* background-color removed */
+	}
+.leaflet-oldie .marker-cluster-medium div {
+	/* background-color removed */
+	}
+
+.leaflet-oldie .marker-cluster-large {
+	/* background-color removed */
+	}
+.leaflet-oldie .marker-cluster-large div {
+	/* background-color removed */
+	}
+
+.marker-cluster {
+	/* Structural behavior only; visual theme is provided by clusters.css. */
+	background-clip: padding-box;
+	border-radius: 20px;
+	}
+.marker-cluster div {
+	/* Size, margins, and typography are defined in clusters.css for ecoBarbie theme. */
+	width: 30px;
+	height: 30px;
+	margin-left: 5px;
+	margin-top: 5px;
+
+	text-align: center;
+	border-radius: 15px;
+	font: 12px "Helvetica Neue", Arial, Helvetica, sans-serif;
+	}
+.marker-cluster span {
+	/* Line-height is controlled by clusters.css to avoid specificity conflicts. */
+	line-height: 30px;
+	}

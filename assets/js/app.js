@@ -765,17 +765,89 @@ class EventsApp {
         
         if (filteredEvents.length === 0) return;
         
-        // Add markers via MapManager
-        const markers = [];
-        filteredEvents.forEach(event => {
-            const marker = this.mapManager.addEventMarker(event, (evt, mkr) => {
-                this.showEventDetail(evt);
-            });
-            markers.push(marker);
-        });
+        // SMART CLUSTERING: Decide if clustering should be enabled based on filtered events
+        const shouldCluster = this.mapManager.shouldUseClustering(filteredEvents);
+        this.mapManager.useClusteringForCurrentView = shouldCluster;
         
-        // Fit map
-        this.mapManager.fitMapToMarkers();
+        if (shouldCluster) {
+            // Group events by category for category-based clustering
+            const eventsByCategory = {};
+            filteredEvents.forEach(event => {
+                const category = event.category || 'other';
+                if (!eventsByCategory[category]) {
+                    eventsByCategory[category] = [];
+                }
+                eventsByCategory[category].push(event);
+            });
+            
+            // Create separate cluster groups for each category
+            this.mapManager.categoryClusterGroups = {};
+            
+            Object.keys(eventsByCategory).forEach(category => {
+                const categoryEvents = eventsByCategory[category];
+                
+                // Initialize cluster group for this category with category-specific settings
+                const clusterGroup = this.mapManager.initializeCategoryClusterGroup(
+                    this.filters, 
+                    category, 
+                    categoryEvents.length
+                );
+                
+                if (clusterGroup) {
+                    this.mapManager.categoryClusterGroups[category] = clusterGroup;
+                    
+                    // Add markers for this category to its cluster group
+                    categoryEvents.forEach(event => {
+                        const marker = this.mapManager.addEventMarker(event, (evt, mkr) => {
+                            this.showEventDetail(evt);
+                        }, true); // addToCluster = true
+                    });
+                    
+                    // Add cluster group to map
+                    if (!this.mapManager.map.hasLayer(clusterGroup)) {
+                        this.mapManager.map.addLayer(clusterGroup);
+                    }
+                }
+            });
+        } else {
+            // Non-clustered mode: add markers normally
+            filteredEvents.forEach(event => {
+                const marker = this.mapManager.addEventMarker(event, (evt, mkr) => {
+                    this.showEventDetail(evt);
+                });
+                markers.push(marker);
+            });
+        }
+        
+        // Fit map to show all markers
+        if (shouldCluster) {
+            // Collect all bounds from category cluster groups
+            const allBounds = [];
+            Object.values(this.mapManager.categoryClusterGroups || {}).forEach(clusterGroup => {
+                const bounds = clusterGroup.getBounds();
+                if (bounds && typeof bounds.isValid === 'function' && bounds.isValid()) {
+                    allBounds.push(bounds);
+                }
+            });
+            
+            if (allBounds.length > 0) {
+                // Combine all category bounds
+                const combinedBounds = allBounds[0];
+                allBounds.slice(1).forEach(bounds => {
+                    combinedBounds.extend(bounds);
+                });
+                this.mapManager.map.fitBounds(combinedBounds.pad(0.1));
+            } else {
+                // Fallback to marker-based fitting
+                this.mapManager.fitMapToMarkers();
+            }
+        } else {
+            // For non-clustered view, fit to individual markers
+            this.mapManager.fitMapToMarkers();
+        }
+        
+        // Log clustering decision
+        this.log(`Displayed ${filteredEvents.length} events (clustering: ${shouldCluster ? 'enabled' : 'disabled'})`);
         
         // Speech bubbles disabled - using Leaflet default popups instead
         // Popups are automatically bound to markers in mapManager.addEventMarker()

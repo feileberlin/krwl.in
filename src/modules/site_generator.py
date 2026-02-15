@@ -78,6 +78,15 @@ DEPENDENCIES = {
             {"src": "/images/marker-shadow.png", "dest": "leaflet/images/marker-shadow.png"}
         ]
     },
+    "leaflet.markercluster": {
+        "version": "1.5.3",
+        "base_url": "https://unpkg.com/leaflet.markercluster@{version}/dist",
+        "files": [
+            {"src": "/MarkerCluster.css", "dest": "leaflet.markercluster/MarkerCluster.css"},
+            {"src": "/MarkerCluster.Default.css", "dest": "leaflet.markercluster/MarkerCluster.Default.css"},
+            {"src": "/leaflet.markercluster.js", "dest": "leaflet.markercluster/leaflet.markercluster.js"}
+        ]
+    },
     "roboto": {
         "version": "v30",
         "base_url": "https://fonts.gstatic.com/s/roboto/{version}",
@@ -777,6 +786,24 @@ class SiteGenerator:
                 {'library': 'Leaflet.js', 'version': '1.9.4'}
             )
         
+        # Load MarkerCluster CSS files
+        markercluster_css_path = self.dependencies_dir / 'leaflet.markercluster' / 'MarkerCluster.css'
+        markercluster_default_css_path = self.dependencies_dir / 'leaflet.markercluster' / 'MarkerCluster.Default.css'
+        markercluster_css = self.read_text_file(markercluster_css_path, fallback='')
+        markercluster_default_css = self.read_text_file(markercluster_default_css_path, fallback='')
+        
+        if not markercluster_css or not markercluster_default_css:
+            markercluster_css = '/* MarkerCluster CSS: Load from CDN at runtime if needed */'
+            logger.warning("MarkerCluster CSS not found locally, generated HTML will need CDN fallback")
+        else:
+            combined_markercluster_css = markercluster_css + '\n\n' + markercluster_default_css
+            markercluster_css = self.wrap_with_debug_comment(
+                combined_markercluster_css,
+                'css',
+                'lib/leaflet.markercluster/*.css',
+                {'library': 'Leaflet.markercluster', 'version': '1.5.3'}
+            )
+        
         # Generate Roboto fonts with debug comments
         roboto_fonts = self.generate_roboto_font_faces()
         roboto_fonts = self.wrap_with_debug_comment(
@@ -791,6 +818,7 @@ class SiteGenerator:
             ('assets/css/base.css', 'Base styles'),
             ('assets/css/map.css', 'Map styles'),
             ('assets/css/leaflet-custom.css', 'Leaflet custom overrides'),
+            ('assets/css/clusters.css', 'Marker cluster styles'),
             ('assets/css/filters.css', 'Filter bar styles'),
             ('assets/css/dashboard.css', 'Dashboard styles'),
             ('assets/css/scrollbar.css', 'Scrollbar styles'),
@@ -822,6 +850,7 @@ class SiteGenerator:
         stylesheets = {
             'roboto_fonts': roboto_fonts,
             'leaflet_css': leaflet_css,
+            'markercluster_css': markercluster_css,
             'app_css': app_css
         }
         return stylesheets
@@ -976,8 +1005,45 @@ class SiteGenerator:
                 {'library': 'Leaflet.js', 'version': '1.9.4'}
             )
         
+        # Load MarkerCluster JS
+        markercluster_js_path = self.dependencies_dir / 'leaflet.markercluster' / 'leaflet.markercluster.js'
+        markercluster_js = self.read_text_file(markercluster_js_path, fallback='')
+        
+        if not markercluster_js:
+            # Provide a CDN loader fallback
+            markercluster_js = '''/* MarkerCluster JS: Load from CDN at runtime */
+(function() {
+    if (typeof L !== 'undefined' && typeof L.markerClusterGroup === 'undefined') {
+        console.warn('MarkerCluster not available - loading from CDN...');
+        const script = document.createElement('script');
+        script.src = 'https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js';
+        script.crossOrigin = '';
+        document.head.appendChild(script);
+        
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = 'https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css';
+        document.head.appendChild(link);
+        
+        const linkDefault = document.createElement('link');
+        linkDefault.rel = 'stylesheet';
+        linkDefault.href = 'https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css';
+        document.head.appendChild(linkDefault);
+    }
+})();'''
+            logger.warning("MarkerCluster JS not found locally, using CDN fallback in generated HTML")
+        else:
+            # Wrap with debug comments
+            markercluster_js = self.wrap_with_debug_comment(
+                markercluster_js,
+                'js',
+                'lib/leaflet.markercluster/leaflet.markercluster.js',
+                {'library': 'Leaflet.markercluster', 'version': '1.5.3'}
+            )
+        
         scripts = {
-            'leaflet_js': leaflet_js
+            'leaflet_js': leaflet_js,
+            'markercluster_js': markercluster_js
         }
         
         # KISS Refactoring: Build modular app.js from components
@@ -2244,6 +2310,7 @@ window.DEBUG_INFO = {debug_info_json};'''
                 roboto_fonts=stylesheets['roboto_fonts'],
                 design_tokens_css=design_tokens_css,
                 leaflet_css=stylesheets['leaflet_css'],
+                markercluster_css=stylesheets['markercluster_css'],
                 app_css=stylesheets['app_css']
             ),
             self.html_component_comment('html-head.html', 'end'),
@@ -2279,6 +2346,7 @@ window.DEBUG_INFO = {debug_info_json};'''
                 config_loader=config_loader,
                 fetch_interceptor=fetch_interceptor,
                 leaflet_js=scripts['leaflet_js'],
+                markercluster_js=scripts['markercluster_js'],
                 lucide_js=scripts.get('lucide_js', '// Lucide not available'),
                 app_js=scripts['app_js']
             ),

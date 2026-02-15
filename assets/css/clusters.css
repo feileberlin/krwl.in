@@ -1,0 +1,187 @@
+/**
+ * Marker Cluster Styles
+ * 
+ * Custom styling for Leaflet.markercluster plugin
+ * Integrates with ecoBarbie design system
+ * Supports category icons with count badges
+ */
+
+/* Cluster markers - circular design with ecoBarbie colors */
+.marker-cluster {
+    background-color: var(--color-primary);
+    border: 3px solid var(--color-tint-50);
+    border-radius: 50%;
+    text-align: center;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.marker-cluster:hover {
+    background-color: var(--color-primary-hover);
+    transform: scale(1.1);
+    cursor: pointer;
+}
+
+/* Cluster icon container (for category icon) */
+.marker-cluster-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.cluster-category-icon {
+    width: 20px;
+    height: 20px;
+    color: var(--color-white);
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+}
+
+/* Count badge (overlays on cluster) */
+.marker-cluster-count-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: var(--color-shade-50);
+    color: var(--color-white);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 10px;
+    min-width: 18px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    line-height: 1.2;
+}
+
+/* Cluster count text (legacy, kept for backward compatibility) */
+.marker-cluster-count {
+    color: var(--color-white);
+    font-size: 14px;
+    font-weight: 700;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Cluster sizes based on event count */
+.marker-cluster-small {
+    width: 40px;
+    height: 40px;
+}
+
+.marker-cluster-small .cluster-category-icon {
+    width: 18px;
+    height: 18px;
+}
+
+.marker-cluster-small .marker-cluster-count-badge {
+    font-size: 10px;
+    padding: 1px 5px;
+}
+
+.marker-cluster-medium {
+    width: 50px;
+    height: 50px;
+}
+
+.marker-cluster-medium .cluster-category-icon {
+    width: 22px;
+    height: 22px;
+}
+
+.marker-cluster-medium .marker-cluster-count-badge {
+    font-size: 12px;
+    padding: 2px 6px;
+}
+
+.marker-cluster-large {
+    width: 60px;
+    height: 60px;
+}
+
+.marker-cluster-large .cluster-category-icon {
+    width: 26px;
+    height: 26px;
+}
+
+.marker-cluster-large .marker-cluster-count-badge {
+    font-size: 13px;
+    font-weight: 800;
+    padding: 3px 7px;
+}
+
+/* Category-aware cluster styling */
+.marker-cluster.category-filtered {
+    /* Slightly darker for filtered view (focused search) */
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px var(--color-tint-50);
+}
+
+.marker-cluster.category-mixed {
+    /* Standard mixed category view */
+    border-color: var(--color-tint-50);
+}
+
+/* Spider animation for expanded clusters */
+.marker-cluster-animated {
+    animation: clusterPulse 0.3s ease-out;
+}
+
+@keyframes clusterPulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Spiderfy legs (lines connecting cluster to individual markers) */
+.leaflet-cluster-spider-leg {
+    stroke: var(--color-primary);
+    stroke-width: 2;
+    stroke-opacity: 0.6;
+}
+
+/* Adjust popup z-index to appear above clusters */
+.leaflet-popup-pane {
+    z-index: 700 !important;
+}
+
+/* Cluster coverage polygon on hover (if enabled) */
+.marker-cluster-cover-polygon {
+    fill: var(--color-primary);
+    fill-opacity: 0.1;
+    stroke: var(--color-primary);
+    stroke-width: 2;
+    stroke-opacity: 0.3;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .marker-cluster-small {
+        width: 35px;
+        height: 35px;
+    }
+    
+    .marker-cluster-medium {
+        width: 45px;
+        height: 45px;
+    }
+    
+    .marker-cluster-large {
+        width: 55px;
+        height: 55px;
+    }
+    
+    .marker-cluster-count {
+        font-size: 12px;
+    }
+}
