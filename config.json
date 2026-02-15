@@ -1302,7 +1302,28 @@
         "lon": -90.0,
         "display_name": "🧊 Ice Cube Bar"
       }
-    ]
+    ],
+    "clustering": {
+      "_comment": "Marker clustering configuration",
+      "enabled": true,
+      "mode": "smart",
+      "_comment_modes": "Modes: 'smart' (auto-detect when clustering helps), 'always' (always cluster), 'never' (disable clustering, use layout distribution)",
+      "threshold": 10,
+      "_comment_threshold": "Minimum events before clustering is considered (only applies in 'smart' mode)",
+      "max_radius": 80,
+      "_comment_max_radius": "Maximum cluster radius in pixels",
+      "min_radius": 40,
+      "_comment_min_radius": "Minimum cluster radius in pixels",
+      "layout_distribution": {
+        "_comment": "Settings for non-clustered layout mode (when mode='never')",
+        "pattern": "spiral",
+        "_comment_pattern": "Options: 'spiral' (spiral outward), 'circle' (circular arrangement), 'grid' (grid pattern)",
+        "spacing": 0.001,
+        "_comment_spacing": "Distance between markers in degrees (~100m at equator)",
+        "max_spread": 0.01,
+        "_comment_max_spread": "Maximum spread radius in degrees (~1km at equator)"
+      }
+    }
   },
   "_comment_categories_section": "────────────────────────────────────────────────────────────────────────────────",
   "_comment_categories_help": "EVENT CATEGORIES & MARKER MAPPING - Define categories and their associated markers",

@@ -22,6 +22,11 @@ const MARKER_OFFSET_RADIUS = 0.0005;   // ~50 meters offset for overlapping mark
 const MARKER_OFFSET_ANGLE = 45;        // Degrees between each offset marker
 const LOCATION_PRECISION = 4;          // Decimal places for location grouping (~11m precision)
 
+// Smart clustering thresholds
+const CLUSTER_THRESHOLD = 10;          // Only cluster if more than 10 events visible
+const MAX_CLUSTER_RADIUS = 80;         // Max pixels for cluster radius
+const MIN_CLUSTER_RADIUS = 40;         // Min pixels for cluster radius
+
 class MapManager {
     constructor(config, storage) {
         this.config = config;
@@ -32,6 +37,8 @@ class MapManager {
         this.locationCounts = {};   // Track markers at same location for offset
         this.referenceMarker = null; // Track the reference location marker (user/predefined/custom)
         this.isFallbackMode = false; // Track if we're showing fallback event list
+        this.markerClusterGroup = null; // MarkerClusterGroup instance
+        this.useClusteringForCurrentView = false; // Dynamic clustering decision
     }
     
     /**
@@ -345,13 +352,20 @@ class MapManager {
     }
     
     /**
-     * Add event marker to map with category icon and permanently open popup
+     * Add event marker to map with category icon and popup
+     * Supports both clustered and non-clustered modes
      * @param {Object} event - Event data
      * @param {Function} onClick - Click handler
+     * @param {boolean} addToCluster - Whether to add to cluster group (default: auto-detect)
      * @returns {Object} Leaflet marker with icon and popup
      */
-    addEventMarker(event, onClick) {
+    addEventMarker(event, onClick, addToCluster = null) {
         if (!this.map || !event.location) return null;
+        
+        // Auto-detect clustering if not specified
+        if (addToCluster === null) {
+            addToCluster = this.useClusteringForCurrentView && this.markerClusterGroup;
+        }
         
         // Detect category if not present
         const category = event.category || this.detectEventCategory(event);
@@ -369,28 +383,39 @@ class MapManager {
             className: this.storage.isBookmarked(event.id) ? 'marker-bookmarked' : 'marker-unbookmarked'
         });
         
-        // Calculate offset for markers at same location
-        const locationKey = `${event.location.lat.toFixed(LOCATION_PRECISION)}_${event.location.lon.toFixed(LOCATION_PRECISION)}`;
-        if (!this.locationCounts[locationKey]) {
-            this.locationCounts[locationKey] = 0;
-        }
-        const offsetIndex = this.locationCounts[locationKey];
-        this.locationCounts[locationKey]++;
-        
-        // Apply offset if there are multiple markers at same location
+        // Use original coordinates when clustering (cluster plugin handles spacing)
+        // Use layout distribution when not clustering (smart visual arrangement)
         let lat = event.location.lat;
         let lon = event.location.lon;
-        if (offsetIndex > 0) {
-            const angle = (offsetIndex * MARKER_OFFSET_ANGLE) * (Math.PI / 180);
-            lat += MARKER_OFFSET_RADIUS * Math.cos(angle);
-            lon += MARKER_OFFSET_RADIUS * Math.sin(angle);
+        
+        if (!addToCluster) {
+            // Track location for layout calculation
+            const locationKey = `${lat.toFixed(LOCATION_PRECISION)}_${lon.toFixed(LOCATION_PRECISION)}`;
+            if (!this.locationCounts[locationKey]) {
+                this.locationCounts[locationKey] = 0;
+            }
+            const offsetIndex = this.locationCounts[locationKey];
+            this.locationCounts[locationKey]++;
+            
+            // Get total markers that will be at this location (for better layout)
+            // This is approximate since we're adding markers incrementally
+            const totalAtLocation = this.locationCounts[locationKey];
+            
+            // Use layout distribution algorithm
+            const layoutPos = this.calculateLayoutPosition(
+                { lat, lon },
+                offsetIndex,
+                totalAtLocation
+            );
+            lat = layoutPos.lat;
+            lon = layoutPos.lon;
         }
         
         // Create marker with icon
         const marker = L.marker([lat, lon], {
             icon: customIcon,
             customData: { id: event.id }
-        }).addTo(this.map);
+        });
         
         // Store event data on marker
         marker.eventData = event;
@@ -398,15 +423,37 @@ class MapManager {
         // Create popup content with time/date logic
         const popupContent = this.createPopupContent(event);
         
-        // Bind popup and open it immediately (permanently open)
-        marker.bindPopup(popupContent, {
-            closeButton: false,       // No close button - permanently open
-            autoClose: false,         // Don't close when clicking map
-            closeOnClick: false,      // Don't close when clicking marker
-            className: 'event-popup',
-            maxWidth: 280,
-            offset: [0, -5]           // Slight offset above marker
-        }).openPopup();
+        // Bind popup (behavior depends on clustering)
+        if (addToCluster) {
+            // Clustered mode: popups open on click only
+            marker.bindPopup(popupContent, {
+                closeButton: true,        // Show close button in clustered mode
+                autoClose: true,          // Allow closing when clicking elsewhere
+                closeOnClick: false,      // Don't close when clicking marker
+                className: 'event-popup',
+                maxWidth: 280,
+                offset: [0, -5]
+            });
+        } else {
+            // Non-clustered mode: popups permanently open
+            marker.bindPopup(popupContent, {
+                closeButton: false,       // No close button - permanently open
+                autoClose: false,         // Don't close when clicking map
+                closeOnClick: false,      // Don't close when clicking marker
+                className: 'event-popup',
+                maxWidth: 280,
+                offset: [0, -5]
+            }).openPopup();
+        }
+        
+        // Add marker to map or cluster group
+        if (addToCluster && this.markerClusterGroup) {
+            this.markerClusterGroup.addLayer(marker);
+            this.log('Marker added to cluster for event', event.title);
+        } else {
+            marker.addTo(this.map);
+            this.log('Marker added to map for event', event.title);
+        }
         
         // Handle popup interactions after it's added to DOM
         setTimeout(() => {
@@ -414,7 +461,6 @@ class MapManager {
         }, 100);
         
         this.markers.push(marker);
-        this.log('Marker added with popup for event', event.title);
         
         return marker;
     }
@@ -676,8 +722,216 @@ class MapManager {
             }
         });
         this.markers = [];
+        
+        // Remove and reset marker cluster group if it exists
+        if (this.markerClusterGroup) {
+            this.map.removeLayer(this.markerClusterGroup);
+            this.markerClusterGroup = null;
+        }
+        
         this.locationCounts = {}; // Reset offset tracking
+        this.useClusteringForCurrentView = false; // Reset clustering decision
         this.log('All markers cleared');
+    }
+    
+    /**
+     * Determine if clustering should be used based on filtered events and config
+     * Smart logic: Only cluster when it makes sense to humans
+     * 
+     * @param {Array} events - Filtered events to display
+     * @returns {boolean} True if clustering should be enabled
+     */
+    shouldUseClustering(events) {
+        if (!events || events.length === 0) return false;
+        
+        // Check config for clustering settings
+        const clusterConfig = this.config?.map?.clustering || {};
+        const mode = clusterConfig.mode || 'smart';
+        const enabled = clusterConfig.enabled !== false;
+        
+        // If clustering is disabled or mode is 'never', never cluster
+        if (!enabled || mode === 'never') {
+            this.log('Clustering disabled by configuration');
+            return false;
+        }
+        
+        // If mode is 'always', always cluster (if enough events)
+        if (mode === 'always') {
+            return events.length >= 2;
+        }
+        
+        // Smart mode (default): analyze event distribution
+        const threshold = clusterConfig.threshold || CLUSTER_THRESHOLD;
+        
+        // Don't cluster if very few events (< threshold)
+        if (events.length < threshold) {
+            return false;
+        }
+        
+        // Count unique locations
+        const locationCounts = {};
+        events.forEach(event => {
+            if (event.location) {
+                const key = `${event.location.lat.toFixed(LOCATION_PRECISION)}_${event.location.lon.toFixed(LOCATION_PRECISION)}`;
+                locationCounts[key] = (locationCounts[key] || 0) + 1;
+            }
+        });
+        
+        const uniqueLocations = Object.keys(locationCounts).length;
+        const maxAtOneLocation = Math.max(...Object.values(locationCounts));
+        
+        // Cluster if:
+        // 1. Many events at same location (5+ at one spot)
+        // 2. Many total events but relatively few locations (high density)
+        if (maxAtOneLocation >= 5) {
+            this.log(`Clustering enabled: ${maxAtOneLocation} events at same location`);
+            return true;
+        }
+        
+        if (events.length >= 20 && uniqueLocations <= events.length / 3) {
+            this.log(`Clustering enabled: High density (${events.length} events, ${uniqueLocations} locations)`);
+            return true;
+        }
+        
+        this.log(`Clustering disabled: Low density (${events.length} events, ${uniqueLocations} locations)`);
+        return false;
+    }
+    
+    /**
+     * Calculate layout position for marker using configured distribution pattern
+     * This creates visually pleasing arrangement without requiring geographic accuracy
+     * 
+     * @param {Object} baseLocation - Original location {lat, lon}
+     * @param {number} index - Marker index at this location
+     * @param {number} totalAtLocation - Total markers at this location
+     * @returns {Object} Adjusted location {lat, lon}
+     */
+    calculateLayoutPosition(baseLocation, index, totalAtLocation) {
+        const layoutConfig = this.config?.map?.clustering?.layout_distribution || {};
+        const pattern = layoutConfig.pattern || 'spiral';
+        const spacing = layoutConfig.spacing || 0.001;
+        const maxSpread = layoutConfig.max_spread || 0.01;
+        
+        let lat = baseLocation.lat;
+        let lon = baseLocation.lon;
+        
+        // First marker stays at original location
+        if (index === 0) {
+            return { lat, lon };
+        }
+        
+        switch (pattern) {
+            case 'spiral':
+                // Archimedean spiral: r = a + b*θ
+                const angle = index * 137.5; // Golden angle in degrees for optimal packing
+                const radius = Math.min(spacing * Math.sqrt(index), maxSpread);
+                const rad = (angle * Math.PI) / 180;
+                lat += radius * Math.cos(rad);
+                lon += radius * Math.sin(rad);
+                break;
+                
+            case 'circle':
+                // Circular arrangement in rings
+                const ring = Math.floor(Math.sqrt(index));
+                const posInRing = index - (ring * ring);
+                const itemsInRing = 2 * ring + 1;
+                const circleAngle = (posInRing / itemsInRing) * 2 * Math.PI;
+                const circleRadius = spacing * (ring + 1);
+                lat += circleRadius * Math.cos(circleAngle);
+                lon += circleRadius * Math.sin(circleAngle);
+                break;
+                
+            case 'grid':
+                // Grid pattern
+                const gridSize = Math.ceil(Math.sqrt(totalAtLocation));
+                const row = Math.floor(index / gridSize);
+                const col = index % gridSize;
+                const offsetX = (col - gridSize / 2) * spacing;
+                const offsetY = (row - gridSize / 2) * spacing;
+                lat += offsetY;
+                lon += offsetX;
+                break;
+                
+            default:
+                // Fallback to simple radial offset
+                const radialAngle = (index * MARKER_OFFSET_ANGLE) * (Math.PI / 180);
+                lat += MARKER_OFFSET_RADIUS * Math.cos(radialAngle);
+                lon += MARKER_OFFSET_RADIUS * Math.sin(radialAngle);
+        }
+        
+        return { lat, lon };
+    }
+    
+    /**
+     * Initialize or reinitialize marker cluster group with filter-aware configuration
+     * 
+     * @param {Object} filters - Current filter settings (for cluster customization)
+     * @returns {Object} MarkerClusterGroup instance
+     */
+    initializeClusterGroup(filters = {}) {
+        // Check if MarkerCluster plugin is available
+        if (typeof L === 'undefined' || typeof L.markerClusterGroup === 'undefined') {
+            this.log('MarkerCluster plugin not available');
+            return null;
+        }
+        
+        // Calculate cluster radius based on zoom level and filter settings
+        // Tighter clustering for distance filters (users want compact view)
+        // Looser clustering for category/time filters (users exploring)
+        let clusterRadius = MAX_CLUSTER_RADIUS;
+        
+        if (filters.maxDistance && filters.maxDistance <= 5) {
+            // Tight distance filter = smaller clusters (more detail)
+            clusterRadius = MIN_CLUSTER_RADIUS;
+        } else if (filters.category && filters.category !== 'all') {
+            // Category filter = medium clusters (focused view)
+            clusterRadius = (MIN_CLUSTER_RADIUS + MAX_CLUSTER_RADIUS) / 2;
+        }
+        
+        // Create cluster group with custom icon
+        this.markerClusterGroup = L.markerClusterGroup({
+            maxClusterRadius: clusterRadius,
+            spiderfyOnMaxZoom: true,
+            showCoverageOnHover: false,
+            zoomToBoundsOnClick: true,
+            
+            // Custom cluster icon showing event count with category awareness
+            iconCreateFunction: (cluster) => {
+                const count = cluster.getChildCount();
+                const markers = cluster.getAllChildMarkers();
+                
+                // Analyze categories in cluster
+                const categories = {};
+                markers.forEach(marker => {
+                    const category = marker.eventData?.category || 'other';
+                    categories[category] = (categories[category] || 0) + 1;
+                });
+                
+                // Determine dominant category (most events)
+                const dominantCategory = Object.keys(categories).reduce((a, b) => 
+                    categories[a] > categories[b] ? a : b
+                );
+                
+                // Size based on count
+                let size = 'small';
+                if (count >= 100) size = 'large';
+                else if (count >= 10) size = 'medium';
+                
+                // Color hint from dominant category (subtle)
+                const categoryHint = filters.category && filters.category !== 'all' 
+                    ? 'category-filtered' 
+                    : 'category-mixed';
+                
+                return L.divIcon({
+                    html: `<div class="marker-cluster-count">${count}</div>`,
+                    className: `marker-cluster marker-cluster-${size} ${categoryHint}`,
+                    iconSize: L.point(40, 40)
+                });
+            }
+        });
+        
+        this.log(`Initialized marker cluster group (radius: ${clusterRadius}px)`);
+        return this.markerClusterGroup;
     }
     
     /**

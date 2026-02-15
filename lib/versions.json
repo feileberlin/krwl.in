@@ -1,7 +1,7 @@
 {
   "metadata": {
     "created": "2026-02-01T11:59:07.067854",
-    "last_updated": "2026-02-15T17:19:16.239048"
+    "last_updated": "2026-02-15T17:22:28.336252"
   },
   "assets": {
     "leaflet": {
@@ -61,6 +61,26 @@
           "checksum": "32c8a74ac0816253d69a7cc68a60986d91c77c80fb17101058527bffa45a13ba",
           "size_bytes": 12764,
           "last_verified": "2026-02-15T17:19:16.239041"
+        }
+      }
+    },
+    "leaflet.markercluster": {
+      "version": "1.5.3",
+      "files": {
+        "leaflet.markercluster/MarkerCluster.css": {
+          "checksum": "614dea0a98ff3f4ead74f04918f6b1d1b9ba435c25b5fc23b21a394d1e3e4d87",
+          "size_bytes": 872,
+          "last_verified": "2026-02-15T17:22:28.213170"
+        },
+        "leaflet.markercluster/MarkerCluster.Default.css": {
+          "checksum": "61258232d98d64dc2a7b1e02130d67421bc5b9bda5994eef70228ff97570c170",
+          "size_bytes": 1287,
+          "last_verified": "2026-02-15T17:22:28.268266"
+        },
+        "leaflet.markercluster/leaflet.markercluster.js": {
+          "checksum": "1e4e1d22972a3926f48598e0caf14e3fe7049835d428a344fed4f9e3665b3508",
+          "size_bytes": 34136,
+          "last_verified": "2026-02-15T17:22:28.336242"
         }
       }
     }

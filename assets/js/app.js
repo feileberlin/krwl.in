@@ -765,7 +765,16 @@ class EventsApp {
         
         if (filteredEvents.length === 0) return;
         
-        // Add markers via MapManager
+        // SMART CLUSTERING: Decide if clustering should be enabled based on filtered events
+        const shouldCluster = this.mapManager.shouldUseClustering(filteredEvents);
+        this.mapManager.useClusteringForCurrentView = shouldCluster;
+        
+        // Initialize cluster group if needed (with current filter settings for customization)
+        if (shouldCluster) {
+            this.mapManager.initializeClusterGroup(this.filters);
+        }
+        
+        // Add markers via MapManager (clustering handled automatically)
         const markers = [];
         filteredEvents.forEach(event => {
             const marker = this.mapManager.addEventMarker(event, (evt, mkr) => {
@@ -774,8 +783,22 @@ class EventsApp {
             markers.push(marker);
         });
         
-        // Fit map
-        this.mapManager.fitMapToMarkers();
+        // Add cluster group to map if clustering is enabled
+        if (shouldCluster && this.mapManager.markerClusterGroup) {
+            this.mapManager.map.addLayer(this.mapManager.markerClusterGroup);
+        }
+        
+        // Fit map to show all markers (works with both clustered and non-clustered)
+        if (shouldCluster && this.mapManager.markerClusterGroup) {
+            // For clustered view, fit to cluster bounds
+            this.mapManager.map.fitBounds(this.mapManager.markerClusterGroup.getBounds().pad(0.1));
+        } else {
+            // For non-clustered view, fit to individual markers
+            this.mapManager.fitMapToMarkers();
+        }
+        
+        // Log clustering decision
+        this.log(`Displayed ${filteredEvents.length} events (clustering: ${shouldCluster ? 'enabled' : 'disabled'})`);
         
         // Speech bubbles disabled - using Leaflet default popups instead
         // Popups are automatically bound to markers in mapManager.addEventMarker()
