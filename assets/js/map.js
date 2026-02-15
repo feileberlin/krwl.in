@@ -324,16 +324,26 @@ class MapManager {
         const escapedLabel = this.escapeHtml(displayLabel);
         
         // Detect location type from label for better marker identification
+        // NOTE: This is a heuristic-based approach. For future improvement, consider
+        // passing location type as an explicit parameter from the calling code.
         let locationType = 'custom';
         let locationTypeLabel = 'Custom Location';
         
-        if (label && (label.includes('You are here') || label.includes('My Location'))) {
+        // Geolocation: User's current position
+        if (label && (label.includes('You are here') || label.includes('My Location') || label.includes('Current location'))) {
             locationType = 'geolocation';
             locationTypeLabel = 'Your Location';
-        } else if (label && (label.includes('Hauptbahnhof') || label.includes('Sonnenplatz') || 
-                             label.includes('Rathaus') || label.includes('Marktplatz'))) {
-            locationType = 'predefined';
-            locationTypeLabel = 'Reference Point';
+        } 
+        // Predefined: Known landmarks (detect by presence of common landmark indicators)
+        // This works for most predefined locations regardless of specific names
+        else if (label && !label.includes('🐧') && !label.includes('Custom')) {
+            // If label doesn't contain custom indicators and isn't geolocation,
+            // it's likely a predefined landmark from the config
+            const hasLandmarkPattern = /\b(station|platz|bahnhof|zentrum|center|hauptbahnhof|markt|rathaus|kirche|church)\b/i.test(label);
+            if (hasLandmarkPattern) {
+                locationType = 'predefined';
+                locationTypeLabel = 'Reference Point';
+            }
         }
         
         return `
