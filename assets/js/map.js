@@ -37,7 +37,8 @@ class MapManager {
         this.locationCounts = {};   // Track markers at same location for offset
         this.referenceMarker = null; // Track the reference location marker (user/predefined/custom)
         this.isFallbackMode = false; // Track if we're showing fallback event list
-        this.markerClusterGroup = null; // MarkerClusterGroup instance
+        this.markerClusterGroup = null; // MarkerClusterGroup instance (deprecated - use categoryClusterGroups)
+        this.categoryClusterGroups = {}; // Category-specific cluster groups
         this.useClusteringForCurrentView = false; // Dynamic clustering decision
     }
     
@@ -447,9 +448,24 @@ class MapManager {
         }
         
         // Add marker to map or cluster group
-        if (addToCluster && this.markerClusterGroup) {
-            this.markerClusterGroup.addLayer(marker);
-            this.log('Marker added to cluster for event', event.title);
+        if (addToCluster && this.useClusteringForCurrentView) {
+            // Category-based clustering: add to category-specific cluster group
+            const category = event.category || 'other';
+            const categoryClusterGroup = this.categoryClusterGroups?.[category];
+            
+            if (categoryClusterGroup) {
+                categoryClusterGroup.addLayer(marker);
+                this.log('Marker added to category cluster for event', event.title, 'category:', category);
+            } else {
+                // Fallback: add to legacy cluster group if available
+                if (this.markerClusterGroup) {
+                    this.markerClusterGroup.addLayer(marker);
+                    this.log('Marker added to legacy cluster for event', event.title);
+                } else {
+                    marker.addTo(this.map);
+                    this.log('Marker added to map (no cluster group) for event', event.title);
+                }
+            }
         } else {
             marker.addTo(this.map);
             this.log('Marker added to map for event', event.title);
@@ -723,7 +739,23 @@ class MapManager {
         });
         this.markers = [];
         
-        // Remove and reset marker cluster group if it exists
+        // Remove and reset all category cluster groups if they exist
+        if (this.categoryClusterGroups) {
+            Object.values(this.categoryClusterGroups).forEach(clusterGroup => {
+                if (clusterGroup) {
+                    // Explicitly clear all layers to ensure event listeners and references are released
+                    if (typeof clusterGroup.clearLayers === 'function') {
+                        clusterGroup.clearLayers();
+                    }
+                    if (this.map && this.map.hasLayer(clusterGroup)) {
+                        this.map.removeLayer(clusterGroup);
+                    }
+                }
+            });
+            this.categoryClusterGroups = {};
+        }
+        
+        // Remove and reset legacy marker cluster group if it exists (backward compatibility)
         if (this.markerClusterGroup) {
             // Explicitly clear all layers to ensure event listeners and references are released
             if (typeof this.markerClusterGroup.clearLayers === 'function') {
@@ -900,14 +932,14 @@ class MapManager {
             clusterRadius = (configMinRadius + configMaxRadius) / 2;
         }
         
-        // Create cluster group with custom icon
+        // Create cluster group with custom icon and category-based clustering
         this.markerClusterGroup = L.markerClusterGroup({
             maxClusterRadius: clusterRadius,
             spiderfyOnMaxZoom: true,
             showCoverageOnHover: false,
             zoomToBoundsOnClick: true,
             
-            // Custom cluster icon showing event count with category awareness
+            // Category-aware clustering: only cluster markers with same category
             iconCreateFunction: (cluster) => {
                 const count = cluster.getChildCount();
                 const markers = cluster.getAllChildMarkers();
@@ -930,9 +962,10 @@ class MapManager {
                 if (count >= 100) size = 'large';
                 else if (count >= 10) size = 'medium';
                 
-                // Color hint from dominant category (subtle)
-                const categoryHint = filters.category && filters.category !== 'all' 
-                    ? 'category-filtered' 
+                // Show category in cluster icon
+                const isSingleCategory = categoryKeys.length === 1;
+                const categoryHint = isSingleCategory 
+                    ? `category-${dominantCategory}` 
                     : 'category-mixed';
                 
                 return L.divIcon({
@@ -940,11 +973,86 @@ class MapManager {
                     className: `marker-cluster marker-cluster-${size} ${categoryHint}`,
                     iconSize: L.point(40, 40)
                 });
+            },
+            
+            // Disable default clustering behavior - we'll group by category manually
+            disableClusteringAtZoom: null,
+            
+            // Custom function to determine if two markers should be clustered together
+            // Only cluster markers with the same category
+            chunkedLoading: false,
+            
+            // Use maxClusterRadius but apply category filtering
+            maxClusterRadius: function(zoom) {
+                return clusterRadius;
             }
         });
         
         this.log(`Initialized marker cluster group (radius: ${clusterRadius}px)`);
         return this.markerClusterGroup;
+    }
+    
+    /**
+     * Initialize category-specific cluster group with filter-aware configuration
+     * This creates separate cluster groups for each event category
+     * 
+     * @param {Object} filters - Current filter settings (for cluster customization)
+     * @param {string} category - Event category for this cluster group
+     * @param {number} categoryEventCount - Number of events in this category
+     * @returns {Object} MarkerClusterGroup instance for this category
+     */
+    initializeCategoryClusterGroup(filters = {}, category = 'other', categoryEventCount = 0) {
+        // Check if MarkerCluster plugin is available
+        if (typeof L === 'undefined' || typeof L.markerClusterGroup === 'undefined') {
+            this.log('MarkerCluster plugin not available');
+            return null;
+        }
+        
+        // Get cluster configuration
+        const clusterConfig = this.config?.map?.clustering || {};
+        const configMaxRadius = clusterConfig.max_radius || MAX_CLUSTER_RADIUS;
+        const configMinRadius = clusterConfig.min_radius || MIN_CLUSTER_RADIUS;
+        const distanceThreshold = clusterConfig.distance_filter_threshold_km || 5;
+        
+        let clusterRadius = configMaxRadius;
+        
+        if (filters.maxDistance && filters.maxDistance <= distanceThreshold) {
+            // Tight distance filter = smaller clusters (more detail)
+            clusterRadius = configMinRadius;
+        } else if (filters.category && filters.category !== 'all') {
+            // Category filter = medium clusters (focused view)
+            clusterRadius = (configMinRadius + configMaxRadius) / 2;
+        }
+        
+        // Create cluster group with category-specific styling
+        const categoryClusterGroup = L.markerClusterGroup({
+            maxClusterRadius: clusterRadius,
+            spiderfyOnMaxZoom: true,
+            showCoverageOnHover: false,
+            zoomToBoundsOnClick: true,
+            
+            // Custom cluster icon showing event count for this category
+            iconCreateFunction: (cluster) => {
+                const count = cluster.getChildCount();
+                
+                // Size based on count
+                let size = 'small';
+                if (count >= 100) size = 'large';
+                else if (count >= 10) size = 'medium';
+                
+                // Single category cluster (since we're grouping by category)
+                const categoryClass = `category-${category}`;
+                
+                return L.divIcon({
+                    html: `<div class="marker-cluster-count">${count}</div>`,
+                    className: `marker-cluster marker-cluster-${size} ${categoryClass}`,
+                    iconSize: L.point(40, 40)
+                });
+            }
+        });
+        
+        this.log(`Initialized category cluster group for '${category}' (${categoryEventCount} events, radius: ${clusterRadius}px)`);
+        return categoryClusterGroup;
     }
     
     /**

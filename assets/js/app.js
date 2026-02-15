@@ -769,37 +769,76 @@ class EventsApp {
         const shouldCluster = this.mapManager.shouldUseClustering(filteredEvents);
         this.mapManager.useClusteringForCurrentView = shouldCluster;
         
-        // Initialize cluster group if needed (with current filter settings for customization)
         if (shouldCluster) {
-            this.mapManager.initializeClusterGroup(this.filters);
-        }
-        
-        // Add markers via MapManager (clustering handled automatically)
-        const markers = [];
-        filteredEvents.forEach(event => {
-            const marker = this.mapManager.addEventMarker(event, (evt, mkr) => {
-                this.showEventDetail(evt);
+            // Group events by category for category-based clustering
+            const eventsByCategory = {};
+            filteredEvents.forEach(event => {
+                const category = event.category || 'other';
+                if (!eventsByCategory[category]) {
+                    eventsByCategory[category] = [];
+                }
+                eventsByCategory[category].push(event);
             });
-            markers.push(marker);
-        });
-        
-        // Add cluster group to map if clustering is enabled and not already present
-        if (
-            shouldCluster &&
-            this.mapManager.markerClusterGroup &&
-            !this.mapManager.map.hasLayer(this.mapManager.markerClusterGroup)
-        ) {
-            this.mapManager.map.addLayer(this.mapManager.markerClusterGroup);
+            
+            // Create separate cluster groups for each category
+            this.mapManager.categoryClusterGroups = {};
+            
+            Object.keys(eventsByCategory).forEach(category => {
+                const categoryEvents = eventsByCategory[category];
+                
+                // Initialize cluster group for this category with category-specific settings
+                const clusterGroup = this.mapManager.initializeCategoryClusterGroup(
+                    this.filters, 
+                    category, 
+                    categoryEvents.length
+                );
+                
+                if (clusterGroup) {
+                    this.mapManager.categoryClusterGroups[category] = clusterGroup;
+                    
+                    // Add markers for this category to its cluster group
+                    categoryEvents.forEach(event => {
+                        const marker = this.mapManager.addEventMarker(event, (evt, mkr) => {
+                            this.showEventDetail(evt);
+                        }, true); // addToCluster = true
+                    });
+                    
+                    // Add cluster group to map
+                    if (!this.mapManager.map.hasLayer(clusterGroup)) {
+                        this.mapManager.map.addLayer(clusterGroup);
+                    }
+                }
+            });
+        } else {
+            // Non-clustered mode: add markers normally
+            filteredEvents.forEach(event => {
+                const marker = this.mapManager.addEventMarker(event, (evt, mkr) => {
+                    this.showEventDetail(evt);
+                });
+                markers.push(marker);
+            });
         }
         
-        // Fit map to show all markers (works with both clustered and non-clustered)
-        if (shouldCluster && this.mapManager.markerClusterGroup) {
-            // For clustered view, fit to cluster bounds (only if bounds are valid)
-            const clusterBounds = this.mapManager.markerClusterGroup.getBounds();
-            if (clusterBounds && typeof clusterBounds.isValid === 'function' && clusterBounds.isValid()) {
-                this.mapManager.map.fitBounds(clusterBounds.pad(0.1));
+        // Fit map to show all markers
+        if (shouldCluster) {
+            // Collect all bounds from category cluster groups
+            const allBounds = [];
+            Object.values(this.mapManager.categoryClusterGroups || {}).forEach(clusterGroup => {
+                const bounds = clusterGroup.getBounds();
+                if (bounds && typeof bounds.isValid === 'function' && bounds.isValid()) {
+                    allBounds.push(bounds);
+                }
+            });
+            
+            if (allBounds.length > 0) {
+                // Combine all category bounds
+                const combinedBounds = allBounds[0];
+                allBounds.slice(1).forEach(bounds => {
+                    combinedBounds.extend(bounds);
+                });
+                this.mapManager.map.fitBounds(combinedBounds.pad(0.1));
             } else {
-                // Fallback: if cluster bounds are invalid (e.g., no markers), use marker-based fitting
+                // Fallback to marker-based fitting
                 this.mapManager.fitMapToMarkers();
             }
         } else {
