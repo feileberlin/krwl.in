@@ -3101,7 +3101,183 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/indiaca/kurs-1-fuer-kinder-von-10-14-jahren-646-C-30NA502601",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/indiaca/kurs-1-fuer-kinder-von-10-14-jahren-646-C-30NA502601",
       "tags": []
+    },
+    {
+      "id": "vhs_4b7b024385df",
+      "title": "R\u00fccken fitKurs 2",
+      "teaser": "Dehn\u00fcbungen, Stabilisation des R\u00fcckens, Kr\u00e4ftigung der Muskeln sowie Ausdauer und Fitness aufbauen. Dadurch k\u00f6nnen Verspannungen und Verk\u00fcrzungen des unteren R\u00fcckens vorgebeugt werden.",
+      "description": "Dehn\u00fcbungen, Stabilisation des R\u00fcckens, Kr\u00e4ftigung der Muskeln sowie Ausdauer und Fitness aufbauen. Dadurch k\u00f6nnen Verspannungen und Verk\u00fcrzungen des unteren R\u00fcckens vorgebeugt werden.",
+      "location": {
+        "name": "Philipp-Wolfrum-Haus",
+        "address": "Marktplatz 17, 95131 Schwarzenbach a.Wald",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-02-23T18:30:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/ruecken-fit/kurs-2-646-C-30SW502222",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/ruecken-fit/kurs-2-646-C-30SW502222",
+      "tags": []
+    },
+    {
+      "id": "vhs_c32d7a203713",
+      "title": "In den Fr\u00fchling tanzen",
+      "teaser": "Mit Kreist\u00e4nzen aus verschiedenen Kulturen schwungvoll in den Fr\u00fchling starten! Wir werden ganz unterschiedliche Kreist\u00e4nze kennenlernen, dabei sind zum Beispiel der fr\u00f6hliche Bachbl\u00fctentanz \u201eWalnut\u201c,...",
+      "description": "Mit Kreist\u00e4nzen aus verschiedenen Kulturen schwungvoll in den Fr\u00fchling starten! Wir werden ganz unterschiedliche Kreist\u00e4nze kennenlernen, dabei sind zum Beispiel der fr\u00f6hliche Bachbl\u00fctentanz \u201eWalnut\u201c, der temperamentvolle \u201eHora Medura\u201c \u2013 Tanz um das Feuer, der indianische \u201eSeed Dance\u201c und der ruhige und sehr ber\u00fchrende Ulmentanz. Alle T\u00e4nze sind sehr einfach und haben einen engen Bezug zur Natur und unserer Lebendigkeit. Es braucht keinerlei Vorkenntnisse oder besondere Fitness. Jede und Jeder k",
+      "location": {
+        "name": "Grundschule Helmbrechts (Aula / Zi.-Nr. 305)",
+        "address": "Eingang \u00fcber Ottengr\u00fcner Stra\u00dfe (bitte klingeln)",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-02-23T19:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/in-den-fruehling-tanzen-646-C-30HE503141",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/in-den-fruehling-tanzen-646-C-30HE503141",
+      "tags": []
+    },
+    {
+      "id": "vhs_00ebe5f67e03",
+      "title": "Energy Dance",
+      "teaser": "Hast Du Lust auf Rhythmus, Bewegung und Musik? M\u00f6chten Du im Kopf abschalten und energievoll deinen K\u00f6rper erleben? Energy Dance f\u00fchrt Dich in vielf\u00e4ltige Bewegungsabl\u00e4ufe, denen man leicht und m\u00fchelo...",
+      "description": "Hast Du Lust auf Rhythmus, Bewegung und Musik? M\u00f6chten Du im Kopf abschalten und energievoll deinen K\u00f6rper erleben? Energy Dance f\u00fchrt Dich in vielf\u00e4ltige Bewegungsabl\u00e4ufe, denen man leicht und m\u00fchelos folgen kann, ohne Schrittfolgen zu lernen oder Takte zu z\u00e4hlen. Ein rhythmisch-dynamischer Fitness- und Gesundheitssport mit abwechslungsreicher, motivierender Musik. Dabei kann jeder selbst die Intensit\u00e4t der Bewegung bestimmen und jeder kann mitmachen.",
+      "location": {
+        "name": "Forum Naila",
+        "address": "Bachstra\u00dfe 1, 95119 Naila",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-02-24T10:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/energy-dance-646-C-30NA502301",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/energy-dance-646-C-30NA502301",
+      "tags": []
+    },
+    {
+      "id": "vhs_0b14b1390ac3",
+      "title": "Schmerzfrei durch BewegungBewegungslehre nach Liebscher & Bracht",
+      "teaser": "Hilfe zur Selbsthilfe bei Schmerzen: In diesem Kurs lernen Sie, wie Sie mit gezielten Engpassdehnungen und sanften Bewegungsflows nach der Methode von Liebscher & Bracht Ihre Beweglichkeit verbessern",
+      "description": "Hilfe zur Selbsthilfe bei Schmerzen: In diesem Kurs lernen Sie, wie Sie mit gezielten Engpassdehnungen und sanften Bewegungsflows nach der Methode von Liebscher & Bracht Ihre Beweglichkeit verbessern und Schmerzen nachhaltig lindern k\u00f6nnen. \nDurch achtsame \u00dcbungen vom Kopf bis zu den F\u00fc\u00dfen \u2013 einschlie\u00dflich spezieller Techniken f\u00fcr Kiefer, Finger und Zehen \u2013 entwickeln Sie ein neues K\u00f6rpergef\u00fchl. Die Bewegungslehre vermittelt leicht umsetzbare \u00dcbungen, die Sie auch zu Hause anwenden k\u00f6nnen \u2013 f\u00fcr ",
+      "location": {
+        "name": "Ludwigstra\u00dfe 7",
+        "address": "95028 Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-02-24T11:30:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/schmerzfrei-durch-bewegung/bewegungslehre-nach-liebscher-bracht-646-C-30AH502274",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/schmerzfrei-durch-bewegung/bewegungslehre-nach-liebscher-bracht-646-C-30AH502274",
+      "tags": []
+    },
+    {
+      "id": "vhs_446220321b2f",
+      "title": "Digitale Welt - VHS Lernportal",
+      "teaser": "Wir laden Sie ein, gemeinsam mit Anne Browa in die digitale Welt einzutauchen! Im VHS Lernportal bieten wir Ihnen einen Kurs an, der speziell darauf ausgerichtet ist, Ihnen den Umgang mit digitalen Me...",
+      "description": "Wir laden Sie ein, gemeinsam mit Anne Browa in die digitale Welt einzutauchen! Im VHS Lernportal bieten wir Ihnen einen Kurs an, der speziell darauf ausgerichtet ist, Ihnen den Umgang mit digitalen Medien n\u00e4herzubringen.\nIn diesem Kurs haben Sie die M\u00f6glichkeit, individuell oder gemeinsam mit unserer Dozentin verschiedene Themen zu bearbeiten. Das Lernportal ist modular aufgebaut, sodass Sie flexibel und in Ihrem eigenen Tempo lernen k\u00f6nnen \u2013 auch von zu Hause aus.\nDer Kurs f\u00fchrt Sie Schritt f\u00fcr",
+      "location": {
+        "name": "Ludwigstra\u00dfe 7",
+        "address": "95028 Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-02-24T15:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/digitale-welt-vhs-lernportal-646-C-30AA904205",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/digitale-welt-vhs-lernportal-646-C-30AA904205",
+      "tags": []
+    },
+    {
+      "id": "vhs_4ae8aa9e48f4",
+      "title": "Yoga auf dem Stuhl",
+      "teaser": "Stuhl-Yoga verhilft uns zu mehr Beweglichkeit und Kraft. Wir \u00fcben auf und mit dem Stuhl. Auch die  Achtsamkeit dem eigenen K\u00f6rper gegen\u00fcber ist hier ein wichtiger Schwerpunkt.",
+      "description": "Stuhl-Yoga verhilft uns zu mehr Beweglichkeit und Kraft. Wir \u00fcben auf und mit dem Stuhl. Auch die  Achtsamkeit dem eigenen K\u00f6rper gegen\u00fcber ist hier ein wichtiger Schwerpunkt. Der Kurs richtet sich an Menschen, die ihre Beweglichkeit verbessern und erhalten m\u00f6chten. Die K\u00f6rper\u00fcbungen wechseln sich mit kurzen  Entspannungsphasen ab. Nehmen Sie sich Zeit f\u00fcr sich selbst und freuen Sie sich auf angenehme Yogastunden.",
+      "location": {
+        "name": "Ludwigstra\u00dfe 7",
+        "address": "95028 Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-02-24T15:30:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/yoga-auf-dem-stuhl-646-C-30AH501104",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/yoga-auf-dem-stuhl-646-C-30AH501104",
+      "tags": []
+    },
+    {
+      "id": "vhs_454d7bac78a0",
+      "title": "Wirbels\u00e4ulengymnastik",
+      "teaser": "Die r\u00fcckengerechte Ausgleichsgymnastik beugt Fehlhaltungen und Haltungsschw\u00e4chen der Wirbels\u00e4ule vor.",
+      "description": "Die r\u00fcckengerechte Ausgleichsgymnastik beugt Fehlhaltungen und Haltungsschw\u00e4chen der Wirbels\u00e4ule vor. Sie st\u00e4rkt und kr\u00e4ftigt die Bauch- und R\u00fcckenmuskulatur, gleichzeitig l\u00f6st sie Verspannungen und Versteifungen des R\u00fcckens. Gezielte und spezielle \u00dcbungsformen f\u00f6rdern das allgemeine Wohlbefinden und tragen zum Stressabbau bei. Interessenten mit akuten Beschwerden wird empfohlen, vorher Ihren Arzt zu konsultieren. Dieser Kurs ersetzt keine Therapie.",
+      "location": {
+        "name": "Ludwigstra\u00dfe 7",
+        "address": "95028 Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-02-24T17:30:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/wirbelsaeulengymnastik-646-C-30AH502201",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/wirbelsaeulengymnastik-646-C-30AH502201",
+      "tags": []
+    },
+    {
+      "id": "vhs_cf568c06d52d",
+      "title": "Canva-Workshop: Social Media & Videoerstellung",
+      "teaser": "Visuelle Inhalte sind der Schl\u00fcssel zu erfolgreichem Social-Media-Marketing.",
+      "description": "Visuelle Inhalte sind der Schl\u00fcssel zu erfolgreichem Social-Media-Marketing. Doch wie erstellt man ansprechende Designs, fesselnde Videos und gut strukturierte Beitr\u00e4ge mit Canva? In diesem interaktiven Workshop wird praxisnah vermittelt, wie Social-Media-Posts und Reels professionell gestaltet und strategisch geplant werden. Zus\u00e4tzlich gibt es exklusive Vorlagen.",
+      "location": {
+        "name": "Online",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-02-24T17:30:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/canva-workshop-social-media-videoerstellung-646-C-29AH316113",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/canva-workshop-social-media-videoerstellung-646-C-29AH316113",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-02-14T03:46:08.656588"
+  "last_scraped": "2026-02-16T03:51:44.290711"
 }
