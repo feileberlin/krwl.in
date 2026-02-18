@@ -3431,7 +3431,29 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/italienisch-niveaustufe-a1/ii-semester-646-C-30AH400912",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/italienisch-niveaustufe-a1/ii-semester-646-C-30AH400912",
       "tags": []
+    },
+    {
+      "id": "vhs_b74ada586fd3",
+      "title": "Tschechisch Konversation - Niveaustufe B2",
+      "teaser": "Der Kurs f\u00fcr fortgeschrittene Lernende zielt darauf ab, Ihre m\u00fcndliche Ausdrucksf\u00e4higkeit zu st\u00e4rken und Hemmungen beim Sprechen abzubauen.",
+      "description": "Der Kurs f\u00fcr fortgeschrittene Lernende zielt darauf ab, Ihre m\u00fcndliche Ausdrucksf\u00e4higkeit zu st\u00e4rken und Hemmungen beim Sprechen abzubauen. Mithilfe aktueller Texte, vielf\u00e4ltiger Gespr\u00e4chsanl\u00e4sse und kurzer Pr\u00e4sentationen erweitern Sie Ihren Wortschatz, machen sich mit unterschiedlichen Sprachstrategien vertraut, wiederholen zentrale Grammatikthemen und trainieren neue Redewendungen.",
+      "location": {
+        "name": "Ludwigstra\u00dfe 7",
+        "address": "95028 Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-03-11T18:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/tschechisch-konversation-niveaustufe-b2-646-C-30AH402346",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/tschechisch-konversation-niveaustufe-b2-646-C-30AH402346",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-02-17T03:48:40.136967"
+  "last_scraped": "2026-02-18T15:15:56.619777"
 }
