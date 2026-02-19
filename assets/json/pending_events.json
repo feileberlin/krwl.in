@@ -3453,7 +3453,51 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/tschechisch-konversation-niveaustufe-b2-646-C-30AH402346",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/tschechisch-konversation-niveaustufe-b2-646-C-30AH402346",
       "tags": []
+    },
+    {
+      "id": "vhs_933493f8d4e8",
+      "title": "Bewegung f\u00fcr die grauen Zellen",
+      "teaser": "Ged\u00e4chtniskurse gibt es viele, Bewegungsangebote auch. Aber einen Kurs, der beides verbindet und zudem Ihrem Gehirn Aufschwung gibt, das finden Sie nur bei der vhs.",
+      "description": "Ged\u00e4chtniskurse gibt es viele, Bewegungsangebote auch. Aber einen Kurs, der beides verbindet und zudem Ihrem Gehirn Aufschwung gibt, das finden Sie nur bei der vhs. Sind Sie neugierig genug f\u00fcr einen Kurs voller neuer Erfahrungen? M\u00f6chten Sie klassischer Altersvergesslichkeit entgegensteuern und Ihre grauen Zellen fit und aktiv halten? Bewegung f\u00fcr die grauen Zellen verbessert Ihre k\u00f6rperliche und geistige Leistungsf\u00e4higkeit. Mit Methoden der Bewegungslehre, dem Wissen des Yogas und Elementen au",
+      "location": {
+        "name": "Forum Naila",
+        "address": "Bachstra\u00dfe 1, 95119 Naila",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-03-04T10:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/bewegung-fuer-die-grauen-zellen-646-C-30NA502260",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/bewegung-fuer-die-grauen-zellen-646-C-30NA502260",
+      "tags": []
+    },
+    {
+      "id": "vhs_d38446942ded",
+      "title": "Lust auf Yoga - Probier es aus!Workshop",
+      "teaser": "Hier bist Du genau richtig. Sei neugierig, komm vorbei. Workshop f\u00fcr Anf\u00e4ngerinnen und Menschen, die wieder in die Yogapraxis einsteigen m\u00f6chten.",
+      "description": "Hier bist Du genau richtig. Sei neugierig, komm vorbei. Workshop f\u00fcr Anf\u00e4ngerinnen und Menschen, die wieder in die Yogapraxis einsteigen m\u00f6chten.",
+      "location": {
+        "name": "Ludwigstra\u00dfe 7",
+        "address": "95028 Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-03-07T10:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/lust-auf-yoga-probier-es-aus/workshop-646-C-30AH501123",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/lust-auf-yoga-probier-es-aus/workshop-646-C-30AH501123",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-02-18T15:15:56.619777"
+  "last_scraped": "2026-02-19T15:15:50.518837"
 }
