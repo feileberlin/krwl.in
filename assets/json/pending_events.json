@@ -3783,7 +3783,29 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/feldenkrais-workshop-kopf-auge-hand-und-weitblick-646-C-29AH502271",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/feldenkrais-workshop-kopf-auge-hand-und-weitblick-646-C-29AH502271",
       "tags": []
+    },
+    {
+      "id": "vhs_a19b7ae0230a",
+      "title": "Die Beobachtungsinstrumente der Sternwarte und ihre Verwendung",
+      "teaser": "Die Beobachtungsinstrumente der Sternwarte und ihre Verwendung am 28.02.",
+      "description": "Die Beobachtungsinstrumente der Sternwarte und ihre Verwendung am 28.02.2026 14:00",
+      "location": {
+        "name": "Hof",
+        "address": "Sternwarte, Egerl\u00e4nderweg 25",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-02-28T14:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/die-beobachtungsinstrumente-der-sternwarte-und-ihre-verwendung-646-C-30AH108603",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/die-beobachtungsinstrumente-der-sternwarte-und-ihre-verwendung-646-C-30AH108603",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-02-23T03:50:50.209325"
+  "last_scraped": "2026-02-23T15:15:57.978413"
 }
