@@ -3761,7 +3761,29 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/bodyart-by-robert-steinbacher-646-C-30AH502307",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/bodyart-by-robert-steinbacher-646-C-30AH502307",
       "tags": []
+    },
+    {
+      "id": "vhs_2b4b57a2edae",
+      "title": "Feldenkrais Workshop - \"Kopf-Auge-Hand und Weitblick\"",
+      "teaser": "Die \u201eAuge-Hand\u201c Verbindung ist ein Schl\u00fcssel, um\u00a0koordinative Aufgaben auszuf\u00fchren, wie z.B. am Rechner oder Handy,\u00a0beim Kochen, Malen\u00a0oder Handwerken.",
+      "description": "Die \u201eAuge-Hand\u201c Verbindung ist ein Schl\u00fcssel, um\u00a0koordinative Aufgaben auszuf\u00fchren, wie z.B. am Rechner oder Handy,\u00a0beim Kochen, Malen\u00a0oder Handwerken. Aber auch f\u00fcr viele Sportarten, wie Basketball, Tennis oder Reiten oder beim Spielen eines Instruments\u00a0ist die Auge-Hand Koordination grundlegend. Leistungssportler oder\u00a0Berufsmusiker\u00a0trainieren sie gezielt,\u00a0um Haltung,\u00a0Beweglichkeit oder Schnelligkeit\u00a0zu verbessern\u00a0und sich \u00fcber \u201elange Distanzen\u201c erm\u00fcdungsfrei zu bewegen. In diesem Workshop expe",
+      "location": {
+        "name": "Ludwigstra\u00dfe 7",
+        "address": "95028 Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-02-28T10:30:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/feldenkrais-workshop-kopf-auge-hand-und-weitblick-646-C-29AH502271",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/feldenkrais-workshop-kopf-auge-hand-und-weitblick-646-C-29AH502271",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-02-21T03:44:55.144048"
+  "last_scraped": "2026-02-23T03:50:50.209325"
 }
