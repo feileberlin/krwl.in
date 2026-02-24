@@ -3805,7 +3805,29 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/die-beobachtungsinstrumente-der-sternwarte-und-ihre-verwendung-646-C-30AH108603",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/die-beobachtungsinstrumente-der-sternwarte-und-ihre-verwendung-646-C-30AH108603",
       "tags": []
+    },
+    {
+      "id": "vhs_7522db115edb",
+      "title": "ANGEKOMMEN! Hof Entdecken: Sternwarte Hof",
+      "teaser": "Gemeinsam besuchen wir die Sternwarte Hof \u2013 \u201eFrankens Fenster ins Weite\u201c im Rahmen einer fachlich gef\u00fchrten Besichtigung, die eine spannende M\u00f6glichkeit bietet, mehr \u00fcber das Universum und seine unend...",
+      "description": "Gemeinsam besuchen wir die Sternwarte Hof \u2013 \u201eFrankens Fenster ins Weite\u201c im Rahmen einer fachlich gef\u00fchrten Besichtigung, die eine spannende M\u00f6glichkeit bietet, mehr \u00fcber das Universum und seine unendlichen Weiten zu erfahren. Die Themen werden anschaulich und spielerisch vermittelt, um das Interesse der Teilnehmenden zu wecken und ihr Wissen zu erweitern.",
+      "location": {
+        "name": "Hof",
+        "address": "Sternwarte, Egerl\u00e4nderweg 25",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-03-01T11:20:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/angekommen-hof-entdecken-sternwarte-hof-646-C-30AA929108",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/angekommen-hof-entdecken-sternwarte-hof-646-C-30AA929108",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-02-23T15:15:57.978413"
+  "last_scraped": "2026-02-24T15:18:02.775931"
 }
