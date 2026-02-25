@@ -3827,7 +3827,51 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/angekommen-hof-entdecken-sternwarte-hof-646-C-30AA929108",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/angekommen-hof-entdecken-sternwarte-hof-646-C-30AA929108",
       "tags": []
+    },
+    {
+      "id": "vhs_1bb511c452de",
+      "title": "Lesewerkstatt 13Lesetraining, Konversationstraining, Leseworkshop",
+      "teaser": "Zugewanderte entwickeln ihre Lesef\u00e4higkeiten: F\u00fcr besseres Textverst\u00e4ndnis und eine klare Aussprache. N\u00e4here Informationen: Jule Konrad, 09281 714549, j.konrad@vhshoferland.",
+      "description": "Zugewanderte entwickeln ihre Lesef\u00e4higkeiten: F\u00fcr besseres Textverst\u00e4ndnis und eine klare Aussprache. N\u00e4here Informationen: Jule Konrad, 09281 714549, j.konrad@vhshoferland.de15",
+      "location": {
+        "name": "Ludwigstra\u00dfe 7",
+        "address": "95028 Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-02-25T12:30:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/lesewerkstatt-13/lesetraining-konversationstraining-leseworkshop-646-C-30AA927261",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/lesewerkstatt-13/lesetraining-konversationstraining-leseworkshop-646-C-30AA927261",
+      "tags": []
+    },
+    {
+      "id": "vhs_114d00056e55",
+      "title": "Online-Vortrag: Sanierung und Heizung \u2013 F\u00f6rderlandschaft im \u00dcberblick",
+      "teaser": "Die F\u00f6rderlandschaft im Hinblick auf die Sanierung und die Heizung ist aktuell sehr komplex.",
+      "description": "Die F\u00f6rderlandschaft im Hinblick auf die Sanierung und die Heizung ist aktuell sehr komplex. Der Vortrag \nerl\u00e4utert, welche M\u00f6glichkeiten f\u00fcr die F\u00f6rderung es gibt, wie Sie diese gegebenenfalls miteinander \nkombinieren k\u00f6nnen und wo Sie diese beantragen k\u00f6nnten. Wichtige Voraussetzung zum Erhalt der \nF\u00f6rderungen werden ebenfalls aufgezeigt.\nZielgruppe: Ein- und Zweifamilienhausbesitzer:innen",
+      "location": {
+        "name": "Online",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-03-02T19:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/online-vortrag-sanierung-und-heizung-foerderlandschaft-im-ueberblick-646-C-30AH107113",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/online-vortrag-sanierung-und-heizung-foerderlandschaft-im-ueberblick-646-C-30AH107113",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-02-24T15:18:02.775931"
+  "last_scraped": "2026-02-25T03:48:26.277740"
 }
