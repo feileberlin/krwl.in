@@ -3871,7 +3871,29 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/online-vortrag-sanierung-und-heizung-foerderlandschaft-im-ueberblick-646-C-30AH107113",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/online-vortrag-sanierung-und-heizung-foerderlandschaft-im-ueberblick-646-C-30AH107113",
       "tags": []
+    },
+    {
+      "id": "vhs_d10ed7b74193",
+      "title": "Englisch - Niveaustufe B1I. Semester",
+      "teaser": "Dieser Kurs baut auf soliden Grundkenntnissen auf und festigt Ihre Sprachkompetenz durch abwechslungsreiche, alltagsnahe Themen.",
+      "description": "Dieser Kurs baut auf soliden Grundkenntnissen auf und festigt Ihre Sprachkompetenz durch abwechslungsreiche, alltagsnahe Themen. Mit gezielten \u00dcbungen zu Wortschatz, Grammatik und Kommunikation gewinnen Sie mehr Sicherheit im Sprechen und Verstehen. Kulturelle Einblicke runden den Unterricht ab.\nLehrwerk: Fairway new B1 (Klett Verlag)",
+      "location": {
+        "name": "Ludwigstra\u00dfe 7",
+        "address": "95028 Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-03-02T17:30:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/englisch-niveaustufe-b1/i-semester-646-C-30AH400631",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/englisch-niveaustufe-b1/i-semester-646-C-30AH400631",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-02-25T03:48:26.277740"
+  "last_scraped": "2026-02-25T15:18:40.117308"
 }
