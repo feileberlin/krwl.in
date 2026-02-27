@@ -4003,7 +4003,29 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/superhirn-namen-und-gesichter-merken/online-seminar-646-C-30AH102101",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/superhirn-namen-und-gesichter-merken/online-seminar-646-C-30AH102101",
       "tags": []
+    },
+    {
+      "id": "vhs_e9d8c2c76970",
+      "title": "VHS Smartphone-StammtischNaila",
+      "teaser": "Smartphone, Tablet und Co. bereiten in der Praxis immer wieder Probleme. Die konkreten Anforderungen lassen sich gemeinsam besser l\u00f6sen und daher bieten diese Treffen an, um Hilfe anzubieten.",
+      "description": "Smartphone, Tablet und Co. bereiten in der Praxis immer wieder Probleme. Die konkreten Anforderungen lassen sich gemeinsam besser l\u00f6sen und daher bieten diese Treffen an, um Hilfe anzubieten. Idealerweise helfen sich die Teilnehmenden untereinander und entsprechen dem \u201eStammtisch-Gedanken\u201c. Wir laden Sie herzlich ein, Teil der Gemeinschaft zu werden.",
+      "location": {
+        "name": "Forum Naila",
+        "address": "Bachstra\u00dfe 1, 95119 Naila",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-03-04T11:15:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/vhs-smartphone-stammtisch/naila-646-C-30AA904207",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/vhs-smartphone-stammtisch/naila-646-C-30AA904207",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-02-27T03:46:50.251854"
+  "last_scraped": "2026-02-27T15:13:03.879928"
 }
