@@ -4113,7 +4113,29 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/russisch-niveaustufe-a1-/i-semester-646-C-30AH401911",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/russisch-niveaustufe-a1-/i-semester-646-C-30AH401911",
       "tags": []
+    },
+    {
+      "id": "vhs_41d6a41725a0",
+      "title": "Besuch der Fachakademie f\u00fcr Sozialp\u00e4dagogikKurs",
+      "teaser": "Der Beruf der Erzieherin wird wieder sehr stark nachgefragt und es werden immer mehr Erzieher/innen gebraucht. Die Besch\u00e4ftigungsm\u00f6glichkeiten f\u00fcr diese Berufsgruppe sind vielf\u00e4ltiger als man denkt.",
+      "description": "Der Beruf der Erzieherin wird wieder sehr stark nachgefragt und es werden immer mehr Erzieher/innen gebraucht. Die Besch\u00e4ftigungsm\u00f6glichkeiten f\u00fcr diese Berufsgruppe sind vielf\u00e4ltiger als man denkt. Die p\u00e4dagogischen Fachkr\u00e4fte arbeiten nicht nur in Tageseinrichtungen f\u00fcr Kinder, sondern beispielsweise auch in der Nachmittagsbetreuung an Schulen. Informieren Sie sich vor Ort, an der Fachakademie f\u00fcr Sozialp\u00e4dagogik in Hof \u00fcber das Berufsbild des Erziehers/der Erzieherin und erfahren Sie, welche ",
+      "location": {
+        "name": "Fachakademie f\u00fcr Sozialp\u00e4dagogik",
+        "address": "Mozartstra\u00dfe 16, Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-03-05T09:30:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/besuch-der-fachakademie-fuer-sozialpaedagogik/kurs-646-C-30AA905048",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/besuch-der-fachakademie-fuer-sozialpaedagogik/kurs-646-C-30AA905048",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-03-03T03:46:53.450490"
+  "last_scraped": "2026-03-03T15:16:05.592979"
 }
