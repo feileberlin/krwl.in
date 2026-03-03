@@ -4069,7 +4069,51 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/bewegung-fuer-die-grauen-zellen/schwarzenbach-saale-646-C-30AA904503",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/bewegung-fuer-die-grauen-zellen/schwarzenbach-saale-646-C-30AA904503",
       "tags": []
+    },
+    {
+      "id": "vhs_1ff633dd9046",
+      "title": "VHS Lese-Stammtisch",
+      "teaser": "B\u00fccher und Autor*innen \u2013 lassen Sie uns dar\u00fcber sprechen. Bringen Sie Ihr Lieblingsbuch mit oder h\u00f6ren Sie zu, wenn andere \u00fcber ihres berichten.",
+      "description": "B\u00fccher und Autor*innen \u2013 lassen Sie uns dar\u00fcber sprechen. Bringen Sie Ihr Lieblingsbuch mit oder h\u00f6ren Sie zu, wenn andere \u00fcber ihres berichten. Lassen Sie uns regelm\u00e4\u00dfig treffen und im Sinne des \u201eStammtisch-Gedanken\u201c Erfahrungen und Empfehlungen austauschen. Wir laden Sie herzlich ein, Teil der Gemeinschaft zu werden.",
+      "location": {
+        "name": "LU 3. Stock - Sitzecke",
+        "address": "Ludwigstra\u00dfe 7",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-03-04T15:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/vhs-lese-stammtisch-646-C-30AA904110",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/vhs-lese-stammtisch-646-C-30AA904110",
+      "tags": []
+    },
+    {
+      "id": "vhs_6f2145c7cdef",
+      "title": "Russisch - Niveaustufe A1 -I. Semester",
+      "teaser": "Haben Sie schon immer davon getr\u00e4umt, die faszinierende russische Sprache zu erlernen? Dann ist dieser Kurs genau das Richtige f\u00fcr Sie! In diesem Kurs werden Sie Schritt f\u00fcr Schritt die Grundlagen der...",
+      "description": "Haben Sie schon immer davon getr\u00e4umt, die faszinierende russische Sprache zu erlernen? Dann ist dieser Kurs genau das Richtige f\u00fcr Sie! In diesem Kurs werden Sie Schritt f\u00fcr Schritt die Grundlagen der russischen Sprache kennenlernen, angefangen bei den kyrillischen Buchstaben \u00fcber die richtige Aussprache bis hin zum Aufbau einfacher S\u00e4tze. \nDas Lehrwerk: wird im Kurs besprochen.",
+      "location": {
+        "name": "Ludwigstra\u00dfe 7",
+        "address": "95028 Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-03-04T17:45:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/russisch-niveaustufe-a1-/i-semester-646-C-30AH401911",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/russisch-niveaustufe-a1-/i-semester-646-C-30AH401911",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-03-02T15:12:39.307473"
+  "last_scraped": "2026-03-03T03:46:53.450490"
 }
