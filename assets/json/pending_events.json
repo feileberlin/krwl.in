@@ -4135,7 +4135,51 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/besuch-der-fachakademie-fuer-sozialpaedagogik/kurs-646-C-30AA905048",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/besuch-der-fachakademie-fuer-sozialpaedagogik/kurs-646-C-30AA905048",
       "tags": []
+    },
+    {
+      "id": "vhs_34bf8fea2ef6",
+      "title": "Bewegung f\u00fcr die grauen ZellenSchauenstein",
+      "teaser": "Ged\u00e4chtniskurse gibt es viele, Bewegungsangebote auch. Aber einen Kurs, der beides verbindet und zudem Ihrem Gehirn Aufschwung gibt, das finden Sie nur bei der vhs.",
+      "description": "Ged\u00e4chtniskurse gibt es viele, Bewegungsangebote auch. Aber einen Kurs, der beides verbindet und zudem Ihrem Gehirn Aufschwung gibt, das finden Sie nur bei der vhs. Sind Sie neugierig genug f\u00fcr einen Kurs voller neuer Erfahrungen? M\u00f6chten Sie klassischer Altersvergesslichkeit entgegensteuern und Ihre grauen Zellen fit und aktiv halten? Bewegung f\u00fcr die grauen Zellen verbessert Ihre k\u00f6rperliche und geistige Leistungsf\u00e4higkeit. Mit Methoden der Bewegungslehre, dem Wissen des Yogas und Elementen au",
+      "location": {
+        "name": "Grundschule Schauenstein",
+        "address": "Mehrgenerationenraum, Schulstra\u00dfe 15, Schauenstein",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-03-05T10:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/bewegung-fuer-die-grauen-zellen/schauenstein-646-C-30AA904502",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/bewegung-fuer-die-grauen-zellen/schauenstein-646-C-30AA904502",
+      "tags": []
+    },
+    {
+      "id": "vhs_530f0e69b50c",
+      "title": "VHS Smartphone-StammtischSchauenstein",
+      "teaser": "Smartphone, Tablet und Co. bereiten in der Praxis immer wieder Probleme. Die konkreten Anforderungen lassen sich gemeinsam besser l\u00f6sen und daher bieten diese Treffen an, um Hilfe anzubieten.",
+      "description": "Smartphone, Tablet und Co. bereiten in der Praxis immer wieder Probleme. Die konkreten Anforderungen lassen sich gemeinsam besser l\u00f6sen und daher bieten diese Treffen an, um Hilfe anzubieten. Idealerweise helfen sich die Teilnehmenden untereinander und entsprechen dem \u201eStammtisch-Gedanken\u201c. Wir laden Sie herzlich ein, Teil der Gemeinschaft zu werden.",
+      "location": {
+        "name": "Grundschule Schauenstein",
+        "address": "Mehrgenerationenraum, Schulstra\u00dfe 15, Schauenstein",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-03-05T11:15:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/vhs-smartphone-stammtisch/schauenstein-646-C-30AA904209",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/vhs-smartphone-stammtisch/schauenstein-646-C-30AA904209",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-03-03T15:16:05.592979"
+  "last_scraped": "2026-03-04T03:45:26.245489"
 }
