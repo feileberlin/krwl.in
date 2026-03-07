@@ -4311,7 +4311,51 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/superhirn-kopfrechnen-schneller-als-mit-dem-taschenrechner/online-seminar-646-C-30AH102102",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/superhirn-kopfrechnen-schneller-als-mit-dem-taschenrechner/online-seminar-646-C-30AH102102",
       "tags": []
+    },
+    {
+      "id": "vhs_54dd17cfc587",
+      "title": "Studium Generale: 200 Jahre FotografieGeschichte und Geschichten \u2013 Entstehung und Entwicklung der Fotografie von den Anf\u00e4ngen bis heute",
+      "teaser": "Die Technik der Camera obscura ist seit der Antike bekannt, aber die erste Fotografie der Moderne stammt von Joseph Ni\u00e9pce aus dem Jahr 1826.",
+      "description": "Die Technik der Camera obscura ist seit der Antike bekannt, aber die erste Fotografie der Moderne stammt von Joseph Ni\u00e9pce aus dem Jahr 1826. Im unterhaltsamen Vortrag kommt die technische Entwicklung ebenso zur Sprache wie inhaltliche und ethische Fragen rund um die heute jederzeit verf\u00fcgbaren Bilder, die Authentizit\u00e4t suggerieren, aber doch immer vom K\u00f6nnen und Wollen der Autor*innen abh\u00e4ngen.",
+      "location": {
+        "name": "Ludwigstra\u00dfe 7",
+        "address": "95028 Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-03-10T19:15:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/studium-generale-200-jahre-fotografie/geschichte-und-geschichten-entstehung-und-entwicklung-der-fotografie-von-den-anfaengen-bis-heute-646-C-30AH103202",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/studium-generale-200-jahre-fotografie/geschichte-und-geschichten-entstehung-und-entwicklung-der-fotografie-von-den-anfaengen-bis-heute-646-C-30AH103202",
+      "tags": []
+    },
+    {
+      "id": "vhs_8ae036706b36",
+      "title": "\"zusammen digital\" - Beratungstheke",
+      "teaser": "\"zusammen digital\" - Beratungstheke am 11.03.",
+      "description": "\"zusammen digital\" - Beratungstheke am 11.03.2026 14:00",
+      "location": {
+        "name": "Ludwigstra\u00dfe 7",
+        "address": "95028 Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-03-11T14:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/zusammen-digital-beratungstheke-646-C-30AA904226",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/zusammen-digital-beratungstheke-646-C-30AA904226",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-03-06T03:46:17.460968"
+  "last_scraped": "2026-03-07T03:39:04.695825"
 }
