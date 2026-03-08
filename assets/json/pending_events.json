@@ -4355,7 +4355,29 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/zusammen-digital-beratungstheke-646-C-30AA904226",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/zusammen-digital-beratungstheke-646-C-30AA904226",
       "tags": []
+    },
+    {
+      "id": "vhs_3fafe2c31360",
+      "title": "Bedeutung und Erhaltung der Biodiversit\u00e4tam Beispiel von Streuobstwiesen",
+      "teaser": "Der Vortrag gibt einen Einblick in die Vielfalt der Natur um uns herum \u2013 also in die sogenannte biologische Vielfalt oder kurz Biodiversit\u00e4t.",
+      "description": "Der Vortrag gibt einen Einblick in die Vielfalt der Natur um uns herum \u2013 also in die sogenannte biologische Vielfalt oder kurz Biodiversit\u00e4t. Es wird erkl\u00e4rt, was genau darunter zu verstehen ist, welche verschiedenen Ebenen und Komponenten dazugeh\u00f6ren und welche wichtigen \u00d6kosystemleistungen sie f\u00fcr uns bietet. Am Beispiel von Streuobstwiesen, die zu den artenreichsten Lebensr\u00e4umen in unserer Kulturlandschaft z\u00e4hlen, wird die faszinierende Arten- und Strukturvielfalt auf der Baum-, Bestandes- un",
+      "location": {
+        "name": "Ludwigstra\u00dfe 7",
+        "address": "95028 Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-03-11T19:30:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/bedeutung-und-erhaltung-der-biodiversitaet/am-beispiel-von-streuobstwiesen-646-C-30AH103311",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/bedeutung-und-erhaltung-der-biodiversitaet/am-beispiel-von-streuobstwiesen-646-C-30AH103311",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-03-07T03:39:04.695825"
+  "last_scraped": "2026-03-08T03:46:27.922668"
 }
