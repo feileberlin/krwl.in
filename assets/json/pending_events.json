@@ -4421,7 +4421,73 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/wie-schuetze-ich-mein-haus-gegen-extremwetterereignisse-wie-hitze-regen-und-flut/online-vortrag-der-verbraucherzentrale-bayern-646-C-30AH107117",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/wie-schuetze-ich-mein-haus-gegen-extremwetterereignisse-wie-hitze-regen-und-flut/online-vortrag-der-verbraucherzentrale-bayern-646-C-30AH107117",
       "tags": []
+    },
+    {
+      "id": "vhs_9bb5b6d2dd0d",
+      "title": "Bal Folk - Offener TanztreffGesamtreihe",
+      "teaser": "Tanzen macht gesund und gl\u00fccklich und bringt Menschen zusammen.",
+      "description": "Tanzen macht gesund und gl\u00fccklich und bringt Menschen zusammen. Der Kurs bietet die Gelegenheit, auch ohne Vorkenntnisse T\u00e4nze aus verschiedenen kulturellen Traditionen kennenzulernen: Balfolk-T\u00e4nze aus Frankreich (z.B. Walzer, Schottisch, Mazurka), aber auch fr\u00e4nkische, osteurop\u00e4ische (insbesondere polnische) oder israelische T\u00e4nze. Getanzt werden sie als Gruppen-, Kreis-, Ketten- oder Paart\u00e4nze. \nInsgesamt sechs Termine, die auch einzeln gebucht werden k\u00f6nnen - die einzelnen Termine sind auf u",
+      "location": {
+        "name": "Ludwigstra\u00dfe 7",
+        "address": "95028 Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-03-12T19:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/bal-folk-offener-tanztreff/gesamtreihe-646-C-30AH503151",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/bal-folk-offener-tanztreff/gesamtreihe-646-C-30AH503151",
+      "tags": []
+    },
+    {
+      "id": "vhs_0b3d985e6fd7",
+      "title": "Photovoltaik und StromspeicherStrom selbst erzeugen, speichern und verbrauchen",
+      "teaser": "Strom selbst erzeugen, speichern und wieder verbrauchen macht unabh\u00e4ngig von den gro\u00dfen Stromkonzernen und ist eine faszinierende Technik.",
+      "description": "Strom selbst erzeugen, speichern und wieder verbrauchen macht unabh\u00e4ngig von den gro\u00dfen Stromkonzernen und ist eine faszinierende Technik. Gerade in Zeiten st\u00e4ndig steigender Strompreise macht es Sinn, sich eine eigene unabh\u00e4ngige Stromversorgung aufzubauen.\nThemen:\n\n- Funktion der Photovoltaik + Grundlagen\n- Stromerzeugung mit Photovoltaik (solarer Ertrag)\n- Eigenverbrauch und Verkauf ins \u00f6ffentliche Stromnetz\n- Eigenverbrauchsquote und Autarkiegrad\n- Stromspeicher f\u00fcr Ein- und Zweifamilienh\u00e4us",
+      "location": {
+        "name": "Online",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-03-12T19:30:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/photovoltaik-und-stromspeicher/strom-selbst-erzeugen-speichern-und-verbrauchen-646-C-30AH107104",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/photovoltaik-und-stromspeicher/strom-selbst-erzeugen-speichern-und-verbrauchen-646-C-30AH107104",
+      "tags": []
+    },
+    {
+      "id": "vhs_cf4ed8e0e464",
+      "title": "KI-Workshop: ChatGPT & Co. praktisch nutzen",
+      "teaser": "Die Zukunft spricht KI: Mehr Zeit f\u00fcrs Wesentliche \u2013 dank ChatGPT-Unterst\u00fctzung bei Routineaufgaben.\nSie erfahren, wie ChatGPT funktioniert und wie Sie es sinnvoll einsetzten k\u00f6nnen.",
+      "description": "Die Zukunft spricht KI: Mehr Zeit f\u00fcrs Wesentliche \u2013 dank ChatGPT-Unterst\u00fctzung bei Routineaufgaben.\nSie erfahren, wie ChatGPT funktioniert und wie Sie es sinnvoll einsetzten k\u00f6nnen. Sie erhalten wertvolle Tipps und Tricks und lernen, wie Sie effektive Prompts (Eingabeaufforderungen) formulieren.\nGemeinsam erstellen, \u00fcberarbeiten und optimieren wir Texte, entwickeln Ideen und lassen ChatGPT Probleme l\u00f6sen. Die Einsatzm\u00f6glichkeiten von Chatbots sind vielf\u00e4ltig - von der Texterstellung \u00fcber die Re",
+      "location": {
+        "name": "Ludwigstra\u00dfe 7",
+        "address": "95028 Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-03-13T17:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/ki-workshop-chatgpt-co-praktisch-nutzen-646-C-30AH311002",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/ki-workshop-chatgpt-co-praktisch-nutzen-646-C-30AH311002",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-03-09T03:47:43.725849"
+  "last_scraped": "2026-03-10T03:45:31.264147"
 }
