@@ -4531,7 +4531,29 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/ostergebaeck-lecker-und-einfach-back-kurs-fuer-kinder-ab-3-klasse-646-C-30MU507105",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/ostergebaeck-lecker-und-einfach-back-kurs-fuer-kinder-ab-3-klasse-646-C-30MU507105",
       "tags": []
+    },
+    {
+      "id": "vhs_f22a883a9c44",
+      "title": "Kommunikation f\u00fcr F\u00fchrungskr\u00e4fteVerbale und non-verbale Kommunikation, Kommunikation in Krisensituationen",
+      "teaser": "Gute Kommunikation ist eine der wichtigsten F\u00e4higkeiten f\u00fcr jede F\u00fchrungskraft.",
+      "description": "Gute Kommunikation ist eine der wichtigsten F\u00e4higkeiten f\u00fcr jede F\u00fchrungskraft. In diesem Kurs lernen Sie, wie Sie klar, verst\u00e4ndlich und wirkungsvoll mit Ihrem Team sprechen \u2013 sowohl mit Worten als auch durch Ihre K\u00f6rpersprache. \nSie erfahren, wie Sie auch in schwierigen Situationen ruhig und sicher auftreten, Gespr\u00e4che zielgerichtet f\u00fchren und Missverst\u00e4ndnisse vermeiden. Ein Fokus liegt auf der Kommunikation in Konfliktsituationen, wenn es darauf ankommt, Orientierung zu geben und Vertrauen z",
+      "location": {
+        "name": "Ludwigstra\u00dfe 7",
+        "address": "95028 Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-03-14T09:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/kommunikation-fuer-fuehrungskraefte/verbale-und-non-verbale-kommunikation-kommunikation-in-krisensituationen-646-C-30AH270010",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/kommunikation-fuer-fuehrungskraefte/verbale-und-non-verbale-kommunikation-kommunikation-in-krisensituationen-646-C-30AH270010",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-03-11T03:45:37.767924"
+  "last_scraped": "2026-03-11T15:15:37.085343"
 }
