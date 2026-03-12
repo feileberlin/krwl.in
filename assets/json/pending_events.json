@@ -4553,7 +4553,73 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/kommunikation-fuer-fuehrungskraefte/verbale-und-non-verbale-kommunikation-kommunikation-in-krisensituationen-646-C-30AH270010",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/kommunikation-fuer-fuehrungskraefte/verbale-und-non-verbale-kommunikation-kommunikation-in-krisensituationen-646-C-30AH270010",
       "tags": []
+    },
+    {
+      "id": "vhs_94b450aa4516",
+      "title": "Yoga f\u00fcr Kiefergelenk, Nacken, SchulternStressbew\u00e4ltigung und Entspannung",
+      "teaser": "Die wichtigste Voraussetzung, der gr\u00f6\u00dfte Reichtum im Leben ist eine gute Gesundheit, psychisch und physisch.",
+      "description": "Die wichtigste Voraussetzung, der gr\u00f6\u00dfte Reichtum im Leben ist eine gute Gesundheit, psychisch und physisch. In meiner zahn\u00e4rztlichen Praxis sehe ich jeden Tag Menschen, die aufgrund von Stress und Verspannung so mit den Z\u00e4hnen knirschen, dass sie Sch\u00e4den am Gebiss verursachen, bis hin zum Zahnverlust. Viele haben auch Beschwerden im Bereich des Kiefergelenks und der Kaumuskulatur. Yoga kann hier eine gro\u00dfe Hilfe zur Selbsthilfe bieten. Der Kurs ist geeignet f\u00fcr Anf\u00e4nger und Yogaerfahrene. Es gi",
+      "location": {
+        "name": "Ludwigstra\u00dfe 7",
+        "address": "95028 Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-03-14T10:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/yoga-fuer-kiefergelenk-nacken-schultern/stressbewaeltigung-und-entspannung-646-C-30AH501115",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/yoga-fuer-kiefergelenk-nacken-schultern/stressbewaeltigung-und-entspannung-646-C-30AH501115",
+      "tags": []
+    },
+    {
+      "id": "vhs_0b8d7376a69c",
+      "title": "Repair Caf\u00e9",
+      "teaser": "Repair Caf\u00e9 ist gemeinsam kaputte Sachen reparieren, fachkundige Beratung, nette Begegnungen und viel Inspirationen.",
+      "description": "Repair Caf\u00e9 ist gemeinsam kaputte Sachen reparieren, fachkundige Beratung, nette Begegnungen und viel Inspirationen.\nAls Besucher des Repair Caf\u00e9s bringen Sie Ihre kaputten oder funktionsunt\u00fcchtigen Gegenst\u00e4nde von Zuhause mit - und die Wahrscheinlichkeit ist gro\u00df, dass die Reparatur gelingt! Die Fachleute im Repair Caf\u00e9 wissen fast immer eine L\u00f6sung.",
+      "location": {
+        "name": "Ludwigstra\u00dfe 7",
+        "address": "95028 Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-03-14T13:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/repair-cafe-646-C-30AH605101",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/repair-cafe-646-C-30AH605101",
+      "tags": []
+    },
+    {
+      "id": "vhs_7f4c5ee2733d",
+      "title": "\"zusammen digital\" - Beratungstheke",
+      "teaser": "\"zusammen digital\" - Beratungstheke am 18.03.",
+      "description": "\"zusammen digital\" - Beratungstheke am 18.03.2026 14:00",
+      "location": {
+        "name": "Ludwigstra\u00dfe 7",
+        "address": "95028 Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-03-18T14:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/zusammen-digital-beratungstheke-646-C-30AA904227",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/zusammen-digital-beratungstheke-646-C-30AA904227",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-03-11T15:15:37.085343"
+  "last_scraped": "2026-03-12T03:47:38.653559"
 }
