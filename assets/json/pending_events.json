@@ -4685,7 +4685,29 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/online-banking-sicher-und-einfach-erklaert/ein-kurs-fuer-seniorinnen-und-senioren-646-C-30AH360040",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/online-banking-sicher-und-einfach-erklaert/ein-kurs-fuer-seniorinnen-und-senioren-646-C-30AH360040",
       "tags": []
+    },
+    {
+      "id": "vhs_b5dcd1ac0ab1",
+      "title": "Wandern mit Komoot \u2013 Routen planen & teilen",
+      "teaser": "F\u00fcr alle, die Komoot bereits kennen und eigene Touren erstellen m\u00f6chten! Sie lernen, wie man individuelle Routen plant, Zwischenstopps setzt, GPX-Daten nutzt und Touren mit Freunden teilt.",
+      "description": "F\u00fcr alle, die Komoot bereits kennen und eigene Touren erstellen m\u00f6chten! Sie lernen, wie man individuelle Routen plant, Zwischenstopps setzt, GPX-Daten nutzt und Touren mit Freunden teilt. Au\u00dferdem besprechen wir, wie man Highlights in der Umgebung entdeckt, Fotos einbindet und Touren \u00f6ffentlich oder privat ver\u00f6ffentlicht.",
+      "location": {
+        "name": "Ludwigstra\u00dfe 7",
+        "address": "95028 Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-03-19T14:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/wandern-mit-komoot-routen-planen-teilen-646-C-30AH318101",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/wandern-mit-komoot-routen-planen-teilen-646-C-30AH318101",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-03-13T03:46:34.651438"
+  "last_scraped": "2026-03-13T15:13:54.186915"
 }
