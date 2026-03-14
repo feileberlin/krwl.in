@@ -4707,7 +4707,29 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/wandern-mit-komoot-routen-planen-teilen-646-C-30AH318101",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/wandern-mit-komoot-routen-planen-teilen-646-C-30AH318101",
       "tags": []
+    },
+    {
+      "id": "vhs_8eb438bd4198",
+      "title": "Canva f\u00fcr Fortgeschrittene \u2013 Kreativ werden mit Stil & Struktur",
+      "teaser": "Sie kennen die Grundlagen von Canva und m\u00f6chten mehr? In diesem Kurs lernen Sie, eigene Farbkonzepte, Vorlagen und kleine Projekte wie Flyer oder Social-Media-Posts professionell anzulegen.",
+      "description": "Sie kennen die Grundlagen von Canva und m\u00f6chten mehr? In diesem Kurs lernen Sie, eigene Farbkonzepte, Vorlagen und kleine Projekte wie Flyer oder Social-Media-Posts professionell anzulegen. Auch kleine Videos lassen sich direkt in Canva schneiden. Tipps zu Schriftwahl, Layout, Bildwirkung und Corporate Design runden das Seminar ab.",
+      "location": {
+        "name": "Ludwigstra\u00dfe 7",
+        "address": "95028 Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-03-19T18:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/canva-fuer-fortgeschrittene-kreativ-werden-mit-stil-struktur-646-C-30AH316051",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/canva-fuer-fortgeschrittene-kreativ-werden-mit-stil-struktur-646-C-30AH316051",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-03-13T15:13:54.186915"
+  "last_scraped": "2026-03-14T03:46:04.080147"
 }
