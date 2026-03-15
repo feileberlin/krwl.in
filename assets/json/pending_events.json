@@ -4729,7 +4729,51 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/canva-fuer-fortgeschrittene-kreativ-werden-mit-stil-struktur-646-C-30AH316051",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/canva-fuer-fortgeschrittene-kreativ-werden-mit-stil-struktur-646-C-30AH316051",
       "tags": []
+    },
+    {
+      "id": "vhs_3a010576c983",
+      "title": "Mit Yoga in den Fr\u00fchling - Workshop\u00d6ffnung-W\u00e4rme-Weite",
+      "teaser": "\u00d6ffne Dein Herz und erweitere Deine Brustwirbels\u00e4ule.",
+      "description": "\u00d6ffne Dein Herz und erweitere Deine Brustwirbels\u00e4ule. Durch das \u00dcben von vielen R\u00fcckbeugen weiten wir unsere verk\u00fcrzte Brustmuskulatur, \u00f6ffnen unseren Herzraum und machen unsere Wirbels\u00e4ule weich und geschmeidig. \u00d6ffnung - Weite - Weichheit - Wachheit entsteht und l\u00e4sst uns fit in den Fr\u00fchling starten.",
+      "location": {
+        "name": "Ludwigstra\u00dfe 7",
+        "address": "95028 Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-03-21T10:45:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/mit-yoga-in-den-fruehling-workshop/oeffnung-waerme-weite-646-C-30AH501124",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/mit-yoga-in-den-fruehling-workshop/oeffnung-waerme-weite-646-C-30AH501124",
+      "tags": []
+    },
+    {
+      "id": "vhs_913a5ea21691",
+      "title": "Trinkwasseraufbereitung am Beispiel der Trinkwasseraufbereitungsanlage RieblichFernwasserversorgung Oberfranken (FWO)",
+      "teaser": "Unter dem Leitspruch des Vorsitzenden der FWO Dr. Heinz K\u00f6hler: \"Trinkwasser ist unser Beitrag zur Lebensqualit\u00e4t in Oberfranken. Seit 50 Jahren - und auch in Zukunft\".",
+      "description": "Unter dem Leitspruch des Vorsitzenden der FWO Dr. Heinz K\u00f6hler: \"Trinkwasser ist unser Beitrag zur Lebensqualit\u00e4t in Oberfranken. Seit 50 Jahren - und auch in Zukunft\". Unter diesem Motto wird die FWO geleitet und gef\u00fchrt. Bei der F\u00fchrung wird gezeigt, wie die verantwortungsvolle Aufgabe der Wasseraufbereitung und -verteilung \"funktioniert\".",
+      "location": {
+        "name": "Trinkwasseraufbereitungsanlage Rieblich 5",
+        "address": "96349 Steinwiesen",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-03-21T13:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/trinkwasseraufbereitung-am-beispiel-der-trinkwasseraufbereitungsanlage-rieblich/fernwasserversorgung-oberfranken-fwo-646-C-30GE105101",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/trinkwasseraufbereitung-am-beispiel-der-trinkwasseraufbereitungsanlage-rieblich/fernwasserversorgung-oberfranken-fwo-646-C-30GE105101",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-03-14T03:46:04.080147"
+  "last_scraped": "2026-03-15T03:57:28.462557"
 }
