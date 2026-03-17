@@ -5059,7 +5059,51 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/mit-sonne-rechnen-das-eigene-dach-nutzen/online-vortrag-der-verbraucherzentrale-bayern-646-C-30AH107124",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/mit-sonne-rechnen-das-eigene-dach-nutzen/online-vortrag-der-verbraucherzentrale-bayern-646-C-30AH107124",
       "tags": []
+    },
+    {
+      "id": "vhs_ec6c2f136e7c",
+      "title": "AzubiPower: Professionelle Telefonate f\u00fcr Auszubildende",
+      "teaser": "Telefonieren ist weit mehr als nur \u201eRangehen\u201c, wenn es klingelt. Mehr denn je ist ein gutes Erscheinungsbild am Telefon ein wichtiger Punkt im Berufsleben.",
+      "description": "Telefonieren ist weit mehr als nur \u201eRangehen\u201c, wenn es klingelt. Mehr denn je ist ein gutes Erscheinungsbild am Telefon ein wichtiger Punkt im Berufsleben. Telefonate pr\u00e4gen das Image des Unternehmens beim Kunden. In diesem Seminar wird den Auszubildenden der Kundenkontakt am Telefon, die Erwartungen des Anrufers sowie effizientes Telefonieren in Gruppenarbeiten und Rollenspielen vermittelt.\n\nDas Seminar ist ausgelegt f\u00fcr max. 12 Teilnehmende\u200b\u200b\n\nInhalte:\nVoraussetzungen f\u00fcr ein gutes Telefongesp",
+      "location": {
+        "name": "Ludwigstra\u00dfe 7",
+        "address": "95028 Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-03-26T08:30:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/azubipower-professionelle-telefonate-fuer-auszubildende-646-C-30AF310006",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/azubipower-professionelle-telefonate-fuer-auszubildende-646-C-30AF310006",
+      "tags": []
+    },
+    {
+      "id": "vhs_42d9f4675296",
+      "title": "Selbstst\u00e4ndiges Deutschlernen mit dem VHS-Lernportal - Einweisung",
+      "teaser": "Das kostenlose vhs-Lernportal bietet digitale \u00dcbungseinheiten zum selbstst\u00e4ndigen Erlernen der deutschen Sprache bis zum Niveau B1. Texte und Men\u00fcf\u00fchrungen sind in 18 Sprachen verf\u00fcgbar.",
+      "description": "Das kostenlose vhs-Lernportal bietet digitale \u00dcbungseinheiten zum selbstst\u00e4ndigen Erlernen der deutschen Sprache bis zum Niveau B1. Texte und Men\u00fcf\u00fchrungen sind in 18 Sprachen verf\u00fcgbar. Neben erkl\u00e4renden Videos werden auch Texte als Audio-Versionen angeboten. \u00dcbungen zur Vorbereitung auf einen Schulabschluss sind ebenfalls integriert. Unternehmen profitieren, weil Mitarbeitende \u2013 auch im Schichtdienst \u2013 sich zeitunabh\u00e4ngig weiterbilden k\u00f6nnen.",
+      "location": {
+        "name": "Ludwigstra\u00dfe 7",
+        "address": "95028 Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-03-26T18:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/selbststaendiges-deutschlernen-mit-dem-vhs-lernportal-einweisung-646-C-30AH402709",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/selbststaendiges-deutschlernen-mit-dem-vhs-lernportal-einweisung-646-C-30AH402709",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-03-17T03:48:10.209521"
+  "last_scraped": "2026-03-17T15:21:21.474063"
 }
