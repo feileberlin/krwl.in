@@ -5147,7 +5147,73 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/chronisch-gesund-ohne-pille-646-C-30SW502265",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/chronisch-gesund-ohne-pille-646-C-30SW502265",
       "tags": []
+    },
+    {
+      "id": "vhs_523ccac779ba",
+      "title": "VHS Stammtisch KI - \u201eErwartungen live in digitale Ergebnisse umsetzen\"",
+      "teaser": "VHS Stammtisch KI - \u201eErwartungen live in digitale Ergebnisse umsetzen\" am 25.03.",
+      "description": "VHS Stammtisch KI - \u201eErwartungen live in digitale Ergebnisse umsetzen\" am 25.03.2026 15:45",
+      "location": {
+        "name": "Ludwigstra\u00dfe 7",
+        "address": "95028 Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-03-25T15:45:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/vhs-stammtisch-ki-erwartungen-live-in-digitale-ergebnisse-umsetzen-646-C-30AA904201",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/vhs-stammtisch-ki-erwartungen-live-in-digitale-ergebnisse-umsetzen-646-C-30AA904201",
+      "tags": []
+    },
+    {
+      "id": "vhs_caf7a350ee1c",
+      "title": "Ein Garten f\u00fcr uns alleWorkshop",
+      "teaser": "Hier wird nicht nur gepflanzt, sondern auch zugeh\u00f6rt, gelacht und voneinander gelernt - ein lebendiger Treffpunkt voller Ideen, Engagement und Herzlichkeit.",
+      "description": "Hier wird nicht nur gepflanzt, sondern auch zugeh\u00f6rt, gelacht und voneinander gelernt - ein lebendiger Treffpunkt voller Ideen, Engagement und Herzlichkeit.\nUnsere Mitmach-Termine laden dazu ein, gemeinsam zu g\u00e4rtnern, ins Gespr\u00e4ch zu kommen und Gemeinschaft zu erleben. Jede*r ist herzlich willkommen.",
+      "location": {
+        "name": "Innenhof der VHS Hofer Land in der LU",
+        "address": "Mitmachgarten",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-03-27T12:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/ein-garten-fuer-uns-alle/workshop-646-C-30AA933038",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/ein-garten-fuer-uns-alle/workshop-646-C-30AA933038",
+      "tags": []
+    },
+    {
+      "id": "vhs_99a43047c282",
+      "title": "F\u00fcnf Wege zu einem perfekten Ged\u00e4chtnisOnline-Seminar",
+      "teaser": "Das Denken und Lernen sind zu einem gro\u00dfen Teil durch die Schulzeit gepr\u00e4gt.",
+      "description": "Das Denken und Lernen sind zu einem gro\u00dfen Teil durch die Schulzeit gepr\u00e4gt. Wenn Sie als Lernender an Fort- und Weiterbildung teilnehmen, greifen Sie meist auf althergebrachtes Lernverhalten zur\u00fcck und wundern sich, dass kaum etwas h\u00e4ngen bleibt. Dabei kann Lernen so einfach sein, wenn Sie nur ein paar Merktechniken anwenden. Wenn Sie also in Zukunft Zahlen, Daten, Fakten, Vokabeln, Namen und Gesichter schnell und sicher behalten m\u00f6chten, dann lassen Sie sich von einem kreativen und einflussrei",
+      "location": {
+        "name": "Online",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-03-28T09:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/fuenf-wege-zu-einem-perfekten-gedaechtnis/online-seminar-646-C-30AH102106",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/fuenf-wege-zu-einem-perfekten-gedaechtnis/online-seminar-646-C-30AH102106",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-03-18T03:51:34.506678"
+  "last_scraped": "2026-03-18T15:25:52.233949"
 }
