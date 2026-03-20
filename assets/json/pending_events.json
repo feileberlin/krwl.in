@@ -5279,7 +5279,95 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/webinar-apple-ios-vs-windows-und-die-apple-welt-lernen-646-C-30AH317030",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/webinar-apple-ios-vs-windows-und-die-apple-welt-lernen-646-C-30AH317030",
       "tags": []
+    },
+    {
+      "id": "vhs_0b76162d3650",
+      "title": "Praktische Astronomie: Astronomietag",
+      "teaser": "Der diesj\u00e4hrige Astronomietag steht unter dem Motto des Gasriesen Jupiter und seiner Monde.\nDaneben sind ebenfalls noch die Fr\u00fchlingssternbilder am Himmel zu sehen.",
+      "description": "Der diesj\u00e4hrige Astronomietag steht unter dem Motto des Gasriesen Jupiter und seiner Monde.\nDaneben sind ebenfalls noch die Fr\u00fchlingssternbilder am Himmel zu sehen. Zusammen erleben wir den Astronomietag und beobachten verschiedene Objekte am Fr\u00fchlingshimmel.",
+      "location": {
+        "name": "Hof",
+        "address": "Sternwarte, Egerl\u00e4nderweg 25",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-03-28T20:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/praktische-astronomie-astronomietag-646-C-30AH108122",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/praktische-astronomie-astronomietag-646-C-30AH108122",
+      "tags": []
+    },
+    {
+      "id": "vhs_b44b4d068cba",
+      "title": "Webinar \u201eExcel Basic\u201c",
+      "teaser": "Der Arbeitsalltag umfasst immer mehr an Fachkenntnissen, in allen Bereichen und fordert mehr Kenntnisse des Mitarbeiters.",
+      "description": "Der Arbeitsalltag umfasst immer mehr an Fachkenntnissen, in allen Bereichen und fordert mehr Kenntnisse des Mitarbeiters. Dieser Kurs eignet sich f\u00fcr einen Schnelleinstieg in die Basic Funktionen der Tabellengestaltung mit Excel. Sie lernen schnell den Umgang mit dem Programm, die Erstellung und Gestaltung einfacher Tabellen, Formatierungen, Sortierung, Filtern, Regeln, sowie einfache Formeln. Einfache Berechnungen sowie die ansprechende Darstellung der Ergebnisse f\u00fchren Sie zum gew\u00fcnschten Erfo",
+      "location": {
+        "name": "Online",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-03-29T10:30:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/webinar-excel-basic-646-C-30AH313025",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/webinar-excel-basic-646-C-30AH313025",
+      "tags": []
+    },
+    {
+      "id": "vhs_f843314546b6",
+      "title": "Webinar \"Geld verdienen im Internet durch Verkaufen\"",
+      "teaser": "Internet-Verkaufsplattformen erfreuen sich immer st\u00e4rkerer Beliebtheit.",
+      "description": "Internet-Verkaufsplattformen erfreuen sich immer st\u00e4rkerer Beliebtheit. Allein Ebay hat in Deutschland mehr als sechs Millionen registrierte Mitglieder, die t\u00e4glich rund eine Million Artikel anbieten bzw. kaufen. Wollen Sie eine Insel ersteigern oder Ihren Familienschmuck zu fairen Preisen verkaufen? Aber auch B\u00fccher sowie Elektronik-Artikel finden Ihre neuen Besitzer \u00fcber diverse Ankauf-Portale. Evtl. stellen Sie selber Produkte her bzw. m\u00f6chten diese verkaufen. Dann mache ich Sie mit der aufre",
+      "location": {
+        "name": "Online",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-03-29T14:30:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/webinar-geld-verdienen-im-internet-durch-verkaufen-646-C-30AH314011",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/webinar-geld-verdienen-im-internet-durch-verkaufen-646-C-30AH314011",
+      "tags": []
+    },
+    {
+      "id": "vhs_a2081acce3a1",
+      "title": "DO-IT - Mach dich fit f\u00fcr Schule, Beruf und ZukunftDein Weg zur digitalen Fitness - f\u00fcr Sch\u00fcler (11 bis 16 Jahre)",
+      "teaser": "Alles an einem Ort! Lerne, wie du Notizen, Bilder, Aufgaben und Ideen digital organisierst. Perfekt f\u00fcr Schule, Ausbildung und Projekte.",
+      "description": "Alles an einem Ort! Lerne, wie du Notizen, Bilder, Aufgaben und Ideen digital organisierst. Perfekt f\u00fcr Schule, Ausbildung und Projekte. Inhalte: Notizb\u00fccher anlegen, Seiten strukturieren, Dateien einf\u00fcgen, mit Teams und Outlook verbinden.\nNach dem Kurs bist du sicher im Umgang mit digitalen Anwendungen, kannst Projekte strukturiert planen, souver\u00e4n pr\u00e4sentieren und kennst die wichtigsten KI-Werkzeuge.\nZertifikat: DO-IT \u2013 Digitale Kompetenzen der VHS Hofer Land",
+      "location": {
+        "name": "LU 3.19 Multifunktionsraum",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-03-30T13:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/do-it-mach-dich-fit-fuer-schule-beruf-und-zukunft/dein-weg-zur-digitalen-fitness-fuer-schueler-11-bis-16-jahre-646-C-30AH350140",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/do-it-mach-dich-fit-fuer-schule-beruf-und-zukunft/dein-weg-zur-digitalen-fitness-fuer-schueler-11-bis-16-jahre-646-C-30AH350140",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-03-19T03:51:19.695900"
+  "last_scraped": "2026-03-20T03:47:11.613552"
 }
