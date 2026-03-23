@@ -5411,7 +5411,29 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/ki-grundkurs-kuenstliche-intelligenz-fuer-anfaenger-646-C-30AH311013",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/ki-grundkurs-kuenstliche-intelligenz-fuer-anfaenger-646-C-30AH311013",
       "tags": []
+    },
+    {
+      "id": "vhs_e0b7b44a02a1",
+      "title": "Ein Garten f\u00fcr uns alleWorkshop",
+      "teaser": "Hier wird nicht nur gepflanzt, sondern auch zugeh\u00f6rt, gelacht und voneinander gelernt - ein lebendiger Treffpunkt voller Ideen, Engagement und Herzlichkeit.",
+      "description": "Hier wird nicht nur gepflanzt, sondern auch zugeh\u00f6rt, gelacht und voneinander gelernt - ein lebendiger Treffpunkt voller Ideen, Engagement und Herzlichkeit.\nUnsere Mitmach-Termine laden dazu ein, gemeinsam zu g\u00e4rtnern, ins Gespr\u00e4ch zu kommen und Gemeinschaft zu erleben. Jede*r ist herzlich willkommen.",
+      "location": {
+        "name": "Innenhof der VHS Hofer Land in der LU",
+        "address": "Mitmachgarten",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-05-15T12:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/ein-garten-fuer-uns-alle/workshop-646-C-30AA933038",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/ein-garten-fuer-uns-alle/workshop-646-C-30AA933038",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-03-21T03:42:49.780807"
+  "last_scraped": "2026-03-23T15:20:53.924426"
 }
