@@ -5433,7 +5433,271 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/ein-garten-fuer-uns-alle/workshop-646-C-30AA933038",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/ein-garten-fuer-uns-alle/workshop-646-C-30AA933038",
       "tags": []
+    },
+    {
+      "id": "vhs_a70a7a14d0d8",
+      "title": "DO-IT - Mach dich fit f\u00fcr Schule, Beruf und ZukunftDein Weg zur digitalen Fitness - f\u00fcr Sch\u00fcler (11 bis 16 Jahre)",
+      "teaser": "Den \u00dcberblick behalten leicht gemacht! Ob Referat, Projekt oder Pr\u00fcfungsvorbereitung \u2013 mit Mindmaps planst du klar und kreativ.",
+      "description": "Den \u00dcberblick behalten leicht gemacht! Ob Referat, Projekt oder Pr\u00fcfungsvorbereitung \u2013 mit Mindmaps planst du klar und kreativ. Inhalte: digitale Mindmaps erstellen, Verkn\u00fcpfungen & Farben nutzen, Pr\u00e4sentation deiner Ideen.\nNach dem Kurs bist du sicher im Umgang mit digitalen Anwendungen, kannst Projekte strukturiert planen, souver\u00e4n pr\u00e4sentieren und kennst die wichtigsten KI-Werkzeuge.\nZertifikat: DO-IT \u2013 Digitale Kompetenzen der VHS Hofer Land",
+      "location": {
+        "name": "Ludwigstra\u00dfe 7",
+        "address": "95028 Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-04-01T13:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/do-it-mach-dich-fit-fuer-schule-beruf-und-zukunft/dein-weg-zur-digitalen-fitness-fuer-schueler-11-bis-16-jahre-646-C-30AH350141",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/do-it-mach-dich-fit-fuer-schule-beruf-und-zukunft/dein-weg-zur-digitalen-fitness-fuer-schueler-11-bis-16-jahre-646-C-30AH350141",
+      "tags": []
+    },
+    {
+      "id": "vhs_dfcc97875987",
+      "title": "Kreative Lesezeichen aus StoffrestenKindern\u00e4hkurs ab 10 Jahren",
+      "teaser": "Aus Stoff-/B\u00e4nderresten n\u00e4hen wir gemeinsam h\u00fcbsche Bucheinleger/Lesezeichen. Mit einer N\u00e4hmaschine und B\u00fcgeleisen ist das schnell erledigt und ist ein ganz besonderes Geschenk f\u00fcr alle Lesefreunde.",
+      "description": "Aus Stoff-/B\u00e4nderresten n\u00e4hen wir gemeinsam h\u00fcbsche Bucheinleger/Lesezeichen. Mit einer N\u00e4hmaschine und B\u00fcgeleisen ist das schnell erledigt und ist ein ganz besonderes Geschenk f\u00fcr alle Lesefreunde.",
+      "location": {
+        "name": "Stadtbibliothek im Forum",
+        "address": "Bachstra\u00dfe 1, Naila",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-04-01T14:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/kreative-lesezeichen-aus-stoffresten/kindernaehkurs-ab-10-jahren-646-C-30NA604151",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/kreative-lesezeichen-aus-stoffresten/kindernaehkurs-ab-10-jahren-646-C-30NA604151",
+      "tags": []
+    },
+    {
+      "id": "vhs_15aef5c2cbb9",
+      "title": "VHS Lese-Stammtisch",
+      "teaser": "B\u00fccher und Autor*innen \u2013 lassen Sie uns dar\u00fcber sprechen. Bringen Sie Ihr Lieblingsbuch mit oder h\u00f6ren Sie zu, wenn andere \u00fcber ihres berichten.",
+      "description": "B\u00fccher und Autor*innen \u2013 lassen Sie uns dar\u00fcber sprechen. Bringen Sie Ihr Lieblingsbuch mit oder h\u00f6ren Sie zu, wenn andere \u00fcber ihres berichten. Lassen Sie uns regelm\u00e4\u00dfig treffen und im Sinne des \u201eStammtisch-Gedanken\u201c Erfahrungen und Empfehlungen austauschen. Wir laden Sie herzlich ein, Teil der Gemeinschaft zu werden.",
+      "location": {
+        "name": "LU 3. Stock - Sitzecke",
+        "address": "Ludwigstra\u00dfe 7",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-04-01T15:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/vhs-lese-stammtisch-646-C-30AA904111",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/vhs-lese-stammtisch-646-C-30AA904111",
+      "tags": []
+    },
+    {
+      "id": "vhs_c30e44cbcc8f",
+      "title": "Canva-Workshop: Visuell starke Pr\u00e4sentationen erstellen",
+      "teaser": "Eine gute Pr\u00e4sentation ist mehr als nur Folien mit Text. Sie sollte klar strukturiert, visuell ansprechend und wirkungsvoll sein.",
+      "description": "Eine gute Pr\u00e4sentation ist mehr als nur Folien mit Text. Sie sollte klar strukturiert, visuell ansprechend und wirkungsvoll sein. In diesem praxisnahen Workshop wird vermittelt, wie moderne und professionelle Pr\u00e4sentationen mit Canva erstellt werden. Dabei stehen nicht nur das Design im Fokus, sondern auch der gezielte Einsatz von \u00dcberg\u00e4ngen, Animationen und die Wahl der passenden Pr\u00e4sentationsart.\nVoraussetzungen: Canva-Grundkenntnisse",
+      "location": {
+        "name": "Online",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-04-01T17:30:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/canva-workshop-visuell-starke-praesentationen-erstellen-646-C-30AH316122",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/canva-workshop-visuell-starke-praesentationen-erstellen-646-C-30AH316122",
+      "tags": []
+    },
+    {
+      "id": "vhs_ecad5667a961",
+      "title": "Energiesparen im Alltag - Tipps und Tricks!Online-Vortrag der Verbraucherzentrale Bayern",
+      "teaser": "Gerade in Zeiten steigender Energiepreise m\u00f6chten viele Verbraucher:innen den Strom- und Heizenergieverbrauch in ihrem Haushalt gern senken. Die Verbraucherzentrale Bayern e.V.",
+      "description": "Gerade in Zeiten steigender Energiepreise m\u00f6chten viele Verbraucher:innen den Strom- und Heizenergieverbrauch in ihrem Haushalt gern senken. Die Verbraucherzentrale Bayern e.V. erkl\u00e4rt, wie Sie bereits mit einfachen Ma\u00dfnahmen Kosten einsparen k\u00f6nnen. Au\u00dferdem wird erkl\u00e4rt, wie man die Effizienz der eigenen Heizung steigern und m\u00f6gliche W\u00e4rmeverluste reduzieren kann. Der Vortrag findet in Kooperation mit der Energieberatung der Verbraucherzentrale Bayern statt. \nZielgruppe: Alle interessierten Ve",
+      "location": {
+        "name": "Online",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-04-02T19:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/energiesparen-im-alltag-tipps-und-tricks/online-vortrag-der-verbraucherzentrale-bayern-646-C-30AH107126",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/energiesparen-im-alltag-tipps-und-tricks/online-vortrag-der-verbraucherzentrale-bayern-646-C-30AH107126",
+      "tags": []
+    },
+    {
+      "id": "vhs_47d4f14b5fc9",
+      "title": "Einstieg in die Robotik und graphische Programmierung",
+      "teaser": "Nach dem Zusammenbau erster Modelle aus Fischertechnik wie z. B. kleiner Maschinen und Fahrzeuge wollen wir diesen Leben einhauchen.",
+      "description": "Nach dem Zusammenbau erster Modelle aus Fischertechnik wie z. B. kleiner Maschinen und Fahrzeuge wollen wir diesen Leben einhauchen. Dazu best\u00fccken wir die Modelle mit Motoren, Sensorik und Steuerunsgtechnik und schicken ihnen \u00fcber kleine Programmierungen einfache Anweisungen. So k\u00f6nnen zun\u00e4chst statische Modelle wie z. B. L\u00fcfter gesteuert oder Ampeln betrieben werden. Im Kursverlauf werden die Programmierungen und Maschinen  - je nach Kenntnisstand der Teilnehmenden - komplexer bis hin zu fahrb",
+      "location": {
+        "name": "Ludwigstra\u00dfe 7",
+        "address": "95028 Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-04-07T09:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/einstieg-in-die-robotik-und-graphische-programmierung-646-C-30AH319060",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/einstieg-in-die-robotik-und-graphische-programmierung-646-C-30AH319060",
+      "tags": []
+    },
+    {
+      "id": "vhs_5502b33cb75c",
+      "title": "Dabei sein... KI f\u00fcr SeniorenK\u00fcnstliche Intelligenz - was ist das? Eine Einf\u00fchrungsveranstaltung f\u00fcr Senioren",
+      "teaser": "In dieser Informationsveranstaltung werden wir gemeinsam das Thema k\u00fcnstliche Intelligenz (KI) und dessen Bedeutung f\u00fcr das Leben \u00e4lterer Menschen er\u00f6rtern.",
+      "description": "In dieser Informationsveranstaltung werden wir gemeinsam das Thema k\u00fcnstliche Intelligenz (KI) und dessen Bedeutung f\u00fcr das Leben \u00e4lterer Menschen er\u00f6rtern. Wir erkl\u00e4ren, was KI ist, welche Systeme existieren und wie diese Technologie konkret Ihren Alltag bereichern kann. Erfahren Sie, wie KI Ihre Lebensqualit\u00e4t steigern kann, indem sie Gesundheit \u00fcberwacht, bei allt\u00e4glichen Aufgaben unterst\u00fctzt, soziale Interaktionen f\u00f6rdert und Ihnen leichteren Zugang zu medizinischer Versorgung bietet. Zuglei",
+      "location": {
+        "name": "Schwarzenbach/Saale",
+        "address": "August-Bebel-Str. 30, Geschwister-Scholl-Mittelschule",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-04-08T16:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/dabei-sein-ki-fuer-senioren/kuenstliche-intelligenz-was-ist-das-eine-einfuehrungsveranstaltung-fuer-senioren-646-C-30AH360038",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/dabei-sein-ki-fuer-senioren/kuenstliche-intelligenz-was-ist-das-eine-einfuehrungsveranstaltung-fuer-senioren-646-C-30AH360038",
+      "tags": []
+    },
+    {
+      "id": "vhs_abe197a8b561",
+      "title": "KI-Prompting: K\u00fcnstliche Intelligenz effektiv steuern",
+      "teaser": "K\u00fcnstliche Intelligenz kann beeindruckende Texte Bilder und L\u00f6sungen generieren doch nur mit den richtigen Prompts liefert sie wirklich pr\u00e4zise und hochwertige Ergebnisse.",
+      "description": "K\u00fcnstliche Intelligenz kann beeindruckende Texte Bilder und L\u00f6sungen generieren doch nur mit den richtigen Prompts liefert sie wirklich pr\u00e4zise und hochwertige Ergebnisse. In diesem Kurs wird gezeigt wie man KI effektiv steuert indem man gezielt formulierte Eingaben verwendet.",
+      "location": {
+        "name": "Online",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-04-08T17:30:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/ki-prompting-kuenstliche-intelligenz-effektiv-steuern-646-C-30AH311083",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/ki-prompting-kuenstliche-intelligenz-effektiv-steuern-646-C-30AH311083",
+      "tags": []
+    },
+    {
+      "id": "vhs_8cfb3c7c8dff",
+      "title": "Qi Gong - Die 8 Brokate",
+      "teaser": "Die 8 Brokate,auch Baduanjin genannt, sind eine klassische Qi Gong \u00dcbungsreihe, die aus acht einzelnen \u00dcbungen besteht.",
+      "description": "Die 8 Brokate,auch Baduanjin genannt, sind eine klassische Qi Gong \u00dcbungsreihe, die aus acht einzelnen \u00dcbungen besteht. Sie zielen darauf ab,den Qi-Fluss im K\u00f6rper zu harmonisieren, die Gesundheit zu f\u00f6rdern und das allgemeine Wohlbefinden zu steigern. Die \u00dcbungen sind relativ einfach zu erlernen und k\u00f6nnen in der Regel von Anf\u00e4ngern und Fortgeschrittenen gleicherma\u00dfen praktiziert werden. Die 8 Brokate umfassen sanfte Bewegungen, Dehn\u00fcbungen und Atem\u00fcbungen, die den K\u00f6rper flexibler und kr\u00e4ftige",
+      "location": {
+        "name": "Turnhalle der Volksschule",
+        "address": "Kellermannstra\u00dfe 2, 95138 Bad Steben",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-04-08T17:45:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/qi-gong-die-8-brokate-646-C-30BS501401",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/qi-gong-die-8-brokate-646-C-30BS501401",
+      "tags": []
+    },
+    {
+      "id": "vhs_ed24f493b165",
+      "title": "KI Grundkurs: K\u00fcnstliche Intelligenz f\u00fcr Anf\u00e4nger",
+      "teaser": "K\u00fcnstliche Intelligenz (KI) ver\u00e4ndert die Art, wie wir arbeiten und kommunizieren.",
+      "description": "K\u00fcnstliche Intelligenz (KI) ver\u00e4ndert die Art, wie wir arbeiten und kommunizieren. Doch was steckt eigentlich dahinter? In diesem praxisnahen Grundkurs werden die Grundlagen der KI verst\u00e4ndlich erkl\u00e4rt. Es wird gezeigt, wo und wie KI eingesetzt werden kann. Ein besonderer Schwerpunkt liegt auf ChatGPT: Von der Einrichtung eines Accounts \u00fcber wichtige Aspekte zu Urheberrecht und Datenschutz bis hin zu effektiven Prompting-Techniken.",
+      "location": {
+        "name": "Online",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-04-08T18:30:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/ki-grundkurs-kuenstliche-intelligenz-fuer-anfaenger-646-C-30AH311014",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/ki-grundkurs-kuenstliche-intelligenz-fuer-anfaenger-646-C-30AH311014",
+      "tags": []
+    },
+    {
+      "id": "vhs_bfc4f33e937d",
+      "title": "DO-IT - Mach dich fit f\u00fcr Schule, Beruf und ZukunftDein Weg zur digitalen Fitness - f\u00fcr Sch\u00fcler (11 bis 16 Jahre)",
+      "teaser": "Gestalte \u00fcberzeugende Pr\u00e4sentationen und bring deine Themen auf den Punkt \u2013 kreativ, klar und modern. Inhalte: Folienlayout, Animationen, Bilder & Videos einbinden, Vortragstraining.",
+      "description": "Gestalte \u00fcberzeugende Pr\u00e4sentationen und bring deine Themen auf den Punkt \u2013 kreativ, klar und modern. Inhalte: Folienlayout, Animationen, Bilder & Videos einbinden, Vortragstraining.\nNach dem Kurs bist du sicher im Umgang mit digitalen Anwendungen, kannst Projekte strukturiert planen, souver\u00e4n pr\u00e4sentieren und kennst die wichtigsten KI-Werkzeuge.\nZertifikat: DO-IT \u2013 Digitale Kompetenzen der VHS Hofer Land",
+      "location": {
+        "name": "Ludwigstra\u00dfe 7",
+        "address": "95028 Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-04-09T13:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/do-it-mach-dich-fit-fuer-schule-beruf-und-zukunft/dein-weg-zur-digitalen-fitness-fuer-schueler-11-bis-16-jahre-646-C-30AH350143",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/do-it-mach-dich-fit-fuer-schule-beruf-und-zukunft/dein-weg-zur-digitalen-fitness-fuer-schueler-11-bis-16-jahre-646-C-30AH350143",
+      "tags": []
+    },
+    {
+      "id": "vhs_298f6c2059df",
+      "title": "VHS Smartphone-StammtischBad Steben",
+      "teaser": "Smartphone, Tablet und Co. bereiten in der Praxis immer wieder Probleme.",
+      "description": "Smartphone, Tablet und Co. bereiten in der Praxis immer wieder Probleme. Die konkreten Anforderungen lassen sich gemeinsam besser l\u00f6sen und daher bieten wir regelm\u00e4\u00dfige Treffen an, um Hilfe anzubieten. Idealerweise helfen sich die Teilnehmenden untereinander und entsprechen dem \u201eStammtisch-Gedanken\u201c. Wir laden Sie herzlich ein, Teil der Gemeinschaft zu werden.",
+      "location": {
+        "name": "Sportheim Bad Steben",
+        "address": "Schlesierweg 5, 95138 Bad Steben",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-04-09T15:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/vhs-smartphone-stammtisch/bad-steben-646-C-30AA904245",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/vhs-smartphone-stammtisch/bad-steben-646-C-30AA904245",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-03-23T15:20:53.924426"
+  "last_scraped": "2026-03-24T03:48:03.016245"
 }
