@@ -5697,7 +5697,73 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/vhs-smartphone-stammtisch/bad-steben-646-C-30AA904245",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/vhs-smartphone-stammtisch/bad-steben-646-C-30AA904245",
       "tags": []
+    },
+    {
+      "id": "vhs_2d2741156898",
+      "title": "Roussillon (S\u00fcdfrankreich)Multimediavortrag",
+      "teaser": "In diesem Vortrag wird die weitl\u00e4ufige Ebene des Roussillon, begrenzt im S\u00fcden von den Pyren\u00e4en und im Osten vom Mittelmeer, zu sehen sein.",
+      "description": "In diesem Vortrag wird die weitl\u00e4ufige Ebene des Roussillon, begrenzt im S\u00fcden von den Pyren\u00e4en und im Osten vom Mittelmeer, zu sehen sein. In diesem Gebiet wurden bemerkenswerte sakrale Bauwerke geschaffen; unter anderem die Kirche von Elne, die Abbaye d`Artes-sur-Tech und die Kathedrale in Narbonne. Riesige Fl\u00e4chen sind der Weinrebe vorbehalten. Das \u00dcberma\u00df an Sonne l\u00e4sst die Naturs\u00fc\u00dfe in den Trauben zu fantastisch schmeckenden Weinen heranreifen. Weiterhin gedeihen im Roussillon mit extrem fr",
+      "location": {
+        "name": "Seniorenwohnpark",
+        "address": "Ebene 6, Dr.-Gebhardt-Steuer-Stra\u00dfe 22 - 32, 95138 Bad Steben",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-04-09T15:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/roussillon-suedfrankreich/multimediavortrag-646-C-30BS103102",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/roussillon-suedfrankreich/multimediavortrag-646-C-30BS103102",
+      "tags": []
+    },
+    {
+      "id": "vhs_95fc92c989bf",
+      "title": "Stress und was die Seele stark macht - Termin 1",
+      "teaser": "In diesem Workshop erfahren Sie, was Stress ist und wie er entsteht. Sie lernen Strategien kennen, um mit Stress besser umzugehen und erfahren, was dazu beitr\u00e4gt unsere Seele daf\u00fcr stark zu machen.",
+      "description": "In diesem Workshop erfahren Sie, was Stress ist und wie er entsteht. Sie lernen Strategien kennen, um mit Stress besser umzugehen und erfahren, was dazu beitr\u00e4gt unsere Seele daf\u00fcr stark zu machen. Es handelt sich um einen interaktiven Vortrag mit \u00dcbungen.",
+      "location": {
+        "name": "Kulturhaus \"Altes E-Werk\"",
+        "address": "Marktplatz 6, 95145 Oberkotzau",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-04-09T17:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/stress-und-was-die-seele-stark-macht-termin-1-646-C-30OB508104",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/stress-und-was-die-seele-stark-macht-termin-1-646-C-30OB508104",
+      "tags": []
+    },
+    {
+      "id": "vhs_00f60af77aab",
+      "title": "Amateurfunker werden",
+      "teaser": "Der Amateurfunk-Kurs richtet sich besonders an Interessenten, die sich auf die amtliche Pr\u00fcfung zur Zulassung zum Amateurfunkdienst der Klasse E vorbereiten m\u00f6chten.",
+      "description": "Der Amateurfunk-Kurs richtet sich besonders an Interessenten, die sich auf die amtliche Pr\u00fcfung zur Zulassung zum Amateurfunkdienst der Klasse E vorbereiten m\u00f6chten. Es werden schwerpunktm\u00e4\u00dfig die technischen Fragen zur Pr\u00fcfung behandelt. Erfahrene Amateurfunker leiten diesen Kurs ehrenamtlich.\nVoraussetzung: Interesse an Technik und Kommunikation",
+      "location": {
+        "name": "Fabrikzeile 21 (Hoftex Group)",
+        "address": "95028 Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-04-09T18:15:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/amateurfunker-werden-646-C-30AH394110",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/amateurfunker-werden-646-C-30AH394110",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-03-24T03:48:03.016245"
+  "last_scraped": "2026-03-25T03:48:46.198120"
 }
