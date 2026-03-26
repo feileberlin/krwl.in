@@ -5851,7 +5851,29 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/stress-und-was-die-seele-stark-macht-termin-2-646-C-30OB508105",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/stress-und-was-die-seele-stark-macht-termin-2-646-C-30OB508105",
       "tags": []
+    },
+    {
+      "id": "vhs_f50a333ddbf5",
+      "title": "Stress und was die Seele stark macht - Termin 3",
+      "teaser": "In diesem Workshop erfahren Sie, was Stress ist und wie er entsteht. Sie lernen Strategien kennen, um mit Stress besser umzugehen und erfahren, was dazu beitr\u00e4gt unsere Seele daf\u00fcr stark zu machen.",
+      "description": "In diesem Workshop erfahren Sie, was Stress ist und wie er entsteht. Sie lernen Strategien kennen, um mit Stress besser umzugehen und erfahren, was dazu beitr\u00e4gt unsere Seele daf\u00fcr stark zu machen. Es handelt sich um einen interaktiven Vortrag mit \u00dcbungen.",
+      "location": {
+        "name": "Kulturhaus \"Altes E-Werk\"",
+        "address": "Marktplatz 6, 95145 Oberkotzau",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-04-11T10:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/stress-und-was-die-seele-stark-macht-termin-3-646-C-30OB508106",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/stress-und-was-die-seele-stark-macht-termin-3-646-C-30OB508106",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-03-26T03:56:43.244572"
+  "last_scraped": "2026-03-26T15:26:25.935944"
 }
