@@ -6533,7 +6533,29 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/zusammen-digital-beratungstheke-646-C-30AA904229",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/zusammen-digital-beratungstheke-646-C-30AA904229",
       "tags": []
+    },
+    {
+      "id": "vhs_3c8ec0448dcc",
+      "title": "Digitale Welt - VHS Lernportal",
+      "teaser": "Wir laden Sie ein, gemeinsam mit Anne Browa in die digitale Welt einzutauchen! Im VHS Lernportal bieten wir Ihnen einen Kurs an, der speziell darauf ausgerichtet ist, Ihnen den Umgang mit digitalen Me...",
+      "description": "Wir laden Sie ein, gemeinsam mit Anne Browa in die digitale Welt einzutauchen! Im VHS Lernportal bieten wir Ihnen einen Kurs an, der speziell darauf ausgerichtet ist, Ihnen den Umgang mit digitalen Medien n\u00e4herzubringen.\nIn diesem Kurs haben Sie die M\u00f6glichkeit, individuell oder gemeinsam mit unserer Dozentin verschiedene Themen zu bearbeiten. Das Lernportal ist modular aufgebaut, sodass Sie flexibel und in Ihrem eigenen Tempo lernen k\u00f6nnen \u2013 auch von zu Hause aus.\nDer Kurs f\u00fchrt Sie Schritt f\u00fcr",
+      "location": {
+        "name": "Ludwigstra\u00dfe 7",
+        "address": "95028 Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-04-15T15:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/digitale-welt-vhs-lernportal-646-C-30AA904206",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/digitale-welt-vhs-lernportal-646-C-30AA904206",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-04-07T03:57:06.114535"
+  "last_scraped": "2026-04-07T15:27:22.078393"
 }
