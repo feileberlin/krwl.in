@@ -7281,7 +7281,29 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/kreatives-aus-epoxidharz/schalen-und-seifenspender-gestalten-646-C-30AH604122",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/kreatives-aus-epoxidharz/schalen-und-seifenspender-gestalten-646-C-30AH604122",
       "tags": []
+    },
+    {
+      "id": "vhs_d444cff58117",
+      "title": "Vereins- und Gruppenverwaltung mit digitalen L\u00f6sungen",
+      "teaser": "Erlernen Sie effiziente Mitgliederverwaltung mit Microsoft 365. Nutzen Sie Excel und Teams zur optimalen Verwaltung von Mitgliedsdaten und Beitr\u00e4gen.",
+      "description": "Erlernen Sie effiziente Mitgliederverwaltung mit Microsoft 365. Nutzen Sie Excel und Teams zur optimalen Verwaltung von Mitgliedsdaten und Beitr\u00e4gen. Entdecken Sie digitale Datenverwaltung, automatisierte Prozesse und professionelle Einladungen. Verstehen Sie die Vorteile von Cloudl\u00f6sungen und effektiver digitaler Kommunikation im Vorstand. Der Kurs zeigt praxisnah, wie KI-Tools wie Microsoft Copilot Ihre Arbeit erleichtern. Interaktive \u00dcbungen und Beispiele vertiefen Ihr Wissen. Profitieren Sie",
+      "location": {
+        "name": "VHS Hofer Land",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-04-20T18:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/vereins-und-gruppenverwaltung-mit-digitalen-loesungen-646-C-30AH370013",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/vereins-und-gruppenverwaltung-mit-digitalen-loesungen-646-C-30AH370013",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-04-12T04:02:02.570424"
+  "last_scraped": "2026-04-13T04:05:47.594313"
 }
