@@ -7303,7 +7303,29 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/vereins-und-gruppenverwaltung-mit-digitalen-loesungen-646-C-30AH370013",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/vereins-und-gruppenverwaltung-mit-digitalen-loesungen-646-C-30AH370013",
       "tags": []
+    },
+    {
+      "id": "vhs_d345836f463a",
+      "title": "R\u00fccken fitKurs 4",
+      "teaser": "Dehn\u00fcbungen, Stabilisation des R\u00fcckens, Kr\u00e4ftigung der Muskeln sowie Ausdauer und Fitness aufbauen. Dadurch k\u00f6nnen Verspannungen und Verk\u00fcrzungen des unteren R\u00fcckens vorgebeugt werden.",
+      "description": "Dehn\u00fcbungen, Stabilisation des R\u00fcckens, Kr\u00e4ftigung der Muskeln sowie Ausdauer und Fitness aufbauen. Dadurch k\u00f6nnen Verspannungen und Verk\u00fcrzungen des unteren R\u00fcckens vorgebeugt werden.",
+      "location": {
+        "name": "Philipp-Wolfrum-Haus",
+        "address": "Marktplatz 17, 95131 Schwarzenbach a.Wald",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-04-20T18:30:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/ruecken-fit/kurs-4-646-C-30SW502224",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/ruecken-fit/kurs-4-646-C-30SW502224",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-04-13T04:05:47.594313"
+  "last_scraped": "2026-04-13T15:27:59.035823"
 }
