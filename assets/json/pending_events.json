@@ -7743,7 +7743,51 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/online-seminar-speziell-fuer-frauen-selbstmarketing-fuer-frauen-die-ihre-chance-aktiv-nutzen-646-C-30AH270623",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/online-seminar-speziell-fuer-frauen-selbstmarketing-fuer-frauen-die-ihre-chance-aktiv-nutzen-646-C-30AH270623",
       "tags": []
+    },
+    {
+      "id": "vhs_0d36253ad9de",
+      "title": "Brilliant, bequem, be\u00e4ngstigend: Leben mit KIFunktionsweise, Chancen und Risiken von KI",
+      "teaser": "KI hat seinen Siegeszug durch unseren Alltag begonnen \u2014 von Empfehlungen in der Personalauswahl \u00fcber Bilderkennung in der Medizin bis zu Chatbots und agentischen Internetbrowsern.",
+      "description": "KI hat seinen Siegeszug durch unseren Alltag begonnen \u2014 von Empfehlungen in der Personalauswahl \u00fcber Bilderkennung in der Medizin bis zu Chatbots und agentischen Internetbrowsern. Aber wie funktioniert das eigentlich, was sind echte Chancen, und wo lauern Risiken? In diesem Vortrag erfahren Sie, warum KI keine Magie ist und wieso weder kategorische Ablehnung noch blinde Euphorie eine passende Reaktion auf die aktuellen technischen Entwicklungen sind.",
+      "location": {
+        "name": "Ludwigstra\u00dfe 7",
+        "address": "95028 Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-04-21T19:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/brilliant-bequem-beaengstigend-leben-mit-ki/funktionsweise-chancen-und-risiken-von-ki-646-C-30AH103161",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/brilliant-bequem-beaengstigend-leben-mit-ki/funktionsweise-chancen-und-risiken-von-ki-646-C-30AH103161",
+      "tags": []
+    },
+    {
+      "id": "vhs_4d0d32936771",
+      "title": "Ist KI die halbe Miete? Chat-Bots und K\u00fcnstliche Intelligenz im JournalismusBegeistertes Entsetzen",
+      "teaser": "Automatisierte Berichterstattung\nVerwendung von KI zur Erstellung von Sportberichten und Finanzberichten\nDatenjournalismus\nNutzung von KI zur Analyse gro\u00dfer Datenmengen und zur Erstellung investigativ...",
+      "description": "Automatisierte Berichterstattung\nVerwendung von KI zur Erstellung von Sportberichten und Finanzberichten\nDatenjournalismus\nNutzung von KI zur Analyse gro\u00dfer Datenmengen und zur Erstellung investigativer Berichte\nKI als Hilfsmittel, verborgene Muster und Informationen aufzudecken.\nGrenzen\nKI und Kommentar \u2013 Verwendbarkeit f\u00fcr den politischen Kommentar, die Kolumne, das Feuilleton, das essayistische Lesest\u00fcck",
+      "location": {
+        "name": "Ludwigstra\u00dfe 7",
+        "address": "95028 Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-04-22T19:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/ist-ki-die-halbe-miete-chat-bots-und-kuenstliche-intelligenz-im-journalismus/begeistertes-entsetzen-646-C-30AH103162",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/ist-ki-die-halbe-miete-chat-bots-und-kuenstliche-intelligenz-im-journalismus/begeistertes-entsetzen-646-C-30AH103162",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-04-15T04:01:03.207313"
+  "last_scraped": "2026-04-15T15:24:37.206746"
 }
