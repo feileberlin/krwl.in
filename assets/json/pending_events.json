@@ -8601,7 +8601,29 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/tastschreiben-10-fingersystem-in-7-stunden-646-C-30AH331020",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/tastschreiben-10-fingersystem-in-7-stunden-646-C-30AH331020",
       "tags": []
+    },
+    {
+      "id": "vhs_3323fe852293",
+      "title": "Ihre Gesundheit im Griff - Wie funktioniert die elektronische Patientenakte (ePA)?Infoveranstaltung",
+      "teaser": "Seit dem 15. Januar 2025 wird die elektronische Patientenakte (ePA) f\u00fcr alle gesetzlich Versicherten automatisch eingerichtet, sofern kein Widerspruch erfolgt ist.",
+      "description": "Seit dem 15. Januar 2025 wird die elektronische Patientenakte (ePA) f\u00fcr alle gesetzlich Versicherten automatisch eingerichtet, sofern kein Widerspruch erfolgt ist. Doch was bedeutet das konkret f\u00fcr Sie?\nWelche medizinischen Dokumente werden in der ePA gespeichert und durch wen?\nWie ver\u00e4ndert sich der Ablauf in Arztpraxen und Apotheken?\nWelche Rechte und Gestaltungsm\u00f6glichkeiten haben Sie als Patientin oder Patient?\nIn dieser kompakten Informationsveranstaltung erhalten Sie einen verst\u00e4ndlichen \u00dc",
+      "location": {
+        "name": "Ludwigstra\u00dfe 7",
+        "address": "95028 Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-05-06T14:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/ihre-gesundheit-im-griff-wie-funktioniert-die-elektronische-patientenakte-epa/infoveranstaltung-646-C-30AH508120",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/ihre-gesundheit-im-griff-wie-funktioniert-die-elektronische-patientenakte-epa/infoveranstaltung-646-C-30AH508120",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-04-23T04:02:25.452886"
+  "last_scraped": "2026-04-23T15:32:52.038484"
 }
