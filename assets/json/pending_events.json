@@ -8513,7 +8513,95 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/nachhaltige-nutzung-von-ki-teil-1/workshop-646-C-30AA933035",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/nachhaltige-nutzung-von-ki-teil-1/workshop-646-C-30AA933035",
       "tags": []
+    },
+    {
+      "id": "vhs_d554476b7a9c",
+      "title": "KI f\u00fcr Einsteiger \u2013 Wie K\u00fcnstliche Intelligenz Ihren Alltag erleichtert",
+      "teaser": "K\u00fcnstliche Intelligenz (KI) ist l\u00e4ngst Teil unseres Alltags \u2013 ob in der Texterstellung, bei der Bildbearbeitung oder im beruflichen Einsatz.",
+      "description": "K\u00fcnstliche Intelligenz (KI) ist l\u00e4ngst Teil unseres Alltags \u2013 ob in der Texterstellung, bei der Bildbearbeitung oder im beruflichen Einsatz. In diesem Einsteigerkurs lernen Sie leicht verst\u00e4ndlich, wie KI funktioniert und wie Sie sie sinnvoll nutzen k\u00f6nnen. Anhand praxisnaher Beispiele (z.\u202fB. mit ChatGPT, Canva Magic Tools oder Bildgeneratoren) entdecken Sie die faszinierenden M\u00f6glichkeiten dieser Technologie \u2013 ganz ohne Fachwissen oder Programmierkenntnisse.",
+      "location": {
+        "name": "Leupoldsgr\u00fcn",
+        "address": "B\u00fcrgerhaus \"Alte Schule\" (Schulstra\u00dfe 1)",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-04-30T19:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/ki-fuer-einsteiger-wie-kuenstliche-intelligenz-ihren-alltag-erleichtert-646-C-30LE102102",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/ki-fuer-einsteiger-wie-kuenstliche-intelligenz-ihren-alltag-erleichtert-646-C-30LE102102",
+      "tags": []
+    },
+    {
+      "id": "vhs_383ea4bac6c8",
+      "title": "Canva von A bis Z: Designs, Videos und Social Media",
+      "teaser": "Canva bietet vielseitige M\u00f6glichkeiten zur Erstellung professioneller Inhalte f\u00fcr Social Media und Marketing.",
+      "description": "Canva bietet vielseitige M\u00f6glichkeiten zur Erstellung professioneller Inhalte f\u00fcr Social Media und Marketing. Dabei werden nicht nur die Grundlagen des Programms erkl\u00e4rt, sondern auch KI-gest\u00fctzte Features eingesetzt, um Arbeitsabl\u00e4ufe zu optimieren. Zus\u00e4tzlich wird ein strukturierter Social-Media-Plan erarbeitet, um Inhalte strategisch zu planen und effizient umzusetzen.",
+      "location": {
+        "name": "Online",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-05-01T09:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/canva-von-a-bis-z-designs-videos-und-social-media-646-C-30AH316140",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/canva-von-a-bis-z-designs-videos-und-social-media-646-C-30AH316140",
+      "tags": []
+    },
+    {
+      "id": "vhs_dc085f756da2",
+      "title": "KI Grundkurs: K\u00fcnstliche Intelligenz f\u00fcr Anf\u00e4nger",
+      "teaser": "K\u00fcnstliche Intelligenz (KI) ver\u00e4ndert die Art, wie wir arbeiten und kommunizieren.",
+      "description": "K\u00fcnstliche Intelligenz (KI) ver\u00e4ndert die Art, wie wir arbeiten und kommunizieren. Doch was steckt eigentlich dahinter? In diesem praxisnahen Grundkurs werden die Grundlagen der KI verst\u00e4ndlich erkl\u00e4rt. Es wird gezeigt, wo und wie KI eingesetzt werden kann. Ein besonderer Schwerpunkt liegt auf ChatGPT: Von der Einrichtung eines Accounts \u00fcber wichtige Aspekte zu Urheberrecht und Datenschutz bis hin zu effektiven Prompting-Techniken.",
+      "location": {
+        "name": "Online",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-05-01T18:30:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/ki-grundkurs-kuenstliche-intelligenz-fuer-anfaenger-646-C-30AH311017",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/ki-grundkurs-kuenstliche-intelligenz-fuer-anfaenger-646-C-30AH311017",
+      "tags": []
+    },
+    {
+      "id": "vhs_18f27b822063",
+      "title": "Tastschreiben - 10-Fingersystem in 7 Stunden",
+      "teaser": "Fast jeder hat mit einem Computer/Laptop zu tun. Hier kann das blinde Bedienen des Tastaturfeldes mit zehn Fingern hilfreich sein.",
+      "description": "Fast jeder hat mit einem Computer/Laptop zu tun. Hier kann das blinde Bedienen des Tastaturfeldes mit zehn Fingern hilfreich sein. Ein Lernsystem, das auf ganzheitlichem, gehirngerechtem Lernen durch Einbeziehen verschiedener Sinne basiert, erm\u00f6glicht dies in sehr kurzer Zeit. Durch die Verkn\u00fcpfung von Informationen wie Bildern (z. B. \"Apfel\" und \"A\") und Geschichten k\u00f6nnen Sie in kurzer Zeit Buchstaben, Zeichen und Zahlen auf der Tastatur blind ertasten. Anders als bei der herk\u00f6mmlichen Lernmet",
+      "location": {
+        "name": "Ludwigstra\u00dfe 7",
+        "address": "95028 Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-06-09T18:15:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/tastschreiben-10-fingersystem-in-7-stunden-646-C-30AH331020",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/tastschreiben-10-fingersystem-in-7-stunden-646-C-30AH331020",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-04-22T04:01:00.929675"
+  "last_scraped": "2026-04-23T04:02:25.452886"
 }
