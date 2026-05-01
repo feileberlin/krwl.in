@@ -9393,7 +9393,117 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/anatolischer-klassiker-imam-bayld-mit-hackfleisch-und-reis/sprachlich-kulinarisches-angebot-646-C-30AH407108",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/anatolischer-klassiker-imam-bayld-mit-hackfleisch-und-reis/sprachlich-kulinarisches-angebot-646-C-30AH407108",
       "tags": []
+    },
+    {
+      "id": "vhs_0b77180d0b63",
+      "title": "Urlaub im Alltag \u2013 kleine Auszeiten f\u00fcr K\u00f6rper, Geist und Seele",
+      "teaser": "Sehnen Sie sich manchmal nach mehr Ruhe und kleinen Oasen im Alltag? In diesem Kurs lernen Sie einfache, wirksame Methoden kennen, um Gelassenheit und neue Energie zu tanken \u2013 ganz ohne gro\u00dfen Aufwand...",
+      "description": "Sehnen Sie sich manchmal nach mehr Ruhe und kleinen Oasen im Alltag? In diesem Kurs lernen Sie einfache, wirksame Methoden kennen, um Gelassenheit und neue Energie zu tanken \u2013 ganz ohne gro\u00dfen Aufwand. Wir \u00fcben kurze Entspannungstechniken, kleine Achtsamkeitsrituale und Atem\u00fcbungen, die leicht in den Alltag integriert werden k\u00f6nnen. Zudem erfahren Sie, wie \u00e4therische \u00d6le sanft das Wohlbefinden unterst\u00fctzen und eine wohltuende Atmosph\u00e4re schaffen k\u00f6nnen. Sie entdecken, wie bereits wenige Minuten ",
+      "location": {
+        "name": "Kulturhaus \"Altes E-Werk\"",
+        "address": "Marktplatz 6, 95145 Oberkotzau",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-05-08T18:30:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/urlaub-im-alltag-kleine-auszeiten-fuer-koerper-geist-und-seele-646-C-30OB509101",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/urlaub-im-alltag-kleine-auszeiten-fuer-koerper-geist-und-seele-646-C-30OB509101",
+      "tags": []
+    },
+    {
+      "id": "vhs_595d586cd9d8",
+      "title": "Bowls - bunt und gesund",
+      "teaser": "In dem Kochkurs stellen wir verschiedene Bowls zusammen. Bowls sind ein aktueller Food Trend, einfach zuzubereiten und gesund.",
+      "description": "In dem Kochkurs stellen wir verschiedene Bowls zusammen. Bowls sind ein aktueller Food Trend, einfach zuzubereiten und gesund. Sie bestehen aus verschiedenen rohen und/oder gekochten Lebensmitteln, die in einer Schale \u2013 der Bowl \u2013 arrangiert werden. Im Baukastenprinzip werden die Lebensmittel zusammengestellt. Es sind hier der Kreativit\u00e4t keine Grenzen gesetzt. Neben herzhaften Bowls gibt es auch s\u00fc\u00dfe Bowls.",
+      "location": {
+        "name": "Fabrikzeile 21 (Hoftex Group)",
+        "address": "95028 Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-05-09T09:30:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/bowls-bunt-und-gesund-646-C-30AH507111",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/bowls-bunt-und-gesund-646-C-30AH507111",
+      "tags": []
+    },
+    {
+      "id": "vhs_10dc20afcbd5",
+      "title": "Acrylmalerei entdeckenSchnupperworkshop",
+      "teaser": "Kompakt und intensiv soll dieser Kurs gestaltet sein. Interessierte, die sich f\u00fcr diese Malart entscheiden, werden in diesem Kurs viel Wissenswertes und Handwerkliches dazu erfahren.",
+      "description": "Kompakt und intensiv soll dieser Kurs gestaltet sein. Interessierte, die sich f\u00fcr diese Malart entscheiden, werden in diesem Kurs viel Wissenswertes und Handwerkliches dazu erfahren. Wir probieren verschiedene Maltechniken aus, setzen dabei Pinsel und Spachtel ein, lernen das richtige Farbmischen, Lasuren setzen und Inpasto malen (ein Bild in einem Zug fertigstellen!). Um das alles auszuprobieren, werden wir uns an abstrakte Motive heranwagen.",
+      "location": {
+        "name": "Philipp-Wolfrum-Haus",
+        "address": "Marktplatz 17, 95131 Schwarzenbach a.Wald",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-05-09T10:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/acrylmalerei-entdecken/schnupperworkshop-646-C-30SW604104",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/acrylmalerei-entdecken/schnupperworkshop-646-C-30SW604104",
+      "tags": []
+    },
+    {
+      "id": "vhs_239385253ca2",
+      "title": "Webinar \u201eOutlook beherrschen\u201c",
+      "teaser": "Outlook ist \u201edie\u201c komfortable E-Mail-Management-Software von Microsoft, und hilft Ihnen bei der Organisation und Kommunikation, sowohl im beruflichen als auch im privaten Umfeld.",
+      "description": "Outlook ist \u201edie\u201c komfortable E-Mail-Management-Software von Microsoft, und hilft Ihnen bei der Organisation und Kommunikation, sowohl im beruflichen als auch im privaten Umfeld. Behalten Sie die Kontrolle \u00fcber Ihre E-Mails, und lernen Sie wichtige Einstellungen, damit Sie stets die \u00dcbersicht behalten. Hierbei sind durchg\u00e4ngige Sichtbarkeit und Transparenz sehr wichtig, um die Aufgaben z\u00fcgig zu erledigen. Lernen Sie f\u00fcr ein schnelles B\u00fcromanagement mehrere E-Mail-Konten einzurichten; sowie Ordne",
+      "location": {
+        "name": "Online",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-05-09T10:30:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/webinar-outlook-beherrschen-646-C-30AH313062",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/webinar-outlook-beherrschen-646-C-30AH313062",
+      "tags": []
+    },
+    {
+      "id": "vhs_df759321f779",
+      "title": "Zeit f\u00fcr mich - Wellnesstag f\u00fcr Frauen",
+      "teaser": "Einfach mal raus aus dem t\u00e4glichen Hamsterrad.",
+      "description": "Einfach mal raus aus dem t\u00e4glichen Hamsterrad. Vielleicht schicken Sie dazu einfach mal Ihren inneren Antreiber auf Kurzurlaub? Oft gen\u00fcgt es, sich eine kleine Auszeit zu nehmen, um zur Ruhe zu kommen und Kraft zu tanken.\nMit Traumreise, sanfter Bewegung und Atemmeditation zelebrieren wir eine Oase der Entspannung. Langsam kommen wir zur Ruhe und lassen die Seele  baumeln.\nGenau das l\u00e4sst uns wieder fit werden f\u00fcr den Alltag und Kraft sch\u00f6pfen f\u00fcr die kommende Zeit.",
+      "location": {
+        "name": "Ludwigstra\u00dfe 7",
+        "address": "95028 Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-05-09T12:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/zeit-fuer-mich-wellnesstag-fuer-frauen-646-C-30AH501669",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/zeit-fuer-mich-wellnesstag-fuer-frauen-646-C-30AH501669",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-04-30T04:14:40.876773"
+  "last_scraped": "2026-05-01T04:22:26.298910"
 }
