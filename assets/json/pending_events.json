@@ -9525,7 +9525,51 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/webinar-excel-basic-646-C-30AH313027",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/webinar-excel-basic-646-C-30AH313027",
       "tags": []
+    },
+    {
+      "id": "vhs_0074044bdfd2",
+      "title": "Anbieterwechsel \u2013 Gewusst wie!Online-Vortrag der Verbraucherzentrale Bayern",
+      "teaser": "Der Strom- und Gasmarkt ist vielf\u00e4ltig und Verbraucher:innen k\u00f6nnen aus einer gro\u00dfen Auswahl an Tarifen w\u00e4hlen. Hier gilt es wachsam zu sein und die Tarife genau zu vergleichen.",
+      "description": "Der Strom- und Gasmarkt ist vielf\u00e4ltig und Verbraucher:innen k\u00f6nnen aus einer gro\u00dfen Auswahl an Tarifen w\u00e4hlen. Hier gilt es wachsam zu sein und die Tarife genau zu vergleichen. Im Vortrag erfahren Sie, wie Sie bei der Tarifsuche und dem Tarifwechsel vorgehen sollten. Der Vortrag findet in Kooperation mit der Energieberatung der Verbraucherzentrale Bayern statt. \nZielgruppe: Mieter und Eigent\u00fcmer",
+      "location": {
+        "name": "Online",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-05-11T12:30:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/anbieterwechsel-gewusst-wie/online-vortrag-der-verbraucherzentrale-bayern-646-C-30AH107136",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/anbieterwechsel-gewusst-wie/online-vortrag-der-verbraucherzentrale-bayern-646-C-30AH107136",
+      "tags": []
+    },
+    {
+      "id": "vhs_2e4d093a8298",
+      "title": "Zehnfingerschreiben am Computer Online-Kurs ab 10 Jahren f\u00fcr Alle",
+      "teaser": "Wer professionell Computerschreiben kann, profitiert in vielen Bereichen.",
+      "description": "Wer professionell Computerschreiben kann, profitiert in vielen Bereichen. In diesem modernen Kurs lernen die Teilnehmerinnen das Computerschreiben blind mit 10 Fingern - und das an nur 4 Online- Terminen via WEBEX plus h\u00e4usliche \u00dcbungen. Bei dieser Lernmethode werden Erkenntnisse aus der Gehirnforschung und dem Ged\u00e4chtnistraining genutzt und miteinander verbunden.\n\nOb in Schule, Beruf, Studium oder Privatleben hat der PC Einzug gehalten, und es werden \u00fcberall sehr gute Kenntnisse bei der Bedienu",
+      "location": {
+        "name": "VHS Hofer Land",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-05-11T18:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/zehnfingerschreiben-am-computer-online-kurs-ab-10-jahren-fuer-alle-646-C-30AH370015",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/zehnfingerschreiben-am-computer-online-kurs-ab-10-jahren-fuer-alle-646-C-30AH370015",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-05-02T04:05:26.750260"
+  "last_scraped": "2026-05-03T04:17:49.693854"
 }
