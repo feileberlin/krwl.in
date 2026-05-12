@@ -10449,7 +10449,29 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/vz-bayern-ihre-heizkostenabrechnung-verstehen-und-pruefen-646-C-30AH107142",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/vz-bayern-ihre-heizkostenabrechnung-verstehen-und-pruefen-646-C-30AH107142",
       "tags": []
+    },
+    {
+      "id": "vhs_241997851000",
+      "title": "Seniorendisco - \"Tanzen wie fr\u00fcher\"",
+      "teaser": "Tanzen, lachen, Erinnerungen aufleben lassen und das ganz ohne Altersgrenzen im Kopf. Erfahren Sie an diesem Abend Wissenswertes \u00fcber Ihre Lieblingsinterpreten und was deren Texte aussagen.",
+      "description": "Tanzen, lachen, Erinnerungen aufleben lassen und das ganz ohne Altersgrenzen im Kopf. Erfahren Sie an diesem Abend Wissenswertes \u00fcber Ihre Lieblingsinterpreten und was deren Texte aussagen. Danach gilt: Tanzfl\u00e4che frei f\u00fcr die \u00dc\u201160\u2011Generation!\nEingeladen sind alle, die frei nach Lust und Laune Freestyle, Discofox oder Rock\u2019n\u2019Roll tanzen wollen. \nDie Veranstaltung soll ganz ohne Altersklischees, Begegnung, Bewegung und gute Stimmung f\u00f6rdern sowie Wissenswertes vermitteln.\nInitiiert und organisier",
+      "location": {
+        "name": "Ludwigstra\u00dfe 7",
+        "address": "95028 Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-05-22T18:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/seniorendisco-tanzen-wie-frueher-646-C-30AA904123",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/seniorendisco-tanzen-wie-frueher-646-C-30AA904123",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-05-12T04:15:45.551094"
+  "last_scraped": "2026-05-12T15:49:15.591380"
 }
