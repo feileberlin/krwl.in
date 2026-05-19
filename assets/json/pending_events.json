@@ -10779,7 +10779,29 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/microsoft-365-der-digitale-arbeitsplatz-646-C-30AH370008",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/microsoft-365-der-digitale-arbeitsplatz-646-C-30AH370008",
       "tags": []
+    },
+    {
+      "id": "vhs_4a375a799c15",
+      "title": "Webinar \"PowerPoint beherrschen\"",
+      "teaser": "PowerPoint ist eine Suite von Microsoft Office. Lernen Sie In diesem Einsteigerkurs als Digital-Seminar, schnell die vielen Funktionen im \u00dcberblick kennen.",
+      "description": "PowerPoint ist eine Suite von Microsoft Office. Lernen Sie In diesem Einsteigerkurs als Digital-Seminar, schnell die vielen Funktionen im \u00dcberblick kennen. Folgende Themen werden behandelt: Aufbau und Ver\u00e4nderungen von Folien; Texte, Grafiken und Formen einbinden; \u00dcberg\u00e4nge zu Folien gestalten; Animation in Folien anlegen; Tabellen, Bilder und Grafiken integrieren sowie Pr\u00e4sentations-Tipps und -Tricks;  Druck und Notizen. SmartArt\u00b4s erreichen gro\u00dfartige Effekte in nur kurzer Zeit, mit nur wenig ",
+      "location": {
+        "name": "Online",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-05-30T10:30:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/webinar-powerpoint-beherrschen-646-C-30AH313043",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/webinar-powerpoint-beherrschen-646-C-30AH313043",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-05-19T04:25:05.689037"
+  "last_scraped": "2026-05-19T16:05:42.591443"
 }
