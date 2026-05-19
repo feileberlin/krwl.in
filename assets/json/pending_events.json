@@ -10537,7 +10537,249 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/online-seminar-speziell-fuer-frauen-souveraen-durchsetzen-geschaetzt-bleiben-646-C-30AH270632",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/online-seminar-speziell-fuer-frauen-souveraen-durchsetzen-geschaetzt-bleiben-646-C-30AH270632",
       "tags": []
+    },
+    {
+      "id": "vhs_b297d90884b3",
+      "title": "Hof entdecken: Alte Musik in HofExkursion",
+      "teaser": "Nach einem Workshop und einer Stadtf\u00fchrung, bei denen wir die kulturelle und musikalische Tradition von Hof kennengelernt haben, besuchen wir gemeinsam das Er\u00f6ffnungskonzert mit den Dozent*innen und d...",
+      "description": "Nach einem Workshop und einer Stadtf\u00fchrung, bei denen wir die kulturelle und musikalische Tradition von Hof kennengelernt haben, besuchen wir gemeinsam das Er\u00f6ffnungskonzert mit den Dozent*innen und dem Ensemble CONCERTO BASSANO, mit dem die seit 2012 bestehende Veranstaltungsreihe \u201eAlte Musik in Hof\u201c er\u00f6ffnet wird.\nTreffpunkt: vor dem Haupteingang der VHS Hofer Land um 19:15 Uhr, Beginn des Konzerts um 19:30 Uhr.",
+      "location": {
+        "name": "Ludwigstra\u00dfe 7",
+        "address": "95028 Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-05-26T19:15:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/hof-entdecken-alte-musik-in-hof/exkursion-646-C-30AA929116",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/hof-entdecken-alte-musik-in-hof/exkursion-646-C-30AA929116",
+      "tags": []
+    },
+    {
+      "id": "vhs_d719124e4cee",
+      "title": "KI-Selfies: K\u00fcnstliche Intelligenz als Fotograf",
+      "teaser": "Mit K\u00fcnstlicher Intelligenz lassen sich beeindruckende realistische oder kreative Bilder von sich selbst erstellen ganz ohne professionelles Fotoshooting.",
+      "description": "Mit K\u00fcnstlicher Intelligenz lassen sich beeindruckende realistische oder kreative Bilder von sich selbst erstellen ganz ohne professionelles Fotoshooting. In diesem praxisnahen Workshop wird gezeigt, wie eine KI mit eigenen Fotos trainiert wird, um anschlie\u00dfend verschiedene hochwertige Portr\u00e4ts und kreative Bildvarianten zu generieren.",
+      "location": {
+        "name": "Online",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-05-27T15:30:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/ki-selfies-kuenstliche-intelligenz-als-fotograf-646-C-30AH311124",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/ki-selfies-kuenstliche-intelligenz-als-fotograf-646-C-30AH311124",
+      "tags": []
+    },
+    {
+      "id": "vhs_5fcbf585adbe",
+      "title": "KI-Protokolle: K\u00fcnstliche Intelligenz als Helfer",
+      "teaser": "Die manuelle Protokollerstellung kann zeitaufwendig und m\u00fchsam sein.",
+      "description": "Die manuelle Protokollerstellung kann zeitaufwendig und m\u00fchsam sein. K\u00fcnstliche Intelligenz bietet effiziente L\u00f6sungen, um Besprechungen, Meetings und Gespr\u00e4che automatisch zu erfassen und strukturiert zu dokumentieren. In diesem Workshop wird praxisnah gezeigt, wie verschiedene KI-Tools zur Protokollerstellung genutzt werden k\u00f6nnen, um Zeit zu sparen und die Qualit\u00e4t der Notizen zu verbessern.",
+      "location": {
+        "name": "Online",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-05-27T16:30:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/ki-protokolle-kuenstliche-intelligenz-als-helfer-646-C-30AH311103",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/ki-protokolle-kuenstliche-intelligenz-als-helfer-646-C-30AH311103",
+      "tags": []
+    },
+    {
+      "id": "vhs_6acf6f392100",
+      "title": "Canva-Workshop: Visuell starke Pr\u00e4sentationen erstellen",
+      "teaser": "Eine gute Pr\u00e4sentation ist mehr als nur Folien mit Text. Sie sollte klar strukturiert, visuell ansprechend und wirkungsvoll sein.",
+      "description": "Eine gute Pr\u00e4sentation ist mehr als nur Folien mit Text. Sie sollte klar strukturiert, visuell ansprechend und wirkungsvoll sein. In diesem praxisnahen Workshop wird vermittelt, wie moderne und professionelle Pr\u00e4sentationen mit Canva erstellt werden. Dabei stehen nicht nur das Design im Fokus, sondern auch der gezielte Einsatz von \u00dcberg\u00e4ngen, Animationen und die Wahl der passenden Pr\u00e4sentationsart.\nVoraussetzungen: Canva-Grundkenntnisse",
+      "location": {
+        "name": "Online",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-05-27T17:30:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/canva-workshop-visuell-starke-praesentationen-erstellen-646-C-30AH316125",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/canva-workshop-visuell-starke-praesentationen-erstellen-646-C-30AH316125",
+      "tags": []
+    },
+    {
+      "id": "vhs_5ff82230c6f9",
+      "title": "Digitale Moderation & Pr\u00e4sentation f\u00fcr Fortgeschrittene",
+      "teaser": "Sie haben bereits erste Erfahrungen mit der Durchf\u00fchrung von Meetings und m\u00f6chten professioneller moderieren? In diesem Aufbaukurs lernen Sie, wie Sie mit Programmen wie OBS Studio, Social Stream Ninj...",
+      "description": "Sie haben bereits erste Erfahrungen mit der Durchf\u00fchrung von Meetings und m\u00f6chten professioneller moderieren? In diesem Aufbaukurs lernen Sie, wie Sie mit Programmen wie OBS Studio, Social Stream Ninja und dem Stream Deck Ihre  Online-Pr\u00e4sentationen abwechslungsreich und klar strukturieren. Dabei spielt es keine Rolle, ob Sie mit Zoom, Microsoft Teams oder Webex arbeiten, die vermittelten Inhalte sind plattformunabh\u00e4ngig. Neben der Technik stehen auch Pr\u00e4sentationsmethoden und Ihr Auftritt vor d",
+      "location": {
+        "name": "Online",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-05-28T14:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/digitale-moderation-praesentation-fuer-fortgeschrittene-646-C-30AH311302",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/digitale-moderation-praesentation-fuer-fortgeschrittene-646-C-30AH311302",
+      "tags": []
+    },
+    {
+      "id": "vhs_d214df825228",
+      "title": "VHS Smartphone-StammtischBad Steben",
+      "teaser": "Smartphone, Tablet und Co. bereiten in der Praxis immer wieder Probleme.",
+      "description": "Smartphone, Tablet und Co. bereiten in der Praxis immer wieder Probleme. Die konkreten Anforderungen lassen sich gemeinsam besser l\u00f6sen und daher bieten wir regelm\u00e4\u00dfige Treffen an, um Hilfe anzubieten. Idealerweise helfen sich die Teilnehmenden untereinander und entsprechen dem \u201eStammtisch-Gedanken\u201c. Wir laden Sie herzlich ein, Teil der Gemeinschaft zu werden.",
+      "location": {
+        "name": "Sportheim Bad Steben",
+        "address": "Schlesierweg 5, 95138 Bad Steben",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-05-28T15:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/vhs-smartphone-stammtisch/bad-steben-646-C-30AA904220",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/vhs-smartphone-stammtisch/bad-steben-646-C-30AA904220",
+      "tags": []
+    },
+    {
+      "id": "vhs_abb3d9c38fa5",
+      "title": "Canva-Workshop: Social Media & Videoerstellung",
+      "teaser": "Visuelle Inhalte sind der Schl\u00fcssel zu erfolgreichem Social-Media-Marketing.",
+      "description": "Visuelle Inhalte sind der Schl\u00fcssel zu erfolgreichem Social-Media-Marketing. Doch wie erstellt man ansprechende Designs, fesselnde Videos und gut strukturierte Beitr\u00e4ge mit Canva? In diesem interaktiven Workshop wird praxisnah vermittelt, wie Social-Media-Posts und Reels professionell gestaltet und strategisch geplant werden. Zus\u00e4tzlich gibt es exklusive Vorlagen.",
+      "location": {
+        "name": "Online",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-05-28T17:30:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/canva-workshop-social-media-videoerstellung-646-C-30AH316104",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/canva-workshop-social-media-videoerstellung-646-C-30AH316104",
+      "tags": []
+    },
+    {
+      "id": "vhs_73ed423920ef",
+      "title": "Solarstrom selbst erzeugen mit PV-KleinstanlagenOnline-Vortrag der Verbraucherzentrale Bayern",
+      "teaser": "Balkonsolaranlagen erfreuen sich zunehmender Beliebtheit und sind einfach in der Handhabung. Die steckerfertigen Kleinstanlagen funktionieren nicht nur auf dem Dach.",
+      "description": "Balkonsolaranlagen erfreuen sich zunehmender Beliebtheit und sind einfach in der Handhabung. Die steckerfertigen Kleinstanlagen funktionieren nicht nur auf dem Dach. Auch auf dem Balkon, der Terrasse oder im Garten k\u00f6nnen sogar Mieter eigenen Solarstrom erzeugen und nutzen. In diesem Vortrag erfahren Sie, worauf Sie vor der Anschaffung und bei der Installation achten m\u00fcssen. \nZielgruppe: Mieter und Eigent\u00fcmer",
+      "location": {
+        "name": "Online",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-05-28T19:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/solarstrom-selbst-erzeugen-mit-pv-kleinstanlagen/online-vortrag-der-verbraucherzentrale-bayern-646-C-30AH107143",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/solarstrom-selbst-erzeugen-mit-pv-kleinstanlagen/online-vortrag-der-verbraucherzentrale-bayern-646-C-30AH107143",
+      "tags": []
+    },
+    {
+      "id": "vhs_f6664b8c41dc",
+      "title": "Praxis-Basics: Social Media Grundlagen",
+      "teaser": "Sie starten gerade erst mit Social Media an Ihrer Volkshochschule? Dann kommen Sie mit uns in den Austausch. Wir zeigen, wie es gehen kann und beantworten Fragen.",
+      "description": "Sie starten gerade erst mit Social Media an Ihrer Volkshochschule? Dann kommen Sie mit uns in den Austausch. Wir zeigen, wie es gehen kann und beantworten Fragen.\n\nDie Praxis-Updates im Rahmen des bvv-Transferprojekts \"Digitales Marketing leicht gemacht\" sind eine kostenlose Veranstaltung f\u00fcr Mitarbeitende an bayerischen Volkshochschulen.",
+      "location": {
+        "name": "Online",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-05-29T10:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/praxis-basics-social-media-grundlagen-646-C-30AA908103",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/praxis-basics-social-media-grundlagen-646-C-30AA908103",
+      "tags": []
+    },
+    {
+      "id": "vhs_2dcae4cf8f7b",
+      "title": "KI-Prompting: K\u00fcnstliche Intelligenz effektiv steuern",
+      "teaser": "K\u00fcnstliche Intelligenz kann beeindruckende Texte Bilder und L\u00f6sungen generieren doch nur mit den richtigen Prompts liefert sie wirklich pr\u00e4zise und hochwertige Ergebnisse.",
+      "description": "K\u00fcnstliche Intelligenz kann beeindruckende Texte Bilder und L\u00f6sungen generieren doch nur mit den richtigen Prompts liefert sie wirklich pr\u00e4zise und hochwertige Ergebnisse. In diesem Kurs wird gezeigt wie man KI effektiv steuert indem man gezielt formulierte Eingaben verwendet.",
+      "location": {
+        "name": "Online",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-05-29T14:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/ki-prompting-kuenstliche-intelligenz-effektiv-steuern-646-C-30AH311086",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/ki-prompting-kuenstliche-intelligenz-effektiv-steuern-646-C-30AH311086",
+      "tags": []
+    },
+    {
+      "id": "vhs_1d7326013f28",
+      "title": "Microsoft 365 - der digitale ArbeitsplatzFreitag, 29.05., 18.00-21.15 Uhr und Samstag, 30.05.2026, 09.00-16.00 Uhr",
+      "teaser": "Steigern Sie nachhaltig die Effizienz Ihrer Arbeitsprozesse mit Microsoft 365.",
+      "description": "Steigern Sie nachhaltig die Effizienz Ihrer Arbeitsprozesse mit Microsoft 365. Dieses umfassende Seminar zeigt Ihnen, wie Sie durch gezielten Einsatz der vielf\u00e4ltigen Tools Ihre t\u00e4gliche Zusammenarbeit revolutionieren und Ihre Produktivit\u00e4t deutlich erh\u00f6hen k\u00f6nnen.\n\nInhalte:\n\nOneDrive: Erhalten Sie sicheren und st\u00e4ndigen Zugriff auf Ihre Daten, wo immer Sie sind. Lernen Sie, wie OneDrive Ihre Datenorganisation und -sicherheit durch fortschrittliche Cloud-Speicherl\u00f6sungen optimiert.\nOneNote: Orga",
+      "location": {
+        "name": "VHS Hofer Land",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-05-30T18:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/microsoft-365-der-digitale-arbeitsplatz-646-C-30AH370008",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/microsoft-365-der-digitale-arbeitsplatz-646-C-30AH370008",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-05-13T04:19:19.708241"
+  "last_scraped": "2026-05-19T04:25:05.689037"
 }
