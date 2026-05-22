@@ -11065,7 +11065,29 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/ki-prompting-kuenstliche-intelligenz-effektiv-steuern-646-C-30AH311087",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/ki-prompting-kuenstliche-intelligenz-effektiv-steuern-646-C-30AH311087",
       "tags": []
+    },
+    {
+      "id": "vhs_97b13916f4da",
+      "title": "Yin Yoga",
+      "teaser": "Yin Yoga l\u00e4dt ein, mehrere Minuten in \u00dcbungen zu verweilen, sich in die Positionen zu entspannen und deren tiefere Wirkung zu erfahren.",
+      "description": "Yin Yoga l\u00e4dt ein, mehrere Minuten in \u00dcbungen zu verweilen, sich in die Positionen zu entspannen und deren tiefere Wirkung zu erfahren. Mit dem Ziel, die Beweglichkeit zu steigern, beanspruchen Yin Yoga-\u00dcbungen nachhaltig B\u00e4nder, Faszien und Sehnen. Die Gelenke werden sanft ge\u00f6ffnet, Spannungen im faszialen Gewebe und der Muskulatur k\u00f6nnen sich l\u00f6sen. Dabei wird jede \u00dcbung so eingerichtet, dass keine eigene Kraft aufgewendet wird. Auf geistiger Ebene wird der Yogi/die Yogini eingeladen, ganz los",
+      "location": {
+        "name": "Ludwigstra\u00dfe 7",
+        "address": "95028 Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-06-08T17:15:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/yin-yoga-646-C-30AH501112",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/yin-yoga-646-C-30AH501112",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-05-21T16:05:07.181877"
+  "last_scraped": "2026-05-22T04:26:44.576802"
 }
