@@ -11175,7 +11175,51 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/ruecken-fit/kurs-6-646-C-30SW502226",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/ruecken-fit/kurs-6-646-C-30SW502226",
       "tags": []
+    },
+    {
+      "id": "vhs_ddd59755d6c7",
+      "title": "SkillUp Al! Kompetenzen zur K\u00fcnstlichen Intelligenz.KI-Agenten im Einsatz",
+      "teaser": "K\u00fcnstliche Intelligenz (KI) manifestiert sich in sogenannten Agenten, die eigenst\u00e4ndig Aufgaben \u00fcbernehmen. Sie optimieren Prozesse, treffen datenbasierte Entscheidungen und interagieren autonom.",
+      "description": "K\u00fcnstliche Intelligenz (KI) manifestiert sich in sogenannten Agenten, die eigenst\u00e4ndig Aufgaben \u00fcbernehmen. Sie optimieren Prozesse, treffen datenbasierte Entscheidungen und interagieren autonom. Ihr Einsatz steigert Effizienz und er\u00f6ffnet Innovationen in Wirtschaftsleben und pers\u00f6nlichem Berufsalltag. \nDieser Online-Kurs erkundet ihr Potenzial, ihre Kernfunktionen und praktische Anwendungsm\u00f6glichkeiten als smarte Helfer zur L\u00f6sung komplexer Probleme und f\u00fcr Nachhaltigkeit von Arbeitsabl\u00e4ufen \u2013 ",
+      "location": {
+        "name": "Online",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-06-08T19:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/skillup-al-kompetenzen-zur-kuenstlichen-intelligenz/ki-agenten-im-einsatz-646-C-30AH280032",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/skillup-al-kompetenzen-zur-kuenstlichen-intelligenz/ki-agenten-im-einsatz-646-C-30AH280032",
+      "tags": []
+    },
+    {
+      "id": "vhs_365c48ac262e",
+      "title": "\u201eBacken verbindet \u2013 Wandern bewegt\u201c \u2013 ein Nachmittag f\u00fcr Gemeinschaft und Begegnung",
+      "teaser": "Unter dem Motto \u201eBacken verbindet \u2013 Wandern bewegt\u201c bringen wir Menschen zusammen, um Gemeinsamkeiten zu entdecken und Gemeinschaft am Tisch und unterwegs zu erleben.",
+      "description": "Unter dem Motto \u201eBacken verbindet \u2013 Wandern bewegt\u201c bringen wir Menschen zusammen, um Gemeinsamkeiten zu entdecken und Gemeinschaft am Tisch und unterwegs zu erleben.\nDer Termin findet am Donnerstag, den 25. Juni 2026, von 14 bis 17 Uhr statt. Wer Lust hat, gemeinsam zu backen, trifft sich um 14 Uhr in der Begegnungsst\u00e4tte in der Luitpoldstra\u00dfe 18. Alle, die lieber wandern m\u00f6chten, starten um 14 Uhr an der VHS Hofer Land in der Ludwigstra\u00dfe 7. Gegen 15 Uhr kommen alle in der Begegnungsst\u00e4tte zus",
+      "location": {
+        "name": "VHS Hofer Land",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-06-25T14:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/backen-verbindet-wandern-bewegt-ein-nachmittag-fuer-gemeinschaft-und-begegnung-646-C-30AA904127",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/backen-verbindet-wandern-bewegt-ein-nachmittag-fuer-gemeinschaft-und-begegnung-646-C-30AA904127",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-05-23T04:16:27.769113"
+  "last_scraped": "2026-05-24T04:26:57.606209"
 }
