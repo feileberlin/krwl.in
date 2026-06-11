@@ -12517,7 +12517,29 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/digitale-moderation-praesentation-fuer-fortgeschrittene-646-C-30AH311303",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/digitale-moderation-praesentation-fuer-fortgeschrittene-646-C-30AH311303",
       "tags": []
+    },
+    {
+      "id": "vhs_4e57d52d2725",
+      "title": "Selbstst\u00e4ndiges Deutschlernen mit dem VHS-Lernportal - Einweisung",
+      "teaser": "Das kostenlose vhs-Lernportal bietet digitale \u00dcbungseinheiten zum selbstst\u00e4ndigen Erlernen der deutschen Sprache bis zum Niveau B1. Texte und Men\u00fcf\u00fchrungen sind in 18 Sprachen verf\u00fcgbar.",
+      "description": "Das kostenlose vhs-Lernportal bietet digitale \u00dcbungseinheiten zum selbstst\u00e4ndigen Erlernen der deutschen Sprache bis zum Niveau B1. Texte und Men\u00fcf\u00fchrungen sind in 18 Sprachen verf\u00fcgbar. Neben erkl\u00e4renden Videos werden auch Texte als Audio-Versionen angeboten. \u00dcbungen zur Vorbereitung auf einen Schulabschluss sind ebenfalls integriert. Unternehmen profitieren, weil Mitarbeitende \u2013 auch im Schichtdienst \u2013 sich zeitunabh\u00e4ngig weiterbilden k\u00f6nnen.",
+      "location": {
+        "name": "VHS",
+        "address": "Ludwigstra\u00dfe 7, 95028 Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-06-25T18:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/selbststaendiges-deutschlernen-mit-dem-vhs-lernportal-einweisung-646-C-30AH402712",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/selbststaendiges-deutschlernen-mit-dem-vhs-lernportal-einweisung-646-C-30AH402712",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-06-11T04:30:24.400964"
+  "last_scraped": "2026-06-11T16:22:59.335611"
 }
