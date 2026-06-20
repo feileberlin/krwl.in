@@ -13001,7 +13001,73 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/zusammen-digital-beratungstheke-646-C-30AA904238",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/zusammen-digital-beratungstheke-646-C-30AA904238",
       "tags": []
+    },
+    {
+      "id": "vhs_757a0d6099fc",
+      "title": "VHS Lese-Stammtisch",
+      "teaser": "B\u00fccher und Autor*innen \u2013 lassen Sie uns dar\u00fcber sprechen. Bringen Sie Ihr Lieblingsbuch mit oder h\u00f6ren Sie zu, wenn andere \u00fcber ihres berichten.",
+      "description": "B\u00fccher und Autor*innen \u2013 lassen Sie uns dar\u00fcber sprechen. Bringen Sie Ihr Lieblingsbuch mit oder h\u00f6ren Sie zu, wenn andere \u00fcber ihres berichten. Lassen Sie uns regelm\u00e4\u00dfig treffen und im Sinne des \u201eStammtisch-Gedanken\u201c Erfahrungen und Empfehlungen austauschen. Wir laden Sie herzlich ein, Teil der Gemeinschaft zu werden.",
+      "location": {
+        "name": "VHS Hofer Land",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-07-01T15:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/vhs-lese-stammtisch-646-C-30AA904114",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/vhs-lese-stammtisch-646-C-30AA904114",
+      "tags": []
+    },
+    {
+      "id": "vhs_32f2c8607008",
+      "title": "Online-Seminar speziell f\u00fcr Frauen: Selbstmarketing f\u00fcr Frauen, die ihre Chance aktiv nutzen",
+      "teaser": "Sie leisten viel \u2013 aber oft bleibt es im Verborgenen? Vielleicht werden Ihre Ideen \u00fcbernommen, ohne dass Ihr Name f\u00e4llt. Vielleicht sehen andere nicht, wie viel Sie tats\u00e4chlich bewegen.",
+      "description": "Sie leisten viel \u2013 aber oft bleibt es im Verborgenen? Vielleicht werden Ihre Ideen \u00fcbernommen, ohne dass Ihr Name f\u00e4llt. Vielleicht sehen andere nicht, wie viel Sie tats\u00e4chlich bewegen. Oder Sie halten sich zur\u00fcck, weil Eigenlob Ihnen unangenehm ist. \nIn diesem interaktiven Online-Seminar lernen Sie, Ihre St\u00e4rken klar zu benennen, Ihre Erfolge \u00fcberzeugend zu pr\u00e4sentieren und sich gezielt sichtbar zu machen \u2013 ohne sich zu verstellen. Sie erkennen, welche Glaubenss\u00e4tze Sie bisher gebremst haben, u",
+      "location": {
+        "name": "Online",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-07-01T18:30:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/online-seminar-speziell-fuer-frauen-selbstmarketing-fuer-frauen-die-ihre-chance-aktiv-nutzen-646-C-30AH270624",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/online-seminar-speziell-fuer-frauen-selbstmarketing-fuer-frauen-die-ihre-chance-aktiv-nutzen-646-C-30AH270624",
+      "tags": []
+    },
+    {
+      "id": "vhs_582073d05e5f",
+      "title": "KlangmorgenEntspannung im Zeichen der Minze",
+      "teaser": "Lass den Alltag los und tauche ein in einen Morgen voller Ruhe, Achtsamkeit und harmonischer Kl\u00e4nge.",
+      "description": "Lass den Alltag los und tauche ein in einen Morgen voller Ruhe, Achtsamkeit und harmonischer Kl\u00e4nge. Dich erwartet eine sanfte Meditation mit Klangschalen und anderen Klanginstrumenten \u2013 begleitet vom erfrischenden Duft der Kamille. Im Anschluss genie\u00dft du eine wohltuende Klangschalen-Auflage zur Tiefenentspannung. Den Morgen lassen wir gemeinsam bei einem warmen Kr\u00e4utertee und offenem Austausch ausklingen.\nEin Vormittag zum Durchatmen, Loslassen und Auftanken \u2013 f\u00fcr K\u00f6rper, Geist und Seele.",
+      "location": {
+        "name": "Mehrzweckgeb\u00e4ude Berg",
+        "address": "Schlegelweg 3, 95180 Berg",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-07-02T10:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/klangmorgen/entspannung-im-zeichen-der-minze-646-C-30BE501623",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/klangmorgen/entspannung-im-zeichen-der-minze-646-C-30BE501623",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-06-19T04:30:38.357626"
+  "last_scraped": "2026-06-20T04:28:08.657401"
 }
