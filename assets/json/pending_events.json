@@ -13199,7 +13199,73 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/treffpunkt-fuer-geselligkeit-und-mehr-sommerhitze-was-kann-ich-tun-um-mich-vor-grosser-hitze-zu-schuetzen-646-C-30AA904121",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/treffpunkt-fuer-geselligkeit-und-mehr-sommerhitze-was-kann-ich-tun-um-mich-vor-grosser-hitze-zu-schuetzen-646-C-30AA904121",
       "tags": []
+    },
+    {
+      "id": "vhs_fdff91c030b0",
+      "title": "Canva-Workshop: Grundkurs",
+      "teaser": "Canva ist ein vielseitiges Design-Tool, das f\u00fcr Pr\u00e4sentationen, Social-Media-Grafiken, Flyer und viele weitere Designs genutzt werden kann. Doch der Einstieg kann herausfordernd sein.",
+      "description": "Canva ist ein vielseitiges Design-Tool, das f\u00fcr Pr\u00e4sentationen, Social-Media-Grafiken, Flyer und viele weitere Designs genutzt werden kann. Doch der Einstieg kann herausfordernd sein. Welche Funktionen sind wichtig? Wie lassen sich Designs professionell gestalten? Und welche M\u00f6glichkeiten bieten KI-gest\u00fctzte Features? Dieser Workshop bietet eine strukturierte Einf\u00fchrung in Canva und vermittelt praxisnah die wichtigsten Grundlagen. Schritt f\u00fcr Schritt werden zentrale Funktionen erkl\u00e4rt.",
+      "location": {
+        "name": "Online",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-07-06T17:30:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/canva-workshop-grundkurs-646-C-30AH316069",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/canva-workshop-grundkurs-646-C-30AH316069",
+      "tags": []
+    },
+    {
+      "id": "vhs_a06d1f87631f",
+      "title": "Stretchingkurs - dehn dich fitSommerkurs",
+      "teaser": "Nach einer kurzen Erw\u00e4rmung, die aus unterschiedlich zusammengesetzten Schrittfolgen auf flotte Musik besteht, dehnen wir unsere gesamten Faszien, um Verklebungen zu l\u00f6sen und das Bindegewebe elastisc...",
+      "description": "Nach einer kurzen Erw\u00e4rmung, die aus unterschiedlich zusammengesetzten Schrittfolgen auf flotte Musik besteht, dehnen wir unsere gesamten Faszien, um Verklebungen zu l\u00f6sen und das Bindegewebe elastisch zu machen. Die zweite H\u00e4lfte der Stunde findet auf der Matte statt. Neben Kr\u00e4ftigungs\u00fcbungen f\u00fcr Bauch und R\u00fccken,  Mobilisations- und Atem\u00fcbungen werden die Dehn\u00fcbungen unter Anleitung ausgef\u00fchrt. Die Stunde wird mit motivierender Musik untermalt und f\u00f6rdert das allgemeine Wohlbefinden und die Fr",
+      "location": {
+        "name": "Turnhalle M\u00fcnsterschule",
+        "address": "Egerl\u00e4nderweg 25",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-07-06T18:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/stretchingkurs-dehn-dich-fit/sommerkurs-646-C-30AH502262",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/stretchingkurs-dehn-dich-fit/sommerkurs-646-C-30AH502262",
+      "tags": []
+    },
+    {
+      "id": "vhs_3dae9b35feac",
+      "title": "Online-Vortrag: Sanierung und Heizung \u2013 F\u00f6rderlandschaft im \u00dcberblick",
+      "teaser": "Die F\u00f6rderlandschaft im Hinblick auf die Sanierung und die Heizung ist aktuell sehr komplex.",
+      "description": "Die F\u00f6rderlandschaft im Hinblick auf die Sanierung und die Heizung ist aktuell sehr komplex. Der Vortrag \nerl\u00e4utert, welche M\u00f6glichkeiten f\u00fcr die F\u00f6rderung es gibt, wie Sie diese gegebenenfalls miteinander \nkombinieren k\u00f6nnen und wo Sie diese beantragen k\u00f6nnten. Wichtige Voraussetzung zum Erhalt der \nF\u00f6rderungen werden ebenfalls aufgezeigt.\nZielgruppe: Ein- und Zweifamilienhausbesitzer:innen",
+      "location": {
+        "name": "Online",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-07-06T19:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/online-vortrag-sanierung-und-heizung-foerderlandschaft-im-ueberblick-646-C-30AH107153",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/online-vortrag-sanierung-und-heizung-foerderlandschaft-im-ueberblick-646-C-30AH107153",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-06-22T04:30:49.673032"
+  "last_scraped": "2026-06-23T04:22:52.780901"
 }
