@@ -13265,7 +13265,29 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/online-vortrag-sanierung-und-heizung-foerderlandschaft-im-ueberblick-646-C-30AH107153",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/online-vortrag-sanierung-und-heizung-foerderlandschaft-im-ueberblick-646-C-30AH107153",
       "tags": []
+    },
+    {
+      "id": "vhs_61bef79f13da",
+      "title": "\"ZukunfstWege - Gemeinsam nachhaltig\"Vom Korn zum Brot - nachhaltig backen, gemeinsam genie\u00dfen",
+      "teaser": "Zusammen backen, nachhaltig genie\u00dfen und voneinander lernen! Im Rahmen unseres Projekts Zusammenwachsen laden wir Einheimische und Zugewanderte zu einem besonderen Backworkshop ein.",
+      "description": "Zusammen backen, nachhaltig genie\u00dfen und voneinander lernen! Im Rahmen unseres Projekts Zusammenwachsen laden wir Einheimische und Zugewanderte zu einem besonderen Backworkshop ein. Gemeinsam entdecken wir die Kunst des Brotbackens mit nat\u00fcrlichen, urspr\u00fcnglichen Zutaten \u2013 ganz ohne Zusatzstoffe, mit Zeit, Liebe und Handarbeit.Wir kneten, formen und backen traditionelles Brot \u2013 so wie es fr\u00fcher gemacht wurde: mit regionalem Mehl, Sauerteig und viel Geduld. Dabei teilen wir nicht nur praktische T",
+      "location": {
+        "name": "Fabrikzeile 21 (Hoftex Group)",
+        "address": "95028 Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-07-23T17:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/zukunfstwege-gemeinsam-nachhaltig/vom-korn-zum-brot-nachhaltig-backen-gemeinsam-geniessen-646-C-30AA933032",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/zukunfstwege-gemeinsam-nachhaltig/vom-korn-zum-brot-nachhaltig-backen-gemeinsam-geniessen-646-C-30AA933032",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-06-23T04:22:52.780901"
+  "last_scraped": "2026-06-24T04:25:09.686162"
 }
