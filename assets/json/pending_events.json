@@ -13287,7 +13287,29 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/zukunfstwege-gemeinsam-nachhaltig/vom-korn-zum-brot-nachhaltig-backen-gemeinsam-geniessen-646-C-30AA933032",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/zukunfstwege-gemeinsam-nachhaltig/vom-korn-zum-brot-nachhaltig-backen-gemeinsam-geniessen-646-C-30AA933032",
       "tags": []
+    },
+    {
+      "id": "vhs_731e7d0092e2",
+      "title": "Urban Sketching - Schnelle architektonische Skizzen in Hof",
+      "teaser": "Wir werden vor Ort die eine oder andere Hausecke, ein sch\u00f6nes Fenster, eine Silhouette der Stra\u00dfe, einen Torbogen oder \u00e4hnliches skizzieren.",
+      "description": "Wir werden vor Ort die eine oder andere Hausecke, ein sch\u00f6nes Fenster, eine Silhouette der Stra\u00dfe, einen Torbogen oder \u00e4hnliches skizzieren. Dieser Kurs ist sehr interessant und regt das genaue Hinsehen an. Er ist gut geeignet f\u00fcr Teilnehmer die schon mal gezeichnet haben, aber auch f\u00fcr Teilnehmer die sich mit dieser Materie noch nicht befasst haben. Es wird uns Spa\u00df machen Teile der Altstadt von Hof einzufangen und wer sich traut auch die eine oder andere Figur mit einzuzeichnen. Unsere Bilder ",
+      "location": {
+        "name": "VHS",
+        "address": "Ludwigstra\u00dfe 7, 95028 Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-08-29T10:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/urban-sketching-schnelle-architektonische-skizzen-in-hof-646-C-30AH604102",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/urban-sketching-schnelle-architektonische-skizzen-in-hof-646-C-30AH604102",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-06-24T04:25:09.686162"
+  "last_scraped": "2026-06-25T15:50:51.563883"
 }
