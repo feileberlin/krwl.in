@@ -13419,7 +13419,73 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/selbstbehauptung-selbstwirksamkeit/fuer-2-klaessler-bis-4-klaessler-646-C-31HE102102",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/selbstbehauptung-selbstwirksamkeit/fuer-2-klaessler-bis-4-klaessler-646-C-31HE102102",
       "tags": []
+    },
+    {
+      "id": "vhs_1dc6339db18f",
+      "title": "Zeit f\u00fcr mich - Raum f\u00fcr mich",
+      "teaser": "An diesen Abenden wollen wir uns Zeit nehmen f\u00fcr uns und f\u00fcr das, was uns in K\u00f6rper, Geist und Seele gut tut.",
+      "description": "An diesen Abenden wollen wir uns Zeit nehmen f\u00fcr uns und f\u00fcr das, was uns in K\u00f6rper, Geist und Seele gut tut. Das mag mal eher ruhig sein, dann wieder frisch, fr\u00f6hlich und herrlich lebendig und vielleicht k\u00f6nnen wir Neues ersp\u00fcren, dass unterst\u00fctzend ist f\u00fcr unser pers\u00f6nliches Wohlgef\u00fchl. Begleiten werden uns dabei Elemente aus K\u00f6rper- und Atemwahrnehmung. Bewegung, Musik und Entspannungseinheiten. Auch ein achtsamer Austausch in der Gruppe bringt oft neues Verst\u00e4ndnis und hilfreiche Impulse. Da",
+      "location": {
+        "name": "Lutherschule",
+        "address": "Kirchplatz 7, 95213 M\u00fcnchberg",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-11-09T18:30:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/zeit-fuer-mich-raum-fuer-mich-646-C-31MU501661",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/zeit-fuer-mich-raum-fuer-mich-646-C-31MU501661",
+      "tags": []
+    },
+    {
+      "id": "vhs_21c2edba4cba",
+      "title": "Hatha-YogaBlock 2: 19 Uhr",
+      "teaser": "Das Ziel der Yogapraxis ist es, einen Zustand der Ruhe und des Wachseins zu erreichen.",
+      "description": "Das Ziel der Yogapraxis ist es, einen Zustand der Ruhe und des Wachseins zu erreichen. Verschiedene K\u00f6rperhaltungen (Asanas) und die Atem\u00fcbungen sind das Werkzeug, um in diese Bewusstheit zu gelangen, die Gedankenstr\u00f6me zur Ruhe zu bringen und eine tiefe Entspannung und gleichzeitige St\u00e4rkung von K\u00f6rper und Geist zu erfahren.",
+      "location": {
+        "name": "Grundschule Helmbrechts (Aula / Zi.-Nr. 305)",
+        "address": "Eingang \u00fcber Ottengr\u00fcner Stra\u00dfe (bitte klingeln)",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-11-10T19:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/hatha-yoga/block-2-19-uhr-646-C-31HE501102",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/hatha-yoga/block-2-19-uhr-646-C-31HE501102",
+      "tags": []
+    },
+    {
+      "id": "vhs_586b9b1a9d6f",
+      "title": "Energy DanceKurs 2",
+      "teaser": "Hast Du Lust auf Rhythmus, Bewegung und Musik? M\u00f6chten Du im Kopf abschalten und energievoll deinen K\u00f6rper erleben? Energy Dance f\u00fchrt Dich in vielf\u00e4ltige Bewegungsabl\u00e4ufe, denen man leicht und m\u00fchelo...",
+      "description": "Hast Du Lust auf Rhythmus, Bewegung und Musik? M\u00f6chten Du im Kopf abschalten und energievoll deinen K\u00f6rper erleben? Energy Dance f\u00fchrt Dich in vielf\u00e4ltige Bewegungsabl\u00e4ufe, denen man leicht und m\u00fchelos folgen kann, ohne Schrittfolgen zu lernen oder Takte zu z\u00e4hlen. Ein rhythmisch-dynamischer Fitness- und Gesundheitssport mit abwechslungsreicher, motivierender Musik. Dabei kann jeder selbst die Intensit\u00e4t der Bewegung bestimmen und jeder kann mitmachen.",
+      "location": {
+        "name": "Philipp-Wolfrum-Haus",
+        "address": "Marktplatz 17, 95131 Schwarzenbach a.Wald",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-11-11T19:30:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/energy-dance/kurs-2-646-C-31SW502304",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/energy-dance/kurs-2-646-C-31SW502304",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-06-26T15:43:47.474345"
+  "last_scraped": "2026-06-27T04:20:42.603258"
 }
