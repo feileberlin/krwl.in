@@ -13837,7 +13837,73 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/solarstrom-selbst-erzeugen-mit-pv-kleinstanlagen/online-vortrag-der-verbraucherzentrale-bayern-646-C-30AH107156",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/solarstrom-selbst-erzeugen-mit-pv-kleinstanlagen/online-vortrag-der-verbraucherzentrale-bayern-646-C-30AH107156",
       "tags": []
+    },
+    {
+      "id": "vhs_e56605f6783a",
+      "title": "VHS Smartphone-StammtischRehau",
+      "teaser": "Smartphone, Tablet und Co. bereiten in der Praxis immer wieder Probleme.",
+      "description": "Smartphone, Tablet und Co. bereiten in der Praxis immer wieder Probleme. Die konkreten Anforderungen lassen sich gemeinsam besser l\u00f6sen und daher bieten wir regelm\u00e4\u00dfige Treffen an, um Hilfe anzubieten. Idealerweise helfen sich die Teilnehmenden untereinander und entsprechen dem \u201eStammtisch-Gedanken\u201c. Wir laden Sie herzlich ein, Teil der Gemeinschaft zu werden.",
+      "location": {
+        "name": "Mehrgenerationenhaus Rehau",
+        "address": "Maxplatz 12, 95111 Rehau",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-07-09T15:30:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/vhs-smartphone-stammtisch/rehau-646-C-30AA904218",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/vhs-smartphone-stammtisch/rehau-646-C-30AA904218",
+      "tags": []
+    },
+    {
+      "id": "vhs_72624b82935b",
+      "title": "Online-Seminar speziell f\u00fcr Frauen: Nein sagen und aus der Harmoniefalle ausbrechen",
+      "teaser": "Sagen Sie \u00f6fter Ja, obwohl Sie eigentlich Nein meinen? Vielleicht, weil Sie niemanden entt\u00e4uschen wollen. Weil Sie Angst haben, als schwierig zu gelten.",
+      "description": "Sagen Sie \u00f6fter Ja, obwohl Sie eigentlich Nein meinen? Vielleicht, weil Sie niemanden entt\u00e4uschen wollen. Weil Sie Angst haben, als schwierig zu gelten. Oder weil Harmonie Ihnen wichtiger erscheint als Ihre eigenen Bed\u00fcrfnisse. \nDoch wer sich st\u00e4ndig anpasst, zahlt einen hohen Preis: Sie verlieren Klarheit, Energie \u2013 und manchmal auch den Respekt anderer. \nIn diesem Online-Seminar lernen Sie, mit innerer St\u00e4rke, Freundlichkeit und Klarheit Nein zu sagen \u2013 im Berufsleben ebenso wie im privaten Um",
+      "location": {
+        "name": "Online",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-07-09T18:30:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/online-seminar-speziell-fuer-frauen-nein-sagen-und-aus-der-harmoniefalle-ausbrechen-646-C-30AH270642",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/online-seminar-speziell-fuer-frauen-nein-sagen-und-aus-der-harmoniefalle-ausbrechen-646-C-30AH270642",
+      "tags": []
+    },
+    {
+      "id": "vhs_e562a2820db7",
+      "title": "Online-Vortrag: Die W\u00e4rmepumpePraxistipps zu Planung, Hydraulik und Effizienzsteigerung",
+      "teaser": "Eine W\u00e4rmepumpenanlage ist nur so gut wie die Qualit\u00e4t der Vorplanung.",
+      "description": "Eine W\u00e4rmepumpenanlage ist nur so gut wie die Qualit\u00e4t der Vorplanung. In diesem Vortrag werden die einzelnen Planungsschritte und die passende Hydraulik von W\u00e4rmepumpenanlagen im EFH und kleineren MFH erl\u00e4utert. Zudem wird detailliert auf die Warmwasserbereitungssysteme mit W\u00e4rmepumpen eingegangen und die wichtigen Stellschrauben f\u00fcr Effizienzsteigerungen erkl\u00e4rt. Der Vortrag findet in Kooperation mit der Energieberatung der Verbraucherzentrale Bayern statt. \nZielgruppe: Interessenten die eine ",
+      "location": {
+        "name": "Online",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-07-09T19:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/online-vortrag-die-waermepumpe/praxistipps-zu-planung-hydraulik-und-effizienzsteigerung-646-C-30AH107157",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/online-vortrag-die-waermepumpe/praxistipps-zu-planung-hydraulik-und-effizienzsteigerung-646-C-30AH107157",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-06-29T16:17:07.093461"
+  "last_scraped": "2026-06-30T04:24:44.945388"
 }
