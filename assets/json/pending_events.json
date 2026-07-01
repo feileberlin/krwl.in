@@ -13903,7 +13903,73 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/online-vortrag-die-waermepumpe/praxistipps-zu-planung-hydraulik-und-effizienzsteigerung-646-C-30AH107157",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/online-vortrag-die-waermepumpe/praxistipps-zu-planung-hydraulik-und-effizienzsteigerung-646-C-30AH107157",
       "tags": []
+    },
+    {
+      "id": "vhs_f7c95975c97a",
+      "title": "Pers\u00f6nlichkeitsentwicklung - Eine Reise zu mir selbstSich selbst kennen lernen oder wieder neu entdecken",
+      "teaser": "Sie kennen das Gef\u00fchl, es jedem recht machen zu wollen. Den Arbeitskollegen, dem Vorgesetzten, dem Partner, den Kindern, den Freunden und den Bekannten.",
+      "description": "Sie kennen das Gef\u00fchl, es jedem recht machen zu wollen. Den Arbeitskollegen, dem Vorgesetzten, dem Partner, den Kindern, den Freunden und den Bekannten. Und dabei vergessen Sie Ihre eigenen W\u00fcnsche, was Sie eigentlich wirklich wollen und kommen selbst zu kurz.\nIn diesem Kurs lernen Sie:\n- Was ist Pers\u00f6nlichkeitsentwicklung?\n- Die Ursachen, warum manche Dinge im Leben nicht so laufen, wie gew\u00fcnscht\n- Wo stehe ich aktuell? Wo will ich hin?\n- Warum Ihnen ein Coach weiterhelfen kann?",
+      "location": {
+        "name": "VHS",
+        "address": "Ludwigstra\u00dfe 7, 95028 Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-07-10T09:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/persoenlichkeitsentwicklung-eine-reise-zu-mir-selbst/sich-selbst-kennen-lernen-oder-wieder-neu-entdecken-646-C-30AH270058",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/persoenlichkeitsentwicklung-eine-reise-zu-mir-selbst/sich-selbst-kennen-lernen-oder-wieder-neu-entdecken-646-C-30AH270058",
+      "tags": []
+    },
+    {
+      "id": "vhs_0947671e6912",
+      "title": "Dabei sein... Richtiger Umgang mit Facebook",
+      "teaser": "An drei Nachmittagen legen Sie sich zusammen mit dem Dozenten Ihren Facebook-Account an. Er zeigt Ihnen wie dies funktioniert und vor allem, wie Sie die Privatsph\u00e4re-Einstellungen richtig handhaben.",
+      "description": "An drei Nachmittagen legen Sie sich zusammen mit dem Dozenten Ihren Facebook-Account an. Er zeigt Ihnen wie dies funktioniert und vor allem, wie Sie die Privatsph\u00e4re-Einstellungen richtig handhaben. Zus\u00e4tzlich erhalten Sie noch Tipps zur Nutzung und wie Sie korrekt mit den Daten umgehen, um sich vor Gefahren durch Datenmissbrauch zu sch\u00fctzen.\nGerne k\u00f6nnen Sie Ihr eigenes Endger\u00e4t (Smartphone, Laptop, Netbook, Tablet) mitbringen.\nVoraussetzung: Geringe Internet- und PC-kenntnisse bzw. Smartphone-",
+      "location": {
+        "name": "VHS",
+        "address": "Ludwigstra\u00dfe 7, 95028 Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-07-10T15:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/dabei-sein-richtiger-umgang-mit-facebook-646-C-30AH360034",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/dabei-sein-richtiger-umgang-mit-facebook-646-C-30AH360034",
+      "tags": []
+    },
+    {
+      "id": "vhs_b020f7c236bb",
+      "title": "KI Grundkurs: K\u00fcnstliche Intelligenz f\u00fcr Anf\u00e4nger",
+      "teaser": "K\u00fcnstliche Intelligenz (KI) ver\u00e4ndert die Art, wie wir arbeiten und kommunizieren.",
+      "description": "K\u00fcnstliche Intelligenz (KI) ver\u00e4ndert die Art, wie wir arbeiten und kommunizieren. Doch was steckt eigentlich dahinter? In diesem praxisnahen Grundkurs werden die Grundlagen der KI verst\u00e4ndlich erkl\u00e4rt. Es wird gezeigt, wo und wie KI eingesetzt werden kann. Ein besonderer Schwerpunkt liegt auf ChatGPT: Von der Einrichtung eines Accounts \u00fcber wichtige Aspekte zu Urheberrecht und Datenschutz bis hin zu effektiven Prompting-Techniken.",
+      "location": {
+        "name": "Online",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-07-10T16:30:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/ki-grundkurs-kuenstliche-intelligenz-fuer-anfaenger-646-C-30AH311022",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/ki-grundkurs-kuenstliche-intelligenz-fuer-anfaenger-646-C-30AH311022",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-06-30T04:24:44.945388"
+  "last_scraped": "2026-07-01T04:29:43.963902"
 }
