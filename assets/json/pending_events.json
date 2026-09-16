@@ -17819,7 +17819,73 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/englisch-niveaustufe-b1/i-semester-646-C-31HE400631",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/englisch-niveaustufe-b1/i-semester-646-C-31HE400631",
       "tags": []
+    },
+    {
+      "id": "vhs_4111e3b088ac",
+      "title": "Ganzheitlich bewegenKurs 1",
+      "teaser": "Verschiedene Bewegungselemente aus der Wirbels\u00e4ulengymnastik, Indian Balance, Yoga und anderen Bewegungsformen-diese werden mit der Atmung kombiniert zus\u00e4tzlich werden K\u00f6rperbewusste leichte Dehnungen...",
+      "description": "Verschiedene Bewegungselemente aus der Wirbels\u00e4ulengymnastik, Indian Balance, Yoga und anderen Bewegungsformen-diese werden mit der Atmung kombiniert zus\u00e4tzlich werden K\u00f6rperbewusste leichte Dehnungen und leichte Kr\u00e4ftigungen durchgef\u00fchrt. Dies nat\u00fcrlich alles unter Ber\u00fccksichtigung evtl. k\u00f6rperlicher Handycaps. Wahrnehmungs\u00fcbungen und verschiedene Entspannungselemente erg\u00e4nzen und runden das Programm ab. Das Allgemeinbefinden und das Wohlbefinden k\u00f6nnen sich durch dieses Ganzheitliche Programm ",
+      "location": {
+        "name": "Philipp-Wolfrum-Haus",
+        "address": "Marktplatz 17, 95131 Schwarzenbach a.Wald",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-09-23T19:30:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/ganzheitlich-bewegen/kurs-1-646-C-31SW502307",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/ganzheitlich-bewegen/kurs-1-646-C-31SW502307",
+      "tags": []
+    },
+    {
+      "id": "vhs_655e27d1603a",
+      "title": "Die W\u00e4rmepumpe - Heizen ohne \u00d6l und GasAktuelle Entwicklungen am Heizungsmarkt",
+      "teaser": "Die Bundesregierung hat am 24.02.2026 die Abschaffung des Geb\u00e4udeenergiegesetzes (\u201eHeizungsgesetz\u201c) beschlossen und wird dieses durch ein Geb\u00e4udemodernisierungsgesetz ersetzen.",
+      "description": "Die Bundesregierung hat am 24.02.2026 die Abschaffung des Geb\u00e4udeenergiegesetzes (\u201eHeizungsgesetz\u201c) beschlossen und wird dieses durch ein Geb\u00e4udemodernisierungsgesetz ersetzen. Bringen Sie sich in unserem Seminar auf den aktuellen Stand der Heiztechnik und der F\u00f6rderprogramme und lernen Sie alle wichtigen Fakten zum Thema \u201eHeizen mit der W\u00e4rmepumpe\u201c kennen.\nThemen:\n- Details zu aktuellen F\u00f6rderprogrammen (\u00dcbergang vom Geb\u00e4udeenergiegesetz zum Geb\u00e4udemodernisierungsgesetz, GEG, BAFA, KfW, usw.)\n-",
+      "location": {
+        "name": "Online",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-09-23T19:30:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/die-waermepumpe-heizen-ohne-oel-und-gas/aktuelle-entwicklungen-am-heizungsmarkt-646-C-31AH107132",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/die-waermepumpe-heizen-ohne-oel-und-gas/aktuelle-entwicklungen-am-heizungsmarkt-646-C-31AH107132",
+      "tags": []
+    },
+    {
+      "id": "vhs_6f63ea711e5f",
+      "title": "Besuch der Contacta HochfrankenExkursion",
+      "teaser": "Wir besuchen gemeinsam die Contacta an der Hochschule Hof, die als gr\u00f6\u00dfte Studien- und Berufsinformationsmesse der Region einen \u00dcberblick \u00fcber m\u00f6gliche Berufswege in Hochfranken und den angrenzenden R...",
+      "description": "Wir besuchen gemeinsam die Contacta an der Hochschule Hof, die als gr\u00f6\u00dfte Studien- und Berufsinformationsmesse der Region einen \u00dcberblick \u00fcber m\u00f6gliche Berufswege in Hochfranken und den angrenzenden Regionen gibt und eine gute Gelegenheit ist, sich rund um das Thema Studium zu informieren.",
+      "location": {
+        "name": "VHS Hofer Land",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-09-24T10:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/besuch-der-contacta-hochfranken/exkursion-646-C-31AA905072",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/besuch-der-contacta-hochfranken/exkursion-646-C-31AA905072",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-09-15T03:04:55.860294"
+  "last_scraped": "2026-09-16T03:04:37.784448"
 }
