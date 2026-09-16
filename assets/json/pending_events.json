@@ -17885,7 +17885,29 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/besuch-der-contacta-hochfranken/exkursion-646-C-31AA905072",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/besuch-der-contacta-hochfranken/exkursion-646-C-31AA905072",
       "tags": []
+    },
+    {
+      "id": "vhs_3f262e5ba4c0",
+      "title": "Women-Stammtisch-InternationalAustauschtreffen",
+      "teaser": "Ob neu in Hof oder schon l\u00e4nger hier \u2013 beim Women-Stammtisch-International treffen sich Frauen unterschiedlicher Herkunft, um sich auszutauschen, Kontakte zu kn\u00fcpfen und voneinander zu lernen.",
+      "description": "Ob neu in Hof oder schon l\u00e4nger hier \u2013 beim Women-Stammtisch-International treffen sich Frauen unterschiedlicher Herkunft, um sich auszutauschen, Kontakte zu kn\u00fcpfen und voneinander zu lernen. In einer offenen und freundlichen Atmosph\u00e4re sprechen wir \u00fcber Themen rund um Arbeit, Beruf, Familie und das Leben in Deutschland. Komm vorbei, trink einen Kaffee, lerne neue Frauen kennen und bring deine Ideen mit!",
+      "location": {
+        "name": "VHS",
+        "address": "Ludwigstra\u00dfe 7, 95028 Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-09-24T18:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/women-stammtisch-international/austauschtreffen-646-C-31AA905073",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/women-stammtisch-international/austauschtreffen-646-C-31AA905073",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-09-16T03:04:37.784448"
+  "last_scraped": "2026-09-16T15:03:22.531841"
 }
