@@ -18677,7 +18677,29 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/wirbelsaeulengymnastik-ganzheitlich/kurs-1-646-C-31HE502203",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/wirbelsaeulengymnastik-ganzheitlich/kurs-1-646-C-31HE502203",
       "tags": []
+    },
+    {
+      "id": "vhs_64081590b0eb",
+      "title": "Ein Abend \u00e0 la fran\u00e7aiseSprachlich-kulinarisches Angebot",
+      "teaser": "Erlernen Sie, wie man die weltbeste \u201emousse au chocolat\u201c selbst zubereitet.",
+      "description": "Erlernen Sie, wie man die weltbeste \u201emousse au chocolat\u201c selbst zubereitet. Damit das Ergebnis ein echter Schokoladentraum und wunderbar fluffig wird, werden Sie von einer Franz\u00f6sin perfekt angeleitet. \nW\u00e4hrend die Mousse gut durchk\u00fchlt, erleben Sie eine Weindegustation und lernen die geschmackliche Vielfalt der franz\u00f6sischen Weine kennen. Genuss und Freude sind hierbei garantiert.",
+      "location": {
+        "name": "VHS",
+        "address": "Ludwigstra\u00dfe 7, 95028 Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-09-29T18:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/ein-abend-a-la-francaise/sprachlich-kulinarisches-angebot-646-C-31AH407101",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/ein-abend-a-la-francaise/sprachlich-kulinarisches-angebot-646-C-31AH407101",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-09-24T03:04:44.528478"
+  "last_scraped": "2026-09-24T15:03:30.076924"
 }
