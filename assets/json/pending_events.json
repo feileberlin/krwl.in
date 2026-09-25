@@ -18699,7 +18699,51 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/ein-abend-a-la-francaise/sprachlich-kulinarisches-angebot-646-C-31AH407101",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/ein-abend-a-la-francaise/sprachlich-kulinarisches-angebot-646-C-31AH407101",
       "tags": []
+    },
+    {
+      "id": "vhs_b39189051e4e",
+      "title": "Entspannen mit Qigong Kurs 1f\u00fcr Einsteiger und Fortgeschrittene",
+      "teaser": "Qigong stellt ein ganzheitliches Konzept der Gesunderhaltung dar.  Die Qigong-\u00dcbungen verbinden K\u00f6rper, Atem und Vorstellungskraft auf harmonische Weise.",
+      "description": "Qigong stellt ein ganzheitliches Konzept der Gesunderhaltung dar.  Die Qigong-\u00dcbungen verbinden K\u00f6rper, Atem und Vorstellungskraft auf harmonische Weise. Es entwickelt sich die F\u00e4higkeit, Disharmonien wahrzunehmen und diese wirksam auszugleichen. So erw\u00e4chst durch Qigong eine verst\u00e4rkte Lebensfreude, Kreativit\u00e4t und Pers\u00f6nlichkeitsentfaltung. Es st\u00e4rkt das Immunsystem und wirkt harmonisierend auf das vegetative Nervensystem.",
+      "location": {
+        "name": "Kulturhaus \"Altes E-Werk\"",
+        "address": "Marktplatz 6, 95145 Oberkotzau",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-10-02T18:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/entspannen-mit-qigong-kurs-1/fuer-einsteiger-und-fortgeschrittene-646-C-31OB501401",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/entspannen-mit-qigong-kurs-1/fuer-einsteiger-und-fortgeschrittene-646-C-31OB501401",
+      "tags": []
+    },
+    {
+      "id": "vhs_23a06655a0e6",
+      "title": "Entspannen mit Qigong Kurs 2f\u00fcr Einsteiger und Fortgeschrittene",
+      "teaser": "Qigong stellt ein ganzheitliches Konzept der Gesunderhaltung dar.  Die Qigong-\u00dcbungen verbinden K\u00f6rper, Atem und Vorstellungskraft auf harmonische Weise.",
+      "description": "Qigong stellt ein ganzheitliches Konzept der Gesunderhaltung dar.  Die Qigong-\u00dcbungen verbinden K\u00f6rper, Atem und Vorstellungskraft auf harmonische Weise. Es entwickelt sich die F\u00e4higkeit, Disharmonien wahrzunehmen und diese wirksam auszugleichen. So erw\u00e4chst durch Qigong eine verst\u00e4rkte Lebensfreude, Kreativit\u00e4t und Pers\u00f6nlichkeitsentfaltung. Es st\u00e4rkt das Immunsystem und wirkt harmonisierend auf das vegetative Nervensystem.",
+      "location": {
+        "name": "Kulturhaus \"Altes E-Werk\"",
+        "address": "Marktplatz 6, 95145 Oberkotzau",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-10-02T19:15:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/entspannen-mit-qigong-kurs-2/fuer-einsteiger-und-fortgeschrittene-646-C-31OB501402",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/entspannen-mit-qigong-kurs-2/fuer-einsteiger-und-fortgeschrittene-646-C-31OB501402",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-09-24T15:03:30.076924"
+  "last_scraped": "2026-09-25T03:04:50.306466"
 }
