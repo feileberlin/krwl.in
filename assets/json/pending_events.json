@@ -18853,7 +18853,29 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/ballett-und-barre-workout/das-workout-an-der-ballettstange-646-C-31AH502301",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/ballett-und-barre-workout/das-workout-an-der-ballettstange-646-C-31AH502301",
       "tags": []
+    },
+    {
+      "id": "vhs_96d2a755cf19",
+      "title": "Yoga zu zweit",
+      "teaser": "Schenke dir und einem lieben Menschen Yogazeit. Schnapp dir einen Herzensmenschen und komm mit ihm zum Yoga. Wir \u00fcben sowohl in der Gruppe als auch mit Partner\u00fcbungen.",
+      "description": "Schenke dir und einem lieben Menschen Yogazeit. Schnapp dir einen Herzensmenschen und komm mit ihm zum Yoga. Wir \u00fcben sowohl in der Gruppe als auch mit Partner\u00fcbungen. Egal ob beste Freundin, Mama, Papa, Schwester, Tochter, Sohn, Mann, Frau... nehmt euch eine gemeinsame Yoga-Auszeit! Yoga ist f\u00fcr alle da.",
+      "location": {
+        "name": "VHS",
+        "address": "Ludwigstra\u00dfe 7, 95028 Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-10-03T10:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/yoga-zu-zweit-646-C-31AH501117",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/yoga-zu-zweit-646-C-31AH501117",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-09-26T03:04:33.248000"
+  "last_scraped": "2026-09-27T03:04:46.675296"
 }
