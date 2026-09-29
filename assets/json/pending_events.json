@@ -19095,7 +19095,29 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/madeira-und-die-suedkueste-portugals/multi-media-vortrag-646-C-31SW103101",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/madeira-und-die-suedkueste-portugals/multi-media-vortrag-646-C-31SW103101",
       "tags": []
+    },
+    {
+      "id": "vhs_86105e26927a",
+      "title": "SySTEP - Systemische MethodenAufkl\u00e4rungsarbeit",
+      "teaser": "Lerne in maximal 11 Modulen die wichtigsten\nTools der Systemischen Methoden kennen.\nDu erf\u00e4hrst theoretisches Wissen und wendest\ndas Gelernte in praktischen \u00dcbungen sofort an.",
+      "description": "Lerne in maximal 11 Modulen die wichtigsten\nTools der Systemischen Methoden kennen.\nDu erf\u00e4hrst theoretisches Wissen und wendest\ndas Gelernte in praktischen \u00dcbungen sofort an.\nEinige Termine finden, soweit es die Wetterlage\nzul\u00e4sst, Outdoor statt. Hier erlebst Du die Natur als\n\u00fcberall verf\u00fcgbaren Erfahrungsraum. Dieser bietet\ndie M\u00f6glichkeit eines neuen bzw. ver\u00e4nderten\nSettings, sowie viel Gelegenheit und Platz f\u00fcr eigene\nErfahrungen. Jedes Modul ist sowohl einzeln buchbar\nals auch im Paket \u201eSy",
+      "location": {
+        "name": "SySTEP",
+        "address": "Poststra\u00dfe 15, 9528 Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-10-07T00:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/systep-systemische-methoden/aufklaerungsarbeit-646-C-31AH102160",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/systep-systemische-methoden/aufklaerungsarbeit-646-C-31AH102160",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-09-29T03:04:53.102932"
+  "last_scraped": "2026-09-29T15:03:57.719789"
 }
