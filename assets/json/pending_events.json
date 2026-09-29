@@ -19007,7 +19007,95 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/bewegung-fuer-die-grauen-zellen/selbitz-646-C-31AA904502",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/bewegung-fuer-die-grauen-zellen/selbitz-646-C-31AA904502",
       "tags": []
+    },
+    {
+      "id": "vhs_472a535a2243",
+      "title": "VHS Smartphone-StammtischSelbitz",
+      "teaser": "Smartphone, Tablet und Co. bereiten in der Praxis immer wieder Probleme. Die konkreten Anforderungen lassen sich gemeinsam besser l\u00f6sen und daher bieten diese Treffen an, um Hilfe anzubieten.",
+      "description": "Smartphone, Tablet und Co. bereiten in der Praxis immer wieder Probleme. Die konkreten Anforderungen lassen sich gemeinsam besser l\u00f6sen und daher bieten diese Treffen an, um Hilfe anzubieten. Idealerweise helfen sich die Teilnehmenden untereinander und entsprechen dem \u201eStammtisch-Gedanken\u201c. Wir laden Sie herzlich ein, Teil der Gemeinschaft zu werden.",
+      "location": {
+        "name": "Gemeinschaftsraum Selbitz",
+        "address": "Kulmbacher Str. 2 (am Wiesenfestplatz)",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-10-06T15:30:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/vhs-smartphone-stammtisch/selbitz-646-C-31AA904201",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/vhs-smartphone-stammtisch/selbitz-646-C-31AA904201",
+      "tags": []
+    },
+    {
+      "id": "vhs_b5a12372bd68",
+      "title": "Dabei sein: KI f\u00fcr SeniorenVerst\u00e4ndlich, praktisch und alltagstauglich",
+      "teaser": "K\u00fcnstliche Intelligenz ver\u00e4ndert zunehmend unseren Alltag \u2013 vom Smartphone \u00fcber Sprachassistenten bis hin zu digitalen Gesundheitsanwendungen.",
+      "description": "K\u00fcnstliche Intelligenz ver\u00e4ndert zunehmend unseren Alltag \u2013 vom Smartphone \u00fcber Sprachassistenten bis hin zu digitalen Gesundheitsanwendungen. Doch was genau steckt hinter dem Begriff \u201eKI\u201c und welche M\u00f6glichkeiten ergeben sich daraus f\u00fcr \u00e4ltere Menschen?\n\nIn dieser verst\u00e4ndlichen Informationsveranstaltung lernen Sie die Grundlagen der K\u00fcnstlichen Intelligenz kennen. Gemeinsam schauen wir uns an, welche KI-Systeme es gibt und wie diese Technologien den Alltag unterst\u00fctzen k\u00f6nnen \u2013 beispielsweise ",
+      "location": {
+        "name": "VHS",
+        "address": "Ludwigstra\u00dfe 7, 95028 Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-10-06T16:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/dabei-sein-ki-fuer-senioren/verstaendlich-praktisch-und-alltagstauglich-646-C-31AH360038",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/dabei-sein-ki-fuer-senioren/verstaendlich-praktisch-und-alltagstauglich-646-C-31AH360038",
+      "tags": []
+    },
+    {
+      "id": "vhs_3c4e60efc5b6",
+      "title": "Thail\u00e4ndische/Chinesische K\u00fccheKurs 1",
+      "teaser": "Sie haben die M\u00f6glichkeit, beide Esskulturen und die Zubereitung k\u00f6stlicher Speisen kennenzulernen. Genie\u00dfen Sie die wohlschmeckenden und vielseitigen Gerichte.",
+      "description": "Sie haben die M\u00f6glichkeit, beide Esskulturen und die Zubereitung k\u00f6stlicher Speisen kennenzulernen. Genie\u00dfen Sie die wohlschmeckenden und vielseitigen Gerichte.",
+      "location": {
+        "name": "Berufsschule Hof",
+        "address": "Pestalozziplatz 1",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-10-06T18:30:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/thailaendische-chinesische-kueche/kurs-1-646-C-31AH507111",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/thailaendische-chinesische-kueche/kurs-1-646-C-31AH507111",
+      "tags": []
+    },
+    {
+      "id": "vhs_cf9cceac2d3c",
+      "title": "Madeira und die S\u00fcdk\u00fcste PortugalsMulti-Media-Vortrag",
+      "teaser": "Entdecken Sie das Paradies im Atlantik! Dort wo spektakul\u00e4re Klippen auf den tiefblauen Ozean treffen, \u00fcppige Natur auf mediterranes Flair und jeder Sonnenuntergang unvergesslich bleibt.",
+      "description": "Entdecken Sie das Paradies im Atlantik! Dort wo spektakul\u00e4re Klippen auf den tiefblauen Ozean treffen, \u00fcppige Natur auf mediterranes Flair und jeder Sonnenuntergang unvergesslich bleibt.\nIm Reisevortrag erleben Sie die Blumeninsel Madeira mit all ihren Facetten: geheimnisvolle Lorbeerw\u00e4lder, atemberaubende Levadas, charmante D\u00f6rfer und die pulsierende Hauptstadt Funchal. Dazu die sonnenverw\u00f6hnte S\u00fcdk\u00fcste Portugals mit ihren goldenen Str\u00e4nden, versteckten Buchten und malerischen K\u00fcstenorten.",
+      "location": {
+        "name": "Philipp-Wolfrum-Haus",
+        "address": "Marktplatz 17, 95131 Schwarzenbach a.Wald",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-10-06T19:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/madeira-und-die-suedkueste-portugals/multi-media-vortrag-646-C-31SW103101",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/madeira-und-die-suedkueste-portugals/multi-media-vortrag-646-C-31SW103101",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-09-28T15:03:37.191366"
+  "last_scraped": "2026-09-29T03:04:53.102932"
 }
