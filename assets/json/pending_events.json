@@ -19205,7 +19205,73 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/vhs-lese-stammtisch-646-C-31AA904102",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/vhs-lese-stammtisch-646-C-31AA904102",
       "tags": []
+    },
+    {
+      "id": "vhs_06d5410e1132",
+      "title": "Interkultureller ChorChorproben",
+      "teaser": "Menschen unterschiedlicher Herkunft und unterschiedlichen Alters singen gemeinsam Lieder aus der ganzen Welt.",
+      "description": "Menschen unterschiedlicher Herkunft und unterschiedlichen Alters singen gemeinsam Lieder aus der ganzen Welt. Es geht nicht darum, ein \"Profi\" zu werden, sondern Musik als eine Sprache wahrzunehmen, die uns alle verbindet.\nUnter professioneller musikalischer Leitung entsteht ein interkultureller Chor, der sich regelm\u00e4\u00dfig an der VHS trifft.",
+      "location": {
+        "name": "VHS",
+        "address": "Ludwigstra\u00dfe 7, 95028 Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-10-01T18:30:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/interkultureller-chor/chorproben-646-C-31AA929133",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/interkultureller-chor/chorproben-646-C-31AA929133",
+      "tags": []
+    },
+    {
+      "id": "vhs_7495d4ba7324",
+      "title": "Italienisch - Niveaustufe A1 - III. Semester",
+      "teaser": "Fortsetzungskurs aber auch f\u00fcr Anf\u00e4nger ohne Vorkenntnisse geeignet",
+      "description": "Fortsetzungskurs aber auch f\u00fcr Anf\u00e4nger ohne Vorkenntnisse geeignet",
+      "location": {
+        "name": "Lutherschule",
+        "address": "Kirchplatz 7, 95213 M\u00fcnchberg",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-10-07T15:30:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/italienisch-niveaustufe-a1-iii-semester-646-C-31MU400913",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/italienisch-niveaustufe-a1-iii-semester-646-C-31MU400913",
+      "tags": []
+    },
+    {
+      "id": "vhs_85fcb235b727",
+      "title": "Italienisch - Niveaustufe A1 - VII. Semester",
+      "teaser": "F\u00fcr Teilnehmer mit geringen Vorkenntnissen\nLehrwerk: Buongiorno neu, Klett Verlag \nAb Lektion 11",
+      "description": "F\u00fcr Teilnehmer mit geringen Vorkenntnissen\nLehrwerk: Buongiorno neu, Klett Verlag \nAb Lektion 11",
+      "location": {
+        "name": "Lutherschule",
+        "address": "Kirchplatz 7, 95213 M\u00fcnchberg",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-10-07T17:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/italienisch-niveaustufe-a1-vii-semester-646-C-31MU400912",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/italienisch-niveaustufe-a1-vii-semester-646-C-31MU400912",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-09-30T03:05:52.552896"
+  "last_scraped": "2026-09-30T15:04:16.911338"
 }
