@@ -19403,7 +19403,73 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/tschechien-vom-boehmerwald-ins-tschechische-paradies/multimediavortrag-646-C-31BS103101",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/tschechien-vom-boehmerwald-ins-tschechische-paradies/multimediavortrag-646-C-31BS103101",
       "tags": []
+    },
+    {
+      "id": "vhs_b2d2f74ad55d",
+      "title": "Online-Seminar Qualit\u00e4tsmanagement nach ISO 9001:2026",
+      "teaser": "Dieses Seminar bietet einen praxisnahen und leicht verst\u00e4ndlichen Einstieg in die DIN EN ISO 9001:2026 \u2013 dem weltweit meistgenutzten Qualit\u00e4tsmanagementsystem, das nicht nur f\u00fcr gro\u00dfe Konzerne, sonder...",
+      "description": "Dieses Seminar bietet einen praxisnahen und leicht verst\u00e4ndlichen Einstieg in die DIN EN ISO 9001:2026 \u2013 dem weltweit meistgenutzten Qualit\u00e4tsmanagementsystem, das nicht nur f\u00fcr gro\u00dfe Konzerne, sondern auch f\u00fcr kleine und mittlere Unternehmen (KMU) attraktiv und umsetzbar ist. Die neuen Anforderungen zur Ber\u00fccksichtigung des Klimawandels sowie die Normrevision 2026 werden verst\u00e4ndlich erl\u00e4utert und die Nutzung von KI-Tools als moderner und hilfreicher L\u00f6sungsansatz wird angesprochen. \nDie Teilne",
+      "location": {
+        "name": "Online",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-10-06T18:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/online-seminar-qualitaetsmanagement-nach-iso-9001-2026-646-C-31AH240000",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/online-seminar-qualitaetsmanagement-nach-iso-9001-2026-646-C-31AH240000",
+      "tags": []
+    },
+    {
+      "id": "vhs_b3598fb9a510",
+      "title": "Dieses halbvolle Glas... echt jetzt?SySTEP - Crazy Donners Day",
+      "teaser": "Raus aus der Problemetrance - rein in die L\u00f6sungsorientierung.",
+      "description": "Raus aus der Problemetrance - rein in die L\u00f6sungsorientierung. Die Weiterbildung vermittelt Impulse f\u00fcr eine ressourcenorientierte Haltung, positives Denken und konstruktiven Umgang mit Herausforderungen im Berufsalltag und Privatleben.",
+      "location": {
+        "name": "SySTEP",
+        "address": "Poststra\u00dfe 15, 9528 Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-10-08T17:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/dieses-halbvolle-glas-echt-jetzt/systep-crazy-donners-day-646-C-31AH102153",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/dieses-halbvolle-glas-echt-jetzt/systep-crazy-donners-day-646-C-31AH102153",
+      "tags": []
+    },
+    {
+      "id": "vhs_394bfd77f3b4",
+      "title": "Pflanzenbasiert genie\u00dfen",
+      "teaser": "Einen Mehrwert f\u00fcr die Gesundheit verspricht eine pflanzenbasierte Ern\u00e4hrung. Dazu wollen wir verschiedene, schmackhafte Gerichte zubereiten.",
+      "description": "Einen Mehrwert f\u00fcr die Gesundheit verspricht eine pflanzenbasierte Ern\u00e4hrung. Dazu wollen wir verschiedene, schmackhafte Gerichte zubereiten. Es wird Wert gelegt auf praktikable, einfach umzusetzende Gerichte.",
+      "location": {
+        "name": "Mittelschule M\u00fcnchberg-Poppenreuth",
+        "address": "Poppenreuth 38, M\u00fcnchberg",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-10-08T17:30:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/pflanzenbasiert-geniessen-646-C-31MU507103",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/pflanzenbasiert-geniessen-646-C-31MU507103",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-10-01T03:09:33.867338"
+  "last_scraped": "2026-10-01T15:03:30.483343"
 }
