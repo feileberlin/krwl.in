@@ -19623,7 +19623,95 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/selbstverteidigung-angelehnt-an-wing-tsun-fuer-frauen/anfaengerinnen-646-C-31AH502606",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/selbstverteidigung-angelehnt-an-wing-tsun-fuer-frauen/anfaengerinnen-646-C-31AH502606",
       "tags": []
+    },
+    {
+      "id": "vhs_89935c55cb25",
+      "title": "Besuch der Hofer AusbildungsmesseExkursion",
+      "teaser": "Auf der Hofer Ausbildungsmesse k\u00f6nnen Sie an einem Ort eine Vielzahl von Berufen und Unternehmen kennenlernen und sich informieren.",
+      "description": "Auf der Hofer Ausbildungsmesse k\u00f6nnen Sie an einem Ort eine Vielzahl von Berufen und Unternehmen kennenlernen und sich informieren.\nInsgesamt 178 Aussteller aus unterschiedlichen Branchen stellen ihre Ausbildungsberufe und Ausbildungen vor. Im direkten Gespr\u00e4ch haben Sie die M\u00f6glichkeit, mehr \u00fcber Berufe und Unternehmen zu erfahren.",
+      "location": {
+        "name": "Hof",
+        "address": "Freiheitshalle, Skylobby",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-10-10T11:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/besuch-der-hofer-ausbildungsmesse/exkursion-646-C-31AA905071",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/besuch-der-hofer-ausbildungsmesse/exkursion-646-C-31AA905071",
+      "tags": []
+    },
+    {
+      "id": "vhs_e7003a6f10c0",
+      "title": "Early Bird Vinyasa Flow",
+      "teaser": "Startet Euren Morgen mit einer flie\u00dfenden und ausgleichenden Yogaklasse, die Euch frische Energie f\u00fcr den bevorstehenden Tag schenkt!\u00a0In diesem Kurs geht es darum sich dynamisch und kreativ zu bewegen...",
+      "description": "Startet Euren Morgen mit einer flie\u00dfenden und ausgleichenden Yogaklasse, die Euch frische Energie f\u00fcr den bevorstehenden Tag schenkt!\u00a0In diesem Kurs geht es darum sich dynamisch und kreativ zu bewegen. Ge\u00fcbt werden Sonnengr\u00fc\u00dfe, Krieger-Sequenzen, Umkehrhaltungen und R\u00fcckbeugen. Wir st\u00e4rken unsere Muskulatur, entwickeln Widerstandsf\u00e4higkeit und arbeiten an der Flexibilit\u00e4t. Durch die Unterst\u00fctzung der Atmung verbinden wir uns mit unseren Sinnen. Der Kurs ist ideal f\u00fcr Fortgeschrittene \u2013 auch Yogi",
+      "location": {
+        "name": "VHS",
+        "address": "Ludwigstra\u00dfe 7, 95028 Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-10-11T09:30:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/early-bird-vinyasa-flow-646-C-31AH501101",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/early-bird-vinyasa-flow-646-C-31AH501101",
+      "tags": []
+    },
+    {
+      "id": "vhs_53fc0f5f35d9",
+      "title": "Spanisch - Online Niveaustufe A1 Intensiv",
+      "teaser": "In diesem Intensivkurs lernen Teilnehmende ohne Vorkenntnisse die Grundlagen der spanischen Sprache f\u00fcr einfache Alltagssituationen.",
+      "description": "In diesem Intensivkurs lernen Teilnehmende ohne Vorkenntnisse die Grundlagen der spanischen Sprache f\u00fcr einfache Alltagssituationen. Durch den Unterricht zweimal pro Woche k\u00f6nnen erste Sprachkenntnisse in kurzer Zeit aufgebaut und direkt angewendet werden.",
+      "location": {
+        "name": "Online vhs cloud",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-10-13T18:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/spanisch-online-niveaustufe-a1-intensiv-646-C-31AH402210",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/spanisch-online-niveaustufe-a1-intensiv-646-C-31AH402210",
+      "tags": []
+    },
+    {
+      "id": "vhs_89ee728d5ea0",
+      "title": "Italienisch - Niveaustufe A1 - III. Semester",
+      "teaser": "Fortsetzungskurs aber auch f\u00fcr Anf\u00e4nger ohne Vorkenntnisse geeignet",
+      "description": "Fortsetzungskurs aber auch f\u00fcr Anf\u00e4nger ohne Vorkenntnisse geeignet",
+      "location": {
+        "name": "Lutherschule",
+        "address": "Kirchplatz 7, 95213 M\u00fcnchberg",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-10-21T15:30:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/italienisch-niveaustufe-a1-iii-semester-646-C-31MU400913",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/italienisch-niveaustufe-a1-iii-semester-646-C-31MU400913",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-10-03T03:14:48.159050"
+  "last_scraped": "2026-10-05T03:10:46.851408"
 }
