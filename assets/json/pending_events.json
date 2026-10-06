@@ -19865,7 +19865,29 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/professionelle-bildbearbeitung-mit-adobe-photoshop-cc-grundlagen-646-C-31AH316042",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/professionelle-bildbearbeitung-mit-adobe-photoshop-cc-grundlagen-646-C-31AH316042",
       "tags": []
+    },
+    {
+      "id": "vhs_1eb3ffc370b7",
+      "title": "\"zusammen digital\" - Beratungstheke",
+      "teaser": "\"zusammen digital\" - Beratungstheke am 14.10.",
+      "description": "\"zusammen digital\" - Beratungstheke am 14.10.2026 14:00",
+      "location": {
+        "name": "VHS",
+        "address": "Ludwigstra\u00dfe 7, 95028 Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-10-14T14:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/zusammen-digital-beratungstheke-646-C-31AA904215",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/zusammen-digital-beratungstheke-646-C-31AA904215",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-10-06T03:05:41.814065"
+  "last_scraped": "2026-10-06T15:03:58.178984"
 }
