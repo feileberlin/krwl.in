@@ -20019,7 +20019,51 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/superhirn-vokabeln-lernen-im-sekundentakt-fuer-schueler-innen/online-seminar-kurs-1-646-C-31AH102103",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/superhirn-vokabeln-lernen-im-sekundentakt-fuer-schueler-innen/online-seminar-kurs-1-646-C-31AH102103",
       "tags": []
+    },
+    {
+      "id": "vhs_50db3b50ea79",
+      "title": "Yoga Nidra und Yin Yoga",
+      "teaser": "Yin Yoga und Yoga Nidra laden dich zu einer besonders ruhigen und regenerierenden Praxis ein.",
+      "description": "Yin Yoga und Yoga Nidra laden dich zu einer besonders ruhigen und regenerierenden Praxis ein. Im Yin Yoga verweilst du l\u00e4nger in sanften Positionen, um tief liegende Faszien zu l\u00f6sen\u00a0und innere Ruhe zu f\u00f6rdern, w\u00e4hrend dich Yoga Nidra anschlie\u00dfend in eine gef\u00fchrte Tiefenentspannung f\u00fchrt. Der Kurs ist f\u00fcr Anf\u00e4nger und Fortgeschrittene geeignet und schenkt dir unter anderem durch achtsame K\u00f6rperwahrnehmung und innere Bilder nachhaltige Entspannung, neue Energie und innere Balance.",
+      "location": {
+        "name": "Christiansreuther Stra\u00dfe 25",
+        "address": "Hof (Lieblingsplatz Hospitalstiftung)",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-10-15T17:30:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/yoga-nidra-und-yin-yoga-646-C-31AH501125",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/yoga-nidra-und-yin-yoga-646-C-31AH501125",
+      "tags": []
+    },
+    {
+      "id": "vhs_da3adeab8e53",
+      "title": "VHS Smartphone-StammtischIssigau",
+      "teaser": "Smartphone, Tablet und Co. bereiten in der Praxis immer wieder Probleme.",
+      "description": "Smartphone, Tablet und Co. bereiten in der Praxis immer wieder Probleme. Die konkreten Anforderungen lassen sich gemeinsam besser l\u00f6sen und daher bieten wir regelm\u00e4\u00dfige Treffen an, um Hilfe anzubieten. Idealerweise helfen sich die Teilnehmenden untereinander und entsprechen dem \u201eStammtisch-Gedanken\u201c. Wir laden Sie herzlich ein, Teil der Gemeinschaft zu werden.",
+      "location": {
+        "name": "VFL Issigau 1921 e. V.",
+        "address": "Schulstr. 2, 95188 Issigau",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-10-15T17:30:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/vhs-smartphone-stammtisch/issigau-646-C-31AA904234",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/vhs-smartphone-stammtisch/issigau-646-C-31AA904234",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-10-07T03:08:34.175493"
+  "last_scraped": "2026-10-07T15:03:54.536696"
 }
