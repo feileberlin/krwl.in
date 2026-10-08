@@ -20063,7 +20063,183 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/vhs-smartphone-stammtisch/issigau-646-C-31AA904234",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/vhs-smartphone-stammtisch/issigau-646-C-31AA904234",
       "tags": []
+    },
+    {
+      "id": "vhs_d76cf810bd70",
+      "title": "MS Pivot-Tabellen -- Daten auswerten, analysieren und visualisieren!",
+      "teaser": "Diese praxisnahe Einf\u00fchrung macht gro\u00dfe Datenmengen beherrschbar \u2013 flexibel auswertbar, intelligent verkn\u00fcpfbar und visuell aufbereitet durch Datenschnitte und Zeitachsen.",
+      "description": "Diese praxisnahe Einf\u00fchrung macht gro\u00dfe Datenmengen beherrschbar \u2013 flexibel auswertbar, intelligent verkn\u00fcpfbar und visuell aufbereitet durch Datenschnitte und Zeitachsen. Und das alles, ohne die Originaldaten zu ver\u00e4ndern. Schritt f\u00fcr Schritt entstehen verl\u00e4ssliche Arbeitsabl\u00e4ufe: Informationen werden strukturiert ausgewertet, gezielt verkn\u00fcpft und Ergebnisse klar dargestellt \u2013 f\u00fcr eine souver\u00e4ne Datenanalyse im Arbeitsalltag. Trends werden sofort sichtbar, verborgene Zusammenh\u00e4nge transparent.",
+      "location": {
+        "name": "Online",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-10-15T18:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/ms-pivot-tabellen-daten-auswerten-analysieren-und-visualisieren-646-C-31AH370000",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/ms-pivot-tabellen-daten-auswerten-analysieren-und-visualisieren-646-C-31AH370000",
+      "tags": []
+    },
+    {
+      "id": "vhs_df400338a3f2",
+      "title": "Mobilisierung R\u00fccken & Schulter",
+      "teaser": "In diesem Workshop stehen gezielte Mobilisations\u00fcbungen f\u00fcr R\u00fccken und Schultern im Mittelpunkt.",
+      "description": "In diesem Workshop stehen gezielte Mobilisations\u00fcbungen f\u00fcr R\u00fccken und Schultern im Mittelpunkt. Sanfte, wirkungsvolle Bewegungsabfolgen helfen, Verspannungen zu l\u00f6sen, die K\u00f6rperwahrnehmung zu verbessern und neue Bewegungsfreiheit zu gewinnen.",
+      "location": {
+        "name": "VHS",
+        "address": "Ludwigstra\u00dfe 7, 95028 Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-10-15T19:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/mobilisierung-ruecken-schulter-646-C-31AH502209",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/mobilisierung-ruecken-schulter-646-C-31AH502209",
+      "tags": []
+    },
+    {
+      "id": "vhs_975882d63840",
+      "title": "Online-Seminar: St\u00e4rke, Selbstvertrauen, \u00dcberzeugungskraft und Durchsetzungsverm\u00f6gen",
+      "teaser": "F\u00e4llt es Ihnen manchmal schwer, Forderungen durchzusetzen, im Mittelpunkt zu stehen, \u201enein\u201c zu sagen oder die eigenen F\u00e4higkeiten ins rechte Licht zu r\u00fccken? Mangelndes Selbstvertrauen kann eine Ursac...",
+      "description": "F\u00e4llt es Ihnen manchmal schwer, Forderungen durchzusetzen, im Mittelpunkt zu stehen, \u201enein\u201c zu sagen oder die eigenen F\u00e4higkeiten ins rechte Licht zu r\u00fccken? Mangelndes Selbstvertrauen kann eine Ursache sein: Sie erhalten oft nicht das, was Sie wollen. Sie werden von anderen \u00fcberholt und \u00e4rgern sich oft im Nachhinein \u00fcber sich selbst. \nDie gute Nachricht: Selbstvertrauen l\u00e4sst sich erlernen. Sie trainieren in dieser Online-Veranstaltung, sich selbst zu vertrauen, sich zu motivieren und das Ruder",
+      "location": {
+        "name": "Online",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-10-16T09:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/online-seminar-staerke-selbstvertrauen-ueberzeugungskraft-und-durchsetzungsvermoegen-646-C-31AH270212",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/online-seminar-staerke-selbstvertrauen-ueberzeugungskraft-und-durchsetzungsvermoegen-646-C-31AH270212",
+      "tags": []
+    },
+    {
+      "id": "vhs_62ae25e4add4",
+      "title": "Punkt 9: Deep Research mit Perplexity & Co.KI-gest\u00fctzte Tiefenanalyse komplexer Informationsr\u00e4ume",
+      "teaser": "Topaktuelle Workflows: Deep Research bezeichnet den systematischen Einsatz k\u00fcnstlicher Intelligenz (KI) zur tiefgehenden Analyse gro\u00dfer und heterogener Informationsbest\u00e4nde (Big Data).",
+      "description": "Topaktuelle Workflows: Deep Research bezeichnet den systematischen Einsatz k\u00fcnstlicher Intelligenz (KI) zur tiefgehenden Analyse gro\u00dfer und heterogener Informationsbest\u00e4nde (Big Data). Im Gegensatz zu klassischen Online-Recherchen werden dabei nicht nur einzelne Suchergebnisse aggregiert, sondern umfangreiche Quellenbest\u00e4nde automatisch durchsucht, bewertet und zu konsistenten Analyseberichten zusammengef\u00fchrt. Perplexity Deep Research kombiniert Such-, Analyse- und Synthesefunktionen und erm\u00f6gli",
+      "location": {
+        "name": "Online",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-10-16T09:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/punkt-9-deep-research-mit-perplexity-co/ki-gestuetzte-tiefenanalyse-komplexer-informationsraeume-646-C-31AH280005",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/punkt-9-deep-research-mit-perplexity-co/ki-gestuetzte-tiefenanalyse-komplexer-informationsraeume-646-C-31AH280005",
+      "tags": []
+    },
+    {
+      "id": "vhs_5058145910a6",
+      "title": "Bewegung f\u00fcr die grauen ZellenBad Steben",
+      "teaser": "Ged\u00e4chtniskurse gibt es viele, Bewegungsangebote auch. Aber einen Kurs, der beides verbindet und zudem Ihrem Gehirn Aufschwung gibt, das finden Sie nur bei der vhs.",
+      "description": "Ged\u00e4chtniskurse gibt es viele, Bewegungsangebote auch. Aber einen Kurs, der beides verbindet und zudem Ihrem Gehirn Aufschwung gibt, das finden Sie nur bei der vhs. Sind Sie neugierig genug f\u00fcr eine Doppelstunde voller neuer Erfahrungen? M\u00f6chten Sie klassischer Altersvergesslichkeit entgegensteuern und Ihre grauen Zellen fit und aktiv halten? Bewegung f\u00fcr die grauen Zellen verbessert Ihre k\u00f6rperliche und geistige Leistungsf\u00e4higkeit. Mit Methoden der Bewegungslehre, dem Wissen des Yoga und Elemen",
+      "location": {
+        "name": "Pfarrsaal",
+        "address": "Badstr. 19, 95138 Bad Steben",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-10-16T14:30:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/bewegung-fuer-die-grauen-zellen/bad-steben-646-C-31AA904501",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/bewegung-fuer-die-grauen-zellen/bad-steben-646-C-31AA904501",
+      "tags": []
+    },
+    {
+      "id": "vhs_395d58bb917a",
+      "title": "Dabei sein: Android-Smartphones f\u00fcr Einsteiger",
+      "teaser": "Entdecken Sie die vielf\u00e4ltigen M\u00f6glichkeiten Ihres Android-Smartphones \u2013 weit \u00fcber WhatsApp hinaus! In diesem Kurs lernen Sie Schritt f\u00fcr Schritt die wichtigsten Funktionen und Einstellungen Ihres Ger...",
+      "description": "Entdecken Sie die vielf\u00e4ltigen M\u00f6glichkeiten Ihres Android-Smartphones \u2013 weit \u00fcber WhatsApp hinaus! In diesem Kurs lernen Sie Schritt f\u00fcr Schritt die wichtigsten Funktionen und Einstellungen Ihres Ger\u00e4ts kennen. Verst\u00e4ndlich erkl\u00e4rt werden unter anderem das Herunterladen und L\u00f6schen von Apps, grundlegende Bediengesten wie Wischen, Tippen oder langes Dr\u00fccken sowie praktische Anpassungsm\u00f6glichkeiten f\u00fcr den Alltag.\n\nBitte bringen Sie Ihr eigenes Android-Ger\u00e4t mit. Die Ersteinrichtung sollte bereit",
+      "location": {
+        "name": "VHS",
+        "address": "Ludwigstra\u00dfe 7, 95028 Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-10-16T15:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/dabei-sein-android-smartphones-fuer-einsteiger-646-C-31AH318011",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/dabei-sein-android-smartphones-fuer-einsteiger-646-C-31AH318011",
+      "tags": []
+    },
+    {
+      "id": "vhs_00fcc51e3b69",
+      "title": "Digitale Moderation & Pr\u00e4sentation f\u00fcr Fortgeschrittene",
+      "teaser": "Sie haben bereits erste Erfahrungen mit der Durchf\u00fchrung von Meetings und m\u00f6chten professioneller moderieren? In diesem Aufbaukurs lernen Sie, wie Sie mit Programmen wie OBS Studio, Social Stream Ninj...",
+      "description": "Sie haben bereits erste Erfahrungen mit der Durchf\u00fchrung von Meetings und m\u00f6chten professioneller moderieren? In diesem Aufbaukurs lernen Sie, wie Sie mit Programmen wie OBS Studio, Social Stream Ninja und dem Stream Deck Ihre  Online-Pr\u00e4sentationen abwechslungsreich und klar strukturieren. Dabei spielt es keine Rolle, ob Sie mit Zoom, Microsoft Teams oder Webex arbeiten, die vermittelten Inhalte sind plattformunabh\u00e4ngig. Neben der Technik stehen auch Pr\u00e4sentationsmethoden und Ihr Auftritt vor d",
+      "location": {
+        "name": "Online",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-10-16T15:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/digitale-moderation-praesentation-fuer-fortgeschrittene-646-C-31AH311301",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/digitale-moderation-praesentation-fuer-fortgeschrittene-646-C-31AH311301",
+      "tags": []
+    },
+    {
+      "id": "vhs_5e2905639701",
+      "title": "MakerSpace - Technik selbst ausprobieren",
+      "teaser": "Sie sind Unternehmer oder Do-It-Yourself-Aktiver, Modellbauer oder Bastler? \nIhnen fehlt jedoch das Equipment, um Ihre Ideen umzusetzen? Oder Sie w\u00fcnschen sich inhaltliche Unterst\u00fctzung und Zugang zu",
+      "description": "Sie sind Unternehmer oder Do-It-Yourself-Aktiver, Modellbauer oder Bastler? \nIhnen fehlt jedoch das Equipment, um Ihre Ideen umzusetzen? Oder Sie w\u00fcnschen sich inhaltliche Unterst\u00fctzung und Zugang zu Expertenwissen?\t\nDann nutzen Sie unseren MakerSpace. Eine Hightech-Werkstatt, die Ihnen den Zugang zu Maschinen, Werkzeugen, Software und dazugeh\u00f6rigem Fachwissen erm\u00f6glicht.\n\nDer MakerSpace bietet Ihnen einen Ort, an dem Ideen und Innovationen realisiert werden. Nach entsprechenden Einf\u00fchrungsworks",
+      "location": {
+        "name": "Stadtbibliothek im Forum",
+        "address": "Bachstra\u00dfe 1, Naila",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-10-16T17:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/makerspace-technik-selbst-ausprobieren-646-C-31AH319014",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/makerspace-technik-selbst-ausprobieren-646-C-31AH319014",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-10-07T15:03:54.536696"
+  "last_scraped": "2026-10-08T03:08:00.365434"
 }
