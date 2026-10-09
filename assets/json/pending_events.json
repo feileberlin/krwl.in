@@ -20459,7 +20459,29 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/meriyoga-646-C-31AH501124",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/meriyoga-646-C-31AH501124",
       "tags": []
+    },
+    {
+      "id": "vhs_356bf6abf7d2",
+      "title": "Mit Entspannungsmethoden wieder in die Ruhe und Kraft gelangen!Entspannungsmix Online \u00fcber Zoom mit Karin Wagner",
+      "teaser": "Schnupperstunde aus Meditation, Autogenem Training und Muskelentspannung nach Jacobsen.",
+      "description": "Schnupperstunde aus Meditation, Autogenem Training und Muskelentspannung nach Jacobsen.",
+      "location": {
+        "name": "Online",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-10-16T18:30:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/mit-entspannungsmethoden-wieder-in-die-ruhe-und-kraft-gelangen/entspannungsmix-online-ueber-zoom-mit-karin-wagner-646-C-31AH501642",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/mit-entspannungsmethoden-wieder-in-die-ruhe-und-kraft-gelangen/entspannungsmix-online-ueber-zoom-mit-karin-wagner-646-C-31AH501642",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-10-09T03:09:12.665408"
+  "last_scraped": "2026-10-09T15:03:36.463772"
 }
