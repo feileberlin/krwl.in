@@ -20283,7 +20283,183 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/tanzkurs-2-fuer-fortgeschrittene-tanzkreis-f-unendlich-646-C-31DT503142",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/tanzkurs-2-fuer-fortgeschrittene-tanzkreis-f-unendlich-646-C-31DT503142",
       "tags": []
+    },
+    {
+      "id": "vhs_e010e2dfbd31",
+      "title": "Klangmeditation",
+      "teaser": "G\u00f6nne dir eine kleine Auszeit vom Alltag und tauche ein in die wohltuende Welt der Kl\u00e4nge. Die sanften T\u00f6ne der tibetischen Klangschalen laden dich dazu ein, loszulassen und in deine Mitte zu kommen.",
+      "description": "G\u00f6nne dir eine kleine Auszeit vom Alltag und tauche ein in die wohltuende Welt der Kl\u00e4nge. Die sanften T\u00f6ne der tibetischen Klangschalen laden dich dazu ein, loszulassen und in deine Mitte zu kommen. Stress darf sich l\u00f6sen - innere Ruhe kann entstehen. Die wohltuenden Schwingungen bringen K\u00f6rper, Geist und Seele in Einklang, f\u00f6rdern einen Zustand tiefer Entspannung und schaffen eine gute Grundlage f\u00fcr innere Balance und Ausgeglichenheit.",
+      "location": {
+        "name": "Forum Naila",
+        "address": "Bachstra\u00dfe 1, 95119 Naila",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-10-16T18:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/klangmeditation-646-C-31NA501621",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/klangmeditation-646-C-31NA501621",
+      "tags": []
+    },
+    {
+      "id": "vhs_3d8d50a4a5f3",
+      "title": "Active Directory und PowerShell \u2013 Netzwerkverwaltung effizient automatisieren",
+      "teaser": "Die Windows PowerShell ist eines der wichtigsten Werkzeuge f\u00fcr die moderne Administration von Windows-Servern und Netzwerken.",
+      "description": "Die Windows PowerShell ist eines der wichtigsten Werkzeuge f\u00fcr die moderne Administration von Windows-Servern und Netzwerken. In diesem praxisnahen Kurs lernen Sie, wie sich Verwaltungsaufgaben im Active Directory effizient automatisieren und vereinfachen lassen.\n\nSchritt f\u00fcr Schritt erhalten Sie einen Einstieg in die Arbeit mit der PowerShell und lernen wichtige Befehle, Skripte und Automatisierungsm\u00f6glichkeiten kennen. Gemeinsam besch\u00e4ftigen wir uns mit typischen Aufgaben der Benutzer-, Gruppe",
+      "location": {
+        "name": "Fabrikzeile 21 (Hoftex Group)",
+        "address": "95028 Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-10-16T18:15:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/active-directory-und-powershell-netzwerkverwaltung-effizient-automatisieren-646-C-31AH312120",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/active-directory-und-powershell-netzwerkverwaltung-effizient-automatisieren-646-C-31AH312120",
+      "tags": []
+    },
+    {
+      "id": "vhs_d123fb769da2",
+      "title": "Online-Seminar: Rhetorik-Workshop:Sicher auftreten - \u00fcberzeugend argumentieren - souver\u00e4n ankommen",
+      "teaser": "Wer in Reden und Verhandlungen \u00fcberzeugend und sicher auftritt, erreicht seine Ziele leicht.",
+      "description": "Wer in Reden und Verhandlungen \u00fcberzeugend und sicher auftritt, erreicht seine Ziele leicht. Die besondere Herausforderung liegt darin, den Spannungsbogen so zu gestalten, dass das Gegen\u00fcber emotional ber\u00fchrt wird. Dann kann der Funke der Begeisterung \u00fcberspringen. Besseres Argumentieren und sicheres Auftreten steigern Ihre \u00dcberzeugungskraft. \nSie erhalten viele \u00dcbungen, die Sie auch zuhause nutzen k\u00f6nnen, um Ihre rhetorischen F\u00e4higkeiten zu entwickeln. \nWeitere Schwerpunkte dieses Online-Worksh",
+      "location": {
+        "name": "Online",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-10-17T09:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/online-seminar-rhetorik-workshop/sicher-auftreten-ueberzeugend-argumentieren-souveraen-ankommen-646-C-31AH270252",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/online-seminar-rhetorik-workshop/sicher-auftreten-ueberzeugend-argumentieren-souveraen-ankommen-646-C-31AH270252",
+      "tags": []
+    },
+    {
+      "id": "vhs_2d45b878e72f",
+      "title": "Webinar \"Sicherheitseinstellungen f\u00fcr Smartphones und Tablets\"",
+      "teaser": "Smartphones sind wahre Allesk\u00f6nner, und lassen sich mit Apps aufr\u00fcsten. So wird Ihr Smartphone zum Genie, und nutzt alle Sinne z.B. GPS f\u00fcr Navigation, Bewegungssensoren, Mikrofon, Kamera uvm.",
+      "description": "Smartphones sind wahre Allesk\u00f6nner, und lassen sich mit Apps aufr\u00fcsten. So wird Ihr Smartphone zum Genie, und nutzt alle Sinne z.B. GPS f\u00fcr Navigation, Bewegungssensoren, Mikrofon, Kamera uvm. Diese sind aus unserem Alltag nicht mehr wegzudenken. Damit sind Smartphones hochwertige PCs im Miniformat, und auch angreifbar f\u00fcr zahlreiche Viren, Malware, Spyware uvm. welche es auf Ihre Daten z.B. Passw\u00f6rter, TAN SMS, Kreditkartendaten abgesehen haben. Im Webinar erfahren Sie, wie sich effektiv davor ",
+      "location": {
+        "name": "Online",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-10-17T10:30:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/webinar-sicherheitseinstellungen-fuer-smartphones-und-tablets-646-C-31AH318066",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/webinar-sicherheitseinstellungen-fuer-smartphones-und-tablets-646-C-31AH318066",
+      "tags": []
+    },
+    {
+      "id": "vhs_eee63115f33f",
+      "title": "Online-Seminar: SchlagfertigkeitVon der Kunst, jederzeit die richtigen Worte zu finden.",
+      "teaser": "Fallen Ihnen die passenden Worte zu sp\u00e4t ein? Haben Sie sp\u00e4ter die besten Ideen? Dann ist dieses Online-Seminar f\u00fcr Sie gemacht.",
+      "description": "Fallen Ihnen die passenden Worte zu sp\u00e4t ein? Haben Sie sp\u00e4ter die besten Ideen? Dann ist dieses Online-Seminar f\u00fcr Sie gemacht. Schlagfertigkeit ist die Kunst, jederzeit die richtigen Worte zu finden. Sie lernen, spontaner mit Ihrer Sprache umzugehen. Sie werden den aktiven Wortschatz sp\u00fcrbar erweitern, damit Sie auch in Belastungssituationen fl\u00fcssig und treffend formulieren. Dadurch werden Sie mutiger, die passenden Worte zu sagen. Sie trainieren spontane, humorvolle und spritzige Antworten, d",
+      "location": {
+        "name": "Online",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-10-17T13:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/online-seminar-schlagfertigkeit/von-der-kunst-jederzeit-die-richtigen-worte-zu-finden-646-C-31AH270273",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/online-seminar-schlagfertigkeit/von-der-kunst-jederzeit-die-richtigen-worte-zu-finden-646-C-31AH270273",
+      "tags": []
+    },
+    {
+      "id": "vhs_0cb369fc4a1f",
+      "title": "KlangmeditationWorkshop 1",
+      "teaser": "G\u00f6nne dir eine kleine Auszeit vom Alltag und tauche ein in die wohltuende Welt der Kl\u00e4nge. Die sanften T\u00f6ne der tibetischen Klangschalen laden dich dazu ein, loszulassen und in deine Mitte zu kommen.",
+      "description": "G\u00f6nne dir eine kleine Auszeit vom Alltag und tauche ein in die wohltuende Welt der Kl\u00e4nge. Die sanften T\u00f6ne der tibetischen Klangschalen laden dich dazu ein, loszulassen und in deine Mitte zu kommen. Stress darf sich l\u00f6sen - innere Ruhe kann entstehen. Die wohltuenden Schwingungen bringen K\u00f6rper, Geist & Seele in Einklang, f\u00f6rdern einen Zustand tiefer Entspannung und schaffen eine gute Grundlage f\u00fcr innere Balance und Ausgeglichenheit.",
+      "location": {
+        "name": "VHS",
+        "address": "Ludwigstra\u00dfe 7, 95028 Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-10-17T17:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/klangmeditation/workshop-1-646-C-31AH501621",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/klangmeditation/workshop-1-646-C-31AH501621",
+      "tags": []
+    },
+    {
+      "id": "vhs_459441cdc662",
+      "title": "Webinar \u201eKI im Alltag\u201c",
+      "teaser": "KI-Anwendungen haben l\u00e4ngst Einzug in unserem Arbeitsalltag gehalten, und sind nach dem Internet die gr\u00f6\u00dfte Revolution der Neuzeit.",
+      "description": "KI-Anwendungen haben l\u00e4ngst Einzug in unserem Arbeitsalltag gehalten, und sind nach dem Internet die gr\u00f6\u00dfte Revolution der Neuzeit. Dieses Webinar bietet Ihnen einen umfassenden \u00dcberblick dar\u00fcber, was KI ist, und wie k\u00fcnstliche Intelligenz (KI) den modernen Arbeitsplatz transformiert und Mitarbeiter*innen dabei unterst\u00fctzt, effizienter und kreativer zu arbeiten - auch im privaten Bereich. Erledigen Sie schneller Ihre Aufgaben, z. B. bei der Erstellung und beim Verfassen von Texten bis hin zur Nu",
+      "location": {
+        "name": "Online",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-10-18T10:30:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/webinar-ki-im-alltag-646-C-31AH311070",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/webinar-ki-im-alltag-646-C-31AH311070",
+      "tags": []
+    },
+    {
+      "id": "vhs_16d4c2e84be5",
+      "title": "MeriYoga",
+      "teaser": "Bei MeriYoga dehnen Sie die Meridiane und kommen gleichzeitig zu mehr Ruhe und Entspannung.",
+      "description": "Bei MeriYoga dehnen Sie die Meridiane und kommen gleichzeitig zu mehr Ruhe und Entspannung. Diese Meridiane sind Energiebahnen, bekannt aus der Traditionellen Chinesischen Medizin, auch im Zusammenhang mit Akupunktur, Akupressur oder Shiatsu. Das Stretching soll anregend und harmonisierend auf den Energiefluss in den Meridianen wirken. Regelm\u00e4\u00dfiges Praktizieren l\u00f6st Verspannungen, man f\u00fchlt sich beweglicher, entspannter, leistungsf\u00e4higer und in der Folge wird man gelassener und ausgeglichener. Z",
+      "location": {
+        "name": "VHS",
+        "address": "Ludwigstra\u00dfe 7, 95028 Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-10-19T17:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/meriyoga-646-C-31AH501124",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/meriyoga-646-C-31AH501124",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-10-08T15:03:37.701082"
+  "last_scraped": "2026-10-09T03:09:12.665408"
 }
