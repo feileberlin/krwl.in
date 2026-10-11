@@ -20569,7 +20569,29 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/englisch-niveaustufe-a1/i-semester-646-C-31RE400601",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/englisch-niveaustufe-a1/i-semester-646-C-31RE400601",
       "tags": []
+    },
+    {
+      "id": "vhs_d3145b38aeab",
+      "title": "Da droben soll einmal ein Dorf gewesen sein.Sp\u00e4tmittelalterliche Funde im offenen Feld",
+      "teaser": "Im Zuge der W\u00fcstungsforschung hat der Referent im gedachten Rechteck Naila, Konradsreuth, Gefrees und Marktleugast bisher 16 ehemalige Ortschaften durch Funde nachgewiesen.",
+      "description": "Im Zuge der W\u00fcstungsforschung hat der Referent im gedachten Rechteck Naila, Konradsreuth, Gefrees und Marktleugast bisher 16 ehemalige Ortschaften durch Funde nachgewiesen. Einige tragen einen Namen, andere bleiben zun\u00e4chst namenlos. In seinem Vortrag geht der Referent auch auf die Methoden ein, nach denen er die Suche gestaltet.",
+      "location": {
+        "name": "VHS",
+        "address": "Ludwigstra\u00dfe 7, 95028 Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-10-19T19:30:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/da-droben-soll-einmal-ein-dorf-gewesen-sein/spaetmittelalterliche-funde-im-offenen-feld-646-C-31AH103301",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/da-droben-soll-einmal-ein-dorf-gewesen-sein/spaetmittelalterliche-funde-im-offenen-feld-646-C-31AH103301",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-10-10T03:08:28.728772"
+  "last_scraped": "2026-10-11T03:10:11.080650"
 }
