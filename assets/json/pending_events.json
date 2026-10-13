@@ -20943,7 +20943,29 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/spanisch-niveaustufe-a1/iv-semester-646-C-31AH402214",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/spanisch-niveaustufe-a1/iv-semester-646-C-31AH402214",
       "tags": []
+    },
+    {
+      "id": "vhs_43f7f16f9f1c",
+      "title": "\"zusammen digital\" - Beratungstheke",
+      "teaser": "\"zusammen digital\" - Beratungstheke am 21.10.",
+      "description": "\"zusammen digital\" - Beratungstheke am 21.10.2026 14:00",
+      "location": {
+        "name": "VHS",
+        "address": "Ludwigstra\u00dfe 7, 95028 Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-10-21T14:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/zusammen-digital-beratungstheke-646-C-31AA904216",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/zusammen-digital-beratungstheke-646-C-31AA904216",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-10-13T03:10:34.550151"
+  "last_scraped": "2026-10-13T15:05:06.168798"
 }
