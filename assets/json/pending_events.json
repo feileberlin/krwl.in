@@ -21911,7 +21911,29 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/xpert-business-lohn-und-gehalt-2/webseminar-646-C-31AH290116",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/xpert-business-lohn-und-gehalt-2/webseminar-646-C-31AH290116",
       "tags": []
+    },
+    {
+      "id": "vhs_edad0e0a3bb0",
+      "title": "Yoga f\u00fcr die Wirbels\u00e4uleKurs 2",
+      "teaser": "Haben Sie Verspannungen oder immer mal wieder leichte R\u00fcckenschmerzen von einseitigen Belastungen oder zu langem Sitzen? Dann sind Sie hier genau richtig.",
+      "description": "Haben Sie Verspannungen oder immer mal wieder leichte R\u00fcckenschmerzen von einseitigen Belastungen oder zu langem Sitzen? Dann sind Sie hier genau richtig. In diesem Kurs lernen Sie viele verschiedene Bewegungsabfolgen, Dehnungen und Kr\u00e4ftigungen, die sich speziell der Wirbels\u00e4ule widmen. Eine kr\u00e4ftige Mitte sowie eine flexible und gut gedehnte Muskulatur erm\u00f6glichen durch regelm\u00e4\u00dfiges \u00dcben, R\u00fcckenschmerzen vorzubeugen bzw. zu lindern. Dieser Kurs dient der Pr\u00e4vention und der Besserung von  leich",
+      "location": {
+        "name": "VHS",
+        "address": "Ludwigstra\u00dfe 7, 95028 Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-11-12T17:15:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/yoga-fuer-die-wirbelsaeule/kurs-2-646-C-31AH501127",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/yoga-fuer-die-wirbelsaeule/kurs-2-646-C-31AH501127",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-10-24T03:04:18.424714"
+  "last_scraped": "2026-10-28T03:03:29.766383"
 }
