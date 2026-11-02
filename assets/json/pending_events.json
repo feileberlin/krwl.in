@@ -21933,7 +21933,73 @@
       "source": "https://www.vhshoferland.de/p/last-minute-kurse/yoga-fuer-die-wirbelsaeule/kurs-2-646-C-31AH501127",
       "url": "https://www.vhshoferland.de/p/last-minute-kurse/yoga-fuer-die-wirbelsaeule/kurs-2-646-C-31AH501127",
       "tags": []
+    },
+    {
+      "id": "vhs_d7a88ea19266",
+      "title": "Microsoft 365 - der digitale ArbeitsplatzFreitag, 06.11., 18.00-21.15 Uhr und Samstag, 07.11.2026, 09.00-16.00 UhrOnline",
+      "teaser": "Steigern Sie nachhaltig die Effizienz Ihrer Arbeitsprozesse mit Microsoft 365.",
+      "description": "Steigern Sie nachhaltig die Effizienz Ihrer Arbeitsprozesse mit Microsoft 365. Dieses umfassende Seminar zeigt Ihnen, wie Sie durch gezielten Einsatz der vielf\u00e4ltigen Tools Ihre t\u00e4gliche Zusammenarbeit revolutionieren und Ihre Produktivit\u00e4t deutlich erh\u00f6hen k\u00f6nnen.\n\nInhalte:\n\nOneDrive: Erhalten Sie sicheren und st\u00e4ndigen Zugriff auf Ihre Daten, wo immer Sie sind. Lernen Sie, wie OneDrive Ihre Datenorganisation und -sicherheit durch fortschrittliche Cloud-Speicherl\u00f6sungen optimiert.\nOneNote: Orga",
+      "location": {
+        "name": "VHS Hofer Land",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-11-07T18:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/microsoft-365-der-digitale-arbeitsplatz-646-C-31AH370008",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/microsoft-365-der-digitale-arbeitsplatz-646-C-31AH370008",
+      "tags": []
+    },
+    {
+      "id": "vhs_da8d327ff6b2",
+      "title": "SpeedpaintingWorkshop",
+      "teaser": "Beim Speedpainting arbeiten zehn Teilnehmende gemeinsam an zehn Kunstwerken.",
+      "description": "Beim Speedpainting arbeiten zehn Teilnehmende gemeinsam an zehn Kunstwerken. In kurzen, festen Zeitabschnitten von jeweils f\u00fcnf Minuten wird gewechselt, sodass jede Person nacheinander an mehreren Bildern weiterarbeitet. Durch das schnelle Rotieren entstehen lebendige, \u00fcberraschende und sehr unterschiedliche Kunstwerke, in die viele Ideen und Stile einflie\u00dfen.",
+      "location": {
+        "name": "Fabrikzeile 21 (Hoftex Group)",
+        "address": "95028 Hof, Farbwerkstatt",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-11-07T17:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/speedpainting/workshop-646-C-31AA929130",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/speedpainting/workshop-646-C-31AA929130",
+      "tags": []
+    },
+    {
+      "id": "vhs_da8597742a06",
+      "title": "Wild-Kochkurs",
+      "teaser": "Wildbret ist vielseitig, regional und besonders aromatisch. In diesem Kochkurs lernen Sie, wie aus heimischem Wild schmackhafte Gerichte entstehen.",
+      "description": "Wildbret ist vielseitig, regional und besonders aromatisch. In diesem Kochkurs lernen Sie, wie aus heimischem Wild schmackhafte Gerichte entstehen. Gemeinsam werden verschiedene Rezepte zubereitet und praktische Tipps vermittelt. Freuen Sie sich auf einen genussvollen Abend mit neuen Ideen f\u00fcr die Wildk\u00fcche.",
+      "location": {
+        "name": "Schulk\u00fcche der Grund- und Mittelschule Oberkotzau",
+        "address": "Haupteingang B\u00fcrgerstra\u00dfe",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-11-14T15:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/p/last-minute-kurse/wild-kochkurs-646-C-31OB507111",
+      "url": "https://www.vhshoferland.de/p/last-minute-kurse/wild-kochkurs-646-C-31OB507111",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-10-28T03:03:29.766383"
+  "last_scraped": "2026-11-02T15:02:32.145934"
 }
