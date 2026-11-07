@@ -2,211 +2,239 @@
   "events": [
     {
       "id": "atlantis_404",
-      "title": "🌊 Oops! This region has sunk beneath the waves",
-      "description": "The page you're looking for went down with Atlantis around 9600 BC. According to Plato, it was a really nice place... before the whole sinking thing.\n\n🏗️ Want to start a NEW civilization? Visit / to claim the South Pole and set up your own event platform!\n\n🗺️ Or fork https://github.com/feileberlin/krwl.in to create events for YOUR region.",
-      "location": {
-        "name": "Mid-Atlantic Ridge (Atlantis, probably)",
-        "lat": 31.0,
-        "lon": -24.0
-      },
+      "title": "🌊 Welcome to Atlantis — the tide has opinions",
+      "description": "You found Atlantis. The map is real, the reef outline is lovingly imaginary, and the city council still disputes whether the old capital counts as a venue. Explore the nearby listings, choose a local landmark, and see how KRWL> can make a place feel alive. Want a real community map? Fork the project and configure your own region.",
+      "location": { "name": "Atlantis Outer Reef", "lat": 31.0, "lon": -24.0 },
       "start_time": "1970-01-01T00:00:00",
       "end_time": null,
       "url": "https://github.com/feileberlin/krwl.in",
       "source": "atlantis",
       "status": "published",
       "category": "community",
-      "relative_time": {
-        "type": "offset",
-        "minutes": -10,
-        "duration_hours": 24
-      },
-      "translations": {
-        "source_language": "en",
-        "fields": {
-          "title": {
-            "de": {
-              "text": "🌊 Hoppla! Diese Region ist unter den Wellen versunken",
-              "method": "manual",
-              "verified": true
-            },
-            "cs": {
-              "text": "🌊 Jejda! Tento region se potopil pod vlnami",
-              "method": "manual",
-              "verified": true
-            }
-          },
-          "description": {
-            "de": {
-              "text": "Die Seite, die Sie suchen, ist um 9600 v. Chr. mit Atlantis untergegangen. Laut Platon war es ein wirklich schöner Ort... vor dem ganzen Untergang.\n\n🏗️ Möchten Sie eine NEUE Zivilisation starten? Besuchen Sie / um den Südpol zu beanspruchen und Ihre eigene Event-Plattform einzurichten!\n\n🗺️ Oder forken Sie https://github.com/feileberlin/krwl.in um Events für IHRE Region zu erstellen.",
-              "method": "manual",
-              "verified": true
-            },
-            "cs": {
-              "text": "Stránka, kterou hledáte, se potopila s Atlantidou kolem roku 9600 př. n. l. Podle Platóna to bylo opravdu hezké místo... před celým tím potopením.\n\n🏗️ Chcete založit NOVOU civilizaci? Navštivte / pro získání jižního pólu a vytvoření vlastní platformy událostí!\n\n🗺️ Nebo forkněte https://github.com/feileberlin/krwl.in pro vytvoření událostí pro VÁŠ region.",
-              "method": "manual",
-              "verified": true
-            }
-          },
-          "location.name": {
-            "de": {
-              "text": "Mittelatlantischer Rücken (Atlantis, wahrscheinlich)",
-              "method": "manual",
-              "verified": true
-            },
-            "cs": {
-              "text": "Středoatlantský hřbet (Atlantida, pravděpodobně)",
-              "method": "manual",
-              "verified": true
-            }
-          }
-        }
-      }
+      "relative_time": { "type": "offset", "minutes": -15, "duration_hours": 24 }
     },
     {
-      "id": "atlantis_poseidon_palace",
-      "title": "🔱 Poseidon's Palace Tour - CANCELLED",
-      "description": "Regrettably, this venue is currently underwater. Last seen: 9600 BC.\n\nLooking for events on dry land? Try visiting / for Antarctica, or fork the repo to add your own region!",
-      "location": {
-        "name": "Underwater Palace Ruins",
-        "lat": 31.1,
-        "lon": -24.1
-      },
-      "start_time": "1970-01-01T00:00:00",
-      "end_time": null,
-      "url": "https://github.com/feileberlin/krwl.in",
-      "source": "atlantis",
-      "status": "published",
-      "category": "culture",
-      "relative_time": {
-        "type": "offset",
-        "hours": 1,
-        "duration_hours": 2
-      },
-      "translations": {
-        "source_language": "en",
-        "fields": {
-          "title": {
-            "de": {
-              "text": "🔱 Poseidons Palast-Tour - ABGESAGT",
-              "method": "manual",
-              "verified": true
-            },
-            "cs": {
-              "text": "🔱 Prohlídka Poseidonova paláce - ZRUŠENO",
-              "method": "manual",
-              "verified": true
-            }
-          },
-          "description": {
-            "de": {
-              "text": "Leider ist dieser Veranstaltungsort derzeit unter Wasser. Zuletzt gesehen: 9600 v. Chr.\n\nSuchen Sie nach Veranstaltungen an Land? Versuchen Sie / für die Antarktis, oder forken Sie das Repo, um Ihre eigene Region hinzuzufügen!",
-              "method": "manual",
-              "verified": true
-            },
-            "cs": {
-              "text": "Bohužel je toto místo v současnosti pod vodou. Naposledy viděno: 9600 př. n. l.\n\nHledáte události na suché zemi? Zkuste navštívit / pro Antarktidu, nebo forkněte repo pro přidání vlastního regionu!",
-              "method": "manual",
-              "verified": true
-            }
-          },
-          "location.name": {
-            "de": {
-              "text": "Unterwasser-Palast-Ruinen",
-              "method": "manual",
-              "verified": true
-            },
-            "cs": {
-              "text": "Ruiny podvodního paláce",
-              "method": "manual",
-              "verified": true
-            }
-          }
-        }
-      }
-    },
-    {
-      "id": "atlantis_reunion",
-      "title": "🐠 Annual Atlantis Reunion - Location TBD",
-      "description": "We've been trying to organize this for millennia, but nobody can remember where we parked the island.\n\n💡 Pro tip: Start fresh at / (Antarctica) where the land is guaranteed to stay put... mostly.",
-      "location": {
-        "name": "Somewhere in the Atlantic",
-        "lat": 30.9,
-        "lon": -23.9
-      },
+      "id": "atlantis_tide_clock",
+      "title": "🕰️ The Tide Clock Is Only Mostly Right",
+      "description": "The clockmaker insists it is accurate to within one myth. Bring a shell, compare predictions, and help decide whether the next tide is coming in or merely considering it.",
+      "location": { "name": "Poseidon's Palace Steps", "lat": 31.0, "lon": -24.0 },
       "start_time": "1970-01-01T00:00:00",
       "end_time": null,
       "url": "https://github.com/feileberlin/krwl.in",
       "source": "atlantis",
       "status": "published",
       "category": "community",
-      "relative_time": {
-        "type": "offset",
-        "hours": 2,
-        "duration_hours": 3
-      },
-      "translations": {
-        "source_language": "en",
-        "fields": {
-          "title": {
-            "de": {
-              "text": "🐠 Jährliches Atlantis-Treffen - Ort noch offen",
-              "method": "manual",
-              "verified": true
-            },
-            "cs": {
-              "text": "🐠 Výroční sraz Atlantidy - Místo bude upřesněno",
-              "method": "manual",
-              "verified": true
-            }
-          },
-          "description": {
-            "de": {
-              "text": "Wir versuchen seit Jahrtausenden, dies zu organisieren, aber niemand kann sich erinnern, wo wir die Insel geparkt haben.\n\n💡 Profi-Tipp: Beginnen Sie neu bei / (Antarktis), wo das Land garantiert an Ort und Stelle bleibt... meistens.",
-              "method": "manual",
-              "verified": true
-            },
-            "cs": {
-              "text": "Snažíme se to organizovat celá tisíciletí, ale nikdo si nemůže vzpomenout, kde jsme zaparkovali ostrov.\n\n💡 Tip: Začněte znovu na / (Antarktida), kde je zaručeno, že země zůstane na místě... většinou.",
-              "method": "manual",
-              "verified": true
-            }
-          },
-          "location.name": {
-            "de": {
-              "text": "Irgendwo im Atlantik",
-              "method": "manual",
-              "verified": true
-            },
-            "cs": {
-              "text": "Někde v Atlantiku",
-              "method": "manual",
-              "verified": true
-            }
-          }
-        }
-      }
+      "relative_time": { "type": "offset", "minutes": 20, "duration_hours": 1.5 }
     },
     {
-      "id": "atlantis_archaeology",
-      "title": "🗿 Underwater Archaeology Workshop",
-      "description": "Learn to excavate ancient ruins! Scuba gear required.\n\n🚀 Rather build something NEW instead of digging up the past? Visit / to start your own event platform, or fork https://github.com/feileberlin/krwl.in",
-      "location": {
-        "name": "Atlantis Archaeological Site",
-        "lat": 31.05,
-        "lon": -24.05
-      },
+      "id": "atlantis_lost_and_found",
+      "title": "🧭 Lost & Found for Things the Current Borrowed",
+      "description": "One umbrella, three invitations, and a very confident lobster are looking for their owners. Unclaimed items will be entered into the municipal folklore archive.",
+      "location": { "name": "Sunken Marketplace", "lat": 30.985, "lon": -23.982 },
+      "start_time": "1970-01-01T00:00:00",
+      "end_time": null,
+      "url": "https://github.com/feileberlin/krwl.in",
+      "source": "atlantis",
+      "status": "published",
+      "category": "community",
+      "relative_time": { "type": "offset", "hours": 1, "duration_hours": 2 }
+    },
+    {
+      "id": "atlantis_seaweed_jazz",
+      "title": "🎷 Seaweed Jazz: Improvisations in E-flatfish",
+      "description": "A small ensemble plays standards, current events, and one long briny note requested by the kelp. Seating is first come, first gently floated.",
+      "location": { "name": "Coral Gardens Bandstand", "lat": 31.015, "lon": -24.018 },
+      "start_time": "1970-01-01T00:00:00",
+      "end_time": null,
+      "url": "https://github.com/feileberlin/krwl.in",
+      "source": "atlantis",
+      "status": "published",
+      "category": "music",
+      "relative_time": { "type": "offset", "hours": 1.5, "duration_hours": 2 }
+    },
+    {
+      "id": "atlantis_soup_exchange",
+      "title": "🍲 Community Soup Exchange (Please Label Your Bubbles)",
+      "description": "Bring a pot, a spoon, and a clear description of what is in it. The anchovy broth won last month, although the judges may have been anchovies.",
+      "location": { "name": "The Warm Current Café", "lat": 30.99, "lon": -24.03 },
+      "start_time": "1970-01-01T00:00:00",
+      "end_time": null,
+      "url": "https://github.com/feileberlin/krwl.in",
+      "source": "atlantis",
+      "status": "published",
+      "category": "food",
+      "relative_time": { "type": "offset", "hours": 2, "duration_hours": 2 }
+    },
+    {
+      "id": "atlantis_archaeology_walk",
+      "title": "🗿 Archaeology Walk: Please Do Not Adopt the Statues",
+      "description": "A guided stroll through the old plaza, ending at the amphora that may or may not be a mailbox. Comfortable flippers recommended; historical certainty not included.",
+      "location": { "name": "Old Capital Ruins", "lat": 31.025, "lon": -24.01 },
+      "start_time": "1970-01-01T00:00:00",
+      "end_time": null,
+      "url": "https://github.com/feileberlin/krwl.in",
+      "source": "atlantis",
+      "status": "published",
+      "category": "historical-monuments",
+      "relative_time": { "type": "offset", "hours": 2.5, "duration_hours": 1.5 }
+    },
+    {
+      "id": "atlantis_shellphone_clinic",
+      "title": "📱 Shellphone Repair Clinic",
+      "description": "Cracked screen? Weak signal? Phone full of sand despite never visiting a beach? Volunteer technicians will take a look. The clinic cannot recover messages sent by dolphin.",
+      "location": { "name": "Gulf Street Workshop", "lat": 30.975, "lon": -24.02 },
+      "start_time": "1970-01-01T00:00:00",
+      "end_time": null,
+      "url": "https://github.com/feileberlin/krwl.in",
+      "source": "atlantis",
+      "status": "published",
+      "category": "technology",
+      "relative_time": { "type": "offset", "hours": 3, "duration_hours": 2 }
+    },
+    {
+      "id": "atlantis_current_yoga",
+      "title": "🧘 Gentle Current Yoga for Beginners",
+      "description": "A slow-flow class for anyone whose balance has been rearranged by the sea. No experience required; the instructor will demonstrate how to stay on the mat while it drifts.",
+      "location": { "name": "Lagoon Quiet Zone", "lat": 31.01, "lon": -23.97 },
+      "start_time": "1970-01-01T00:00:00",
+      "end_time": null,
+      "url": "https://github.com/feileberlin/krwl.in",
+      "source": "atlantis",
+      "status": "published",
+      "category": "sports",
+      "relative_time": { "type": "offset", "hours": 3.5, "duration_hours": 1 }
+    },
+    {
+      "id": "atlantis_reef_garden",
+      "title": "🌱 Reef Garden Volunteer Morning",
+      "description": "Help the gardeners rehome coral fragments, untangle a few overenthusiastic vines, and put the sign back up after the octopus borrowed it. Gloves and patience provided.",
+      "location": { "name": "Coral Gardens North", "lat": 31.02, "lon": -23.99 },
+      "start_time": "1970-01-01T00:00:00",
+      "end_time": null,
+      "url": "https://github.com/feileberlin/krwl.in",
+      "source": "atlantis",
+      "status": "published",
+      "category": "nature",
+      "relative_time": { "type": "offset", "hours": 4, "duration_hours": 2 }
+    },
+    {
+      "id": "atlantis_story_hour",
+      "title": "📚 Story Hour: The Fish Who Missed the Bus",
+      "description": "A cozy reading circle for young sea creatures and grown-ups who still enjoy a map with too many arrows. Readers welcome; dramatic bubble effects encouraged.",
+      "location": { "name": "Pearl Library Annex", "lat": 30.99, "lon": -23.97 },
       "start_time": "1970-01-01T00:00:00",
       "end_time": null,
       "url": "https://github.com/feileberlin/krwl.in",
       "source": "atlantis",
       "status": "published",
       "category": "education",
-      "relative_time": {
-        "type": "offset",
-        "hours": 3,
-        "duration_hours": 4
-      }
+      "relative_time": { "type": "offset", "hours": 4.5, "duration_hours": 1 }
+    },
+    {
+      "id": "atlantis_lantern_parade",
+      "title": "🏮 Bioluminescent Lantern Parade",
+      "description": "Follow the glowing jellyfish along the reef and back to the plaza. Please do not take the lanterns home; they are attached to very small, very determined animals.",
+      "location": { "name": "Moonpool Promenade", "lat": 31.0, "lon": -24.04 },
+      "start_time": "1970-01-01T00:00:00",
+      "end_time": null,
+      "url": "https://github.com/feileberlin/krwl.in",
+      "source": "atlantis",
+      "status": "published",
+      "category": "arts",
+      "relative_time": { "type": "offset", "hours": 5, "duration_hours": 1.5 }
+    },
+    {
+      "id": "atlantis_tiny_triathlon",
+      "title": "🏊 The Tiny Triathlon: Swim, Glide, Nap",
+      "description": "Three friendly stages, no stopwatch, and a generous nap break. Sea turtles may enter the glide section but must let everyone else finish first.",
+      "location": { "name": "Lagoon South Buoy", "lat": 30.98, "lon": -24.01 },
+      "start_time": "1970-01-01T00:00:00",
+      "end_time": null,
+      "url": "https://github.com/feileberlin/krwl.in",
+      "source": "atlantis",
+      "status": "published",
+      "category": "sports",
+      "relative_time": { "type": "offset", "hours": 5.5, "duration_hours": 2 }
+    },
+    {
+      "id": "atlantis_makers_market",
+      "title": "🛍️ Makers Market: Shells, Maps & Questionable Pottery",
+      "description": "Browse handmade reef crafts, current-proof maps, and a vase that looks better from one side. Vendors accept pearls, barter, and sincere compliments.",
+      "location": { "name": "Sunken Marketplace East Arcade", "lat": 31.02, "lon": -24.0 },
+      "start_time": "1970-01-01T00:00:00",
+      "end_time": null,
+      "url": "https://github.com/feileberlin/krwl.in",
+      "source": "atlantis",
+      "status": "published",
+      "category": "shopping",
+      "relative_time": { "type": "offset", "hours": 6, "duration_hours": 3 }
+    },
+    {
+      "id": "atlantis_council_meeting",
+      "title": "🏛️ City Council: Is a Reef a Public Park?",
+      "description": "Residents are invited to debate signage, public seating, and whether a crab can be fined for moving the boundary markers. The meeting will end when everyone agrees, or when the tide does.",
+      "location": { "name": "Old Capital Assembly Hall", "lat": 31.025, "lon": -23.99 },
+      "start_time": "1970-01-01T00:00:00",
+      "end_time": null,
+      "url": "https://github.com/feileberlin/krwl.in",
+      "source": "atlantis",
+      "status": "published",
+      "category": "government",
+      "relative_time": { "type": "offset", "hours": 7, "duration_hours": 1.5 }
+    },
+    {
+      "id": "atlantis_open_mic",
+      "title": "🎤 Open Mic Night: Sea Shanties & Soft Complaints",
+      "description": "Share a song, a poem, or a polite complaint about the municipal current. The house band knows three chords and one of them is a bubble.",
+      "location": { "name": "The Blue Kelp Lounge", "lat": 30.98, "lon": -23.98 },
+      "start_time": "1970-01-01T00:00:00",
+      "end_time": null,
+      "url": "https://github.com/feileberlin/krwl.in",
+      "source": "atlantis",
+      "status": "published",
+      "category": "music",
+      "relative_time": { "type": "offset", "hours": 8, "duration_hours": 2 }
+    },
+    {
+      "id": "atlantis_family_shell_hunt",
+      "title": "🐚 Family Shell Hunt (Please Return the Shells)",
+      "description": "A gentle scavenger hunt for colorful shells and clues. Every shell goes back where it came from; the prize is a certificate and the satisfaction of excellent noticing.",
+      "location": { "name": "Pearl Beach — Technically a Sandbar", "lat": 31.015, "lon": -24.035 },
+      "start_time": "1970-01-01T00:00:00",
+      "end_time": null,
+      "url": "https://github.com/feileberlin/krwl.in",
+      "source": "atlantis",
+      "status": "published",
+      "category": "family",
+      "relative_time": { "type": "offset", "hours": 9, "duration_hours": 1.5 }
+    },
+    {
+      "id": "atlantis_dolphin_debate",
+      "title": "🐬 Public Forum: Are Dolphins Actually Listening?",
+      "description": "A lively, evidence-based discussion. Dolphins may attend but have not confirmed whether they will take questions or simply make that sound again.",
+      "location": { "name": "Coral Gardens Forum Steps", "lat": 31.005, "lon": -23.985 },
+      "start_time": "1970-01-01T00:00:00",
+      "end_time": null,
+      "url": "https://github.com/feileberlin/krwl.in",
+      "source": "atlantis",
+      "status": "published",
+      "category": "community",
+      "relative_time": { "type": "offset", "hours": 10, "duration_hours": 1 }
+    },
+    {
+      "id": "atlantis_lost_city_tour",
+      "title": "🗺️ Lost City Walking Tour — No Promises About the Walking",
+      "description": "Explore the old avenues, point out the former bakery, and learn why every street seems to lead to the same fountain. Flippers optional; a sense of direction is aspirational.",
+      "location": { "name": "Poseidon's Palace Courtyard", "lat": 31.01, "lon": -24.015 },
+      "start_time": "1970-01-01T00:00:00",
+      "end_time": null,
+      "url": "https://github.com/feileberlin/krwl.in",
+      "source": "atlantis",
+      "status": "published",
+      "category": "historical-monuments",
+      "relative_time": { "type": "offset", "hours": 11, "duration_hours": 2 }
     }
   ],
-  "last_updated": "2026-02-01T00:00:00"
+  "last_updated": "2026-11-07T00:00:00Z",
+  "note": "A fictional Atlantis neighborhood showcase: events use relative times and nearby fictional venues to demonstrate KRWL> filters, markers, categories, and location presets."
 }
