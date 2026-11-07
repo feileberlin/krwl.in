@@ -34,10 +34,10 @@ if (window.L && window.L.map) {{
 // against each region's configured customFilters, then seed missing region presets.
 if (typeof EventStorage !== 'undefined') {{
     const regionConfigFor = (storage, regionId) => storage.config?.regions?.[regionId];
-    const locationCoordinates = (location) => ({
+    const locationCoordinates = (location) => ({{
         lat: location?.center?.lat ?? location?.lat,
         lon: location?.center?.lng ?? location?.center?.lon ?? location?.lon
-    });
+    }});
     const locationName = (location, language = 'en') => {{
         const name = location?.name;
         if (name && typeof name === 'object') {{
@@ -72,7 +72,7 @@ if (typeof EventStorage !== 'undefined') {{
                     const savedName = String(saved.name || '').trim().toLowerCase();
                     const presetName = String(locationName(preset, region.defaultLanguage) || '').trim().toLowerCase();
                     return sameCoordinates || (saved.fromRegion && savedName && savedName === presetName);
-                });
+                }});
                 if (match) {{
                     matchedRegion = regionId;
                     matchedPreset = match;
