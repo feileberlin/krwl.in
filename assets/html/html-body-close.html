@@ -3,7 +3,7 @@
 <script>
 {embedded_data}
 
-// Basemap provider settings. Change URL and attribution here to switch providers.
+// Central basemap/provider settings; use the same OSM tiles on every region.
 window.MAP_TILE_PROVIDER = Object.freeze({{
     url: 'https://{{s}}.tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png',
     attribution: "&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors"
@@ -17,8 +17,7 @@ if (window.APP_CONFIG && window.APP_CONFIG.map) {{
 {fetch_interceptor}
 {leaflet_js}
 
-// MapManager currently disables Leaflet attribution. Override that option after
-// Leaflet loads so the selected tile provider's required credit is displayed.
+// Ensure Leaflet's attribution control stays on so OSM credit is visible.
 if (window.L && window.L.map) {{
     const leafletMapFactory = window.L.map;
     window.L.map = function (container, options) {{
@@ -29,6 +28,110 @@ if (window.L && window.L.map) {{
 {markercluster_js}
 {lucide_js}
 {app_js}
+
+// For an untouched/default setup, route the root URL to /atlantis. Forks can
+// set defaultRegion to their own configured region and root will route there.
+if (typeof EventsApp !== 'undefined') {{
+    const originalApplyRegionFromUrl = EventsApp.prototype.applyRegionFromUrl;
+    EventsApp.prototype.applyRegionFromUrl = function () {{
+        originalApplyRegionFromUrl.call(this);
+        if (this.activeRegion !== 'antarctica') return;
+
+        const configuredDefault = this.config.defaultRegion;
+        const defaultRegionId = (!configuredDefault || configuredDefault === 'antarctica')
+            ? 'atlantis'
+            : configuredDefault;
+        const defaultRegion = this.config.regions?.[defaultRegionId] || this.config.regions?.atlantis;
+        if (!defaultRegion) return;
+
+        this.activeRegion = defaultRegion.name || defaultRegionId;
+        this.activeRegionConfig = defaultRegion;
+        this.config.map.default_center = {{
+            lat: defaultRegion.center.lat,
+            lon: defaultRegion.center.lng ?? defaultRegion.center.lon
+        }};
+        // A wider initial view gives the sunken-city illustration breathing room.
+        this.config.map.default_zoom = defaultRegionId === 'atlantis' ? 8 : defaultRegion.zoom;
+
+        const pathSegments = window.location.pathname.split('/').filter(Boolean);
+        const language = pathSegments.length === 1 &&
+            (this.config.supportedLanguages || []).includes(pathSegments[0].toLowerCase())
+            ? pathSegments[0].toLowerCase()
+            : null;
+        const targetPath = language
+            ? `/${{language}}/${{defaultRegionId}}`
+            : `/${{defaultRegionId}}`;
+        if (window.location.pathname !== targetPath) {{
+            history.replaceState(null, '', targetPath);
+        }}
+        console.info(`[KRWL] Root showcase redirected to ${{targetPath}}`);
+    }};
+}}
+
+// A playful, explicitly fictional submerged reef outline is an illustration,
+// not geographic data. Keep it beneath event and location markers.
+window.addEventListener('app-ready', function () {{
+    const app = window.eventsApp || window.app;
+    const map = app?.mapManager?.map;
+    if (!map || app.activeRegion !== 'atlantis' || typeof L === 'undefined') return;
+    if (map.__atlantisIllustrationAdded) return;
+    map.__atlantisIllustrationAdded = true;
+
+    const center = [31.0, -24.0];
+    const latitudeDegreesPerKm = 1 / 111;
+    const longitudeDegreesPerKm = 1 / (111 * Math.cos(center[0] * Math.PI / 180));
+    const points = 64;
+    const reef = [];
+    const lagoon = [];
+
+    for (let i = 0; i < points; i++) {{
+        const angle = 2 * Math.PI * i / points;
+        const irregularity = 1 + 0.13 * Math.sin(3 * angle + 0.4) + 0.07 * Math.cos(5 * angle - 0.8);
+        const radiusKm = 18 * irregularity;
+        reef.push([
+            center[0] + Math.sin(angle) * radiusKm * latitudeDegreesPerKm,
+            center[1] + Math.cos(angle) * radiusKm * longitudeDegreesPerKm
+        ]);
+
+        const lagoonRadiusKm = 5.2 * (1 + 0.1 * Math.sin(4 * angle));
+        lagoon.push([
+            center[0] + Math.sin(angle) * lagoonRadiusKm * latitudeDegreesPerKm,
+            center[1] + Math.cos(angle) * lagoonRadiusKm * longitudeDegreesPerKm
+        ]);
+    }}
+
+    L.polygon(reef, {{
+        color: '#f2e9ee',
+        weight: 2,
+        opacity: 0.95,
+        dashArray: '7 6',
+        fillColor: '#d689b8',
+        fillOpacity: 0.2,
+        interactive: false,
+        bubblingMouseEvents: false
+    }}).addTo(map);
+    L.polygon(lagoon, {{
+        color: '#e8a5c8',
+        weight: 2,
+        opacity: 0.95,
+        fillColor: '#110a0e',
+        fillOpacity: 0.5,
+        interactive: false,
+        bubblingMouseEvents: false
+    }}).addTo(map);
+    L.marker([31.19, -24.0], {{
+        interactive: false,
+        icon: L.divIcon({{
+            className: 'atlantis-map-label',
+            html: '<span>ATLANTIS</span>',
+            iconSize: [150, 30],
+            iconAnchor: [75, 15]
+        }})
+    }}).addTo(map);
+
+    // Event display may fit bounds tightly around markers; restore the intended overview.
+    map.setView(center, 8);
+}});
 </script>
 </body>
 </html>

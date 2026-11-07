@@ -10,21 +10,22 @@
 <style>{markercluster_css}</style>
 <style>{app_css}</style>
 <style>
-/* OSM raster tiles: keep the ecoBarbie treatment on the map imagery only,
-   so Leaflet controls, event markers and popups retain their intended colors. */
-.leaflet-container {{
-    filter: none !important;
-    background: #110a0e;
-}}
-.leaflet-tile {{
-    filter: grayscale(100%) brightness(0.58) sepia(85%) hue-rotate(290deg) saturate(180%);
-}}
-.leaflet-control-attribution {{
-    background: rgba(17, 10, 14, 0.88) !important;
-    color: #f2e9ee !important;
-}}
-.leaflet-control-attribution a {{
-    color: #e8a5c8 !important;
+/* Filter OSM raster tiles only. Keep Leaflet controls, event markers and popups crisp. */
+.leaflet-container {{ filter: none !important; background: #110a0e; }}
+.leaflet-tile {{ filter: grayscale(100%) brightness(0.58) sepia(85%) hue-rotate(290deg) saturate(180%); }}
+.leaflet-control-attribution {{ background: rgba(17, 10, 14, 0.9) !important; color: #f2e9ee !important; }}
+.leaflet-control-attribution a {{ color: #e8a5c8 !important; }}
+.atlantis-map-label {{
+    background: rgba(17, 10, 14, 0.9);
+    border: 1px solid #d689b8;
+    border-radius: 999px;
+    color: #f2e9ee;
+    font: 700 11px/28px Roboto, sans-serif;
+    letter-spacing: 0.16em;
+    text-align: center;
+    white-space: nowrap;
+    box-shadow: 0 0 12px rgba(214, 137, 184, 0.55);
+    pointer-events: none;
 }}
 </style>
 </head>
