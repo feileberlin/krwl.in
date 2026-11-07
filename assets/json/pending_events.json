@@ -22989,7 +22989,51 @@
       "source": "https://www.vhshoferland.de/kurs/last-minute-kurse/skillup-ai-ms-powerpoint-copilot-business-praesentationen/strukturierte-inhalte-klare-botschaften-und-effiziente-praesentationserstellung/31AH280027",
       "url": "https://www.vhshoferland.de/kurs/last-minute-kurse/skillup-ai-ms-powerpoint-copilot-business-praesentationen/strukturierte-inhalte-klare-botschaften-und-effiziente-praesentationserstellung/31AH280027",
       "tags": []
+    },
+    {
+      "id": "vhs_b12647de849f",
+      "title": "Selbstverteidigung angelehnt an Wing Tsun - gemischte Gruppe f\u00fcr Fortgeschrittene",
+      "teaser": "Dieses Selbstverteidigungstraining greift auf wirkungsvolle Elemente aus dem WingTsun Kung Fu zur\u00fcck und verbindet sie mit modernen Trainingsmethoden.",
+      "description": "Dieses Selbstverteidigungstraining greift auf wirkungsvolle Elemente aus dem WingTsun Kung Fu zur\u00fcck und verbindet sie mit modernen Trainingsmethoden. Ziel ist es, schnell handlungsf\u00e4hig zu werden und sich in kritischen Situationen behaupten zu k\u00f6nnen. WingTsun Kung Fu gilt als eine der effektivsten Formen der Selbstverteidigung und wurde vor rund 300 Jahren in China entwickelt. Es bietet es die M\u00f6glichkeit, in kurzer Zeit verteidigungsf\u00e4hig zu werden. Diese chinesische Kampf- und Bewegungskunst",
+      "location": {
+        "name": "UhrChristiansreuther Stra\u00dfe 25",
+        "address": "95032 Hof (Lieblingsplatz der Hospitalstiftung Hof)",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-11-13T18:45:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/kurs/last-minute-kurse/selbstverteidigung-angelehnt-an-wing-tsun-gemischte-gruppe-fuer-fortgeschrittene/31AH502609",
+      "url": "https://www.vhshoferland.de/kurs/last-minute-kurse/selbstverteidigung-angelehnt-an-wing-tsun-gemischte-gruppe-fuer-fortgeschrittene/31AH502609",
+      "tags": []
+    },
+    {
+      "id": "vhs_435a870ae17c",
+      "title": "Smart Home verstehen und sinnvoll nutzen \u2013 Komfort, Sicherheit und Energie sparen (Hybridkurs)",
+      "teaser": "## Was bringt mir der Kurs?",
+      "description": "## Was bringt mir der Kurs?",
+      "location": {
+        "name": "UhrOnline MS Teams\u200b",
+        "address": "...",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-11-13T19:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/kurs/last-minute-kurse/smart-home-verstehen-und-sinnvoll-nutzen-komfort-sicherheit-und-energie-sparen-hybridkurs/31AH317110",
+      "url": "https://www.vhshoferland.de/kurs/last-minute-kurse/smart-home-verstehen-und-sinnvoll-nutzen-komfort-sicherheit-und-energie-sparen-hybridkurs/31AH317110",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-11-06T15:01:46.792923"
+  "last_scraped": "2026-11-07T03:03:22.318709"
 }
