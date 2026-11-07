@@ -29,109 +29,173 @@ if (window.L && window.L.map) {{
 {lucide_js}
 {app_js}
 
-// For an untouched/default setup, route the root URL to /atlantis. Forks can
-// set defaultRegion to their own configured region and root will route there.
-if (typeof EventsApp !== 'undefined') {{
-    const originalApplyRegionFromUrl = EventsApp.prototype.applyRegionFromUrl;
-    EventsApp.prototype.applyRegionFromUrl = function () {{
-        originalApplyRegionFromUrl.call(this);
-        if (this.activeRegion !== 'antarctica') return;
-
-        const configuredDefault = this.config.defaultRegion;
-        const defaultRegionId = (!configuredDefault || configuredDefault === 'antarctica')
-            ? 'atlantis'
-            : configuredDefault;
-        const defaultRegion = this.config.regions?.[defaultRegionId] || this.config.regions?.atlantis;
-        if (!defaultRegion) return;
-
-        this.activeRegion = defaultRegion.name || defaultRegionId;
-        this.activeRegionConfig = defaultRegion;
-        this.config.map.default_center = {{
-            lat: defaultRegion.center.lat,
-            lon: defaultRegion.center.lng ?? defaultRegion.center.lon
-        }};
-        // A wider initial view gives the sunken-city illustration breathing room.
-        this.config.map.default_zoom = defaultRegionId === 'atlantis' ? 8 : defaultRegion.zoom;
-
-        const pathSegments = window.location.pathname.split('/').filter(Boolean);
-        const language = pathSegments.length === 1 &&
-            (this.config.supportedLanguages || []).includes(pathSegments[0].toLowerCase())
-            ? pathSegments[0].toLowerCase()
-            : null;
-        const targetPath = language
-            ? `/${{language}}/${{defaultRegionId}}`
-            : `/${{defaultRegionId}}`;
-        if (window.location.pathname !== targetPath) {{
-            history.replaceState(null, '', targetPath);
+// Keep region-provided custom locations scoped to their region. Older versions
+// stored one global list, so migrate known entries by matching their coordinates
+// against each region's configured customFilters, then seed missing region presets.
+if (typeof EventStorage !== 'undefined') {{
+    const regionConfigFor = (storage, regionId) => storage.config?.regions?.[regionId];
+    const locationCoordinates = (location) => ({
+        lat: location?.center?.lat ?? location?.lat,
+        lon: location?.center?.lng ?? location?.center?.lon ?? location?.lon
+    });
+    const locationName = (location, language = 'en') => {{
+        const name = location?.name;
+        if (name && typeof name === 'object') {{
+            return name[language] || name.en || name.de || Object.values(name)[0];
         }}
-        console.info(`[KRWL] Root showcase redirected to ${{targetPath}}`);
+        return location?.display_name || name;
     }};
-}}
 
-// A playful, explicitly fictional submerged reef outline is an illustration,
-// not geographic data. Keep it beneath event and location markers.
-window.addEventListener('app-ready', function () {{
-    const app = window.eventsApp || window.app;
-    const map = app?.mapManager?.map;
-    if (!map || app.activeRegion !== 'atlantis' || typeof L === 'undefined') return;
-    if (map.__atlantisIllustrationAdded) return;
-    map.__atlantisIllustrationAdded = true;
+    EventStorage.prototype.getActiveRegionId = function () {{
+        return this.activeRegionConfig?.name || this.config?.defaultRegion || 'atlantis';
+    }};
 
-    const center = [31.0, -24.0];
-    const latitudeDegreesPerKm = 1 / 111;
-    const longitudeDegreesPerKm = 1 / (111 * Math.cos(center[0] * Math.PI / 180));
-    const points = 64;
-    const reef = [];
-    const lagoon = [];
+    EventStorage.prototype.migrateAndSeedRegionLocations = function () {{
+        const regions = this.config?.regions || {{}};
+        const locations = Array.isArray(this.customLocations) ? this.customLocations : [];
 
-    for (let i = 0; i < points; i++) {{
-        const angle = 2 * Math.PI * i / points;
-        const irregularity = 1 + 0.13 * Math.sin(3 * angle + 0.4) + 0.07 * Math.cos(5 * angle - 0.8);
-        const radiusKm = 18 * irregularity;
-        reef.push([
-            center[0] + Math.sin(angle) * radiusKm * latitudeDegreesPerKm,
-            center[1] + Math.cos(angle) * radiusKm * longitudeDegreesPerKm
-        ]);
+        locations.forEach((saved) => {{
+            if (saved.regionId || saved.scope === 'global') return;
 
-        const lagoonRadiusKm = 5.2 * (1 + 0.1 * Math.sin(4 * angle));
-        lagoon.push([
-            center[0] + Math.sin(angle) * lagoonRadiusKm * latitudeDegreesPerKm,
-            center[1] + Math.cos(angle) * lagoonRadiusKm * longitudeDegreesPerKm
-        ]);
+            // Match historical region presets before treating anything as user-created.
+            let matchedRegion = null;
+            let matchedPreset = null;
+            const savedLat = Number(saved.lat);
+            const savedLon = Number(saved.lon);
+            for (const [regionId, region] of Object.entries(regions)) {{
+                const presets = region.customFilters || [];
+                const match = presets.find((preset) => {{
+                    const coordinates = locationCoordinates(preset);
+                    const sameCoordinates = Number.isFinite(savedLat) && Number.isFinite(savedLon) &&
+                        Math.abs(savedLat - coordinates.lat) < 0.002 &&
+                        Math.abs(savedLon - coordinates.lon) < 0.002;
+                    const savedName = String(saved.name || '').trim().toLowerCase();
+                    const presetName = String(locationName(preset, region.defaultLanguage) || '').trim().toLowerCase();
+                    return sameCoordinates || (saved.fromRegion && savedName && savedName === presetName);
+                });
+                if (match) {{
+                    matchedRegion = regionId;
+                    matchedPreset = match;
+                    break;
+                }}
+            }}
+
+            if (matchedRegion && matchedPreset) {{
+                saved.regionId = matchedRegion;
+                saved.regionLocationId = matchedPreset.id;
+                saved.fromRegion = true;
+                saved.fromPredefined = true;
+            }} else if (saved.fromRegion || saved.fromPredefined) {{
+                // Keep unrecognized old presets out of every unrelated region.
+                saved.regionId = 'legacy-unmatched';
+            }} else {{
+                // User-created custom locations remain available in all regions.
+                saved.scope = 'global';
+            }}
+        }});
+
+        const regionId = this.getActiveRegionId();
+        const region = regionConfigFor(this, regionId);
+        const presets = region?.customFilters || [];
+        const language = region?.defaultLanguage || this.config?.defaultLanguage || 'en';
+
+        presets.forEach((preset) => {{
+            const coordinates = locationCoordinates(preset);
+            if (!Number.isFinite(coordinates.lat) || !Number.isFinite(coordinates.lon)) return;
+            const exists = locations.some((saved) =>
+                saved.regionId === regionId && saved.regionLocationId === preset.id
+            );
+            if (exists) return;
+
+            locations.push({{
+                id: `region:${{regionId}}:${{preset.id}}`,
+                name: locationName(preset, language),
+                lat: coordinates.lat,
+                lon: coordinates.lon,
+                created: new Date().toISOString(),
+                regionId,
+                regionLocationId: preset.id,
+                fromRegion: true,
+                fromPredefined: true
+            }});
+        }});
+
+        this.customLocations = locations;
+        this.saveCustomLocations();
+        this.log('Region-scoped custom locations ready', {{ regionId, count: presets.length }});
+    }};
+
+    EventStorage.prototype.initializeDefaultCustomLocations = function () {{
+        this.migrateAndSeedRegionLocations();
+    }};
+
+    EventStorage.prototype.getCustomLocations = function () {{
+        const regionId = this.getActiveRegionId();
+        return this.customLocations.filter((location) =>
+            location.scope === 'global' || location.regionId === regionId
+        );
+    }};
+
+    EventStorage.prototype.getCustomLocationById = function (id) {{
+        return this.getCustomLocations().find((location) => location.id === id) || null;
+    }};
+
+    EventStorage.prototype.getOriginalPredefinedLocation = function (id) {{
+        const saved = this.getCustomLocationById(id);
+        if (!saved?.fromRegion) return null;
+        const region = regionConfigFor(this, saved.regionId);
+        const preset = region?.customFilters?.find((location) => location.id === saved.regionLocationId);
+        if (!preset) return null;
+        const coordinates = locationCoordinates(preset);
+        return {{
+            id: preset.id,
+            name: locationName(preset, region.defaultLanguage),
+            display_name: locationName(preset, region.defaultLanguage),
+            lat: coordinates.lat,
+            lon: coordinates.lon
+        }};
+    }};
+
+    EventStorage.prototype.isPredefinedLocationModified = function (id) {{
+        const saved = this.getCustomLocationById(id);
+        const original = this.getOriginalPredefinedLocation(id);
+        return !!(saved && original && (
+            saved.name !== original.name ||
+            Math.abs(Number(saved.lat) - original.lat) >= 0.0001 ||
+            Math.abs(Number(saved.lon) - original.lon) >= 0.0001
+        ));
+    }};
+
+    EventStorage.prototype.resetCustomLocation = function (id) {{
+        const saved = this.getCustomLocationById(id);
+        const original = this.getOriginalPredefinedLocation(id);
+        if (!saved || !original) return false;
+        saved.name = original.name;
+        saved.lat = original.lat;
+        saved.lon = original.lon;
+        this.saveCustomLocations();
+        return true;
+    }};
+
+    // Discard a previously selected location when it belongs to another region.
+    // Run after EventStorage and EventsApp have loaded but before DOMContentLoaded.
+    if (typeof EventStorage.prototype.loadFiltersFromCookie === 'function') {{
+        const loadFilters = EventStorage.prototype.loadFiltersFromCookie;
+        EventStorage.prototype.loadFiltersFromCookie = function () {{
+            const filters = loadFilters.call(this);
+            if (filters?.selectedCustomLocation &&
+                !this.getCustomLocationById(filters.selectedCustomLocation)) {{
+                filters.locationType = 'geolocation';
+                filters.selectedCustomLocation = null;
+                filters.selectedCustomLocationName = null;
+                filters.customLat = null;
+                filters.customLon = null;
+                this.saveFiltersToCookie(filters);
+            }}
+            return filters;
+        }};
     }}
-
-    L.polygon(reef, {{
-        color: '#f2e9ee',
-        weight: 2,
-        opacity: 0.95,
-        dashArray: '7 6',
-        fillColor: '#d689b8',
-        fillOpacity: 0.2,
-        interactive: false,
-        bubblingMouseEvents: false
-    }}).addTo(map);
-    L.polygon(lagoon, {{
-        color: '#e8a5c8',
-        weight: 2,
-        opacity: 0.95,
-        fillColor: '#110a0e',
-        fillOpacity: 0.5,
-        interactive: false,
-        bubblingMouseEvents: false
-    }}).addTo(map);
-    L.marker([31.19, -24.0], {{
-        interactive: false,
-        icon: L.divIcon({{
-            className: 'atlantis-map-label',
-            html: '<span>ATLANTIS</span>',
-            iconSize: [150, 30],
-            iconAnchor: [75, 15]
-        }})
-    }}).addTo(map);
-
-    // Event display may fit bounds tightly around markers; restore the intended overview.
-    map.setView(center, 8);
-}});
+}}
 </script>
 </body>
 </html>
