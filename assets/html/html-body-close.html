@@ -2,6 +2,29 @@
 
 <script>
 {embedded_data}
+
+// Basemap provider configuration. Change these values here to switch tile
+// providers without editing MapManager or its marker/filter behavior.
+window.MAP_TILE_PROVIDER = Object.freeze({{
+    url: 'https://{{s}}.tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png',
+    attribution: "&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors"
+}});
+if (window.APP_CONFIG && window.APP_CONFIG.map) {{
+    window.APP_CONFIG.map.tile_provider = window.MAP_TILE_PROVIDER.url;
+    window.APP_CONFIG.map.attribution = window.MAP_TILE_PROVIDER.attribution;
+}}
+
+// The app disables Leaflet's default attribution control; add it back so the
+// required tile-provider credit remains visible on the map.
+if (window.L && window.L.map && window.L.control && window.L.control.attribution) {{
+    const leafletMapFactory = window.L.map;
+    window.L.map = function (...args) {{
+        const map = leafletMapFactory.apply(this, args);
+        window.L.control.attribution().addTo(map);
+        return map;
+    }};
+}}
+
 {config_loader}
 {fetch_interceptor}
 {leaflet_js}
