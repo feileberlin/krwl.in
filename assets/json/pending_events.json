@@ -23033,7 +23033,51 @@
       "source": "https://www.vhshoferland.de/kurs/last-minute-kurse/smart-home-verstehen-und-sinnvoll-nutzen-komfort-sicherheit-und-energie-sparen-hybridkurs/31AH317110",
       "url": "https://www.vhshoferland.de/kurs/last-minute-kurse/smart-home-verstehen-und-sinnvoll-nutzen-komfort-sicherheit-und-energie-sparen-hybridkurs/31AH317110",
       "tags": []
+    },
+    {
+      "id": "vhs_077878e4843c",
+      "title": "Praktische Astronomie: Einf\u00fchrung in die Beobachtung",
+      "teaser": "Der Einstieg in die Welt der Sterne. Unsere Einf\u00fchrungsveranstaltung richtet sich an alle, die die Astronomie von Grund auf kennenlernen m\u00f6chten, egal ob bereits mit eigenem Teleskop oder noch ohne.",
+      "description": "Der Einstieg in die Welt der Sterne. Unsere Einf\u00fchrungsveranstaltung richtet sich an alle, die die Astronomie von Grund auf kennenlernen m\u00f6chten, egal ob bereits mit eigenem Teleskop oder noch ohne. Neben kurzen theoretischen Grundlagen werden Beobachtungen durchgef\u00fchrt. Je nach Wetter wird ein zus\u00e4tzlicher Samstagstermin f\u00fcr eine gemeinsame Himmelsbeobachtung angesetzt.",
+      "location": {
+        "name": "UhrHof",
+        "address": "Sternwarte, Egerl\u00e4nderweg 25",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-11-14T18:30:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/kurs/last-minute-kurse/praktische-astronomie-einfuehrung-in-die-beobachtung/31AH108123",
+      "url": "https://www.vhshoferland.de/kurs/last-minute-kurse/praktische-astronomie-einfuehrung-in-die-beobachtung/31AH108123",
+      "tags": []
+    },
+    {
+      "id": "vhs_b7ed984131b4",
+      "title": "Webinar \"Sicherheitseinstellungen f\u00fcr Smartphones und Tablets\"",
+      "teaser": "Smartphones sind wahre Allesk\u00f6nner, und lassen sich mit Apps aufr\u00fcsten. So wird Ihr Smartphone zum Genie, und nutzt alle Sinne z.B. GPS f\u00fcr Navigation, Bewegungssensoren, Mikrofon, Kamera uvm.",
+      "description": "Smartphones sind wahre Allesk\u00f6nner, und lassen sich mit Apps aufr\u00fcsten. So wird Ihr Smartphone zum Genie, und nutzt alle Sinne z.B. GPS f\u00fcr Navigation, Bewegungssensoren, Mikrofon, Kamera uvm. Diese sind aus unserem Alltag nicht mehr wegzudenken. Damit sind Smartphones hochwertige PCs im Miniformat, und auch angreifbar f\u00fcr zahlreiche Viren, Malware, Spyware uvm. welche es auf Ihre Daten z.B. Passw\u00f6rter, TAN SMS, Kreditkartendaten abgesehen haben. Im Webinar erfahren Sie, wie sich effektiv davor ",
+      "location": {
+        "name": "UhrOnline",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-11-15T10:30:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/kurs/last-minute-kurse/webinar-sicherheitseinstellungen-fuer-smartphones-und-tablets/31AH318067",
+      "url": "https://www.vhshoferland.de/kurs/last-minute-kurse/webinar-sicherheitseinstellungen-fuer-smartphones-und-tablets/31AH318067",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-11-07T03:03:22.318709"
+  "last_scraped": "2026-11-09T03:03:40.250043"
 }
