@@ -23143,7 +23143,51 @@
       "source": "https://www.vhshoferland.de/kurs/last-minute-kurse/kraft-aus-der-mitte-beckenbodentraining-fuer-frauen-und-maenner/workshop/31HE502209",
       "url": "https://www.vhshoferland.de/kurs/last-minute-kurse/kraft-aus-der-mitte-beckenbodentraining-fuer-frauen-und-maenner/workshop/31HE502209",
       "tags": []
+    },
+    {
+      "id": "vhs_0b5651696072",
+      "title": "Aerial-YogaEine ganz neue Art Yoga zu erleben",
+      "teaser": "Beim Aerial-Yoga spielt ein an der Decke aufgeh\u00e4ngtes gro\u00dfes Tuch die zentrale Rolle. Mittels dieses Tuches h\u00e4ngen die Teilnehmenden in der Luft und erfahren dadurch ein Gef\u00fchl von Schwerelosigkeit.",
+      "description": "Beim Aerial-Yoga spielt ein an der Decke aufgeh\u00e4ngtes gro\u00dfes Tuch die zentrale Rolle. Mittels dieses Tuches h\u00e4ngen die Teilnehmenden in der Luft und erfahren dadurch ein Gef\u00fchl von Schwerelosigkeit. Mit Hilfe der Schwerkraft lassen sich die \u00fcblichen Asanas ganz neu erfahren!",
+      "location": {
+        "name": "UhrVHS",
+        "address": "Ludwigstra\u00dfe 7, Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-11-21T14:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/kurs/last-minute-kurse/aerial-yoga/eine-ganz-neue-art-yoga-zu-erleben/31AH501121",
+      "url": "https://www.vhshoferland.de/kurs/last-minute-kurse/aerial-yoga/eine-ganz-neue-art-yoga-zu-erleben/31AH501121",
+      "tags": []
+    },
+    {
+      "id": "vhs_7e8c9b6c8c2e",
+      "title": "Pilates",
+      "teaser": "F\u00fcr alle, die fit und gesund sein m\u00f6chten, bietet Pilates eine hervorragende Alternative zum Gang ins Fitnessstudio.",
+      "description": "F\u00fcr alle, die fit und gesund sein m\u00f6chten, bietet Pilates eine hervorragende Alternative zum Gang ins Fitnessstudio. Der Mix aus Koordination, Kr\u00e4ftigung, Dehnung und Entspannung bietet ein Ganzk\u00f6rpertraining, das die Muskeln fest werden l\u00e4sst und den K\u00f6rper zugleich entspannt. Im Pilates wird prim\u00e4r die Beckenboden-, Bauch- und R\u00fcckenmuskulatur gest\u00e4rkt.",
+      "location": {
+        "name": "UhrVHS",
+        "address": "Ludwigstra\u00dfe 7, Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-11-23T16:15:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/kurs/last-minute-kurse/pilates/31AH502103",
+      "url": "https://www.vhshoferland.de/kurs/last-minute-kurse/pilates/31AH502103",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-11-09T15:02:11.338102"
+  "last_scraped": "2026-11-12T03:03:27.719462"
 }
