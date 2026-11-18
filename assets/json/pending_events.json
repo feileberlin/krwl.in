@@ -23671,7 +23671,51 @@
       "source": "https://www.vhshoferland.de/kurs/last-minute-kurse/ki-selfies-kuenstliche-intelligenz-als-fotograf/31AH311123",
       "url": "https://www.vhshoferland.de/kurs/last-minute-kurse/ki-selfies-kuenstliche-intelligenz-als-fotograf/31AH311123",
       "tags": []
+    },
+    {
+      "id": "vhs_d5534e13af71",
+      "title": "Digital zeichnen mit Procreate \u2013 Kreativer Einstieg auf dem iPad",
+      "teaser": "Entdecken Sie die M\u00f6glichkeiten des digitalen Zeichnens mit Procreate \u2013 der beliebten Kreativ-App f\u00fcr das iPad.",
+      "description": "Entdecken Sie die M\u00f6glichkeiten des digitalen Zeichnens mit Procreate \u2013 der beliebten Kreativ-App f\u00fcr das iPad. In diesem praxisnahen Kurs lernen Sie Schritt f\u00fcr Schritt die Grundlagen der App kennen und erstellen Ihr erstes eigenes digitales Kunstwerk.",
+      "location": {
+        "name": "UhrVHS",
+        "address": "Ludwigstra\u00dfe 7, Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-11-25T17:30:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/kurs/last-minute-kurse/digital-zeichnen-mit-procreate-kreativer-einstieg-auf-dem-ipad/31AH316030",
+      "url": "https://www.vhshoferland.de/kurs/last-minute-kurse/digital-zeichnen-mit-procreate-kreativer-einstieg-auf-dem-ipad/31AH316030",
+      "tags": []
+    },
+    {
+      "id": "vhs_fa504d132292",
+      "title": "Weiterbildung & Neue berufliche Perspektiven (Hybrid-Veranstaltung)",
+      "teaser": "Welche Weiterbildung passt zu mir? Welche F\u00f6rderm\u00f6glichkeiten gibt es? Und wie finde ich passende Angebote in der Region?",
+      "description": "Welche Weiterbildung passt zu mir? Welche F\u00f6rderm\u00f6glichkeiten gibt es? Und wie finde ich passende Angebote in der Region?",
+      "location": {
+        "name": "UhrVHS",
+        "address": "Ludwigstra\u00dfe 7, Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-11-25T18:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/kurs/last-minute-kurse/weiterbildung-neue-berufliche-perspektiven-hybrid-veranstaltung/31AA914006",
+      "url": "https://www.vhshoferland.de/kurs/last-minute-kurse/weiterbildung-neue-berufliche-perspektiven-hybrid-veranstaltung/31AA914006",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-11-17T15:02:16.617225"
+  "last_scraped": "2026-11-18T03:03:23.021509"
 }
