@@ -24419,7 +24419,29 @@
       "source": "https://www.vhshoferland.de/kurs/last-minute-kurse/skillup-ai-ms-copilot-chat-ms-copilot-in-m365/ki-gestuetzte-arbeitsablaeufe-und-intelligente-assistenz/31AH280029",
       "url": "https://www.vhshoferland.de/kurs/last-minute-kurse/skillup-ai-ms-copilot-chat-ms-copilot-in-m365/ki-gestuetzte-arbeitsablaeufe-und-intelligente-assistenz/31AH280029",
       "tags": []
+    },
+    {
+      "id": "vhs_d1aba7505bbb",
+      "title": "Adobe Firefly entdecken \u2013 KI f\u00fcr kreative K\u00f6pfe",
+      "teaser": "Entdecken Sie die kreativen M\u00f6glichkeiten von Adobe Firefly und lernen Sie, wie K\u00fcnstliche Intelligenz kreative Prozesse unterst\u00fctzen kann.",
+      "description": "Entdecken Sie die kreativen M\u00f6glichkeiten von Adobe Firefly und lernen Sie, wie K\u00fcnstliche Intelligenz kreative Prozesse unterst\u00fctzen kann. In diesem praxisnahen Kurs erfahren Sie, wie aus einfachen Texteingaben beeindruckende Bilder, Designideen und kreative Inhalte entstehen.",
+      "location": {
+        "name": "UhrVHS",
+        "address": "Ludwigstra\u00dfe 7, Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-11-30T18:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/kurs/last-minute-kurse/adobe-firefly-entdecken-ki-fuer-kreative-koepfe/31AH316049",
+      "url": "https://www.vhshoferland.de/kurs/last-minute-kurse/adobe-firefly-entdecken-ki-fuer-kreative-koepfe/31AH316049",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-11-24T01:57:19.408931"
+  "last_scraped": "2026-11-24T13:03:51.754535"
 }
