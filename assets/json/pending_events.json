@@ -24617,7 +24617,29 @@
       "source": "https://www.vhshoferland.de/kurs/last-minute-kurse/souveraen-investieren-rational-evidenzbasiert-und-unabhaengig-von-marktprognosen/online/31AH107182",
       "url": "https://www.vhshoferland.de/kurs/last-minute-kurse/souveraen-investieren-rational-evidenzbasiert-und-unabhaengig-von-marktprognosen/online/31AH107182",
       "tags": []
+    },
+    {
+      "id": "vhs_4aa1ec2fb22b",
+      "title": "KI-Bilder: Kreativ mit K\u00fcnstlicher Intelligenz",
+      "teaser": "Mit K\u00fcnstlicher Intelligenz lassen sich beeindruckende Bilder von fotorealistischen Portr\u00e4ts bis hin zu abstrakten Kunstwerken erstellen.",
+      "description": "Mit K\u00fcnstlicher Intelligenz lassen sich beeindruckende Bilder von fotorealistischen Portr\u00e4ts bis hin zu abstrakten Kunstwerken erstellen. Doch welche Tools eignen sich daf\u00fcr, wie formuliert man die richtigen Prompts und was muss beim Copyright beachtet werden? Dieser praxisnahe Workshop stellt verschiedene KI-Tools zur Bildgenerierung vor, zeigt M\u00f6glichkeiten und Grenzen auf und vermittelt effektives Prompting. Zudem werden rechtliche Aspekte beim Einsatz von KI-generierten Bildern beleuchtet.",
+      "location": {
+        "name": "UhrOnline",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-12-01T19:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/kurs/last-minute-kurse/ki-bilder-kreativ-mit-kuenstlicher-intelligenz/31AH311066",
+      "url": "https://www.vhshoferland.de/kurs/last-minute-kurse/ki-bilder-kreativ-mit-kuenstlicher-intelligenz/31AH311066",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-11-24T23:41:21.540483"
+  "last_scraped": "2026-11-25T11:52:48.657620"
 }
