@@ -24771,7 +24771,29 @@
       "source": "https://www.vhshoferland.de/kurs/last-minute-kurse/faltsterne-aus-stoff/kurs-berg/31AH604155",
       "url": "https://www.vhshoferland.de/kurs/last-minute-kurse/faltsterne-aus-stoff/kurs-berg/31AH604155",
       "tags": []
+    },
+    {
+      "id": "vhs_5ad63eb199d7",
+      "title": "VHS Lese-Stammtisch",
+      "teaser": "B\u00fccher und Autor*innen \u2013 lassen Sie uns dar\u00fcber sprechen. Bringen Sie Ihr Lieblingsbuch mit oder h\u00f6ren Sie zu, wenn andere \u00fcber ihres berichten.",
+      "description": "B\u00fccher und Autor*innen \u2013 lassen Sie uns dar\u00fcber sprechen. Bringen Sie Ihr Lieblingsbuch mit oder h\u00f6ren Sie zu, wenn andere \u00fcber ihres berichten. Lassen Sie uns regelm\u00e4\u00dfig treffen und im Sinne des \u201eStammtisch-Gedanken\u201c Erfahrungen und Empfehlungen austauschen. Wir laden Sie herzlich ein, Teil der Gemeinschaft zu werden.",
+      "location": {
+        "name": "UhrVHS",
+        "address": "Ludwigstra\u00dfe 7, 95028 Hof",
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": false,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-12-02T15:00:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/kurs/last-minute-kurse/vhs-lese-stammtisch/31AA904104",
+      "url": "https://www.vhshoferland.de/kurs/last-minute-kurse/vhs-lese-stammtisch/31AA904104",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-11-25T23:24:59.390555"
+  "last_scraped": "2026-11-26T11:41:33.458236"
 }
