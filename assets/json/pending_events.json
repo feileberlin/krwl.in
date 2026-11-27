@@ -24947,7 +24947,51 @@
       "source": "https://www.vhshoferland.de/kurs/last-minute-kurse/hatha-yoga/fuer-anfaenger-wiedereinsteiger/31LE501102",
       "url": "https://www.vhshoferland.de/kurs/last-minute-kurse/hatha-yoga/fuer-anfaenger-wiedereinsteiger/31LE501102",
       "tags": []
+    },
+    {
+      "id": "vhs_89e5114b0b5a",
+      "title": "Canva-Workshop: Grundkurs",
+      "teaser": "Canva ist ein vielseitiges Design-Tool, das f\u00fcr Pr\u00e4sentationen, Social-Media-Grafiken, Flyer und viele weitere Designs genutzt werden kann. Doch der Einstieg kann herausfordernd sein.",
+      "description": "Canva ist ein vielseitiges Design-Tool, das f\u00fcr Pr\u00e4sentationen, Social-Media-Grafiken, Flyer und viele weitere Designs genutzt werden kann. Doch der Einstieg kann herausfordernd sein. Welche Funktionen sind wichtig? Wie lassen sich Designs professionell gestalten? Und welche M\u00f6glichkeiten bieten KI-gest\u00fctzte Features? Dieser Workshop bietet eine strukturierte Einf\u00fchrung in Canva und vermittelt praxisnah die wichtigsten Grundlagen. Schritt f\u00fcr Schritt werden zentrale Funktionen erkl\u00e4rt.",
+      "location": {
+        "name": "UhrOnline",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-12-07T17:30:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/kurs/last-minute-kurse/canva-workshop-grundkurs/31AH316068",
+      "url": "https://www.vhshoferland.de/kurs/last-minute-kurse/canva-workshop-grundkurs/31AH316068",
+      "tags": []
+    },
+    {
+      "id": "vhs_87c28f1d12d0",
+      "title": "Online-Seminar: K\u00f6rpersprache verstehenSicher auftreten, dynamisch wirken, Menschen entschl\u00fcsseln",
+      "teaser": "Haben Sie sich schon einmal gefragt, welchen Eindruck Sie hinterlassen \u2013 noch bevor Sie ein Wort gesagt haben? Die K\u00f6rpersprache ist oft der Schl\u00fcssel zum Erfolg.",
+      "description": "Haben Sie sich schon einmal gefragt, welchen Eindruck Sie hinterlassen \u2013 noch bevor Sie ein Wort gesagt haben? Die K\u00f6rpersprache ist oft der Schl\u00fcssel zum Erfolg. Ob beruflich in Gespr\u00e4chen mit Kollegen, Kunden und F\u00fchrungskr\u00e4ften oder privat im Austausch mit Familie und Freunden: Wer die eigene K\u00f6rpersprache gezielt einsetzt und die Signale anderer besser versteht, kommuniziert erfolgreicher und selbstbewusster.",
+      "location": {
+        "name": "UhrOnline",
+        "address": null,
+        "lat": 50.3167,
+        "lon": 11.9167,
+        "address_hidden": true,
+        "needs_review": false,
+        "resolution_method": null
+      },
+      "start_time": "2026-12-07T18:30:00",
+      "end_time": null,
+      "category": "education",
+      "status": "pending",
+      "source": "https://www.vhshoferland.de/kurs/last-minute-kurse/online-seminar-koerpersprache-verstehen/sicher-auftreten-dynamisch-wirken-menschen-entschluesseln/31AH270470",
+      "url": "https://www.vhshoferland.de/kurs/last-minute-kurse/online-seminar-koerpersprache-verstehen/sicher-auftreten-dynamisch-wirken-menschen-entschluesseln/31AH270470",
+      "tags": []
     }
   ],
-  "last_scraped": "2026-11-26T23:24:14.945363"
+  "last_scraped": "2026-11-27T23:03:46.083501"
 }
